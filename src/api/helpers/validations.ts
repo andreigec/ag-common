@@ -92,7 +92,7 @@ export const getAndValidateToken = async ({
     try {
       await jwtVerify({ token, COGNITO_USER_POOL_ID });
       const decoded = decode(token) as unknown as IdJwt;
-      debug(`decoded=${JSON.stringify(decoded)}`);
+      debug(`decoded=${JSON.stringify(decoded, null, 2)}`);
       subject = decoded?.sub;
       if (!subject) {
         const mess = 'user should have responded with subject (sub) field';

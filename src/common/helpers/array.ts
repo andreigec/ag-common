@@ -29,9 +29,8 @@ export const chunk = <T>(array: T[], max: number): T[][] => {
 
   for (const k in array) {
     const item = array[k];
-    if (row.length < max) {
-      row = [...row, item];
-    } else {
+    row.push(item);
+    if (row.length >= max) {
       rows.push(row);
       row = [];
     }

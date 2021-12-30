@@ -30,7 +30,7 @@ export const putDynamo = async <T>(
     Item: item as any,
   };
 
-  info(`running dynamo put=${JSON.stringify(params)}`);
+  info(`running dynamo put=${JSON.stringify(params, null, 2)}`);
 
   // write the todo to the database
   const put = await dynamoDb.put(params).promise();
@@ -182,7 +182,7 @@ export const getItemDynamo = async <T>({
   try {
     const res = await dynamoDb.get(params).promise();
     const ret = res.Item as T;
-    debug(`got dynamo getitem=${JSON.stringify(params)}`);
+    debug(`got dynamo getitem=${JSON.stringify(params, null, 2)}`);
 
     return ret;
   } catch (e) {
@@ -201,7 +201,7 @@ export const getItemsDynamo = async <T>({
   }[];
   tableName: string;
 }): Promise<T[]> => {
-  const params: DocumentClient.BatchGetItemInput = {
+  const params: AWS.DynamoDB.BatchGetItemInput = {
     RequestItems: {
       [tableName]: {
         Keys: items.map(({ pkName, pkValue }) => ({
@@ -211,14 +211,25 @@ export const getItemsDynamo = async <T>({
     },
   };
 
+  const dbRaw = new AWS.DynamoDB({ apiVersion: '2012-10-08' });
+
   try {
-    const res = await dynamoDb.batchGet(params).promise();
-    debug(`got dynamo getitems=${JSON.stringify(res)}`);
-    let ret = res.Responses?.[tableName]?.map((s) => s as T) || [];
+    const res = await dbRaw.batchGetItem(params).promise();
+    debug(`got dynamo getitems=${JSON.stringify(res, null, 2)}`);
+    let ret =
+      res.Responses?.[tableName]?.map(
+        (s) => AWS.DynamoDB.Converter.unmarshall(s) as T,
+      ) || [];
 
     return ret;
   } catch (e) {
-    errorF(e);
+    let msg =
+      `error with getitems query:` +
+      JSON.stringify(params, null, 2) +
+      '\n' +
+      (e as any).toString();
+
+    errorF(msg);
     throw e;
   }
 };
