@@ -86,7 +86,7 @@ export const getAndValidateToken = async ({
       };
     }
 
-    token = tokenRaw.substr(tokenRaw.indexOf(' ') + 1);
+    token = tokenRaw.substring(tokenRaw.indexOf(' ') + 1);
 
     let subject: string | undefined;
     try {

@@ -52,20 +52,23 @@ export function truncate(
   if (!str) {
     return undefined;
   }
-  return str.length > n ? str.substr(0, n - 1) + ellip : str;
+  return str.length > n ? str.substring(0, n - 1) + ellip : str;
 }
 
 export interface ISite {
   siteUrl: string;
   niceSiteUrl: string;
 }
+/**
+ * removes protocol, and trailing slashes
+ */
 export const niceUrl = (siteUrl: string) => {
   if (!siteUrl) {
     return siteUrl;
   }
 
   let niceSiteUrl = siteUrl
-    .substr(siteUrl.indexOf(':') + 1)
+    .substring(siteUrl.indexOf(':') + 1)
     .replace('sc-domain:', '')
     .replace('https://', '')
     .replace('http://', '');
@@ -73,3 +76,19 @@ export const niceUrl = (siteUrl: string) => {
   niceSiteUrl = trim(niceSiteUrl, '/');
   return { siteUrl, niceSiteUrl } as ISite;
 };
+
+/**
+ * string -> String
+ * @param str
+ * @returns
+ */
+export function toTitleCase(str: string) {
+  if (!str) {
+    return str;
+  }
+  return str.replace(
+    /\w\S*/g,
+    (txt: string) =>
+      txt && txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase(),
+  );
+}

@@ -26,7 +26,9 @@ export const LoginButton = ({
     !savePath || typeof window === 'undefined'
       ? undefined
       : {
-          redirect: window.location.href.substr(window.location.origin.length),
+          redirect: window.location.href.substring(
+            window.location.origin.length,
+          ),
         },
   );
 
