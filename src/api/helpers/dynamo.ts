@@ -227,6 +227,7 @@ export const getItemsDynamo = async <T>({
       `error with getitems query:` +
       JSON.stringify(params, null, 2) +
       '\n' +
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (e as any).toString();
 
     errorF(msg);
