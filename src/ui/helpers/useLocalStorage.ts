@@ -1,5 +1,5 @@
-import { error, warn } from "../../common/helpers/log";
-import { tryJsonParse } from "../../common/helpers/object";
+import { error, warn } from '../../common/helpers/log';
+import { tryJsonParse } from '../../common/helpers/object';
 
 const getTimeSeconds = () => Math.ceil(new Date().getTime() / 1000);
 

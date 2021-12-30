@@ -1,4 +1,4 @@
-import { clamp } from "../../common/helpers/math";
+import { clamp } from '../../common/helpers/math';
 
 export const colours = {
   mainLight: 'rgb(255,255,255)',

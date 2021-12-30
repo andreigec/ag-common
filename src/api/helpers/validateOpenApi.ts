@@ -1,10 +1,9 @@
 // eslint-disable-next-line import/no-unresolved
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import OpenAPIRequestValidator from 'openapi-request-validator';
-
 import { User } from 'analytica.click';
 import { getAndValidateToken } from './validations';
-import { warn,error as errorF, info, debug } from '../../common/helpers/log';
+import { warn, error as errorF, info, debug } from '../../common/helpers/log';
 import { objectKeysToLowerCase } from '../../common/helpers/object';
 import { returnCode } from './api';
 //
@@ -17,6 +16,7 @@ const getOperation = ({
   method: string;
   path: string;
   resource: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: any;
 }) => {
   const resourcePath = Object.keys(schema.paths).find((rp) => rp === resource);
@@ -65,7 +65,10 @@ export async function validateOpenApi<T>({
   next,
   authorized,
   schema,
+  COGNITO_USER_POOL_ID,
 }: {
+  COGNITO_USER_POOL_ID: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: any;
   event: APIGatewayEvent;
   next: NextType<T>;
@@ -134,7 +137,10 @@ export async function validateOpenApi<T>({
     event.headers?.Authorization || event.headers?.authorization;
 
   if (authorized === true || (authorized === 'optional' && authHeader)) {
-    ({ error, userProfile } = await getAndValidateToken(authHeader));
+    ({ error, userProfile } = await getAndValidateToken({
+      tokenRaw: authHeader,
+      COGNITO_USER_POOL_ID,
+    }));
 
     if (error) {
       return error;

@@ -12,7 +12,7 @@ import { Construct } from 'constructs';
 import { distinctBy } from '../../common/helpers/distinctBy';
 import { warn } from '../../common/helpers/log';
 import { ILambdaPermissions } from '../types';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line
 const getPaths = (schema: any) =>
   Object.entries(
     schema.paths as {
@@ -137,7 +137,8 @@ const lambdaNameSafe = (raw: string) =>
   raw.replace(/[^a-zA-Z0-9-.]/gim, '-').replace(/(-){2,}/gim, '-');
 
 export const openApiImpl = (p: {
-  schema: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema: any;
   stack: Construct;
   NODE_ENV: string;
   baseUrl: string;

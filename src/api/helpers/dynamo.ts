@@ -12,7 +12,7 @@ import {
 import AWS, { AWSError, Response } from 'aws-sdk';
 import { IQueryDynamo } from '../types';
 import { info, error as errorF, debug, warn } from '../../common/helpers/log';
- import { chunk, notEmpty, take } from '../../common/helpers/array';
+import { chunk, notEmpty, take } from '../../common/helpers/array';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -321,7 +321,8 @@ export const queryDynamo = async <T>({
     }
 
     debug(
-      `dynamo query against ${params?.TableName} ok, count=${newitems?.length
+      `dynamo query against ${params?.TableName} ok, count=${
+        newitems?.length
       } ${JSON.stringify(params)}`,
       ` next startkey=${startKey}`,
     );

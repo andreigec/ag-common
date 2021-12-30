@@ -1,4 +1,4 @@
-import { TResource } from "../../../common/helpers/i18n";
+import { TResource } from '../../../common/helpers/i18n';
 
 export const getstarted = {
   en: 'Get Started',

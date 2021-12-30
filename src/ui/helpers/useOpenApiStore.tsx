@@ -14,7 +14,7 @@ const mutex = new Mutex({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mutexData = new MutexData<AxiosWrapper<any>>();
- const setMutexData = ({
+export const setMutexData = ({
   key,
   data,
   ttlSeconds = 3600,
@@ -38,8 +38,9 @@ const mutexData = new MutexData<AxiosWrapper<any>>();
 
   mutexData.setData(key, wrap, ttlSeconds);
 };
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
- const getMutexData = <T,>(key: string) =>
+export const getMutexData = <T,>(key: string) =>
   mutexData.getData(key) as AxiosWrapper<T>;
 
 async function mLock<T, TDefaultApi>(
@@ -49,6 +50,7 @@ async function mLock<T, TDefaultApi>(
   logout: () => void,
   refreshToken: () => Promise<User | undefined>,
   apiUrl: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   newDefaultApi: (config: any) => TDefaultApi,
 ) {
   let unlock: () => void | undefined;
@@ -106,6 +108,7 @@ export const useOpenApiStore = <T, TDefaultApi>({
   refreshToken: () => Promise<User | undefined>;
   disabled?: boolean;
   apiUrl: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   newDefaultApi: (config: any) => TDefaultApi;
 }): AxiosWrapper<T> => {
   if (!cacheKey) {

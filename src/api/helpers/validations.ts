@@ -6,20 +6,33 @@ import { IdJwt, User } from 'analytica.click';
 import { debug, error, info } from '../../common/helpers/log';
 import { returnCode } from './api';
 
-const jwksUri = `https://cognito-idp.ap-southeast-2.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}/.well-known/jwks.json`;
-const issuer = `https://cognito-idp.ap-southeast-2.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}`;
-const jwksClient = JwksClient({
-  cache: true,
-  rateLimit: true,
-  jwksRequestsPerMinute: 10,
-  jwksUri,
-});
+let jwksClient: JwksClient.JwksClient | undefined;
+const jwtVerify = async ({
+  COGNITO_USER_POOL_ID,
+  token,
+}: {
+  COGNITO_USER_POOL_ID: string;
+  token: string;
+}) => {
+  const jwksUri = `https://cognito-idp.ap-southeast-2.amazonaws.com/${COGNITO_USER_POOL_ID}/.well-known/jwks.json`;
+  const issuer = `https://cognito-idp.ap-southeast-2.amazonaws.com/${COGNITO_USER_POOL_ID}`;
 
-const jwtVerify = async (token: string) => {
   return new Promise((resolve, reject) => {
     verify(
       token,
       (header, callback) => {
+        if (!jwksClient) {
+          const jc = {
+            cache: true,
+            rateLimit: true,
+            jwksRequestsPerMinute: 10,
+            jwksUri,
+          };
+
+          info(`jwksClient config=`, jc);
+          jwksClient = JwksClient(jc);
+        }
+
         jwksClient.getSigningKey(
           header.kid,
           (errorV, key?: { rsaPublicKey?: string; publicKey?: string }) => {
@@ -53,9 +66,13 @@ const jwtVerify = async (token: string) => {
   });
 };
 
-export const getAndValidateToken = async (
-  tokenRaw?: string,
-): Promise<{
+export const getAndValidateToken = async ({
+  tokenRaw,
+  COGNITO_USER_POOL_ID,
+}: {
+  tokenRaw?: string;
+  COGNITO_USER_POOL_ID: string;
+}): Promise<{
   error?: APIGatewayProxyResult;
   token?: string;
   userProfile?: User;
@@ -73,7 +90,7 @@ export const getAndValidateToken = async (
 
     let subject: string | undefined;
     try {
-      await jwtVerify(token);
+      await jwtVerify({ token, COGNITO_USER_POOL_ID });
       const decoded = decode(token) as unknown as IdJwt;
       debug(`decoded=${JSON.stringify(decoded)}`);
       subject = decoded?.sub;

@@ -19,8 +19,10 @@ export const callOpenApi = async <T, TDefaultApi>({
   overrideAuth?: OverrideAuth;
   logout: () => void;
   refreshToken: () => Promise<User | undefined>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   newDefaultApi: (config: any) => TDefaultApi;
 }): Promise<AxiosWrapper<T | undefined>> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let error: AxiosError<unknown, any> | undefined;
   let data: T | undefined;
   const config = {
@@ -55,6 +57,7 @@ export const callOpenApi = async <T, TDefaultApi>({
 
       throw new Error(JSON.stringify(resp.data) || resp.statusText);
     } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const ae = e as AxiosError<unknown, any>;
       const status = ae.response?.status;
       const errorMessage = (ae.response?.data ||
