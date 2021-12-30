@@ -3,6 +3,8 @@
   "version": "0.0.5",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "author": "Andrei Gec <@andreigec> (https://gec.dev/)",
+  "repository": "github:andreigec/ag-common",
   "dependencies": {
     "aws-lambda": "1.0.7",
     "styled-components": "5.3.3",
