@@ -1396,7 +1396,7 @@ ajv@^8.0.0, ajv@^8.3.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-analytica.click@*:
+analytica.click@0.0.123:
   version "0.0.123"
   resolved "https://registry.yarnpkg.com/analytica.click/-/analytica.click-0.0.123.tgz#981455eaa6f7092c0b221b66137bf96617c75f04"
   integrity sha512-s2WmwFH4/UZ7/E4GOOQC4oRu6ZFelPk9rYDrEa3E60tOKJOagGSx+BkCG8fG+/MJq5UcAd4QiiZztLqVJ9EJOA==
