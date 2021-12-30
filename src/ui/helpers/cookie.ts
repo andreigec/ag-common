@@ -40,7 +40,7 @@ function getCookie({
 
   for (const c of ca) {
     if (c.indexOf(name) === 0) {
-      return c.substring(name.length, c.length);
+      return c.substr(name.length, c.length);
     }
   }
   return undefined;

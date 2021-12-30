@@ -52,7 +52,7 @@ export function truncate(
   if (!str) {
     return undefined;
   }
-  return str.length > n ? str.substring(0, n - 1) + ellip : str;
+  return str.length > n ? str.substr(0, n - 1) + ellip : str;
 }
 
 export interface ISite {
