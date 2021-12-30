@@ -14,7 +14,7 @@ const mutex = new Mutex({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mutexData = new MutexData<AxiosWrapper<any>>();
-export const setMutexData = ({
+ const setMutexData = ({
   key,
   data,
   ttlSeconds = 3600,
@@ -39,7 +39,7 @@ export const setMutexData = ({
   mutexData.setData(key, wrap, ttlSeconds);
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getMutexData = <T,>(key: string) =>
+ const getMutexData = <T,>(key: string) =>
   mutexData.getData(key) as AxiosWrapper<T>;
 
 async function mLock<T, TDefaultApi>(
