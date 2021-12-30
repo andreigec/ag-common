@@ -12,7 +12,6 @@
     "axios": "0.24.0",
     "typescript": "4.5.4",
     "openapi-request-validator": "10.0.0",
-    "analytica.click": "0.0.123",
     "aws-sdk": "2.1048.0",
     "aws-cdk-lib": "2.3.0",
     "constructs": "10.0.17",

@@ -2,10 +2,10 @@ import { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import { Mutex } from './mutex';
 import { MutexData } from './mutexData';
-import { AxiosWrapper, User } from 'analytica.click';
 import { callOpenApi } from './callOpenApi';
 import { CacheItems } from './routes';
 import { error, info } from '../../common/helpers/log';
+import { AxiosWrapper, User } from './jwt';
 const mutex = new Mutex({
   autoUnlockTimeoutMs: 10000,
   intervalMs: 100,

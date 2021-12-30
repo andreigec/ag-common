@@ -2,9 +2,9 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import JwksClient from 'jwks-rsa';
 import { verify, decode } from 'jsonwebtoken';
-import { IdJwt, User } from 'analytica.click';
 import { debug, error, info } from '../../common/helpers/log';
 import { returnCode } from './api';
+import { IdJwt, User } from '../../ui/helpers/jwt';
 
 let jwksClient: JwksClient.JwksClient | undefined;
 const jwtVerify = async ({

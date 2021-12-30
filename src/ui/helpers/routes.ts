@@ -1,8 +1,5 @@
-import {
-  AuthedUserContext,
-  ICognitoAuth,
-  ICognitoAuthProviderProps,
-} from 'analytica.click';
+import { ICognitoAuth, ICognitoAuthProviderProps } from './cognito';
+import { AuthedUserContext } from './jwt';
 
 export interface LocationSubset {
   pathname: string;
@@ -12,13 +9,6 @@ export interface LocationSubset {
   host: string;
 }
 
-export interface IRequest {
-  darkMode: boolean;
-  url: LocationSubset;
-  headerTitle?: string;
-  seed?: number;
-  lang: 'en';
-}
 export type CacheItems = CacheItem[];
 export interface CacheItem {
   cacheKey: string;
@@ -26,14 +16,22 @@ export interface CacheItem {
   prefillData: any;
   ttlSeconds: number;
 }
-export interface IInitialState {
+export interface IInitialStateCommon {
   openApiCache?: CacheItem[];
   headerTitle?: string;
   seed?: number;
 }
 
-export interface IState extends IInitialState {
-  request: IRequest;
+export interface IRequestCommon {
+  darkMode: boolean;
+  url: LocationSubset;
+  headerTitle?: string;
+  seed?: number;
+  lang: 'en';
+}
+export interface IStateCommon<TRequest extends IRequestCommon>
+  extends IInitialStateCommon {
+  request: TRequest;
   auth: ICognitoAuth;
   CognitoAuthContext: React.Context<AuthedUserContext>;
   CognitoAuthProvider: (p: ICognitoAuthProviderProps) => JSX.Element;

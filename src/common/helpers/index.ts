@@ -1,4 +1,5 @@
 export * from './array';
+export * from './date';
 export * from './distinctBy';
 export * from './email';
 export * from './groupBy';

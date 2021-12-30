@@ -1,20 +1,27 @@
-import Axios, { AxiosResponse, AxiosError } from 'axios';
+import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import { isJson } from '../../common/helpers/object';
 
+/**
+ *
+ * @param body accepts object or json, and passes as-is
+ * @returns
+ */
 export const axiosHelper = async <TOut>({
   verb,
   url,
-  data,
+  body,
   headers,
   timeout = 30000,
   retryMax = 0,
+  onStaleAuth,
 }: {
   headers?: { [a: string]: string };
   verb: 'put' | 'post' | 'get' | 'patch' | 'delete';
   url: string;
-  data?: unknown;
+  body?: unknown;
   timeout?: number;
   retryMax?: number;
+  onStaleAuth?: () => void;
 }): Promise<AxiosResponse<TOut>> => {
   let retry = 0;
   do {
@@ -35,33 +42,39 @@ export const axiosHelper = async <TOut>({
       }
 
       let noBody = false;
-      let func = Axios.post;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let axios: <T = any, R = AxiosResponse<T, any>, D = any>(
+        url: string,
+        body?: D | undefined,
+        config?: AxiosRequestConfig<D> | undefined,
+      ) => Promise<R> = Axios.post;
+
       if (verb === 'put') {
-        func = Axios.put;
+        axios = Axios.put;
       } else if (verb === 'post') {
-        func = Axios.post;
+        axios = Axios.post;
       } else if (verb === 'patch') {
-        func = Axios.patch;
+        axios = Axios.patch;
       } else if (verb === 'delete') {
-        func = Axios.delete;
+        axios = Axios.delete;
         noBody = true;
       }
 
       let ret: AxiosResponse<TOut> | undefined;
 
       if (noBody) {
-        ret = await func<TOut>(url, {
+        ret = await axios<TOut>(url, {
           headers: setHeaders,
           timeout,
           timeoutErrorMessage: `${url} timeout`,
         });
       } else {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (data && isJson(data as any)) {
+        if (body && isJson(body as any)) {
           setHeaders['Content-Type'] = 'application/json';
         }
 
-        ret = await func<TOut>(url, data, { headers: setHeaders });
+        ret = await axios<TOut>(url, body, { headers: setHeaders });
       }
 
       return ret;
@@ -72,9 +85,8 @@ export const axiosHelper = async <TOut>({
       // 403 returned for old token - will be refreshed
       if (em.code === '401' || em.code === '403') {
         // eslint-disable-next-line no-console
-        console.log('auth expired, reset');
-        // retry current page
-        window.location.reload();
+        console.log('auth expired');
+        onStaleAuth?.();
         retry = retryMax;
       }
 

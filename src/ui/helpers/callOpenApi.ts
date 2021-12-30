@@ -1,7 +1,7 @@
-import { AxiosWrapper, User } from 'analytica.click';
 import { AxiosError, AxiosResponse } from 'axios';
 import { getCookieWrapper } from './cookie';
 import { sleep } from './debounce';
+import { AxiosWrapper, User } from './jwt';
 
 export interface OverrideAuth {
   id_token?: string;

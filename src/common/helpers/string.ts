@@ -64,7 +64,7 @@ export interface ISite {
  */
 export const niceUrl = (siteUrl: string) => {
   if (!siteUrl) {
-    return siteUrl;
+    return undefined;
   }
 
   let niceSiteUrl = siteUrl

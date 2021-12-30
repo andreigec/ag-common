@@ -1,11 +1,11 @@
 // eslint-disable-next-line import/no-unresolved
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import OpenAPIRequestValidator from 'openapi-request-validator';
-import { User } from 'analytica.click';
 import { getAndValidateToken } from './validations';
 import { warn, error as errorF, info, debug } from '../../common/helpers/log';
 import { objectKeysToLowerCase } from '../../common/helpers/object';
 import { returnCode } from './api';
+import { User } from '../../ui/helpers/jwt';
 //
 const getOperation = ({
   path,

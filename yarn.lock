@@ -1120,18 +1120,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@paciolan/remote-component@^2.11.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@paciolan/remote-component/-/remote-component-2.12.0.tgz#6072f0a953d74323362bc9a8bc17d91a354be061"
-  integrity sha512-0KX6ftbdCRWoP288QBvRh3iT42aKU5aOXVe2HR4YwZQnEYuePZ/ge4orSKouvUnTEBxiQjT9Xk+jCep9kmS5NQ==
-  dependencies:
-    "@paciolan/remote-module-loader" "^3.0.1"
-
-"@paciolan/remote-module-loader@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@paciolan/remote-module-loader/-/remote-module-loader-3.0.1.tgz#2c0ff79763991e81cbb39556c12bc7319979592f"
-  integrity sha512-zruys/MHu+nNa6nbxmPJo9GYkS1LtXBHc76tD70GbMdZebOwePoFsetFCh8nmhD0T0fiiY9YHyoSyohTNvXx1A==
-
 "@panva/asn1.js@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@panva/asn1.js/-/asn1.js-1.0.0.tgz#dd55ae7b8129e02049f009408b97c61ccf9032f6"
@@ -1395,13 +1383,6 @@ ajv@^8.0.0, ajv@^8.3.0:
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
-
-analytica.click@0.0.123:
-  version "0.0.123"
-  resolved "https://registry.yarnpkg.com/analytica.click/-/analytica.click-0.0.123.tgz#981455eaa6f7092c0b221b66137bf96617c75f04"
-  integrity sha512-s2WmwFH4/UZ7/E4GOOQC4oRu6ZFelPk9rYDrEa3E60tOKJOagGSx+BkCG8fG+/MJq5UcAd4QiiZztLqVJ9EJOA==
-  dependencies:
-    "@paciolan/remote-component" "^2.11.0"
 
 ansi-colors@^4.1.1:
   version "4.1.1"
