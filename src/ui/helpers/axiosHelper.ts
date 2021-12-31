@@ -27,7 +27,7 @@ export const axiosHelper = async <TOut>({
   do {
     try {
       const setHeaders: { [a: string]: string } = {
-        accept: 'application/json',
+        Accept: 'application/json',
         ...headers,
       };
 
@@ -71,7 +71,8 @@ export const axiosHelper = async <TOut>({
       } else {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (body && isJson(body as any)) {
-          setHeaders['Content-Type'] = 'application/json';
+          setHeaders['Content-Type'] =
+            setHeaders['Content-Type'] || 'application/json';
         }
 
         ret = await axios<TOut>(url, body, { headers: setHeaders });
