@@ -52,6 +52,7 @@ export const Modal = ({
   topPosition = 'bottom',
   showCloseButton = true,
   closeOnMoveMouseOutside = false,
+  className,
 }: {
   open: boolean;
   setOpen: (b: boolean) => void;
@@ -60,6 +61,7 @@ export const Modal = ({
   topPosition?: 'bottom' | 'top' | 'center';
   showCloseButton?: boolean;
   closeOnMoveMouseOutside?: boolean;
+  className?: string;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside({ ref, moveMouseOutside: closeOnMoveMouseOutside }, () => {
@@ -73,7 +75,7 @@ export const Modal = ({
   }
 
   return (
-    <FixedBackground>
+    <FixedBackground className={className}>
       <ModalBase
         data-position={position}
         data-topposition={topPosition}
@@ -98,8 +100,9 @@ export const ModalDropList = (p: {
   setOpen: (b: boolean) => void;
   closeOnMoveMouseOutside?: boolean;
   showCloseButton?: boolean;
+  className?: string;
 }) => (
-  <Modal {...p}>
+  <Modal {...p} className={p.className}>
     {p.options.map((option, index) => (
       <ModalItem
         key={option as unknown as never}
