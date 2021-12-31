@@ -18,7 +18,7 @@ function getWindowDimensions(): Dimensions | undefined {
   }
 }
 
-export default function UseWindowDimensions() {
+export function useResize() {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
