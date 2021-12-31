@@ -46,7 +46,15 @@ export class MutexData<T> {
     });
   }
 
-  setData(key: string, data: T, ttlSeconds = 3600) {
+  setData({
+    ttlSeconds = 3600,
+    key,
+    data,
+  }: {
+    key: string;
+    data: T;
+    ttlSeconds?: number;
+  }) {
     setLocalStorageItem(`mutex-${key}`, data, ttlSeconds);
     if (Object.keys(this.subscriptions).length > 0) {
       this.pingSubscribers(key);

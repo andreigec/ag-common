@@ -1,12 +1,12 @@
 export const toObject = <T, Indexer extends string | number>(
   arr: T[],
   keyF: (a: T) => Indexer,
-): { [a in Indexer]: T } | null => {
+): { [a in Indexer]: T } => {
+  const ret: { [a in Indexer]: T } = {} as { [a in Indexer]: T };
   if (!arr || !keyF) {
-    return null;
+    return ret;
   }
 
-  const ret: { [a in Indexer]: T } = {} as { [a in Indexer]: T };
   arr.forEach((v) => {
     const k = keyF(v);
     ret[k] = v;

@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import { Mutex } from './mutex';
 import { MutexData } from './mutexData';
-import { callOpenApi } from './callOpenApi';
+import { callOpenApi, OverrideAuth } from './callOpenApi';
 import { CacheItems } from './routes';
 import { error, info } from '../../common/helpers/log';
 import { AxiosWrapper, User } from './jwt';
@@ -36,23 +36,33 @@ export const setMutexData = ({
     url: '',
   };
 
-  mutexData.setData(key, wrap, ttlSeconds);
+  mutexData.setData({ key, data: wrap, ttlSeconds });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getMutexData = <T,>(key: string) =>
   mutexData.getData(key) as AxiosWrapper<T>;
 
-async function mLock<T, TDefaultApi>(
-  key: string,
-  func: (f: TDefaultApi) => Promise<AxiosResponse<T>>,
-  ttlSeconds: number,
-  logout: () => void,
-  refreshToken: () => Promise<User | undefined>,
-  apiUrl: string,
+async function mLock<T, TDefaultApi>({
+  key,
+  func,
+  ttlSeconds = 3600,
+  logout,
+  refreshToken,
+  apiUrl,
+  newDefaultApi,
+  overrideAuth,
+}: {
+  key: string;
+  func: (f: TDefaultApi) => Promise<AxiosResponse<T>>;
+  ttlSeconds?: number;
+  logout: () => void;
+  refreshToken: () => Promise<User | undefined>;
+  apiUrl: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  newDefaultApi: (config: any) => TDefaultApi,
-) {
+  newDefaultApi: (config: any) => TDefaultApi;
+  overrideAuth?: OverrideAuth;
+}) {
   let unlock: () => void | undefined;
   try {
     unlock = await mutex.capture(key);
@@ -66,6 +76,7 @@ async function mLock<T, TDefaultApi>(
       logout,
       refreshToken,
       newDefaultApi,
+      overrideAuth,
     });
 
     if (!newData) {
@@ -75,7 +86,7 @@ async function mLock<T, TDefaultApi>(
     if (newData.error) {
       error('api error:', newData.error);
     } else {
-      mutexData.setData(key, newData, ttlSeconds);
+      mutexData.setData({ key, data: newData, ttlSeconds });
     }
 
     mutexData.pingSubscribers(key);
@@ -91,16 +102,12 @@ async function mLock<T, TDefaultApi>(
 }
 
 const getTs = () => new Date().getTime();
-export const useOpenApiStore = <T, TDefaultApi>({
-  func,
-  cacheKey,
-  ttlSeconds = 3600,
-  logout,
-  refreshToken,
-  disabled = false,
-  apiUrl,
-  newDefaultApi,
-}: {
+/**
+ *
+ * @param overrideAuth - auth automatically picked up from id_token cookie, can override value here, but not required
+ * @returns
+ */
+export const useOpenApiStore = <T, TDefaultApi>(p: {
   ttlSeconds?: number;
   func: (f: TDefaultApi) => Promise<AxiosResponse<T>>;
   cacheKey: string;
@@ -110,7 +117,9 @@ export const useOpenApiStore = <T, TDefaultApi>({
   apiUrl: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   newDefaultApi: (config: any) => TDefaultApi;
+  overrideAuth?: OverrideAuth;
 }): AxiosWrapper<T> => {
+  const { cacheKey, disabled } = p;
   if (!cacheKey) {
     throw new Error('no cache key');
   }
@@ -130,18 +139,12 @@ export const useOpenApiStore = <T, TDefaultApi>({
   useEffect(() => {
     if (!disabled && !mutexData.getData(key)) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      mLock(key, func, ttlSeconds, logout, refreshToken, apiUrl, newDefaultApi);
+      mLock({
+        key,
+        ...p,
+      });
     }
-  }, [
-    disabled,
-    func,
-    key,
-    ttlSeconds,
-    logout,
-    refreshToken,
-    apiUrl,
-    newDefaultApi,
-  ]);
+  }, [disabled, key, p]);
 
   if (!mutexData.getData(key)) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -165,17 +168,15 @@ export const useOpenApiStore = <T, TDefaultApi>({
   return {
     ...current,
     reFetch: async () => {
-      mutexData.setData(key, { ...current, loading: true }, ttlSeconds);
-      mutexData.pingSubscribers(key);
-      const newData = await callOpenApi({
-        apiUrl,
-        func,
-        logout,
-        refreshToken,
-        newDefaultApi,
+      mutexData.setData({
+        key,
+        data: { ...current, loading: true },
+        ttlSeconds: p.ttlSeconds,
       });
 
-      mutexData.setData(key, newData, ttlSeconds);
+      mutexData.pingSubscribers(key);
+      const newData = await callOpenApi(p);
+      mutexData.setData({ key, data: newData, ttlSeconds: p.ttlSeconds });
       mutexData.pingSubscribers(key);
     },
   };
@@ -183,6 +184,6 @@ export const useOpenApiStore = <T, TDefaultApi>({
 
 export const setOpenApiCache = (items: CacheItems) => {
   items.forEach(({ cacheKey, prefillData, ttlSeconds }) => {
-    mutexData.setData(cacheKey, prefillData, ttlSeconds);
+    mutexData.setData({ key: cacheKey, data: prefillData, ttlSeconds });
   });
 };

@@ -1,5 +1,3 @@
-import { AuthedUserContext } from './jwt';
-
 export type TOnMessage = (
   m: string,
   options?: { appearance: 'error' | 'success' },
@@ -38,9 +36,4 @@ export interface ICognitoAuthProviderProps {
   children: JSX.Element | JSX.Element[];
   config: ICognitoAuth;
   onMessage?: TOnMessage;
-}
-
-export interface ICognitoAuthProviderPropsInternal
-  extends ICognitoAuthProviderProps {
-  Context: React.Context<AuthedUserContext>;
 }
