@@ -6,6 +6,7 @@ import { warn, error as errorF, info, debug } from '../../common/helpers/log';
 import { objectKeysToLowerCase } from '../../common/helpers/object';
 import { returnCode } from './api';
 import { User } from '../../ui/helpers/jwt';
+import { getValidatedLang, TLang } from '../../common/helpers/i18n';
 //
 const getOperation = ({
   path,
@@ -53,11 +54,13 @@ export type NextType<T> = ({
   body,
   params,
   userProfile,
+  lang,
 }: {
   params: Record<string, string>;
   event: APIGatewayEvent;
   body: T;
   userProfile?: User;
+  lang: TLang;
 }) => Promise<APIGatewayProxyResult>;
 
 export async function validateOpenApi<T>({
@@ -157,6 +160,7 @@ export async function validateOpenApi<T>({
     event,
     body: (event.body && JSON.parse(event.body)) as T,
     userProfile,
+    lang: getValidatedLang(event.headers['x-lang'] ?? ''),
   });
 
   return res;
