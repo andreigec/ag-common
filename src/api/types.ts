@@ -73,6 +73,7 @@ export interface APIGatewayEvent {
   path: string;
   requestContext: {
     identity: {
+      userAgent: string;
       sourceIp: string;
     };
     httpMethod: string;
