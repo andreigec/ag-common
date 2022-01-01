@@ -77,6 +77,14 @@ export async function validateOpenApi<T>({
   next: NextType<T>;
   authorized?: true | false | 'optional';
 }) {
+  if (!schema) {
+    throw new Error('schema undefined!');
+  }
+
+  if (!COGNITO_USER_POOL_ID) {
+    throw new Error('COGNITO_USER_POOL_ID undefined');
+  }
+
   const request = {
     method: event.httpMethod,
     path: event.path,
