@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-onchange */
 import React, { useState, useEffect } from 'react';
 import { SaveIcon, UndoIcon } from './images';
-import { Icon, ValueBox } from './common';
+import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
 import { noDrag } from '../../styles/common';
 export const ListboxEdit = ({
   defaultValue,
@@ -28,7 +28,7 @@ export const ListboxEdit = ({
       </select>
       {value !== defaultValue && (
         <Icon
-          style={{ right: '2rem' }}
+          style={iconLeft}
           onClick={() =>
             value !== defaultValue &&
             onSubmit(value.split(',').map((s) => s.trim()))
@@ -38,10 +38,7 @@ export const ListboxEdit = ({
         </Icon>
       )}
       {value !== defaultValue && (
-        <Icon
-          style={{ right: '0.5rem' }}
-          onClick={() => setValue(defaultValue)}
-        >
+        <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
           <UndoIcon />
         </Icon>
       )}

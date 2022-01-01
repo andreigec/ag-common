@@ -1,5 +1,4 @@
 // eslint-disable-next-line import/no-unresolved
-import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import OpenAPIRequestValidator from 'openapi-request-validator';
 import { getAndValidateToken } from './validations';
 import { warn, error as errorF, info, debug } from '../../common/helpers/log';
@@ -7,6 +6,7 @@ import { objectKeysToLowerCase } from '../../common/helpers/object';
 import { returnCode } from './api';
 import { User } from '../../ui/helpers/jwt';
 import { getValidatedLang, TLang } from '../../common/helpers/i18n';
+import { APIGatewayEvent, APIGatewayProxyResult } from '../types';
 //
 const getOperation = ({
   path,

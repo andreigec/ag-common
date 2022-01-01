@@ -1,19 +1,16 @@
 import { colours } from '../../styles/colours';
 import React, { useEffect, useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
+import { Icon } from '../Icon';
 
 const SBase = styled.div`
   display: flex;
   flex-flow: row;
   position: relative;
-  min-width: 5rem;
   align-items: center;
   justify-content: space-between;
-  cursor: default;
-  background-color: ${colours.darker};
-  color: ${colours.dark};
   cursor: pointer;
-  flex-grow: 1;
+  flex-grow: 0;
 `;
 
 const SItems = styled.div<{ open?: boolean }>`
@@ -22,9 +19,11 @@ const SItems = styled.div<{ open?: boolean }>`
   top: 100%;
   display: none;
   position: absolute;
-  background-color: ${colours.mainLight};
+  background-color: white;
   cursor: default;
   width: 100%;
+  right: 0;
+  max-width: 95vw;
   ${({ open }) =>
     open &&
     css`
@@ -32,14 +31,19 @@ const SItems = styled.div<{ open?: boolean }>`
     `}
 `;
 
-const SSelectedItem = styled.div`
-  font-weight: 500;
-  padding: 0.5rem;
-`;
+const Dots = (
+  <svg
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    fillRule="evenodd"
+    clipRule="evenodd"
+  >
+    <path d="M16 12a3.001 3.001 0 016 0 3.001 3.001 0 01-6 0zm1 0a2 2 0 114.001.001A2 2 0 0117 12zm-8 0a3.001 3.001 0 016 0 3.001 3.001 0 01-6 0zm1 0a2 2 0 114.001.001A2 2 0 0110 12zm-8 0a3.001 3.001 0 016 0 3.001 3.001 0 01-6 0zm1 0a2 2 0 114.001.001A2 2 0 013 12z" />
+  </svg>
+);
 
 const SItem = styled.div<{ selected?: boolean }>`
   z-index: 1;
-  word-break: break-all;
   font-weight: 500;
   padding-left: 0.5rem;
   flex-grow: 1;
@@ -70,40 +74,6 @@ const SItem = styled.div<{ selected?: boolean }>`
   }
 `;
 
-function Items<T>({
-  options,
-  state,
-  onChange,
-  renderF,
-}: {
-  options: T[];
-  state: T;
-  onChange: (v: T, index: number) => void;
-  renderF: (v: T) => string;
-}) {
-  return (
-    <>
-      {options.map((s, i) => (
-        <SItem
-          key={renderF(s)}
-          selected={s === state}
-          onClick={() => {
-            if (s !== state) {
-              onChange(s, i);
-            }
-          }}
-        >
-          {renderF(s)}
-        </SItem>
-      ))}
-    </>
-  );
-}
-
-const ChevronStyled = styled.div`
-  margin-right: 0.5rem;
-`;
-
 export function DropdownList<T>({
   options,
   value,
@@ -111,13 +81,15 @@ export function DropdownList<T>({
   placeholder,
   className,
   renderF,
+  children,
 }: {
   options: T[];
-  value: T;
+  value?: T;
   onChange: (v: T, index: number) => void;
   placeholder?: string;
   className?: string;
   renderF: (v: T) => string;
+  children?: JSX.Element;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState(value);
@@ -136,8 +108,12 @@ export function DropdownList<T>({
   }, []);
 
   useEffect(() => {
-    setState(value);
-  }, [value]);
+    const newv = value;
+    if (JSON.stringify(newv) !== JSON.stringify(value)) setState(newv);
+  }, [options, value]);
+
+  const maxLen = Math.max(...options.map((s) => renderF(s).length));
+
   return (
     <SBase
       className={className}
@@ -145,22 +121,39 @@ export function DropdownList<T>({
       title={placeholder}
       onClick={(e) => {
         e.stopPropagation();
+        e.preventDefault();
         setOpen(!open);
       }}
     >
-      <SSelectedItem>{renderF(state)}</SSelectedItem>
-
-      <ChevronStyled>{open ? '˄' : '˅'}</ChevronStyled>
-      <SItems open={open}>
-        {open && (
-          <Items
-            renderF={renderF}
-            state={state}
-            options={options}
-            onChange={onChange}
-          />
-        )}
+      <SItems open={open} style={{ width: `calc(${maxLen}ch + 2rem)` }}>
+        {open &&
+          options.map((s, i) => (
+            <SItem
+              key={renderF(s)}
+              selected={s === state}
+              onClick={() => {
+                if (s !== state) {
+                  onChange(s, i);
+                }
+              }}
+            >
+              {renderF(s)}
+            </SItem>
+          ))}
       </SItems>
+      {children || (
+        <Icon
+          width="2rem"
+          height="2rem"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            setOpen(!open);
+          }}
+        >
+          {Dots}
+        </Icon>
+      )}
     </SBase>
   );
 }

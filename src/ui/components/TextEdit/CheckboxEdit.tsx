@@ -1,7 +1,13 @@
 /* eslint-disable jsx-a11y/no-onchange */
 import React, { useState, useEffect, useRef } from 'react';
 import { SaveIcon, UndoIcon } from './images';
-import { Icon, ValueBox, ValueInputCB } from './common';
+import {
+  IconD as Icon,
+  iconLeft,
+  iconRight,
+  ValueBox,
+  ValueInputCB,
+} from './common';
 import { noDrag } from '../../styles/common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import styled from 'styled-components';
@@ -46,17 +52,14 @@ export const CheckboxEdit = ({
       <Icons center>
         {value !== defaultValue && (
           <Icon
-            style={{ right: '2rem' }}
+            style={iconLeft}
             onClick={() => value !== defaultValue && onSubmit(value)}
           >
             <SaveIcon />
           </Icon>
         )}
         {value !== defaultValue && (
-          <Icon
-            style={{ right: '0.5rem' }}
-            onClick={() => setValue(defaultValue)}
-          >
+          <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
             <UndoIcon />
           </Icon>
         )}

@@ -11,9 +11,7 @@ export const ValueBox = styled.div`
   justify-content: flex-start;
   flex-grow: 1;
   max-width: 100%;
-  &[data-editing='false'] {
-    padding-right: 2rem;
-  }
+
   &[data-pointer='true'] {
     cursor: pointer;
   }
@@ -40,7 +38,7 @@ export const ValueReadonly = styled.div`
   ${valueCss};
 `;
 
-export const Icon = styled.div`
+export const IconD = styled.div`
   z-index: 1;
   font-size: 1rem;
   width: 1.5rem;
@@ -51,3 +49,5 @@ export const Icon = styled.div`
     fill: ${colours.notificationBlue};
   }
 `;
+export const iconRight = { right: '0', top: '-1rem' };
+export const iconLeft = { right: '1.5rem', top: '-1rem' };

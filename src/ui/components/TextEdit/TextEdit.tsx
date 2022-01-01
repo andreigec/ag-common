@@ -1,7 +1,14 @@
 /* eslint-disable jsx-a11y/no-onchange */
 import React, { useState, useEffect, useRef } from 'react';
 import { SaveIcon, UndoIcon, PencilIcon } from './images';
-import { Icon, ValueBox, valueCss, ValueReadonly } from './common';
+import {
+  IconD as Icon,
+  iconLeft,
+  iconRight,
+  ValueBox,
+  valueCss,
+  ValueReadonly,
+} from './common';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
@@ -10,6 +17,9 @@ const ValueTextArea = styled.textarea`
   ${valueCss};
   resize: none;
   overflow: hidden;
+  &[data-editing='true'] {
+    min-height: 5rem;
+  }
 `;
 
 export const TextEdit = ({
@@ -44,6 +54,10 @@ export const TextEdit = ({
     if (valueChange) {
       onSubmit(value);
     } else {
+      if (canEdit && editing && defaultEditing) {
+        return;
+      }
+
       if (onClickOutsideWithNoValue) {
         onClickOutsideWithNoValue();
       }
@@ -86,7 +100,7 @@ export const TextEdit = ({
         <ValueReadonly data-type="text">{value}</ValueReadonly>
         {canEdit && (
           <Icon
-            style={{ right: '0.5rem' }}
+            style={iconRight}
             onClick={(e) => {
               e.stopPropagation();
               setEditing(true);
@@ -112,6 +126,7 @@ export const TextEdit = ({
       className={className}
     >
       <ValueTextArea
+        data-editing="true"
         data-valuechange={valueChange.toString()}
         ref={taref}
         data-type="text"
@@ -124,16 +139,13 @@ export const TextEdit = ({
         }
       />
       {valueChange && (
-        <Icon
-          style={{ right: '2rem' }}
-          onClick={() => valueChange && onSubmit(value)}
-        >
+        <Icon style={iconLeft} onClick={() => valueChange && onSubmit(value)}>
           <SaveIcon />
         </Icon>
       )}
       {(valueChange || editing !== defaultEditing) && (
         <Icon
-          style={{ right: '0.5rem' }}
+          style={iconRight}
           onClick={() => {
             setEditing(defaultEditing);
             setValue(defaultValue);

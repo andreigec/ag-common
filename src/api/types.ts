@@ -47,3 +47,34 @@ export interface IQueryDynamo {
   filterValue?: string | number;
   filterOperator?: string;
 }
+export interface APIGatewayProxyResult {
+  statusCode: number;
+  headers?:
+    | {
+        [header: string]: boolean | number | string;
+      }
+    | undefined;
+  multiValueHeaders?:
+    | {
+        [header: string]: Array<boolean | number | string>;
+      }
+    | undefined;
+  body: string;
+  isBase64Encoded?: boolean | undefined;
+}
+
+export interface APIGatewayEvent {
+  body: string | null;
+  headers: Record<string, string | undefined>;
+  httpMethod: string;
+  queryStringParameters: Record<string, string> | null;
+  pathParameters: Record<string, string> | null;
+  resource: string;
+  path: string;
+  requestContext: {
+    identity: {
+      sourceIp: string;
+    };
+    httpMethod: string;
+  };
+}

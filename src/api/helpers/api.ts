@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // eslint-disable-next-line
-import { APIGatewayProxyResult } from 'aws-lambda';
 import { notEmpty } from '../../common/helpers/array';
-import { DYNAMOKEYS } from '../types';
+import { APIGatewayProxyResult, DYNAMOKEYS } from '../types';
 export const returnCode = <T>(
   statusCode: number,
   body?: T,

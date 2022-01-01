@@ -9,6 +9,7 @@ export * from './Icon';
 export * from './Input';
 export * from './Loader';
 export * from './LoginButton';
+export * from './LogoutButton';
 export * from './Modal';
 export * from './RowOrColumn';
 export * from './Table';

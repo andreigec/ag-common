@@ -42,8 +42,8 @@ function nicify(...args: any[][]) {
 }
 
 function logprocess(type: TLogType, date: string, args: string[]) {
-  const ds = date ? `[${date}]` : '';
-  const retm = [ds, type, ...args].filter(notEmpty).join('\t');
+  const msg = `[${date}] ${type} `;
+  const argsClean = args.filter(notEmpty);
   const min =
     GetLogLevel(process.env.LOG_LEVEL?.toUpperCase() as TLogType) || 'WARN';
 
@@ -56,37 +56,37 @@ function logprocess(type: TLogType, date: string, args: string[]) {
 
   switch (type) {
     case 'TRACE': {
-      console.trace(retm);
+      console.trace(msg, ...argsClean);
       break;
     }
 
     case 'DEBUG': {
-      console.debug(retm);
+      console.debug(msg, ...argsClean);
       break;
     }
 
     case 'INFO': {
-      console.log(retm);
+      console.log(msg, ...argsClean);
       break;
     }
 
     case 'WARN': {
-      console.warn(retm);
+      console.warn(msg, ...argsClean);
       break;
     }
 
     case 'ERROR': {
-      console.error(retm);
+      console.error(msg, ...argsClean);
       break;
     }
 
     case 'FATAL': {
-      console.error(retm);
+      console.error(msg, ...argsClean);
       break;
     }
 
     default: {
-      console.log(retm);
+      console.log(msg, ...argsClean);
       break;
     }
   }

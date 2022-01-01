@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-onchange */
 import React, { useState, useEffect, useRef } from 'react';
 import { SaveIcon, UndoIcon } from './images';
-import { Icon, ValueBox } from './common';
+import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
 export const ColourEdit = ({
@@ -33,17 +33,14 @@ export const ColourEdit = ({
       />
       {value !== defaultValue && (
         <Icon
-          style={{ right: '2rem' }}
+          style={iconLeft}
           onClick={() => valueChange && onSubmit(value.trim())}
         >
           <SaveIcon />
         </Icon>
       )}
       {valueChange && (
-        <Icon
-          style={{ right: '0.5rem' }}
-          onClick={() => setValue(defaultValue)}
-        >
+        <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
           <UndoIcon />
         </Icon>
       )}
