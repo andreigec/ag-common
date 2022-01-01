@@ -72,6 +72,8 @@ export interface APIGatewayEvent {
   resource: string;
   path: string;
   requestContext: {
+    connectionId: string;
+    domainName: string;
     identity: {
       userAgent: string;
       sourceIp: string;

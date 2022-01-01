@@ -42,7 +42,7 @@
     "@types/jsonwebtoken": "8.5.6"
   },
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && yarn checklint && tsc",
     "fix": "./node_modules/.bin/eslint --fix './src/**/*.ts' './src/**/*.tsx'",
     "checklint": "npx eslint --ext .ts,.tsx ./src",
     "start": "tsc --watch"
