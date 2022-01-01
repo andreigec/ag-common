@@ -92,3 +92,39 @@ export function toTitleCase(str: string) {
       txt && txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase(),
   );
 }
+
+/**
+ * remove all found params from str
+ * @param str
+ * @param params allows single chars and/or strings
+ * @returns
+ */
+export function replaceRemove(str: string, ...params: string[]) {
+  const replaceSingles: string[] = [];
+  const replaceStrings: string[] = [];
+  params.forEach((p) => {
+    if (typeof p !== 'string') {
+      throw new Error('trim only supports strings');
+    }
+
+    if (p.length === 1) {
+      replaceSingles.push(p);
+    } else {
+      replaceStrings.push(p);
+    }
+  });
+
+  let firstLength = 0;
+  let changedLength = 0;
+  let ret = str;
+  const singleRegex = `[${replaceSingles.join('')}]*`;
+  const stringRegex = `(${replaceStrings.map((s) => `(${s})`).join('|')})*`;
+  do {
+    firstLength = ret.length;
+    ret = ret.replace(new RegExp(stringRegex, 'gim'), '');
+    ret = ret.replace(new RegExp(singleRegex, 'gim'), '');
+    changedLength = ret.length;
+  } while (changedLength < firstLength);
+
+  return ret;
+}
