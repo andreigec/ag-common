@@ -15,35 +15,7 @@ function dateF(): string {
   return str;
 }
 
-function nicify(...args: any[][]) {
-  const ret: string[] = [];
-  args.forEach((a) => {
-    a.forEach((v) => {
-      if (
-        v !== null &&
-        typeof v !== 'undefined' &&
-        v.toString().indexOf('Error:') !== -1 &&
-        v.stack
-      ) {
-        ret.push(`${v.stack}`);
-      } else if (typeof v === 'string') {
-        if (v.trim() !== 'undefined') {
-          ret.push(`${v.trim()}`);
-        }
-      } else if (typeof v === 'object') {
-        ret.push(JSON.parse(JSON.stringify(v)));
-      } else {
-        ret.push(v);
-      }
-    });
-  });
-
-  return ret;
-}
-
-function logprocess(type: TLogType, date: string, args: string[]) {
-  const msg = `[${date}] ${type} `;
-  const argsClean = args.filter(notEmpty);
+function logprocess(type: TLogType, args: any[]) {
   const min =
     GetLogLevel(process.env.LOG_LEVEL?.toUpperCase() as TLogType) || 'WARN';
 
@@ -54,39 +26,42 @@ function logprocess(type: TLogType, date: string, args: string[]) {
     return;
   }
 
+  ////////
+  const log = [`[${dateF()}]`, type, ...args.filter(notEmpty)];
+
   switch (type) {
     case 'TRACE': {
-      console.trace(msg, ...argsClean);
+      console.trace(...log);
       break;
     }
 
     case 'DEBUG': {
-      console.debug(msg, ...argsClean);
+      console.debug(...log);
       break;
     }
 
     case 'INFO': {
-      console.log(msg, ...argsClean);
+      console.log(...log);
       break;
     }
 
     case 'WARN': {
-      console.warn(msg, ...argsClean);
+      console.warn(...log);
       break;
     }
 
     case 'ERROR': {
-      console.error(msg, ...argsClean);
+      console.error(...log);
       break;
     }
 
     case 'FATAL': {
-      console.error(msg, ...argsClean);
+      console.error(...log);
       break;
     }
 
     default: {
-      console.log(msg, ...argsClean);
+      console.log(...log);
       break;
     }
   }
@@ -157,26 +132,25 @@ function printStackTrace(...args: undefined[]) {
   return callstack.join('\n');
 }
 
+export const debug = (...args: any[]) => logprocess('DEBUG', args);
+
+export const info = (...args: any[]) => logprocess('INFO', args);
+
+export const warn = (...args: any[]) => logprocess('WARN', args);
+
+//
+
 export const trace = (...args: any[]) => {
-  const argsNice = nicify(args);
   args.push(printStackTrace());
-  logprocess('TRACE', dateF(), argsNice);
+  logprocess('TRACE', args);
 };
 
-export const debug = (...args: any[]) =>
-  logprocess('DEBUG', dateF(), nicify(args));
-
-export const info = (...args: any[]) =>
-  logprocess('INFO', dateF(), nicify(args));
-
-export const warn = (...args: any[]) =>
-  logprocess('WARN', dateF(), nicify(args));
-
-export const error = (...args: any[]) =>
-  logprocess('ERROR', dateF(), nicify(args));
+export const error = (...args: any[]) => {
+  args.push(printStackTrace());
+  logprocess('ERROR', args);
+};
 
 export const fatal = (...args: any[]) => {
-  const argsNice = nicify(args);
   args.push(printStackTrace());
-  logprocess('FATAL', dateF(), argsNice);
+  logprocess('FATAL', args);
 };

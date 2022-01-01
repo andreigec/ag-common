@@ -65,7 +65,7 @@ export const callOpenApi = async <T, TDefaultApi>({
         ae.response?.status ||
         'ERROR') as string;
 
-      if (status === 403) {
+      if (status === 403 || status === 401) {
         logout();
         return {
           error: ae,
@@ -90,11 +90,7 @@ export const callOpenApi = async <T, TDefaultApi>({
     data,
     error,
     loading: false,
-    reFetch: async () => {
-      const ret = func(cl);
-
-      return ret;
-    },
+    reFetch: async () => func(cl),
     url: func.toString(),
     datetime: new Date().getTime(),
   };
