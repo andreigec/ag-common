@@ -1,6 +1,7 @@
 /* eslint-disable no-new */
 import {
   aws_apigateway as apigw,
+  aws_logs as logs,
   aws_lambda as lambda,
   aws_certificatemanager as certmgr,
   aws_route53 as route53,
@@ -183,6 +184,8 @@ export const openApiImpl = (p: {
         bundling: {
           externalModules: ['aws-sdk', 'aws-lambda'],
         },
+        reservedConcurrentExecutions: 5,
+        logRetention: logs.RetentionDays.FIVE_DAYS,
       });
 
       readTables.forEach((t) => t.table.grantReadData(lambdaV));
