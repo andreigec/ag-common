@@ -4,13 +4,12 @@
 /* eslint-disable prefer-const */
 import {
   DocumentClient,
-  Key,
   PutItemInput,
   QueryInput,
   QueryOutput,
 } from 'aws-sdk/clients/dynamodb';
 import AWS, { AWSError, Response } from 'aws-sdk';
-import { IQueryDynamo } from '../types';
+import { IQueryDynamo, Key } from '../types';
 import { info, error as errorF, debug, warn } from '../../common/helpers/log';
 import { chunk, notEmpty, take } from '../../common/helpers/array';
 

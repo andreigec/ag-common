@@ -2,6 +2,7 @@ import { colours } from '../../styles/colours';
 import React, { useEffect, useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { Icon } from '../Icon';
+import { convertRemToPixels } from '../../helpers/dom';
 
 const SBase = styled.div`
   display: flex;
@@ -22,7 +23,6 @@ const SItems = styled.div<{ open?: boolean }>`
   background-color: white;
   cursor: default;
   width: 100%;
-  right: 0;
   max-width: 95vw;
   ${({ open }) =>
     open &&
@@ -113,6 +113,18 @@ export function DropdownList<T>({
   }, [options, value]);
 
   const maxLen = Math.max(...options.map((s) => renderF(s).length));
+  const style: Record<string, string | number> = {
+    width: `calc(${maxLen}ch + 2rem)`,
+  };
+
+  const minLeft = convertRemToPixels(2 + maxLen / 2);
+  const offsetList = ref?.current?.offsetLeft ?? 0;
+
+  if (offsetList < minLeft) {
+    style.left = 0;
+  } else {
+    style.right = 0;
+  }
 
   return (
     <SBase
@@ -125,7 +137,7 @@ export function DropdownList<T>({
         setOpen(!open);
       }}
     >
-      <SItems open={open} style={{ width: `calc(${maxLen}ch + 2rem)` }}>
+      <SItems open={open} style={style}>
         {open &&
           options.map((s, i) => (
             <SItem
