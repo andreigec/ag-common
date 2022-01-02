@@ -49,7 +49,7 @@ export const CheckboxEdit = ({
           e.key === 'Enter' && value !== defaultValue && onSubmit(value)
         }
       />
-      <Icons center>
+      <Icons center enableOverflow>
         {value !== defaultValue && (
           <Icon
             style={iconLeft}
