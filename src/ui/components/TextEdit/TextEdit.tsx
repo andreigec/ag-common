@@ -1,24 +1,43 @@
 /* eslint-disable jsx-a11y/no-onchange */
 import React, { useState, useEffect, useRef } from 'react';
 import { SaveIcon, UndoIcon, PencilIcon } from './images';
-import {
-  IconD as Icon,
-  iconLeft,
-  iconRight,
-  ValueBox,
-  valueCss,
-  ValueReadonly,
-} from './common';
+import { iconLeft, iconRight, ValueBox, valueCss } from './common';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
 
+export const ValueReadonly = styled.div`
+  ${valueCss};
+  word-break: break-word;
+  flex-basis: calc(100% - 3rem);
+`;
 const ValueTextArea = styled.textarea`
+  border: 0;
+  word-break: break-word;
   ${valueCss};
   resize: none;
   overflow: hidden;
+  background-color: white;
   &[data-editing='true'] {
     min-height: 5rem;
+  }
+`;
+
+const ValueBoxEdit = styled(ValueBox)`
+  border: solid 1px #ccc;
+`;
+
+const Right = styled.div`
+  display: flex;
+  flex-flow: row;
+  align-content: center;
+`;
+
+const Icon = styled.div`
+  width: 1.5rem;
+  cursor: pointer;
+  &:hover {
+    filter: saturate(3);
   }
 `;
 
@@ -98,17 +117,19 @@ export const TextEdit = ({
         data-pointer={onClickNotEditing ? 'true' : 'false'}
       >
         <ValueReadonly data-type="text">{value}</ValueReadonly>
-        {canEdit && (
-          <Icon
-            style={iconRight}
-            onClick={(e) => {
-              e.stopPropagation();
-              setEditing(true);
-            }}
-          >
-            <PencilIcon />
-          </Icon>
-        )}
+        <Right>
+          {canEdit && (
+            <Icon
+              style={iconRight}
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditing(true);
+              }}
+            >
+              <PencilIcon />
+            </Icon>
+          )}
+        </Right>
       </ValueBox>
     );
   }
@@ -118,7 +139,7 @@ export const TextEdit = ({
   }
 
   return (
-    <ValueBox
+    <ValueBoxEdit
       data-editing="true"
       {...noDrag}
       ref={ref}
@@ -138,22 +159,24 @@ export const TextEdit = ({
           singleLine && e.code.endsWith('Enter') && onSubmit(value) && false
         }
       />
-      {valueChange && (
-        <Icon style={iconLeft} onClick={() => valueChange && onSubmit(value)}>
-          <SaveIcon />
-        </Icon>
-      )}
-      {(valueChange || editing !== defaultEditing) && (
-        <Icon
-          style={iconRight}
-          onClick={() => {
-            setEditing(defaultEditing);
-            setValue(defaultValue);
-          }}
-        >
-          <UndoIcon />
-        </Icon>
-      )}
-    </ValueBox>
+      <Right>
+        {valueChange && (
+          <Icon style={iconLeft} onClick={() => valueChange && onSubmit(value)}>
+            <SaveIcon />
+          </Icon>
+        )}
+        {(valueChange || editing !== defaultEditing) && (
+          <Icon
+            style={iconRight}
+            onClick={() => {
+              setEditing(defaultEditing);
+              setValue(defaultValue);
+            }}
+          >
+            <UndoIcon />
+          </Icon>
+        )}
+      </Right>
+    </ValueBoxEdit>
   );
 };

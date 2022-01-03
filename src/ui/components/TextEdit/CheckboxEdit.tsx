@@ -22,9 +22,11 @@ const Icons = styled(FlexRow)`
 export const CheckboxEdit = ({
   defaultValue,
   onSubmit,
+  noGrow = false,
 }: {
   defaultValue: boolean;
   onSubmit: (val: boolean) => void;
+  noGrow?: boolean;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState(defaultValue);
@@ -39,7 +41,7 @@ export const CheckboxEdit = ({
   });
 
   return (
-    <ValueBox {...noDrag} ref={ref}>
+    <ValueBox {...noDrag} ref={ref} data-nogrow={noGrow}>
       <ValueInputCB
         type="checkbox"
         data-type="checkbox"

@@ -15,6 +15,9 @@ export const ValueBox = styled.div`
   &[data-pointer='true'] {
     cursor: pointer;
   }
+  &[data-nogrow='true'] {
+    flex-grow: 0;
+  }
 `;
 
 export const valueCss = css`
@@ -34,10 +37,6 @@ export const ValueInputCB = styled.input`
   ${valueCss};
 `;
 
-export const ValueReadonly = styled.div`
-  ${valueCss};
-`;
-
 export const IconD = styled.div`
   z-index: 1;
   font-size: 1rem;
@@ -49,5 +48,5 @@ export const IconD = styled.div`
     fill: ${colours.notificationBlue};
   }
 `;
-export const iconRight = { right: '0', top: '-1rem' };
-export const iconLeft = { right: '1.5rem', top: '-1rem' };
+export const iconRight = { right: '0' };
+export const iconLeft = { right: '1.5rem' };

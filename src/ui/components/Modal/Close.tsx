@@ -7,7 +7,9 @@ const SClose = styled.div`
   height: 32px;
   opacity: 0.3;
   cursor: pointer;
+  background-color: white;
   top: 0;
+  z-index: 1;
   right: 0;
   &:hover {
     opacity: 1;
