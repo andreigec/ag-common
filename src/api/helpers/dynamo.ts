@@ -67,7 +67,7 @@ let batchWriteRaw = async (
       let es = (e as any).toString();
       if (
         es.indexOf('429') !== -1 ||
-        es.indexOf(' ProvisionedThroughputExceeded') !== -1
+        es.indexOf('ProvisionedThroughputExceeded') !== -1
       ) {
         count += 1;
       }
