@@ -3,6 +3,7 @@ export * from './async';
 export * from './date';
 export * from './distinctBy';
 export * from './email';
+export * from './generator';
 export * from './groupBy';
 export * from './hashCode';
 export * from './i18n';
