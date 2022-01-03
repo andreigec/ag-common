@@ -20,7 +20,7 @@ export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const debounceMap: Record<string, number> = {};
+const hashMap: { [key: string]: NodeJS.Timeout } = {};
 export function debounce(
   callback: () => void,
   {
@@ -31,12 +31,9 @@ export function debounce(
     key: string;
   },
 ) {
-  const now = new Date().getTime();
-  const lastDrag = debounceMap[key] || 0;
-  if (now - lastDrag < time) {
-    return;
-  }
-
-  debounceMap[key] = now;
-  callback();
+  clearTimeout(hashMap[key]);
+  hashMap[key] = setTimeout(() => {
+    delete hashMap[key];
+    callback();
+  }, time);
 }
