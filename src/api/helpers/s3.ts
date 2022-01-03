@@ -1,7 +1,10 @@
 import { Blob } from 'aws-sdk/lib/dynamodb/document_client';
 import AWS from 'aws-sdk';
 
-const s3 = new AWS.S3();
+let s3 = new AWS.S3();
+export const setS3 = (region: string) => {
+  s3 = new AWS.S3({ region });
+};
 
 export const getS3Object = async ({
   fileurl,
