@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { getCookieWrapper } from './cookie';
-import { sleep } from './debounce';
+import { sleep } from '../../common/helpers/sleep';
 import { AxiosWrapper, User } from './jwt';
 
 export interface OverrideAuth {

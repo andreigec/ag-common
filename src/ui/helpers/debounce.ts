@@ -16,10 +16,6 @@ export function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-export const sleep = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
 const hashMap: { [key: string]: NodeJS.Timeout } = {};
 export function debounce(
   callback: () => void,

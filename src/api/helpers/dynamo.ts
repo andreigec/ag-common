@@ -12,6 +12,7 @@ import AWS, { AWSError, Response } from 'aws-sdk';
 import { IQueryDynamo, Key } from '../types';
 import { info, error as errorF, debug, warn } from '../../common/helpers/log';
 import { chunk, notEmpty, take } from '../../common/helpers/array';
+import { sleep } from '../../common/helpers/sleep';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -45,6 +46,47 @@ export const putDynamo = async <T>(
   return { data: item };
 };
 
+let batchWriteRaw = async (
+  req: DocumentClient.BatchWriteItemRequestMap,
+  debugMsg?: (s: string) => void,
+) => {
+  let count = 0;
+  let max = 5;
+  // eslint-disable-next-line no-constant-condition
+  while (true)
+    try {
+      const res = await dynamoDb
+        .batchWrite({
+          RequestItems: req,
+        })
+        .promise();
+
+      return res;
+    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let es = (e as any).toString();
+      if (
+        es.indexOf('429') !== -1 ||
+        es.indexOf(' ProvisionedThroughputExceeded') !== -1
+      ) {
+        count += 1;
+      }
+
+      if (count >= max) {
+        throw e;
+      }
+
+      let msg = `batch write throttled. retry ${count}/${max}`;
+      if (!debugMsg) {
+        info(msg);
+      } else {
+        debugMsg(msg);
+      }
+
+      await sleep(2000);
+    }
+};
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const batchWrite = async <T extends {}>(
   tableName: string,
@@ -58,16 +100,15 @@ export const batchWrite = async <T extends {}>(
     const { part, rest } = take(items, 25);
     // eslint-disable-next-line no-param-reassign
     items = rest;
-    // eslint-disable-next-line no-await-in-loop
-    const res = await dynamoDb
-      .batchWrite({
-        RequestItems: {
-          [`${tableName}`]: part.map((item) => ({
-            PutRequest: { Item: item },
-          })),
-        },
-      })
-      .promise();
+    let req: DocumentClient.BatchWriteItemRequestMap = {
+      [`${tableName}`]: part.map((item) => ({
+        PutRequest: { Item: item },
+      })),
+    };
+
+    let res = await batchWriteRaw(req, (m) =>
+      info(`${m} remaining=${rest.length}`),
+    );
 
     const newError = res.$response?.error ?? null;
     if (newError) {
