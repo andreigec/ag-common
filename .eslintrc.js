@@ -4,10 +4,11 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
     ecmaVersion: 6,
+    createDefaultProgram: true,
   },
   settings: {
     react: {
-      "version": "detect",
+      version: 'detect',
     },
   },
   ignorePatterns: [
@@ -26,27 +27,27 @@ module.exports = {
     'import',
   ],
   extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
+    'eslint:recommended',
+    'plugin:react/recommended',
     'airbnb-typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'plugin:jsx-a11y/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
-    'plugin:import/typescript'
+    'plugin:import/typescript',
   ],
   rules: {
     '@typescript-eslint/no-floating-promises': 'error',
-    'react/jsx-props-no-spreading': "off",
-    'import/extensions': "off",
+    'react/jsx-props-no-spreading': 'off',
+    'import/extensions': 'off',
     'react/jsx-wrap-multilines': 'off',
     'react/no-unused-prop-types': 'off',
     'react/require-default-props': 'off',
-    '@typescript-eslint/naming-convention': "off",
+    '@typescript-eslint/naming-convention': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'no-console': 'error',
-    'no-alert': "error",
+    'no-alert': 'error',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'react/prop-types': 'off',
