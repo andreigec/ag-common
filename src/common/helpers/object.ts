@@ -60,3 +60,23 @@ export function objectToArray<T>(obj: { [a: string]: T }): IArrayType<T>[] {
   });
   return ret;
 }
+
+export const objectAlphaSort = (object: any, depthLeft = -1): object => {
+  if (depthLeft === 0) {
+    return object;
+  }
+
+  if (object !== null && typeof object === 'object') {
+    return Object.keys(object)
+      .sort((a, b) => (a.toLowerCase() < b.toLowerCase() ? -1 : 1))
+      .reduce((result: any, key) => {
+        result[key] = objectAlphaSort(object[key], depthLeft - 1);
+
+        return result;
+      }, {});
+  } else if (Array.isArray(object)) {
+    return object.map((obj) => objectAlphaSort(obj, depthLeft - 1));
+  } else {
+    return object;
+  }
+};
