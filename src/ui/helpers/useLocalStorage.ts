@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { error, warn } from '../../common/helpers/log';
 import { tryJsonParse } from '../../common/helpers/object';
 
@@ -86,6 +87,8 @@ export function UseLocalStorage<T>(
   ttl?: number,
 ): [T, (value: T | ((a: T) => T)) => void] {
   const storedValue = getLocalStorageItem(key, initialValue, ttl);
+  //bump use of stored value
+  const [, setT] = useState(0);
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to localStorage.
   const setValue = (value: T | ((a: T) => T)) => {
@@ -98,6 +101,7 @@ export function UseLocalStorage<T>(
     ) as T;
 
     setLocalStorageItem(key, valueToStore, ttl);
+    setT(new Date().getTime());
   };
 
   return [storedValue, setValue];
