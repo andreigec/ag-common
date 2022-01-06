@@ -1,4 +1,5 @@
 import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import { debug } from '../../common/helpers/log';
 import { isJson } from '../../common/helpers/object';
 
 /**
@@ -85,8 +86,7 @@ export const axiosHelper = async <TOut>({
       // jwt expired or bad response
       // 403 returned for old token - will be refreshed
       if (em.code === '401' || em.code === '403') {
-        // eslint-disable-next-line no-console
-        console.log('auth expired');
+        debug('auth expired');
         onStaleAuth?.();
         retry = retryMax;
       }

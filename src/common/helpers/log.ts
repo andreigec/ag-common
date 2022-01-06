@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { notEmpty } from '.';
 
@@ -7,7 +8,18 @@ export const GetLogLevel = (l: TLogType) =>
     (s) => s === l,
   );
 
-/* eslint-disable no-console */
+let userLogLevel: TLogType = 'WARN';
+export const SetLogLevel = (l: string) => {
+  const lu = l?.toUpperCase() as TLogType;
+  if (GetLogLevel(lu) === -1) {
+    return;
+  }
+
+  userLogLevel = lu;
+};
+
+SetLogLevel(process.env.LOG_LEVEL || '');
+
 function dateF(): string {
   const d = new Date();
   const str = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
@@ -16,9 +28,7 @@ function dateF(): string {
 }
 
 function logprocess(type: TLogType, args: any[]) {
-  const min =
-    GetLogLevel(process.env.LOG_LEVEL?.toUpperCase() as TLogType) || 'WARN';
-
+  const min = GetLogLevel(userLogLevel);
   const typesLogLevel = GetLogLevel(type);
 
   // env ignores it
