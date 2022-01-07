@@ -1,11 +1,11 @@
 {
   "name": "ag-common",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "author": "Andrei Gec <@andreigec> (https://gec.dev/)",
   "repository": "github:andreigec/ag-common",
-  "license": "ISC", 
+  "license": "ISC",
   "scripts": {
     "build": "rimraf dist && yarn checklint && tsc",
     "fix": "./node_modules/.bin/eslint --fix './src/**/*.ts' './src/**/*.tsx'",
