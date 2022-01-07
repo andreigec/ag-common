@@ -128,3 +128,13 @@ export function replaceRemove(str: string, ...params: string[]) {
 
   return ret;
 }
+
+export function containsInsensitive(str: string, ...args: string[]) {
+  if (!str || !args) {
+    return false;
+  }
+
+  const l = str.toLowerCase();
+
+  return !!args.find((a) => l.includes(a));
+}
