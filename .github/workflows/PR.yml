@@ -1,0 +1,28 @@
+on: [pull_request]
+
+jobs:
+  PR:
+    runs-on: ubuntu-latest
+    name: checklint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: |
+          yarn
+
+      - name: Run common builds
+        env:
+          CI: false
+        run: yarn build:commons
+
+      - name: checklint
+        run: |
+          yarn checklint

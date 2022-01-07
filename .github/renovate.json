@@ -1,0 +1,8 @@
+{
+  "labels": [
+    "ag-common"
+  ],
+  "extends": [
+    "github>andreigec/renovate"
+  ]
+}
