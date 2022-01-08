@@ -77,3 +77,13 @@ export const noDrag: {
     e.stopPropagation();
   },
 };
+
+export const FullScreenPage = styled.div`
+  display: flex;
+  width: 100%;
+  flex-grow: 1;
+  flex-flow: column;
+  overflow: hidden;
+  align-content: flex-start;
+  align-items: flex-start;
+`;
