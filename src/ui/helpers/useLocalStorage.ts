@@ -14,7 +14,11 @@ export const clearLocalStorageItem = (key: string) => {
     return;
   }
 
-  window.localStorage.removeItem(key);
+  try {
+    window.localStorage.removeItem(key);
+  } catch (e) {
+    warn('error clearing local storage:', e);
+  }
 };
 
 export const clearAllLocalStorage = (except?: string[]) => {
@@ -50,6 +54,7 @@ export const setLocalStorageItem = <T>(key: string, value: T, ttl?: number) => {
     window.localStorage.setItem(key, JSON.stringify(set));
   } catch (e) {
     error(`set LS error:${key}-${e}`);
+    clearLocalStorageItem(key);
   }
 };
 
