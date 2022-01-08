@@ -1486,10 +1486,10 @@ aws-cdk-lib@2.4.0:
     semver "^7.3.5"
     yaml "1.10.2"
 
-aws-sdk@2.1052.0:
-  version "2.1052.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1052.0.tgz#ae51421884b1228a2e48588e6b2628036f35f090"
-  integrity sha512-GtCjW/1yzyJaTavcd22W8aptq2jVyGwXiJXPDLzyqTi0Q34EijSWYIlLk2C8dzIO7L1qnnVvva6u8XL+W0zwLw==
+aws-sdk@2.1053.0:
+  version "2.1053.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1053.0.tgz#cd8263bde89177351e7ef49d9e6a89d4584c852c"
+  integrity sha512-bsVudymGczfn7kOsY9tiMFZUCNFOQi7iG3d1HiBFrnEDCKtVTyKuFrXy4iKUPCcjfOaqNnb1S3ZxN/A70MOTkg==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -1729,10 +1729,10 @@ confusing-browser-globals@^1.0.10, confusing-browser-globals@^1.0.11:
   resolved "https://registry.yarnpkg.com/confusing-browser-globals/-/confusing-browser-globals-1.0.11.tgz#ae40e9b57cdd3915408a2805ebd3a5585608dc81"
   integrity sha512-JsPKdmh8ZkmnHxDk55FZ1TqVLvEQTvoByJZRN9jzI0UjxK/QgAmsphz7PGtqgPieQZ/CQcHWXCR7ATDNhGe+YA==
 
-constructs@10.0.27:
-  version "10.0.27"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.27.tgz#0f158fdc5638b4a3ac22e360e4cf4d9f5513f1a4"
-  integrity sha512-XIfg8vL/OPvGi8owc2BpCoZCt/yeJafLtuQHxyUVYdyGbQOG/1BWXvq87yFPpNKJ2moaPcJp0mPNPFM0QTyzSw==
+constructs@10.0.28:
+  version "10.0.28"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.28.tgz#9de00c01927f5ce6338edbf0c062959093125ada"
+  integrity sha512-0OJqIVAkesLni8U5exuWYwCzToFqHpQj/pLZKl3DEJ+uTPfBbLkJClzRZi4xbBomY2VX+ipPEYHz+LYN1HbyIQ==
 
 content-type@^1.0.4:
   version "1.0.4"
