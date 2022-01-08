@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { bigScreenPx, smallScreenPx } from '../styles/media';
 
 export interface Dimensions {
   width: number;
@@ -9,9 +10,15 @@ export interface Dimensions {
 }
 function getWindowDimensions(): Dimensions | undefined {
   if (typeof window !== 'undefined') {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
     return {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width,
+      height,
+      smallScreen: width <= smallScreenPx,
+      bigScreen: width > smallScreenPx,
+      vBigScreen: width > bigScreenPx,
     } as Dimensions;
   } else {
     return undefined;
