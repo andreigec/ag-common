@@ -76,10 +76,6 @@ export interface AuthedUserContext {
   error: Error | undefined;
   refreshToken: () => Promise<User | undefined>;
 }
-export interface AuthedUser {
-  user: AuthedUserContext;
-  userLink?: User;
-}
 
 export const getBearerToken = (jwt?: { id_token?: string }) =>
   !jwt?.id_token ? undefined : `Bearer ${jwt.id_token}`;
