@@ -16,7 +16,7 @@
     "aws-cdk-lib": "2.4.0",
     "aws-sdk": "2.1053.0",
     "axios": "0.24.0",
-    "constructs": "10.0.29",
+    "constructs": "10.0.27",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
     "openapi-request-validator": "10.0.0",
