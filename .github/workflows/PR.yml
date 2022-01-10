@@ -18,11 +18,6 @@ jobs:
         run: |
           yarn
 
-      - name: Run common builds
-        env:
-          CI: false
-        run: yarn build:commons
-
       - name: checklint
         run: |
           yarn checklint
