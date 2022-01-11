@@ -4,5 +4,6 @@
   ],
   "extends": [
     "github>andreigec/renovate"
-  ]
+  ],
+  "schedule": "before 7am on tuesday and friday"
 }
