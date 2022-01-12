@@ -1,7 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
 import { t, TLang, TResource } from '../../../common/helpers/i18n';
-import { Button } from '../Button';
+import { ButtonBase } from '../Button';
 import { getstarted } from './text';
+
+const Base = styled.a`
+  ${ButtonBase}
+`;
 
 export const LoginButton = ({
   className,
@@ -10,7 +15,6 @@ export const LoginButton = ({
   title,
   savePath = true,
   lang,
-  pushPath,
   loginPath,
 }: {
   title?: TResource;
@@ -19,7 +23,6 @@ export const LoginButton = ({
   className?: string;
   savePath?: boolean;
   lang: TLang;
-  pushPath: (p: string) => void;
   loginPath: (state?: Record<string, unknown> | undefined) => string;
 }) => {
   const lp = loginPath(
@@ -33,19 +36,15 @@ export const LoginButton = ({
   );
 
   return (
-    <Button
+    <Base
+      href={lp}
       lang={lang}
-      title={title}
-      invert={invert}
+      title={!title ? undefined : t(title, lang)}
+      data-invert={invert}
+      data-disabled={false}
       className={className}
-      onKeyPress={async () => {
-        await pushPath(lp);
-      }}
-      onClick={async () => {
-        await pushPath(lp);
-      }}
     >
       {text && t(text, lang)}
-    </Button>
+    </Base>
   );
 };

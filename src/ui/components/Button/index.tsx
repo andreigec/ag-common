@@ -1,10 +1,10 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { KeyboardEventHandler, MouseEventHandler } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { t, TLang, TResource } from '../../../common/helpers/i18n';
 import { colours } from '../../styles/colours';
 
-const Base = styled.button`
+export const ButtonBase = css`
   border: 0;
 
   font-weight: bold;
@@ -32,6 +32,10 @@ const Base = styled.button`
     cursor: default;
     background-color: #888;
   }
+`;
+
+const Base = styled.button`
+  ${ButtonBase}
 `;
 
 export const Button: React.FC<{
