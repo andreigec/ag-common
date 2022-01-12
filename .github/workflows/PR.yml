@@ -16,7 +16,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          yarn
+          yarn --frozen-lockfile
 
       - name: checklint
         run: |
