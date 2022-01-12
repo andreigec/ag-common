@@ -9,6 +9,7 @@ export * from './hashCode';
 export * from './i18n';
 export * from './log';
 export * from './math';
+export * from './memo';
 export * from './object';
 export * from './random';
 export * from './secondsInNearest';
