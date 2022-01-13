@@ -1541,10 +1541,10 @@ at-least-node@^1.0.0:
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-aws-cdk-lib@2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.5.0.tgz#f798fd8946feda64cb71a41d14588f1535b4ccd7"
-  integrity sha512-3vAmS4IyKnPxJxJc5gw00fqzG5g0Gx3BzleWzV7FGulugzMnEPWR3NYuSVS5raxy3aANRDLHS+jdAupqiWcWIg==
+aws-cdk-lib@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.7.0.tgz#f6a2b83355781ef3d55e9e6a9112a2819a24699c"
+  integrity sha512-9mxm9WD5rioZxTCQ6FqMzkZ0NH5+4oBFtlNL10duXJ+P+7Zcs82mHHycX7wjD689Gnl6hZla/DOlUV04HQvNhw==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     case "1.6.3"
@@ -1799,10 +1799,10 @@ confusing-browser-globals@^1.0.10, confusing-browser-globals@^1.0.11:
   resolved "https://registry.yarnpkg.com/confusing-browser-globals/-/confusing-browser-globals-1.0.11.tgz#ae40e9b57cdd3915408a2805ebd3a5585608dc81"
   integrity sha512-JsPKdmh8ZkmnHxDk55FZ1TqVLvEQTvoByJZRN9jzI0UjxK/QgAmsphz7PGtqgPieQZ/CQcHWXCR7ATDNhGe+YA==
 
-constructs@10.0.30:
-  version "10.0.30"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.30.tgz#8c0600205434175699205c78b20748d944b9894d"
-  integrity sha512-13ALeGAojU0AtqEAX/AGosH9sc+KElLamfZB7Q7s87z4cxjHY3coRaHIL4sMuzGPIewiPxUA8q893fPa0L351Q==
+constructs@10.0.32:
+  version "10.0.32"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.32.tgz#e8cda60bf2e42ade89b7da92b76c42eebf659480"
+  integrity sha512-uGI5csbvnBrngJfygF7VfqRpd0bDmX2AH4/Oo5+2l8TFafvSfuG8R07T276OAvPl6qppcd8yQX67cunGGG5UMw==
 
 content-type@^1.0.4:
   version "1.0.4"
