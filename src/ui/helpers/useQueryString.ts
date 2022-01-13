@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { fromBase64, toBase64 } from './cookie';
 export const isServer = typeof window === 'undefined';
 
-export const useQueryString = <T>({
+export const useQueryStringRaw = <T>({
   name,
   searchOverride,
   defaultValue,
@@ -59,13 +58,12 @@ export const useQueryStringArray = ({
   searchOverride?: string;
   defaultValue: string[];
 }) =>
-  useQueryString<string[]>({
+  useQueryStringRaw<string[]>({
     name,
     defaultValue,
     searchOverride,
-    stringify: (v) =>
-      v.length === 0 ? undefined : toBase64(JSON.stringify(v)),
-    parse: (v) => (!v ? [] : (JSON.parse(fromBase64(v)) as string[])),
+    stringify: (v) => (v.length === 0 ? undefined : v.join(',')),
+    parse: (v) => (!v ? defaultValue : v.split(',')),
   });
 
 export const useQueryStringSingle = ({
@@ -77,10 +75,10 @@ export const useQueryStringSingle = ({
   searchOverride?: string;
   defaultValue: string | undefined;
 }) =>
-  useQueryString<string>({
+  useQueryStringRaw<string>({
     name,
     defaultValue,
     searchOverride,
-    stringify: (v) => toBase64(JSON.stringify(v)),
-    parse: (v) => (!v ? defaultValue : (JSON.parse(fromBase64(v)) as string)),
+    stringify: (v) => v,
+    parse: (v) => (!v ? defaultValue : v),
   });
