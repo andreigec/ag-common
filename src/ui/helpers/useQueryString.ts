@@ -13,7 +13,7 @@ export const useQueryStringRaw = <T>({
   defaultValue: T | undefined;
   stringify: (v: T) => string | undefined;
   parse: (v: string | undefined) => T | undefined;
-}) => {
+}): [T | undefined, (v: T | undefined) => void] => {
   const raw = isServer ? searchOverride : window.location.search;
   const [state, setStateRaw] = useState<T | undefined>(() => {
     if (!raw) {
@@ -28,9 +28,9 @@ export const useQueryStringRaw = <T>({
     return parse(g) || defaultValue;
   });
 
-  const setState = (v: T) => {
+  const setState = (v: T | undefined) => {
     const searchParams = new URLSearchParams(window.location.search);
-    const sv = stringify(v);
+    const sv = !v ? undefined : stringify(v);
     if (sv) {
       searchParams.set(name, sv);
     } else {
