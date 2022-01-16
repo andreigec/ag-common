@@ -63,6 +63,7 @@ export const callOpenApi = async <T, TDefaultApi>({
       const errorMessage = (ae.response?.data ||
         ae.response?.statusText ||
         ae.response?.status ||
+        ae.message ||
         'ERROR') as string;
 
       if (status === 403 || status === 401) {
