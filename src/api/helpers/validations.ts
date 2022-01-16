@@ -37,6 +37,7 @@ const jwtVerify = async ({
           header.kid,
           (errorV, key?: { rsaPublicKey?: string; publicKey?: string }) => {
             if (errorV) {
+              error(`signing key error. jwks=${jwksUri} iss=${issuer}`);
               reject(errorV);
               return;
             }
