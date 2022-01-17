@@ -62,11 +62,12 @@ export class MutexData<T> {
     }
   }
 
-  delete(key: string) {
+  delete(key: string, updateSubscribers = false) {
     clearLocalStorageItem(`mutex-${key}`);
-
-    if (Object.keys(this.subscriptions).length > 0) {
-      this.pingSubscribers(key);
+    if (updateSubscribers) {
+      if (Object.keys(this.subscriptions).length > 0) {
+        this.pingSubscribers(key);
+      }
     }
   }
 }
