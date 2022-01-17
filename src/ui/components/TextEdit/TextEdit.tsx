@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SaveIcon, UndoIcon, PencilIcon } from './images';
 import { iconLeft, iconRight, ValueBox, valueCss } from './common';
-import styled from 'styled-components';
+import styled, { css, StyledComponent } from 'styled-components';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
 
@@ -11,16 +11,25 @@ export const ValueReadonly = styled.div`
   word-break: break-word;
   flex-basis: calc(100% - 3rem);
 `;
-const ValueTextArea = styled.textarea`
+const basecss = css`
+  outline: none;
   border: 0;
   word-break: break-word;
   ${valueCss};
   resize: none;
   overflow: hidden;
   background-color: white;
+`;
+
+const ValueTextArea = styled.textarea`
+  ${basecss}
   &[data-editing='true'] {
     min-height: 5rem;
   }
+`;
+
+const ValueTextBox = styled.input`
+  ${basecss}
 `;
 
 const ValueBoxEdit = styled(ValueBox)`
@@ -43,9 +52,9 @@ const Icon = styled.div`
 
 export const TextEdit = ({
   defaultValue,
-  defaultEditing = false,
+  defaultEditing,
   onSubmit,
-  canEdit = true,
+  disableEdit = false,
   placeholder,
   onEditingChange,
   onClickOutsideWithNoValue,
@@ -56,9 +65,12 @@ export const TextEdit = ({
   singleLine?: boolean;
   className?: string;
   defaultValue: string;
-  defaultEditing?: boolean;
+  /**
+   * if truthy will enable. if focus is true, will also focus on open
+   */
+  defaultEditing?: { focus: boolean };
   onSubmit: (val: string) => void;
-  canEdit?: boolean;
+  disableEdit?: boolean;
   placeholder?: string;
   onEditingChange?: (editing: boolean) => void;
   onClickOutsideWithNoValue?: () => void;
@@ -67,13 +79,13 @@ export const TextEdit = ({
   const ref = useRef<HTMLDivElement>(null);
   const taref = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState(defaultValue);
-  const [editing, setEditingRaw] = useState(defaultEditing);
+  const [editing, setEditingRaw] = useState(!!defaultEditing);
   const valueChange = value !== defaultValue;
   useOnClickOutside({ ref, moveMouseOutside: false }, () => {
     if (valueChange) {
       onSubmit(value);
     } else {
-      if (canEdit && editing && defaultEditing) {
+      if (!disableEdit && editing && defaultEditing) {
         return;
       }
 
@@ -94,20 +106,19 @@ export const TextEdit = ({
 
   useEffect(() => {
     setValue(defaultValue);
-    //setEditing(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue]);
 
   useEffect(() => {
-    if (defaultEditing && taref.current) {
+    if (defaultEditing?.focus && taref.current) {
       taref.current.focus();
     }
 
-    setEditing(defaultEditing);
+    setEditing(!!defaultEditing);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultEditing]);
 
-  if (!editing || !canEdit) {
+  if (!editing || disableEdit) {
     return (
       <ValueBox
         {...noDrag}
@@ -118,7 +129,7 @@ export const TextEdit = ({
       >
         <ValueReadonly data-type="text">{value}</ValueReadonly>
         <Right>
-          {canEdit && (
+          {!disableEdit && (
             <Icon
               style={iconRight}
               onClick={(e) => {
@@ -138,15 +149,22 @@ export const TextEdit = ({
     return <></>;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Comp: StyledComponent<'textarea', any> = singleLine
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (ValueTextBox as any)
+    : ValueTextArea;
+
   return (
     <ValueBoxEdit
       data-editing="true"
       {...noDrag}
-      ref={ref}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ref={ref as any}
       tabIndex={editing ? 0 : undefined}
       className={className}
     >
-      <ValueTextArea
+      <Comp
         data-editing="true"
         data-valuechange={valueChange.toString()}
         ref={taref}
@@ -165,11 +183,11 @@ export const TextEdit = ({
             <SaveIcon />
           </Icon>
         )}
-        {(valueChange || editing !== defaultEditing) && (
+        {(valueChange || editing !== !!defaultEditing) && (
           <Icon
             style={iconRight}
             onClick={() => {
-              setEditing(defaultEditing);
+              setEditing(!!defaultEditing);
               setValue(defaultValue);
             }}
           >
