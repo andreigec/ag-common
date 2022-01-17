@@ -143,10 +143,12 @@ export function DropdownList<T>({
             <SItem
               key={renderF(s)}
               selected={s === state}
-              onClick={() => {
+              onClick={(e) => {
                 if (s !== state) {
                   onChange(s, i);
                 }
+
+                e.preventDefault();
               }}
             >
               {renderF(s)}

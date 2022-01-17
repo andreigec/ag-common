@@ -13,6 +13,7 @@ export * from './mutex';
 export * from './mutexData';
 export * from './plural';
 export * from './routes';
+export * from './useContextMenu';
 export * from './useLocalStorage';
 export * from './useLockBodyScroll';
 export * from './useOnClickOutside';

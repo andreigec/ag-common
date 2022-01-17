@@ -24,7 +24,6 @@ export const valueCss = css`
   width: 100%;
   height: 100%;
   word-break: break-all;
-  font-size: 1rem;
 
   &[data-type='checkbox'] {
     cursor: pointer;
