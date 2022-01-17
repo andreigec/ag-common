@@ -14,6 +14,7 @@ const mutex = new Mutex({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mutexData = new MutexData<AxiosWrapper<any>>();
+export const deleteMutexData = (key: string) => mutexData.delete(key);
 export const setMutexData = ({
   key,
   data,

@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import { clearLocalStorageItem } from '.';
 import { debug } from '../../common/helpers/log';
 import { getLocalStorageItem, setLocalStorageItem } from './useLocalStorage';
 
@@ -56,6 +57,14 @@ export class MutexData<T> {
     ttlSeconds?: number;
   }) {
     setLocalStorageItem(`mutex-${key}`, data, ttlSeconds);
+    if (Object.keys(this.subscriptions).length > 0) {
+      this.pingSubscribers(key);
+    }
+  }
+
+  delete(key: string) {
+    clearLocalStorageItem(`mutex-${key}`);
+
     if (Object.keys(this.subscriptions).length > 0) {
       this.pingSubscribers(key);
     }
