@@ -26,13 +26,20 @@ export const Chevron = ({
   width = '1.2rem',
   className,
   colour = 'black',
+  onToggle,
 }: {
   colour?: string;
   className?: string;
   width?: string;
   down: boolean;
+  onToggle?: () => void;
 }) => (
-  <SChevron className={className}>
+  <SChevron
+    className={className}
+    onClick={() => onToggle?.()}
+    onTouchStart={() => onToggle?.()}
+    onKeyPress={(e) => e.key === 'Enter' && onToggle?.()}
+  >
     <IconStyled flip={down} fill={colour} width={width} height={width}>
       {ChevronIcon}
     </IconStyled>
