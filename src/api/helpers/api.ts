@@ -32,7 +32,7 @@ export const returnCode = <T>(
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const stripPKs = <T>(r: T, excludePK = true): T => {
+export const stripPKs = <T>(r: T, removePK = true): T => {
   if (!r) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return null as any;
@@ -40,10 +40,9 @@ export const stripPKs = <T>(r: T, excludePK = true): T => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { PK, PK1, PK2, PK3, PK4, PK5, L1, L2, L3, L4, L5, L6, TYPE, ...rest } =
-    r;
+  const { PK, PK1, PK2, PK3, PK4, PK5, L1, L2, L3, L4, L5, L6, ...rest } = r;
 
-  if (!excludePK) {
+  if (removePK) {
     //@ts-ignore
     rest.PK = PK;
   }
