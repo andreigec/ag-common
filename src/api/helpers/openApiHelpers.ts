@@ -12,7 +12,7 @@ import {
 import { Construct } from 'constructs';
 import { notEmpty } from '../..';
 import { distinctBy } from '../../common/helpers/distinctBy';
-import { info, warn } from '../../common/helpers/log';
+import { warn } from '../../common/helpers/log';
 import { ILambdaPermissions } from '../types';
 // eslint-disable-next-line
 const getPaths = (schema: any) =>

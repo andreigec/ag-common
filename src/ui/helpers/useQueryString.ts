@@ -10,12 +10,12 @@ export const useQueryStringRaw = <T>({
 }: {
   name: string;
   searchOverride?: string;
-  defaultValue: T | undefined;
+  defaultValue: T;
   stringify: (v: T) => string | undefined;
-  parse: (v: string | undefined) => T | undefined;
-}): [T | undefined, (v: T | undefined) => void] => {
+  parse: (v: string | undefined) => T;
+}): [T, (v: T) => void] => {
   const raw = isServer ? searchOverride : window.location.search;
-  const [state, setStateRaw] = useState<T | undefined>(() => {
+  const [state, setStateRaw] = useState<T>(() => {
     if (!raw) {
       return defaultValue;
     }
@@ -28,7 +28,7 @@ export const useQueryStringRaw = <T>({
     return parse(g) || defaultValue;
   });
 
-  const setState = (v: T | undefined) => {
+  const setState = (v: T) => {
     const searchParams = new URLSearchParams(window.location.search);
     const sv = !v ? undefined : stringify(v);
     if (sv) {
@@ -75,7 +75,7 @@ export const useQueryStringSingle = ({
   searchOverride?: string;
   defaultValue: string | undefined;
 }) =>
-  useQueryStringRaw<string>({
+  useQueryStringRaw<string | undefined>({
     name,
     defaultValue,
     searchOverride,
