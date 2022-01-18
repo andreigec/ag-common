@@ -10,8 +10,9 @@ import {
   Duration,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import { notEmpty } from '../..';
 import { distinctBy } from '../../common/helpers/distinctBy';
-import { warn } from '../../common/helpers/log';
+import { info, warn } from '../../common/helpers/log';
 import { ILambdaPermissions } from '../types';
 // eslint-disable-next-line
 const getPaths = (schema: any) =>
@@ -32,6 +33,10 @@ const setUpApiGw = ({
   certificate,
   hostedZone,
   shortStackName,
+  cors = {
+    allowOrigins: apigw.Cors.ALL_ORIGINS,
+    allowHeaders: apigw.Cors.DEFAULT_HEADERS,
+  },
 }: {
   stack: Construct;
   NODE_ENV: string;
@@ -39,10 +44,12 @@ const setUpApiGw = ({
   certificate: certmgr.ICertificate;
   hostedZone: route53.IHostedZone;
   shortStackName: string;
+
+  cors?: { allowOrigins: string[]; allowHeaders: string[] };
 }) => {
   const api = new apigw.RestApi(stack, `${shortStackName}-api-${NODE_ENV}`, {
     defaultCorsPreflightOptions: {
-      allowOrigins: apigw.Cors.ALL_ORIGINS,
+      ...(cors || {}),
     },
   });
 
@@ -74,7 +81,7 @@ const getDynamoPermissions = ({
   lambdaPermissions: ILambdaPermissions;
   seenPermissions: { [a: string]: boolean };
 }) => {
-  const pathCompute = pathV + '-' + verb;
+  const pathCompute = pathV + '/' + verb;
   const lp = lambdaPermissions?.[pathCompute];
   if (lp) {
     seenPermissions[pathCompute] = true;
@@ -98,34 +105,33 @@ const getDynamoPermissions = ({
     (s) => s.shortName,
   );
 
+  const policies = [...(def.policies || []), ...(lp?.policies || [])].filter(
+    notEmpty,
+  );
+
   const tables = [...readTables, ...writeTables];
   const environment: Record<string, string> = {};
   Object.values(tables).forEach((v) => {
     environment[v.shortName] = v.table.tableName;
   });
-  return { environment, readTables, writeTables };
+  return { environment, readTables, writeTables, policies };
 };
 
 const addApiPaths = (
   api: apigw.RestApi,
-  subs: string[],
+  pathList: string[],
   apiRoots: { [root: string]: apigw.Resource },
 ) => {
-  let apiPath: apigw.Resource | undefined;
-  subs.forEach((s, i) => {
-    if (i === 0) {
-      if (apiRoots[s]) {
-        apiPath = apiRoots[s];
-      } else {
-        apiPath = api.root.addResource(s);
-        apiRoots[s] = apiPath;
-      }
-    } else {
-      if (!apiPath) {
-        throw new Error('no apipath');
-      }
+  let pathBuild = '';
+  let apiPath = api.root;
+  pathList.forEach((path) => {
+    pathBuild += '/' + path;
 
-      apiPath = apiPath.addResource(s);
+    if (apiRoots[pathBuild]) {
+      apiPath = apiRoots[pathBuild];
+    } else {
+      apiRoots[pathBuild] = apiPath.addResource(path);
+      apiPath = apiRoots[pathBuild];
     }
   });
   if (!apiPath) {
@@ -148,6 +154,12 @@ export const openApiImpl = (p: {
   certificate: certmgr.ICertificate;
   hostedZone: route53.IHostedZone;
   shortStackName: string;
+  /**
+   * defaults:
+   * allowOrigins: apigw.Cors.ALL_ORIGINS,
+    allowHeaders: apigw.Cors.DEFAULT_HEADERS,
+   */
+  cors?: { allowOrigins: string[]; allowHeaders: string[] };
 }) => {
   if (!p.schema) {
     throw new Error('no openapi schema found');
@@ -161,17 +173,19 @@ export const openApiImpl = (p: {
   paths.forEach(({ fullPath, verbs, pathList }) => {
     const apiPath = addApiPaths(api, pathList, apiRoots);
     verbs.forEach((verb) => {
-      const { environment, readTables, writeTables } = getDynamoPermissions({
-        lambdaPermissions,
-        pathV: fullPath,
-        verb,
-        seenPermissions,
-      });
+      const { environment, readTables, writeTables, policies } =
+        getDynamoPermissions({
+          lambdaPermissions,
+          pathV: fullPath,
+          verb,
+          seenPermissions,
+        });
 
       const lambdaName = lambdaNameSafe(
         `${p.shortStackName}-${fullPath}-${verb}-${NODE_ENV}`,
       );
 
+      const entry = `${endpointsBase}${fullPath}/${verb.toUpperCase()}.ts`;
       const lambdaV = new nodejs.NodejsFunction(stack, lambdaName, {
         functionName: lambdaName,
         runtime: lambda.Runtime.NODEJS_14_X,
@@ -180,7 +194,7 @@ export const openApiImpl = (p: {
         memorySize: 128,
         timeout: Duration.seconds(30),
         description: '(cdk)',
-        entry: `${endpointsBase}${fullPath}/${verb.toUpperCase()}.ts`,
+        entry: entry,
         bundling: {
           externalModules: ['aws-sdk', 'aws-lambda'],
         },
@@ -190,6 +204,7 @@ export const openApiImpl = (p: {
 
       readTables.forEach((t) => t.table.grantReadData(lambdaV));
       writeTables.forEach((t) => t.table.grantReadWriteData(lambdaV));
+      policies.forEach((p1) => lambdaV.addToRolePolicy(p1));
       //
       apiPath.addMethod(
         verb.toUpperCase(),
