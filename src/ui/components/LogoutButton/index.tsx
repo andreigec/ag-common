@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TLang } from '../../..';
 import { colours } from '../../styles/colours';
 import { Button } from '../Button';
 const Door = (
@@ -28,23 +27,18 @@ const ButtonStyled = styled(Button)`
 export const LogoutButton = ({
   className,
   invert,
-  lang,
   logout,
 }: {
-  lang: TLang;
   invert?: boolean;
   className?: string;
   logout: () => void;
-}) => {
-  return (
-    <ButtonStyled
-      invert={invert}
-      className={className}
-      onKeyPress={() => logout()}
-      onClick={() => logout()}
-      lang={lang}
-    >
-      <Icon>{Door}</Icon>
-    </ButtonStyled>
-  );
-};
+}) => (
+  <ButtonStyled
+    invert={invert}
+    className={className}
+    onKeyPress={() => logout()}
+    onClick={() => logout()}
+  >
+    <Icon>{Door}</Icon>
+  </ButtonStyled>
+);

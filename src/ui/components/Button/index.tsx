@@ -1,7 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { KeyboardEventHandler, MouseEventHandler } from 'react';
 import styled, { css } from 'styled-components';
-import { t, TLang, TResource } from '../../../common/helpers/i18n';
 import { colours } from '../../styles/colours';
 
 export const ButtonBase = css`
@@ -44,10 +43,9 @@ const Base = styled.button`
 `;
 
 export const Button: React.FC<{
-  title?: TResource;
+  title?: string;
   invert?: boolean;
   disabled?: boolean;
-  lang: TLang;
   className?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onKeyPress?: KeyboardEventHandler<HTMLButtonElement>;
@@ -58,7 +56,7 @@ export const Button: React.FC<{
     data-disabled={props.disabled ?? false}
     {...props}
     role="button"
-    title={!props.title ? undefined : t(props.title, props.lang)}
+    title={props.title || undefined}
   >
     {props.children}
   </Base>

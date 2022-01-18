@@ -1,32 +1,27 @@
 import React from 'react';
-import { t, TLang, TResource } from '../../../common/helpers/i18n';
 
 export const HeadersRaw = ({
   title,
   image,
-  lang,
   SiteShort,
   FullSiteUrl,
   siteDesc,
 }: {
-  title?: TResource | null;
+  title?: string;
   image?: string;
-  lang: TLang;
   SiteShort: string;
   FullSiteUrl: string;
-  siteDesc: TResource;
+  siteDesc: string;
 }) => {
-  const dt = t(siteDesc, lang);
-  const titleText = !title ? undefined : t(title, lang);
-  const fullTitle = `${title ? `${titleText} | ` : ''}${SiteShort} | ${dt}`;
+  const fullTitle = `${title ? `${title} | ` : ''}${SiteShort} | ${siteDesc}`;
   const titleBlock =
     title === undefined
       ? []
       : [
           <title key="1">{fullTitle}</title>,
-          <meta key="2" property="og:title" content={titleText} />,
-          <meta key="3" name="twitter:title" content={titleText} />,
-          <meta key="4" itemProp="name" content={titleText} />,
+          <meta key="2" property="og:title" content={title} />,
+          <meta key="3" name="twitter:title" content={title} />,
+          <meta key="4" itemProp="name" content={title} />,
           <meta key="5" name="description" content={fullTitle} />,
           <meta key="6" itemProp="description" content={fullTitle} />,
           <meta key="7" property="og:description" content={fullTitle} />,

@@ -53,6 +53,7 @@ export const Modal = ({
   showCloseButton = true,
   closeOnMoveMouseOutside = false,
   className,
+  closeOnClickOutside = true,
 }: {
   open: boolean;
   setOpen: (b: boolean) => void;
@@ -62,10 +63,11 @@ export const Modal = ({
   showCloseButton?: boolean;
   closeOnMoveMouseOutside?: boolean;
   className?: string;
+  closeOnClickOutside?: boolean;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside({ ref, moveMouseOutside: closeOnMoveMouseOutside }, () => {
-    if (open) {
+    if (closeOnClickOutside && open) {
       setOpen(false);
     }
   });
