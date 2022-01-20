@@ -19,6 +19,9 @@ const basecss = css`
   resize: none;
   overflow: hidden;
   background-color: white;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
 `;
 
 const ValueTextArea = styled.textarea`

@@ -11,6 +11,7 @@ export const ValueBox = styled.div`
   justify-content: flex-start;
   flex-grow: 1;
   max-width: 100%;
+  border: solid 1px transparent;
 
   &[data-pointer='true'] {
     cursor: pointer;
@@ -24,6 +25,9 @@ export const valueCss = css`
   width: 100%;
   height: 100%;
   word-break: break-all;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
 
   &[data-type='checkbox'] {
     cursor: pointer;

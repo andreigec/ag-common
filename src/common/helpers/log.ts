@@ -20,13 +20,6 @@ export const SetLogLevel = (l: string) => {
 
 SetLogLevel(process.env.LOG_LEVEL || '');
 
-function dateF(): string {
-  const d = new Date();
-  const str = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
-
-  return str;
-}
-
 function logprocess(type: TLogType, args: any[]) {
   const min = GetLogLevel(userLogLevel);
   const typesLogLevel = GetLogLevel(type);
@@ -37,7 +30,8 @@ function logprocess(type: TLogType, args: any[]) {
   }
 
   ////////
-  const log = [`[${dateF()}]`, type, ...args.filter(notEmpty)];
+  const datetime = new Date().toLocaleTimeString('en-GB');
+  const log = [`[${datetime}]`, type, ...args.filter(notEmpty)];
 
   switch (type) {
     case 'TRACE': {
