@@ -1729,10 +1729,10 @@ confusing-browser-globals@^1.0.10, confusing-browser-globals@^1.0.11:
   resolved "https://registry.yarnpkg.com/confusing-browser-globals/-/confusing-browser-globals-1.0.11.tgz#ae40e9b57cdd3915408a2805ebd3a5585608dc81"
   integrity sha512-JsPKdmh8ZkmnHxDk55FZ1TqVLvEQTvoByJZRN9jzI0UjxK/QgAmsphz7PGtqgPieQZ/CQcHWXCR7ATDNhGe+YA==
 
-constructs@10.0.36:
-  version "10.0.36"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.36.tgz#e21eaf360a633a4b71919423ec626fedc4e26317"
-  integrity sha512-0stZi+PUWlfxmbnECWREbjlTgrvqDxg9/0j16b8t6bX1KWffXNBEwBSAS92WVKdFiSmVzEvMNLRcl+gyNMAwDQ==
+constructs@10.0.39:
+  version "10.0.39"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.39.tgz#9e0edac67c881eee78e52f718a7018f03aa8a4bb"
+  integrity sha512-Xg0tUqP6Z5nbKmNXhrlHxTdiqkC9mSiYnG/KStquXfDzTmz4jrXXMSCUjo/p94sSySOr+aQ92vSz1ur21JHevw==
 
 content-type@^1.0.4:
   version "1.0.4"
