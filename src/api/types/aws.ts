@@ -23,6 +23,9 @@ export interface APIGatewayEvent {
   resource: string;
   path: string;
   requestContext: {
+    authorizer?: {
+      data?: string;
+    };
     connectionId: string;
     domainName: string;
     identity: {
