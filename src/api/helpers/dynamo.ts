@@ -133,11 +133,15 @@ export const batchDelete = async ({
   keys,
   breakOnError = true,
   pkName,
+  rangeName,
+  rangeValue,
 }: {
   pkName: string;
   breakOnError?: boolean;
   tableName: string;
   keys: string[];
+  rangeName?: string;
+  rangeValue?: string;
 }) => {
   info(`wipe keys dynamo:${tableName} - count=${keys.length}`);
   const error: AWS.AWSError[] = [];
@@ -147,13 +151,16 @@ export const batchDelete = async ({
       break;
     }
 
-    const res = await dynamoDb
-      .delete({
-        TableName: tableName,
-        Key: { [`${pkName}`]: key },
-      })
-      .promise();
+    let params: DocumentClient.DeleteItemInput = {
+      TableName: tableName,
+      Key: { [pkName]: key },
+    };
 
+    if (rangeName) {
+      params.Key[rangeName] = rangeValue;
+    }
+
+    const res = await dynamoDb.delete(params).promise();
     const newError = res.$response?.error ?? null;
     if (newError) {
       error.push(newError);

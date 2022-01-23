@@ -2,6 +2,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { getCookieWrapper } from './cookie';
 import { sleep } from '../../common/helpers/sleep';
 import { AxiosWrapper, User } from './jwt';
+import { notEmpty } from '../../common/helpers/array';
 
 export interface OverrideAuth {
   id_token?: string;
@@ -60,11 +61,15 @@ export const callOpenApi = async <T, TDefaultApi>({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const ae = e as AxiosError<unknown, any>;
       const status = ae.response?.status;
-      const errorMessage = (ae.response?.data ||
-        ae.response?.statusText ||
-        ae.response?.status ||
-        ae.message ||
-        'ERROR') as string;
+      const errorMessage = [
+        (ae.response?.data as any)?.toString() ?? '',
+        ae.response?.statusText?.toString() ?? '',
+        ae.response?.status?.toString() ?? '',
+        ae.message?.toString() ?? '',
+      ]
+        .filter(notEmpty)
+        .sort((a, b) => (a.length < b.length ? -1 : 1))
+        .join('\n');
 
       if (status === 403 || status === 401) {
         logout();
