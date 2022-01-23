@@ -13,6 +13,7 @@ import { IQueryDynamo, Key } from '../types';
 import { info, error as errorF, debug, warn } from '../../common/helpers/log';
 import { chunk, notEmpty, take } from '../../common/helpers/array';
 import { sleep } from '../../common/helpers/sleep';
+import { asyncForEach } from '../../common/helpers/async';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -130,25 +131,25 @@ export const batchWrite = async <T extends {}>(
 
 export const batchDelete = async ({
   tableName,
-  keys,
   breakOnError = true,
   pkName,
+  keys,
   rangeName,
-  rangeValue,
+  rangeKeys,
 }: {
   pkName: string;
   breakOnError?: boolean;
   tableName: string;
   keys: string[];
   rangeName?: string;
-  rangeValue?: string;
+  rangeKeys?: string[];
 }) => {
   info(`wipe keys dynamo:${tableName} - count=${keys.length}`);
   const error: AWS.AWSError[] = [];
   let breakV = false;
-  for (let key of keys) {
+  await asyncForEach(keys, async (key, i) => {
     if (breakV) {
-      break;
+      return;
     }
 
     let params: DocumentClient.DeleteItemInput = {
@@ -157,7 +158,10 @@ export const batchDelete = async ({
     };
 
     if (rangeName) {
-      params.Key[rangeName] = rangeValue;
+      let rangeValue = rangeKeys?.[i];
+      if (rangeValue) {
+        params.Key[rangeName] = rangeValue;
+      }
     }
 
     const res = await dynamoDb.delete(params).promise();
@@ -168,7 +172,7 @@ export const batchDelete = async ({
         breakV = true;
       }
     }
-  }
+  });
 
   if (error?.length > 0) {
     const me = error.join('\n');
