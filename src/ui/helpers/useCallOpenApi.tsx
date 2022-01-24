@@ -36,7 +36,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
     }
 
     const { error, loaded, loading, loadcount } = data;
-    if (loaded || loading || (error && loadcount < 2)) {
+    if (p.disabled || loaded || loading || (error && loadcount < 2)) {
       return;
     }
 

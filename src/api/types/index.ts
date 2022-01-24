@@ -20,17 +20,17 @@ export interface IGeneratedDynamoData {
   table: dynamodb.ITable;
   shortName: string;
 }
-export interface ILambdaPermissions {
-  [pathHyphenVerb: string]: {
+export interface ILambdaPermission {
+  dynamo?: {
     reads?: IGeneratedDynamoData[];
     writes?: IGeneratedDynamoData[];
-    policies?: iam.PolicyStatement[];
-  } & {
-    default?: {
-      reads?: IGeneratedDynamoData[];
-      writes?: IGeneratedDynamoData[];
-      policies?: iam.PolicyStatement[];
-    };
+  };
+  policies?: iam.PolicyStatement[];
+  env?: Record<string, string>;
+}
+export interface ILambdaPermissions {
+  [pathHyphenVerb: string]: ILambdaPermission & {
+    default?: ILambdaPermission;
   };
 }
 

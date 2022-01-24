@@ -70,7 +70,7 @@ const setUpApiGw = ({
   return api;
 };
 
-const getDynamoPermissions = ({
+const setupLambda = ({
   lambdaPermissions,
   pathV,
   verb,
@@ -96,12 +96,12 @@ const getDynamoPermissions = ({
 
   //
   const readTables = distinctBy(
-    [...(def?.reads || []), ...(lp?.reads || [])],
+    [...(def?.dynamo?.reads || []), ...(lp?.dynamo?.reads || [])],
     (s) => s.shortName,
   );
 
   const writeTables = distinctBy(
-    [...(def?.writes || []), ...(lp?.writes || [])],
+    [...(def?.dynamo?.writes || []), ...(lp?.dynamo?.writes || [])],
     (s) => s.shortName,
   );
 
@@ -109,8 +109,9 @@ const getDynamoPermissions = ({
     notEmpty,
   );
 
+  const env = { ...(def.env || {}), ...(lp?.env || {}) };
   const tables = [...readTables, ...writeTables];
-  const environment: Record<string, string> = {};
+  const environment: Record<string, string> = env;
   Object.values(tables).forEach((v) => {
     environment[v.shortName] = v.table.tableName;
   });
@@ -173,13 +174,12 @@ export const openApiImpl = (p: {
   paths.forEach(({ fullPath, verbs, pathList }) => {
     const apiPath = addApiPaths(api, pathList, apiRoots);
     verbs.forEach((verb) => {
-      const { environment, readTables, writeTables, policies } =
-        getDynamoPermissions({
-          lambdaPermissions,
-          pathV: fullPath,
-          verb,
-          seenPermissions,
-        });
+      const { environment, readTables, writeTables, policies } = setupLambda({
+        lambdaPermissions,
+        pathV: fullPath,
+        verb,
+        seenPermissions,
+      });
 
       const lambdaName = lambdaNameSafe(
         `${p.shortStackName}-${fullPath}-${verb}-${NODE_ENV}`,

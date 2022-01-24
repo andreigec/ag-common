@@ -12,4 +12,5 @@ export interface ICallOpenApi<T, TDefaultApi> {
   refreshToken: () => Promise<User | undefined>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   newDefaultApi: (config: any) => TDefaultApi;
+  disabled?: boolean;
 }
