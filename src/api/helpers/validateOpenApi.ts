@@ -2,7 +2,10 @@
 import OpenAPIRequestValidator from 'openapi-request-validator';
 import { getAndValidateToken } from './validations';
 import { warn, error as errorF, info, debug } from '../../common/helpers/log';
-import { objectKeysToLowerCase } from '../../common/helpers/object';
+import {
+  objectKeysToLowerCase,
+  tryJsonParse,
+} from '../../common/helpers/object';
 import { returnCode } from './api';
 import { User } from '../../ui/helpers/jwt';
 import { getValidatedLang, TLang } from '../../common/helpers/i18n';
@@ -91,7 +94,7 @@ export async function validateOpenApi<T>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params: undefined as any,
     query: event.queryStringParameters,
-    body: event.body && JSON.parse(event.body),
+    body: tryJsonParse(event.body, event.body),
     headers: objectKeysToLowerCase(event?.headers),
   };
 
@@ -166,7 +169,7 @@ export async function validateOpenApi<T>({
   const res = await next({
     params,
     event,
-    body: (event.body && JSON.parse(event.body)) as T,
+    body: tryJsonParse(event.body, event.body) as unknown as T,
     userProfile,
     lang: getValidatedLang(event.headers['x-lang'] ?? ''),
   });
