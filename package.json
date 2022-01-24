@@ -13,10 +13,8 @@
     "start": "tsc --watch"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.8.0",
     "aws-sdk": "2.1060.0",
     "axios": "0.25.0",
-    "constructs": "10.0.39",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
     "openapi-request-validator": "10.0.0",
@@ -46,6 +44,10 @@
     "prettier": "2.5.1",
     "rimraf": "3.0.2",
     "typescript-styled-plugin": "0.18.2"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "2.x",
+    "constructs": "10.x"
   },
   "files": [
     "dist/**/*",

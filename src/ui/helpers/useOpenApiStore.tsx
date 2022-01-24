@@ -2,10 +2,11 @@ import { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import { Mutex } from './mutex';
 import { MutexData } from './mutexData';
-import { callOpenApi, OverrideAuth } from './callOpenApi';
+import { callOpenApi } from './callOpenApi';
 import { CacheItems } from './routes';
 import { error, info } from '../../common/helpers/log';
 import { AxiosWrapper, User } from './jwt';
+import { OverrideAuth } from './types';
 const mutex = new Mutex({
   autoUnlockTimeoutMs: 10000,
   intervalMs: 100,
@@ -44,16 +45,7 @@ export const setMutexData = ({
 export const getMutexData = <T,>(key: string) =>
   mutexData.getData(key) as AxiosWrapper<T>;
 
-async function mLock<T, TDefaultApi>({
-  key,
-  func,
-  ttlSeconds = 3600,
-  logout,
-  refreshToken,
-  apiUrl,
-  newDefaultApi,
-  overrideAuth,
-}: {
+async function mLock<T, TDefaultApi>(p: {
   key: string;
   func: (f: TDefaultApi) => Promise<AxiosResponse<T>>;
   ttlSeconds?: number;
@@ -66,19 +58,12 @@ async function mLock<T, TDefaultApi>({
 }) {
   let unlock: () => void | undefined;
   try {
-    unlock = await mutex.capture(key);
-    if (mutexData.getData(key)) {
+    unlock = await mutex.capture(p.key);
+    if (mutexData.getData(p.key)) {
       return;
     }
 
-    const newData = await callOpenApi({
-      apiUrl,
-      func,
-      logout,
-      refreshToken,
-      newDefaultApi,
-      overrideAuth,
-    });
+    const newData = await callOpenApi(p);
 
     if (!newData) {
       return;
@@ -87,10 +72,14 @@ async function mLock<T, TDefaultApi>({
     if (newData.error) {
       error('api error:', newData.error);
     } else {
-      mutexData.setData({ key, data: newData, ttlSeconds });
+      mutexData.setData({
+        key: p.key,
+        data: newData,
+        ttlSeconds: p.ttlSeconds,
+      });
     }
 
-    mutexData.pingSubscribers(key);
+    mutexData.pingSubscribers(p.key);
   } catch (e) {
     error('mutex error:', e);
   } finally {

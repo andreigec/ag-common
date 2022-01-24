@@ -1,12 +1,10 @@
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { getCookieWrapper } from './cookie';
 import { sleep } from '../../common/helpers/sleep';
-import { AxiosWrapper, User } from './jwt';
+import { AxiosWrapper } from './jwt';
 import { notEmpty } from '../../common/helpers/array';
+import { ICallOpenApi } from './types';
 
-export interface OverrideAuth {
-  id_token?: string;
-}
 export const callOpenApi = async <T, TDefaultApi>({
   func,
   apiUrl,
@@ -14,15 +12,7 @@ export const callOpenApi = async <T, TDefaultApi>({
   refreshToken,
   logout,
   newDefaultApi,
-}: {
-  func: (f: TDefaultApi) => Promise<AxiosResponse<T>>;
-  apiUrl: string;
-  overrideAuth?: OverrideAuth;
-  logout: () => void;
-  refreshToken: () => Promise<User | undefined>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  newDefaultApi: (config: any) => TDefaultApi;
-}): Promise<AxiosWrapper<T | undefined>> => {
+}: ICallOpenApi<T, TDefaultApi>): Promise<AxiosWrapper<T | undefined>> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let error: AxiosError<unknown, any> | undefined;
   let data: T | undefined;
@@ -62,6 +52,7 @@ export const callOpenApi = async <T, TDefaultApi>({
       const ae = e as AxiosError<unknown, any>;
       const status = ae.response?.status;
       const errorMessage = [
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (ae.response?.data as any)?.toString() ?? '',
         ae.response?.statusText?.toString() ?? '',
         ae.response?.status?.toString() ?? '',
