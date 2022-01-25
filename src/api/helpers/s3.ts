@@ -47,7 +47,7 @@ export const uploadFile = async ({
 }: {
   Bucket: string;
   Key: string;
-  Body: string;
+  Body: Buffer | Uint8Array | Blob | string;
 }) => {
   const res = await s3.upload({ Bucket, Key, Body }).promise();
 
