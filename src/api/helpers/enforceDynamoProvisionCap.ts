@@ -15,6 +15,7 @@ export const enforceDynamoProvisionCap = ({
   tables,
   readsMax = 25,
   writesMax = 25,
+  mustEqual = false,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tables: any[];
@@ -26,6 +27,10 @@ export const enforceDynamoProvisionCap = ({
    * default 25
    */
   writesMax?: number;
+  /**
+   * default false. if true, will throw if cap isnt met
+   */
+  mustEqual?: boolean;
 }) => {
   if (!tables || tables.length === 0) {
     warn('error in dynamo FT enforce');
@@ -37,21 +42,14 @@ export const enforceDynamoProvisionCap = ({
   const s = safeStringify(t.node._children.Resource.node.scope);
   const reads = extractSum({ str: s, regex: /readCapacityUnits.*/gim });
   const writes = extractSum({ str: s, regex: /writeCapacityUnits.*/gim });
+  warn(`dynamo table provisioned reads:${reads}/${readsMax}`);
+  warn(`dynamo table provisioned writes:${writes}/${writesMax}`);
 
-  if (reads > readsMax) {
-    warn(
-      `dynamo table provisioned reads:${reads} greater than max:${readsMax}`,
-    );
-
+  if (reads > readsMax || writes > writesMax) {
     throw new Error('exceeded dynamo provision cap');
   }
 
-  if (writes > writesMax) {
-    warn(
-      `dynamo table provisioned writes:${writes} greater than max:${writesMax}`,
-    );
-    throw new Error('exceeded dynamo provision cap');
+  if (mustEqual && (reads !== readsMax || writes !== writesMax)) {
+    throw new Error(`dynamo provision cap not met reads`);
   }
-
-  warn(`dynamo provisioned total: R=${reads} W=${writes}`);
 };
