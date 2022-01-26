@@ -1,6 +1,5 @@
 import { TLang } from '../..';
-import { ICognitoAuth, ICognitoAuthProviderProps } from './cognito';
-import { AuthedUserContext } from './jwt';
+import { ICognitoAuth } from './cognito';
 
 export interface LocationSubset {
   pathname: string;
@@ -34,7 +33,5 @@ export interface IStateCommon<TRequest extends IRequestCommon>
   extends IInitialStateCommon {
   request: TRequest;
   auth: ICognitoAuth;
-  CognitoAuthContext: React.Context<AuthedUserContext>;
-  CognitoAuthProvider: (p: ICognitoAuthProviderProps) => JSX.Element;
   pushPath: (path: string) => Promise<void>;
 }
