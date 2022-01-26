@@ -87,7 +87,7 @@ export const getAndValidateToken = async ({
   let token = '';
   try {
     if (!tokenRaw) {
-      const m = 'no auth headers, auth failed';
+      const m = 'auth error: no auth headers';
       error(m);
       return {
         error: returnCode(403, m),
