@@ -72,6 +72,7 @@ export async function validateOpenApi<T>({
   authorized,
   schema,
   COGNITO_USER_POOL_ID,
+  jwksRegion = 'ap-southeast-2',
 }: {
   COGNITO_USER_POOL_ID: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,6 +80,10 @@ export async function validateOpenApi<T>({
   event: APIGatewayEvent;
   next: NextType<T>;
   authorized?: true | false | 'optional';
+  /**
+   * default ap-southeast-2
+   */
+  jwksRegion?: string;
 }) {
   if (!schema) {
     throw new Error('schema undefined!');
@@ -154,6 +159,7 @@ export async function validateOpenApi<T>({
     ({ error, userProfile } = await getAndValidateToken({
       tokenRaw: authHeader,
       COGNITO_USER_POOL_ID,
+      jwksRegion,
     }));
 
     if (error) {
