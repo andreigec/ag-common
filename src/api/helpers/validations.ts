@@ -71,6 +71,9 @@ export const getAndValidateToken = async ({
   jwksRegion = 'ap-southeast-2',
   COGNITO_USER_POOL_ID,
 }: {
+  /**
+   * default ap-southeast-2
+   */
   jwksRegion?: string;
   tokenRaw?: string;
   COGNITO_USER_POOL_ID: string;
@@ -84,19 +87,36 @@ export const getAndValidateToken = async ({
   let token = '';
   try {
     if (!tokenRaw) {
-      error('no auth headers');
+      const m = 'no auth headers, auth failed';
+      error(m);
       return {
-        error: returnCode(403, 'auth failed'),
+        error: returnCode(403, m),
       };
     }
 
     token = tokenRaw.substring(tokenRaw.indexOf(' ') + 1);
+    if (!token) {
+      const m = 'auth error: no token';
+      error(m);
+      return {
+        error: returnCode(403, m),
+      };
+    }
 
     let subject: string | undefined;
     try {
       await jwtVerify({ token, jwksUri, issuer });
+
       const decoded = decode(token) as unknown as IdJwt;
       debug(`decoded=${JSON.stringify(decoded, null, 2)}`);
+      if (!decoded.email) {
+        const m = 'auth error, no email';
+        error(m);
+        return {
+          error: returnCode(403, m),
+        };
+      }
+
       subject = decoded?.sub;
       if (!subject) {
         const mess = 'user should have responded with subject (sub) field';
@@ -122,13 +142,6 @@ export const getAndValidateToken = async ({
         updatedAt: parseInt(`${decoded.auth_time}000`, 10),
       };
 
-      if (!userProfile || !token || !userProfile.userId) {
-        error('auth fail');
-        return {
-          error: returnCode(403, 'auth fail'),
-        };
-      }
-
       return { token, userProfile };
     } catch (e) {
       const ex = e as object;
@@ -139,9 +152,10 @@ export const getAndValidateToken = async ({
       throw e;
     }
   } catch (e) {
-    error('auth error', e);
+    const m = 'auth error:' + JSON.stringify(e, null, 2);
+    error(m);
     return {
-      error: returnCode(403, 'auth fail'),
+      error: returnCode(403, m),
     };
   }
 };
