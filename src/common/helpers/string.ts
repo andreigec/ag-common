@@ -138,3 +138,28 @@ export function containsInsensitive(str: string, ...args: string[]) {
 
   return !!args.find((a) => l.includes(a));
 }
+
+/**
+ * safely handles circular references
+ * @param obj
+ * @param indent
+ * @returns
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const safeStringify = (obj: any, indent = 2) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let cache: any = [];
+  const retVal = JSON.stringify(
+    obj,
+    (_key, value) =>
+      typeof value === 'object' && value !== null
+        ? cache.includes(value)
+          ? undefined // Duplicate reference found, discard key
+          : cache.push(value) && value // Store value in our collection
+        : value,
+    indent,
+  );
+
+  cache = null;
+  return retVal;
+};
