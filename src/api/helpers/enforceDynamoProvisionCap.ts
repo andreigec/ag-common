@@ -50,6 +50,6 @@ export const enforceDynamoProvisionCap = ({
   }
 
   if (mustEqual && (reads !== readsMax || writes !== writesMax)) {
-    throw new Error(`dynamo provision cap not met reads`);
+    throw new Error(`dynamo provision cap not met`);
   }
 };
