@@ -8,15 +8,14 @@ import { APIGatewayProxyResult } from '../types';
 
 let jwksClient: JwksClient.JwksClient | undefined;
 const jwtVerify = async ({
-  COGNITO_USER_POOL_ID,
   token,
+  jwksUri,
+  issuer,
 }: {
-  COGNITO_USER_POOL_ID: string;
+  issuer: string;
+  jwksUri: string;
   token: string;
 }) => {
-  const jwksUri = `https://cognito-idp.ap-southeast-2.amazonaws.com/${COGNITO_USER_POOL_ID}/.well-known/jwks.json`;
-  const issuer = `https://cognito-idp.ap-southeast-2.amazonaws.com/${COGNITO_USER_POOL_ID}`;
-
   return new Promise((resolve, reject) => {
     verify(
       token,
@@ -69,8 +68,10 @@ const jwtVerify = async ({
 
 export const getAndValidateToken = async ({
   tokenRaw,
+  jwksRegion = 'ap-southeast-2',
   COGNITO_USER_POOL_ID,
 }: {
+  jwksRegion?: string;
   tokenRaw?: string;
   COGNITO_USER_POOL_ID: string;
 }): Promise<{
@@ -78,6 +79,8 @@ export const getAndValidateToken = async ({
   token?: string;
   userProfile?: User;
 }> => {
+  const jwksUri = `https://cognito-idp.${jwksRegion}.amazonaws.com/${COGNITO_USER_POOL_ID}/.well-known/jwks.json`;
+  const issuer = `https://cognito-idp.${jwksRegion}.amazonaws.com/${COGNITO_USER_POOL_ID}`;
   let token = '';
   try {
     if (!tokenRaw) {
@@ -91,7 +94,7 @@ export const getAndValidateToken = async ({
 
     let subject: string | undefined;
     try {
-      await jwtVerify({ token, COGNITO_USER_POOL_ID });
+      await jwtVerify({ token, jwksUri, issuer });
       const decoded = decode(token) as unknown as IdJwt;
       debug(`decoded=${JSON.stringify(decoded, null, 2)}`);
       subject = decoded?.sub;
