@@ -1,5 +1,9 @@
 /* eslint-disable no-new */
-import { aws_dynamodb as dynamodb, aws_iam as iam } from 'aws-cdk-lib';
+import {
+  aws_dynamodb as dynamodb,
+  aws_iam as iam,
+  aws_lambda as lambda,
+} from 'aws-cdk-lib';
 import { Key } from './aws';
 
 export interface DYNAMOKEYS {
@@ -20,17 +24,18 @@ export interface IGeneratedDynamoData {
   table: dynamodb.ITable;
   shortName: string;
 }
-export interface ILambdaPermission {
+export interface ILambdaConfig {
   dynamo?: {
     reads?: IGeneratedDynamoData[];
     writes?: IGeneratedDynamoData[];
   };
   policies?: iam.PolicyStatement[];
   env?: Record<string, string>;
+  layers?: lambda.ILayerVersion[];
 }
-export interface ILambdaPermissions {
-  [pathHyphenVerb: string]: ILambdaPermission & {
-    default?: ILambdaPermission;
+export interface ILambdaConfigs {
+  [pathHyphenVerb: string]: ILambdaConfig & {
+    default?: ILambdaConfig;
   };
 }
 

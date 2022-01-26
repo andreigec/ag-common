@@ -13,7 +13,7 @@ import { Construct } from 'constructs';
 import { notEmpty } from '../..';
 import { distinctBy } from '../../common/helpers/distinctBy';
 import { warn } from '../../common/helpers/log';
-import { ILambdaPermissions } from '../types';
+import { ILambdaConfig, ILambdaConfigs } from '../types';
 // eslint-disable-next-line
 const getPaths = (schema: any) =>
   Object.entries(
@@ -71,25 +71,25 @@ const setUpApiGw = ({
 };
 
 const setupLambda = ({
-  lambdaPermissions,
+  lambdaConfig,
   pathV,
   verb,
   seenPermissions,
 }: {
   pathV: string;
   verb: string;
-  lambdaPermissions: ILambdaPermissions;
+  lambdaConfig: ILambdaConfigs;
   seenPermissions: { [a: string]: boolean };
 }) => {
   const pathCompute = pathV + '/' + verb;
-  const lp = lambdaPermissions?.[pathCompute];
+  const lp = lambdaConfig?.[pathCompute];
   if (lp) {
     seenPermissions[pathCompute] = true;
   } else {
     seenPermissions[pathCompute] = false;
   }
 
-  const def = lambdaPermissions?.default;
+  const def = lambdaConfig?.default;
   if (def) {
     seenPermissions.default = true;
   }
@@ -109,13 +109,17 @@ const setupLambda = ({
     notEmpty,
   );
 
+  const layers = [...(def.layers || []), ...(lp?.layers || [])].filter(
+    notEmpty,
+  );
+
   const env = { ...(def.env || {}), ...(lp?.env || {}) };
   const tables = [...readTables, ...writeTables];
   const environment: Record<string, string> = env;
   Object.values(tables).forEach((v) => {
     environment[v.shortName] = v.table.tableName;
   });
-  return { environment, readTables, writeTables, policies };
+  return { environment, readTables, writeTables, policies, layers };
 };
 
 const addApiPaths = (
@@ -151,7 +155,7 @@ export const openApiImpl = (p: {
   NODE_ENV: string;
   baseUrl: string;
   endpointsBase: string;
-  lambdaPermissions: ILambdaPermissions;
+  lambdaConfig: ILambdaConfigs;
   certificate: certmgr.ICertificate;
   hostedZone: route53.IHostedZone;
   shortStackName: string;
@@ -166,7 +170,7 @@ export const openApiImpl = (p: {
     throw new Error('no openapi schema found');
   }
 
-  const { stack, NODE_ENV, endpointsBase, lambdaPermissions } = p;
+  const { stack, NODE_ENV, endpointsBase, lambdaConfig } = p;
   const paths = getPaths(p.schema);
   const api = setUpApiGw(p);
   const apiRoots: { [name: string]: apigw.Resource } = {};
@@ -174,12 +178,13 @@ export const openApiImpl = (p: {
   paths.forEach(({ fullPath, verbs, pathList }) => {
     const apiPath = addApiPaths(api, pathList, apiRoots);
     verbs.forEach((verb) => {
-      const { environment, readTables, writeTables, policies } = setupLambda({
-        lambdaPermissions,
-        pathV: fullPath,
-        verb,
-        seenPermissions,
-      });
+      const { environment, readTables, writeTables, policies, layers } =
+        setupLambda({
+          lambdaConfig,
+          pathV: fullPath,
+          verb,
+          seenPermissions,
+        });
 
       const lambdaName = lambdaNameSafe(
         `${p.shortStackName}-${fullPath}-${verb}-${NODE_ENV}`,
@@ -200,6 +205,7 @@ export const openApiImpl = (p: {
         },
         reservedConcurrentExecutions: 5,
         logRetention: logs.RetentionDays.FIVE_DAYS,
+        layers,
       });
 
       readTables.forEach((t) => t.table.grantReadData(lambdaV));
@@ -213,7 +219,7 @@ export const openApiImpl = (p: {
     });
   });
 
-  Object.keys(lambdaPermissions).forEach((k) => {
+  Object.keys(lambdaConfig).forEach((k) => {
     if (!seenPermissions[k] || seenPermissions[k] === false) {
       warn(
         `unused permissions for '${k}', did you mean one of these paths?=`,
