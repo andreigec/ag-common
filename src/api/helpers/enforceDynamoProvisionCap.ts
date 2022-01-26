@@ -39,15 +39,18 @@ export const enforceDynamoProvisionCap = ({
   const writes = extractSum({ str: s, regex: /writeCapacityUnits.*/gim });
 
   if (reads > readsMax) {
-    throw new Error(
+    warn(
       `dynamo table provisioned reads:${reads} greater than max:${readsMax}`,
     );
+
+    throw new Error('exceeded dynamo provision cap');
   }
 
   if (writes > writesMax) {
-    throw new Error(
+    warn(
       `dynamo table provisioned writes:${writes} greater than max:${writesMax}`,
     );
+    throw new Error('exceeded dynamo provision cap');
   }
 
   warn(`dynamo provisioned total: R=${reads} W=${writes}`);
