@@ -90,6 +90,9 @@ export function getCookieWrapper<T>({
   defaultValue,
 }: {
   cname: string;
+  /**
+   * set for ssr
+   */
   cookieDocument?: string;
   defaultValue?: string;
 }): T {
@@ -134,9 +137,11 @@ export function useCookie<T>({
 }: {
   key: string;
   defaultValue?: string;
+  /**
+   * set for ssr
+   */
   cookieDocument?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-}): [T, (v: T) => any] {
+}): [T, (v: T) => void] {
   const [cookie, setC] = useState<T>(
     getCookieWrapper({ cname: key, defaultValue, cookieDocument }),
   );

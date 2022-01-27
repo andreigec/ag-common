@@ -36,4 +36,8 @@ export interface IStateCommon<TRequest extends IRequestCommon>
   request: TRequest;
   auth: ICognitoAuth;
   pushPath: (path: string) => Promise<void>;
+  /**
+   * set for ssr
+   */
+  cookieDocument: string | undefined;
 }
