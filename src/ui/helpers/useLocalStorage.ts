@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useState } from 'react';
 import { error, warn } from '../../common/helpers/log';
 import { tryJsonParse } from '../../common/helpers/object';
@@ -8,7 +7,6 @@ const getTimeSeconds = () => Math.ceil(new Date().getTime() / 1000);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if (!(process as any).nodeLocalStorage) {
-  console.log('reset node');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (process as any).nodeLocalStorage = {};
 }
@@ -22,7 +20,6 @@ export const clearLocalStorageItem = (key: string) => {
   if (typeof window === 'undefined') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (process as any).nodeLocalStorage[key];
-    console.log('delete node');
     return;
   }
 
@@ -38,7 +35,6 @@ export const clearAllLocalStorage = (except?: string[]) => {
     if (typeof window === 'undefined') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (process as any).nodeLocalStorage = {};
-      console.log('clear node');
       return;
     }
 
@@ -60,7 +56,6 @@ export const setLocalStorageItem = <T>(key: string, value: T, ttl?: number) => {
     if (typeof window === 'undefined') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (process as any).nodeLocalStorage[key] = value;
-      console.log('set node', key, value);
       return;
     }
 
@@ -84,7 +79,7 @@ export const getLocalStorageItem = <T>(
   if (typeof window === 'undefined') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const value = (process as any).nodeLocalStorage[key] || initialValue;
-    console.log('get node', key, value);
+
     return value;
   }
 
