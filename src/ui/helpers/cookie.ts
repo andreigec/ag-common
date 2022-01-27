@@ -42,7 +42,7 @@ function getCookie({ cname }: { cname: string }) {
   const name = `${cname}=`;
   const ca1 =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (process as any).nodeLocalCookie ||
+    ((process as any).nodeLocalCookie as string) ||
     (typeof window !== 'undefined' && document.cookie);
 
   if (!ca1 || !ca1?.trim()) {
