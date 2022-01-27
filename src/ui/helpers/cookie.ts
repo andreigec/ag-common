@@ -1,28 +1,24 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 import { useState } from 'react';
-import { warn } from '../../common/helpers/log';
+import { fromBase64, toBase64 } from '../../common/helpers/string';
 
 const expireDate = 'Thu, 01 Jan 1970 00:00:00 UTC';
 const maxCookieLen = 4000;
 const chunkString = (str: string, length: number) =>
   str.match(new RegExp(`.{1,${length}}`, 'g')) as string[];
 
-export const toBase64 = (str: string) => Buffer.from(str).toString('base64');
-export const fromBase64 = (str: string) =>
-  Buffer.from(decodeURIComponent(str), 'base64').toString();
-
 function setCookie(cname: string, raw: string | null | undefined, exdays = 1) {
+  if (typeof window === undefined) {
+    return;
+  }
+
   const d = new Date();
   d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
   const expires = `expires=${
     !raw || exdays < 0 ? expireDate : d.toUTCString()
   }`;
 
-  if (typeof window === undefined) {
-    warn('cant set cookie with no window object');
-    return;
-  }
   document.cookie = `${cname}=${!raw ? '' : raw};${expires};path=/`;
 }
 
