@@ -108,6 +108,10 @@ export const useOpenApiStore = <T, TDefaultApi>(p: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   newDefaultApi: (config: any) => TDefaultApi;
   overrideAuth?: OverrideAuth;
+  /**
+   * will shortcut and return the appropriate axioswrapper data if cachekey is found
+   */
+  ssrCacheItems?: CacheItems;
 }): AxiosWrapper<T> => {
   const { cacheKey, disabled } = p;
   if (!cacheKey) {
@@ -136,11 +140,6 @@ export const useOpenApiStore = <T, TDefaultApi>(p: {
     }
   }, [disabled, key, p]);
 
-  if (!mutexData.getData(key)) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return { loading: true } as any;
-  }
-
   if (disabled) {
     return {
       loading: false,
@@ -153,7 +152,17 @@ export const useOpenApiStore = <T, TDefaultApi>(p: {
     };
   }
 
+  const ssrCached = p.ssrCacheItems?.find((s) => s.cacheKey === cacheKey);
+  if (typeof window === 'undefined' && ssrCached) {
+    return ssrCached.prefillData;
+  }
+
   const current = mutexData.getData(key);
+
+  if (!current) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return { loading: true } as any;
+  }
 
   return {
     ...current,

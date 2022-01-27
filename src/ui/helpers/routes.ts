@@ -1,5 +1,6 @@
-import { TLang } from '../..';
+import { TLang } from '../../common/helpers/i18n';
 import { ICognitoAuth } from './cognito';
+import { AxiosWrapper } from './jwt';
 
 export interface LocationSubset {
   pathname: string;
@@ -9,15 +10,16 @@ export interface LocationSubset {
   host: string;
 }
 
-export type CacheItems = CacheItem[];
-export interface CacheItem {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type CacheItems = CacheItem<any>[];
+export interface CacheItem<T> {
   cacheKey: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  prefillData: any;
+  prefillData: AxiosWrapper<T>;
   ttlSeconds: number;
 }
 export interface IInitialStateCommon {
-  openApiCache?: CacheItem[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  openApiCache?: CacheItem<any>[];
   headerTitle?: string;
   seed?: number;
 }
