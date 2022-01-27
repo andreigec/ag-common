@@ -3,6 +3,8 @@ import { error, warn } from '../../common/helpers/log';
 import { tryJsonParse } from '../../common/helpers/object';
 
 const getTimeSeconds = () => Math.ceil(new Date().getTime() / 1000);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let nodeLocalStorage: Record<string, any> = {};
 
 interface ILS {
   expiry?: number;
@@ -11,6 +13,7 @@ interface ILS {
 
 export const clearLocalStorageItem = (key: string) => {
   if (typeof window === 'undefined') {
+    delete nodeLocalStorage[key];
     return;
   }
 
@@ -24,6 +27,7 @@ export const clearLocalStorageItem = (key: string) => {
 export const clearAllLocalStorage = (except?: string[]) => {
   try {
     if (typeof window === 'undefined') {
+      nodeLocalStorage = {};
       return;
     }
 
@@ -43,6 +47,7 @@ export const clearAllLocalStorage = (except?: string[]) => {
 export const setLocalStorageItem = <T>(key: string, value: T, ttl?: number) => {
   try {
     if (typeof window === 'undefined') {
+      nodeLocalStorage[key] = value;
       return;
     }
 
@@ -64,7 +69,7 @@ export const getLocalStorageItem = <T>(
   ttl?: number,
 ): T => {
   if (typeof window === 'undefined') {
-    return initialValue;
+    return nodeLocalStorage[key] || initialValue;
   }
 
   const itemraw = window.localStorage.getItem(key);
@@ -97,10 +102,6 @@ export function UseLocalStorage<T>(
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to localStorage.
   const setValue = (value: T | ((a: T) => T)) => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
     const valueToStore = (
       value instanceof Function ? value(storedValue) : value
     ) as T;
