@@ -85,7 +85,7 @@ export const callOpenApi = async <T, TDefaultApi>({
 
   return {
     data,
-    error,
+    ...(error && { error }),
     loading: false,
     reFetch: async () => func(cl),
     url: func.toString(),
