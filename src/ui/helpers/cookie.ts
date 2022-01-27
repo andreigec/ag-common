@@ -12,17 +12,6 @@ export const toBase64 = (str: string) => Buffer.from(str).toString('base64');
 export const fromBase64 = (str: string) =>
   Buffer.from(decodeURIComponent(str), 'base64').toString();
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-if (!(process as any).nodeLocalCookie === undefined) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).nodeLocalCookie = '';
-}
-
-export const setNodeCookieDocument = (s: string) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).nodeLocalCookie = s;
-};
-
 function setCookie(cname: string, raw: string | null | undefined, exdays = 1) {
   const d = new Date();
   d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
@@ -34,16 +23,19 @@ function setCookie(cname: string, raw: string | null | undefined, exdays = 1) {
     warn('cant set cookie with no window object');
     return;
   }
-
   document.cookie = `${cname}=${!raw ? '' : raw};${expires};path=/`;
 }
 
-function getCookie({ cname }: { cname: string }) {
+function getCookie({
+  cname,
+  cookieDocument,
+}: {
+  cname: string;
+  cookieDocument?: string;
+}) {
   const name = `${cname}=`;
   const ca1 =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((process as any).nodeLocalCookie as string) ||
-    (typeof window !== 'undefined' && document.cookie);
+    cookieDocument || (typeof window !== 'undefined' && document.cookie);
 
   if (!ca1 || !ca1?.trim()) {
     return undefined;
@@ -98,9 +90,11 @@ export function wipeCookies(cname: string) {
 
 export function getCookieWrapper<T>({
   cname,
+  cookieDocument,
   defaultValue,
 }: {
   cname: string;
+  cookieDocument?: string;
   defaultValue?: string;
 }): T {
   let raw = '';
@@ -110,6 +104,7 @@ export function getCookieWrapper<T>({
   while (true) {
     const newv = getCookie({
       cname: cname + currentCount,
+      cookieDocument,
     });
 
     if (!newv) {
@@ -139,13 +134,15 @@ export function getCookieWrapper<T>({
 export function useCookie<T>({
   key,
   defaultValue,
+  cookieDocument,
 }: {
   key: string;
   defaultValue?: string;
+  cookieDocument?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }): [T, (v: T) => any] {
   const [cookie, setC] = useState<T>(
-    getCookieWrapper({ cname: key, defaultValue }),
+    getCookieWrapper({ cname: key, defaultValue, cookieDocument }),
   );
 
   return [
