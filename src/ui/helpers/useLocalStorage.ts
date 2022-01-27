@@ -3,13 +3,6 @@ import { error, warn } from '../../common/helpers/log';
 import { tryJsonParse } from '../../common/helpers/object';
 
 const getTimeSeconds = () => Math.ceil(new Date().getTime() / 1000);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-if (!(process as any).nodeLocalStorage) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).nodeLocalStorage = {};
-}
 
 interface ILS {
   expiry?: number;
@@ -18,8 +11,6 @@ interface ILS {
 
 export const clearLocalStorageItem = (key: string) => {
   if (typeof window === 'undefined') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete (process as any).nodeLocalStorage[key];
     return;
   }
 
@@ -33,8 +24,6 @@ export const clearLocalStorageItem = (key: string) => {
 export const clearAllLocalStorage = (except?: string[]) => {
   try {
     if (typeof window === 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (process as any).nodeLocalStorage = {};
       return;
     }
 
@@ -54,8 +43,6 @@ export const clearAllLocalStorage = (except?: string[]) => {
 export const setLocalStorageItem = <T>(key: string, value: T, ttl?: number) => {
   try {
     if (typeof window === 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (process as any).nodeLocalStorage[key] = value;
       return;
     }
 
@@ -77,10 +64,7 @@ export const getLocalStorageItem = <T>(
   ttl?: number,
 ): T => {
   if (typeof window === 'undefined') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const value = (process as any).nodeLocalStorage[key] || initialValue;
-
-    return value;
+    return initialValue;
   }
 
   const itemraw = window.localStorage.getItem(key);
