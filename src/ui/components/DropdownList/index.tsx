@@ -112,18 +112,21 @@ export function DropdownList<T>({
     if (JSON.stringify(newv) !== JSON.stringify(value)) setState(newv);
   }, [options, value]);
 
-  const maxLen = Math.max(...options.map((s) => renderF(s).length));
-  const style: Record<string, string | number> = {
-    width: `calc(${maxLen}ch + 2rem)`,
-  };
+  let style: Record<string, string | number> = {};
+  if (open) {
+    const maxLen = Math.max(...options.map((s) => renderF(s).length));
+    style = {
+      width: `calc(${maxLen}ch + 2rem)`,
+    };
 
-  const minLeft = convertRemToPixels(2 + maxLen / 2);
-  const offsetList = ref?.current?.offsetLeft ?? 0;
+    const minLeft = convertRemToPixels(2 + maxLen / 2);
+    const offsetList = ref?.current?.offsetLeft ?? 0;
 
-  if (offsetList < minLeft) {
-    style.left = 0;
-  } else {
-    style.right = 0;
+    if (offsetList < minLeft) {
+      style.left = 0;
+    } else {
+      style.right = 0;
+    }
   }
 
   return (
