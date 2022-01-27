@@ -1,10 +1,17 @@
+/* eslint-disable no-console */
 import { useState } from 'react';
 import { error, warn } from '../../common/helpers/log';
 import { tryJsonParse } from '../../common/helpers/object';
 
 const getTimeSeconds = () => Math.ceil(new Date().getTime() / 1000);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-let nodeLocalStorage: Record<string, any> = {};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+if (!(process as any).nodeLocalStorage) {
+  console.log('reset node');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (process as any).nodeLocalStorage = {};
+}
 
 interface ILS {
   expiry?: number;
@@ -13,7 +20,9 @@ interface ILS {
 
 export const clearLocalStorageItem = (key: string) => {
   if (typeof window === 'undefined') {
-    delete nodeLocalStorage[key];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (process as any).nodeLocalStorage[key];
+    console.log('delete node');
     return;
   }
 
@@ -27,7 +36,9 @@ export const clearLocalStorageItem = (key: string) => {
 export const clearAllLocalStorage = (except?: string[]) => {
   try {
     if (typeof window === 'undefined') {
-      nodeLocalStorage = {};
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (process as any).nodeLocalStorage = {};
+      console.log('clear node');
       return;
     }
 
@@ -47,7 +58,9 @@ export const clearAllLocalStorage = (except?: string[]) => {
 export const setLocalStorageItem = <T>(key: string, value: T, ttl?: number) => {
   try {
     if (typeof window === 'undefined') {
-      nodeLocalStorage[key] = value;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (process as any).nodeLocalStorage[key] = value;
+      console.log('set node', key, value);
       return;
     }
 
@@ -69,7 +82,10 @@ export const getLocalStorageItem = <T>(
   ttl?: number,
 ): T => {
   if (typeof window === 'undefined') {
-    return nodeLocalStorage[key] || initialValue;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const value = (process as any).nodeLocalStorage[key] || initialValue;
+    console.log('get node', key, value);
+    return value;
   }
 
   const itemraw = window.localStorage.getItem(key);
@@ -88,8 +104,6 @@ export const getLocalStorageItem = <T>(
 
   return itemv;
 };
-
-// Hook
 
 export function UseLocalStorage<T>(
   key: string,
