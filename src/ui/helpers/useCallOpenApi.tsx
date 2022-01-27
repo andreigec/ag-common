@@ -21,7 +21,7 @@ const defaultV = <T,>(def: T): AxiosWrapperWrap<T> => ({
 });
 
 export const useCallOpenApi = <T, TDefaultApi>(
-  p: ICallOpenApi<T, TDefaultApi> & { cacheKey: string },
+  p: ICallOpenApi<T, TDefaultApi>,
 ): AxiosWrapperWrap<T> => {
   const [data, setData] = useState<AxiosWrapperWrap<T>>(defaultV(undefined));
   useEffect(() => {
