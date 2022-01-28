@@ -95,7 +95,7 @@ export const confirm = async ({
 }: {
   topText?: string;
   bottomText: string;
-}) => {
+}): Promise<boolean> => {
   return new Promise((res) => {
     const wrapper = document.body.appendChild(document.createElement('div'));
     ReactDOM.render(
