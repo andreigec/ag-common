@@ -6,7 +6,7 @@ import { callOpenApi } from './callOpenApi';
 import { CacheItems } from './routes';
 import { error, info } from '../../common/helpers/log';
 import { AxiosWrapper, User } from './jwt';
-import { OverrideAuth } from './types';
+import { ICallOpenApi, OverrideAuth } from './types';
 const mutex = new Mutex({
   autoUnlockTimeoutMs: 10000,
   intervalMs: 100,
@@ -97,22 +97,16 @@ const getTs = () => new Date().getTime();
  * @param overrideAuth - auth automatically picked up from id_token cookie, can override value here, but not required
  * @returns
  */
-export const useOpenApiStore = <T, TDefaultApi>(p: {
-  ttlSeconds?: number;
-  func: (f: TDefaultApi) => Promise<AxiosResponse<T>>;
-  cacheKey: string;
-  logout: () => void;
-  refreshToken: () => Promise<User | undefined>;
-  disabled?: boolean;
-  apiUrl: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  newDefaultApi: (config: any) => TDefaultApi;
-  overrideAuth?: OverrideAuth;
-  /**
-   * will shortcut and return the appropriate axioswrapper data if cachekey is found
-   */
-  ssrCacheItems?: CacheItems;
-}): AxiosWrapper<T> => {
+export const useOpenApiStore = <T, TDefaultApi>(
+  p: ICallOpenApi<T, TDefaultApi> & {
+    ttlSeconds?: number;
+    cacheKey: string;
+    /**
+     * will shortcut and return the appropriate axioswrapper data if cachekey is found
+     */
+    ssrCacheItems?: CacheItems;
+  },
+): AxiosWrapper<T> => {
   const { cacheKey, disabled } = p;
   if (!cacheKey) {
     throw new Error('no cache key');

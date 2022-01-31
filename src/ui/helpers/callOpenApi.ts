@@ -12,10 +12,10 @@ export const callOpenApi = async <T, TDefaultApi>({
   refreshToken,
   logout,
   newDefaultApi,
-}: ICallOpenApi<T, TDefaultApi>): Promise<AxiosWrapper<T | undefined>> => {
+}: ICallOpenApi<T, TDefaultApi>): Promise<AxiosWrapper<T>> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let error: AxiosError<unknown, any> | undefined;
-  let data: T | undefined;
+  let data: T = undefined as unknown as T;
   const config = {
     basePath: apiUrl,
     baseOptions: { headers: { authorization: '' } },
@@ -66,7 +66,7 @@ export const callOpenApi = async <T, TDefaultApi>({
         logout();
         return {
           error: ae,
-          data: undefined,
+          data: undefined as unknown as T,
           datetime: new Date().getTime(),
           loading: false,
           reFetch: async () => {},

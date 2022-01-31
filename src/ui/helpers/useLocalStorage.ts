@@ -75,7 +75,7 @@ export const getLocalStorageItem = <T>(
     return initialValue;
   }
 
-  const itemv = tryJsonParse<T | undefined>(item.val, undefined);
+  const itemv = tryJsonParse<T>(item.val, undefined);
   if (!itemv) {
     setLocalStorageItem(key, initialValue, ttl);
     return initialValue;
