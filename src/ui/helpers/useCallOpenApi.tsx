@@ -1,32 +1,45 @@
+/* eslint-disable no-console */
 import { AxiosWrapper } from './jwt';
 import { ICallOpenApi } from './types';
 import { useEffect, useState } from 'react';
 import { callOpenApi } from './callOpenApi';
+import { CacheItems } from './routes';
 
 type AxiosWrapperWrap<T> = AxiosWrapper<T | undefined> & {
   loaded: boolean;
   loadcount: number;
 };
-const defaultV = <T,>(def: T): AxiosWrapperWrap<T> => ({
-  loading: false,
-  data: def,
-  datetime: new Date().getTime(),
-  reFetch: async () => {},
-  error: undefined,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  url: undefined as any,
-  //
-  loaded: false,
-  loadcount: 0,
-});
 
 export const useCallOpenApi = <T, TDefaultApi>(
-  p: ICallOpenApi<T, TDefaultApi>,
+  p: ICallOpenApi<T, TDefaultApi> & {
+    cacheKey: string;
+    /**
+     * will shortcut and return the appropriate axioswrapper data if cachekey is found
+     */
+    ssrCacheItems?: CacheItems;
+  },
 ): AxiosWrapperWrap<T> => {
-  const [data, setData] = useState<AxiosWrapperWrap<T>>(defaultV(undefined));
+  const ssrCached = p.ssrCacheItems?.find((s) => s.cacheKey === p.cacheKey);
+  const defv = {
+    data: undefined,
+    url: '',
+    datetime: 0,
+    loadcount: 0,
+    loading: false,
+    loaded: false,
+    reFetch: async () => {},
+  };
+
+  const [data, setData] = useState<AxiosWrapperWrap<T>>({
+    ...defv,
+    data: ssrCached ? ssrCached.prefillData?.data : undefined,
+    loaded: !!ssrCached,
+  });
+
   useEffect(() => {
     async function run() {
       const res = await callOpenApi(p);
+      console.log('set res=', res);
       setData((d) => ({
         ...res,
         loaded: true,
@@ -36,7 +49,9 @@ export const useCallOpenApi = <T, TDefaultApi>(
     }
 
     const { error, loaded, loading, loadcount } = data;
-    if (p.disabled || loaded || loading || (error && loadcount < 2)) {
+    const ng = p.disabled || loaded || loading || (error && loadcount > 2);
+
+    if (ng) {
       return;
     }
 
@@ -47,7 +62,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
   return {
     ...data,
     reFetch: async () => {
-      setData(defaultV(undefined));
+      setData(defv);
     },
   };
 };
