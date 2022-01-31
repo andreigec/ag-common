@@ -13,4 +13,5 @@ export interface ICallOpenApi<T, TDefaultApi> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   newDefaultApi: (config: any) => TDefaultApi;
   disabled?: boolean;
+  headers?: Record<string, string | number>;
 }

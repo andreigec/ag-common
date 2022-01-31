@@ -1,12 +1,11 @@
-import { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import { Mutex } from './mutex';
 import { MutexData } from './mutexData';
 import { callOpenApi } from './callOpenApi';
 import { CacheItems } from './routes';
 import { error, info } from '../../common/helpers/log';
-import { AxiosWrapper, User } from './jwt';
-import { ICallOpenApi, OverrideAuth } from './types';
+import { AxiosWrapper } from './jwt';
+import { ICallOpenApi } from './types';
 const mutex = new Mutex({
   autoUnlockTimeoutMs: 10000,
   intervalMs: 100,
@@ -45,17 +44,12 @@ export const setMutexData = ({
 export const getMutexData = <T,>(key: string) =>
   mutexData.getData(key) as AxiosWrapper<T>;
 
-async function mLock<T, TDefaultApi>(p: {
-  key: string;
-  func: (f: TDefaultApi) => Promise<AxiosResponse<T>>;
-  ttlSeconds?: number;
-  logout: () => void;
-  refreshToken: () => Promise<User | undefined>;
-  apiUrl: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  newDefaultApi: (config: any) => TDefaultApi;
-  overrideAuth?: OverrideAuth;
-}) {
+async function mLock<T, TDefaultApi>(
+  p: ICallOpenApi<T, TDefaultApi> & {
+    key: string;
+    ttlSeconds?: number;
+  },
+) {
   let unlock: () => void | undefined;
   try {
     unlock = await mutex.capture(p.key);

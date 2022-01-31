@@ -12,13 +12,14 @@ export const callOpenApi = async <T, TDefaultApi>({
   refreshToken,
   logout,
   newDefaultApi,
+  headers,
 }: ICallOpenApi<T, TDefaultApi>): Promise<AxiosWrapper<T>> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let error: AxiosError<unknown, any> | undefined;
   let data: T = undefined as unknown as T;
   const config = {
     basePath: apiUrl,
-    baseOptions: { headers: { authorization: '' } },
+    baseOptions: { headers: { authorization: '', ...(headers || {}) } },
   };
 
   const isAuthed = !!getCookieWrapper<string>({ cname: 'id_token' });
