@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { AxiosWrapper } from './jwt';
 import { ICallOpenApi } from './types';
 import { useEffect, useState } from 'react';
@@ -39,7 +38,6 @@ export const useCallOpenApi = <T, TDefaultApi>(
   useEffect(() => {
     async function run() {
       const res = await callOpenApi(p);
-      console.log('set res=', res);
       setData((d) => ({
         ...res,
         loaded: true,
