@@ -13,6 +13,7 @@ export * from './Loader';
 export * from './LoginButton';
 export * from './LogoutButton';
 export * from './Modal';
+export * from './Prompt';
 export * from './RowOrColumn';
 export * from './Table';
 export * from './TextEdit';
