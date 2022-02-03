@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { DropShadow } from '../../styles/common';
+import { HardOutline } from '../../styles/common';
 
 interface IIcon {
   disabled?: boolean;
@@ -62,7 +62,7 @@ export const IconF = styled.span<IIcon>`
         stop-color: ${fill} !important;
       }
     `};
-  ${({ outline }) => outline && DropShadow(outline)};
+  ${({ outline }) => outline && HardOutline(outline)};
 
   width: ${({ width }) => width || '100%'};
   height: ${({ height }) => height || '100%'};

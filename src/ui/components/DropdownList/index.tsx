@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { Icon } from '../Icon';
 import { convertRemToPixels } from '../../helpers/dom';
+import { Shadow } from '../../styles/common';
 
 const SBase = styled.div`
   display: flex;
@@ -14,7 +15,7 @@ const SBase = styled.div`
   flex-grow: 0;
 `;
 
-const SItems = styled.div<{ open?: boolean }>`
+const SItems = styled.div<{ open?: boolean; shadow?: string }>`
   flex-flow: column;
   z-index: 5;
   top: 100%;
@@ -29,6 +30,7 @@ const SItems = styled.div<{ open?: boolean }>`
     css`
       display: flex;
     `}
+  ${({ shadow }) => shadow && Shadow(shadow)}
 `;
 
 const Dots = (
@@ -82,6 +84,7 @@ export function DropdownList<T>({
   className,
   renderF,
   children,
+  shadow = '#555',
 }: {
   options: T[];
   value?: T;
@@ -90,6 +93,10 @@ export function DropdownList<T>({
   className?: string;
   renderF: (v: T) => string;
   children?: JSX.Element;
+  /**
+   * colour of dropdown shadow. default #555
+   */
+  shadow?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState(value);
@@ -140,7 +147,7 @@ export function DropdownList<T>({
         setOpen(!open);
       }}
     >
-      <SItems open={open} style={style}>
+      <SItems open={open} style={style} shadow={shadow}>
         {open &&
           options.map((s, i) => (
             <SItem
