@@ -1,6 +1,7 @@
 export * from './BorderGradient';
 export * from './Button';
 export * from './Chevron';
+export * from './Close';
 export * from './Confirm';
 export * from './Dropdown';
 export * from './DropdownList';

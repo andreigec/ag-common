@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { Close } from './Close';
+import { Close } from '../Close';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 const FixedBackground = styled.div`
   position: fixed;
@@ -43,6 +43,9 @@ export const ModalItem = styled.div`
     background-color: #eee;
   }
 `;
+const CloseStyled = styled(Close)`
+  z-index: 1;
+`;
 
 export const Modal = ({
   open,
@@ -83,7 +86,7 @@ export const Modal = ({
         data-topposition={topPosition}
         ref={ref}
       >
-        {showCloseButton && <Close onClick={() => setOpen(false)} />}
+        {showCloseButton && <CloseStyled onClick={() => setOpen(false)} />}
         {children}
       </ModalBase>
     </FixedBackground>

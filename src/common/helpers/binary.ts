@@ -19,6 +19,11 @@ function toArrayBuffer(base64: string) {
   return bytes.buffer;
 }
 
+/**
+ * convert an ArrayBuffer (usually from file.arrayBuffer) to base64. Usually on client side before server send
+ * @param buffer
+ * @returns
+ */
 export function arrayBufferToBase64(buffer: ArrayBuffer) {
   let binary = '';
   const bytes = new Uint8Array(buffer);
@@ -29,4 +34,9 @@ export function arrayBufferToBase64(buffer: ArrayBuffer) {
   return toBase64(binary);
 }
 
+/**
+ * convert a base64 string to a binary Buffer. Usually on server side from client sent content
+ * @param raw
+ * @returns
+ */
 export const base64ToBinary = (raw: string) => toBuffer(toArrayBuffer(raw));
