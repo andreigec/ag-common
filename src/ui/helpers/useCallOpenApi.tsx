@@ -25,7 +25,15 @@ export const useCallOpenApi = <T, TDefaultApi>(
     cacheTtl?: number;
   },
 ): AxiosWrapperWrap<T> => {
+  if (!useCallOpenApiCache) {
+    useCallOpenApiCache = new NodeCache({ stdTTL: p.cacheTtl || 120 });
+  }
+
   const ssrCached = p.ssrCacheItems?.find((s) => s.cacheKey === p.cacheKey);
+  if (!useCallOpenApiCache.get<T>(p.cacheKey) && ssrCached) {
+    useCallOpenApiCache.set(p.cacheKey, ssrCached);
+  }
+
   const defv = {
     data: undefined,
     url: '',
@@ -36,28 +44,22 @@ export const useCallOpenApi = <T, TDefaultApi>(
     reFetch: async () => {},
   };
 
+  const cached = useCallOpenApiCache.get<T>(p.cacheKey);
   const [data, setData] = useState<AxiosWrapperWrap<T>>({
     ...defv,
-    data: ssrCached ? ssrCached.prefillData?.data : undefined,
-    loaded: !!ssrCached,
+    data: cached,
+    loaded: !!cached,
   });
 
   useEffect(() => {
     async function run() {
-      if (!useCallOpenApiCache) {
-        useCallOpenApiCache = new NodeCache({ stdTTL: p.cacheTtl || 120 });
-      }
-
-      let cached =
-        useCallOpenApiCache.get<AxiosWrapper<T>>(p.cacheKey) || undefined;
-
-      if (!cached) {
-        cached = await callOpenApi(p);
-        useCallOpenApiCache.set(p.cacheKey, cached);
+      const resp = await callOpenApi(p);
+      if (useCallOpenApiCache) {
+        useCallOpenApiCache.set<T>(p.cacheKey, resp.data);
       }
 
       setData((d) => ({
-        ...(cached as AxiosWrapper<T>),
+        ...(resp as AxiosWrapper<T>),
         loaded: true,
         loading: false,
         loadcount: d.loadcount + 1,
@@ -73,7 +75,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
 
     setData((d) => ({ ...d, loading: true }));
     void run();
-  }, [data, p, setData]);
+  }, [cached, data, p, setData]);
 
   return {
     ...data,

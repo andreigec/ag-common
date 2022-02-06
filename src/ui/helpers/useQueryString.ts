@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 export const isServer = typeof window === 'undefined';
 
 export const useQueryStringRaw = <T>({
@@ -46,6 +46,16 @@ export const useQueryStringRaw = <T>({
     window.history.replaceState({}, '', loc);
     setStateRaw(v);
   };
+
+  useEffect(() => {
+    const parsed = new URLSearchParams(raw);
+    const g = parsed.get(name);
+    const newv = g ? parse(g) : defaultValue;
+
+    if (state !== newv) {
+      setStateRaw(newv);
+    }
+  }, [defaultValue, name, parse, raw, state]);
 
   return [state, setState];
 };
