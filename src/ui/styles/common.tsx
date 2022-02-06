@@ -6,7 +6,12 @@ export const HardOutline = (colour: string) => css`
     drop-shadow(1px -1px 0px ${colour}) drop-shadow(-1px -1px 0px ${colour});
 `;
 
-export const Shadow = (colour: string) => css`
+export const Shadow = (
+  /**
+   * colour of shadow, default #555
+   */
+  colour = '#555',
+) => css`
   filter: drop-shadow(1px 1px 0.5rem ${colour});
 `;
 

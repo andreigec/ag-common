@@ -1,5 +1,6 @@
 export * from './array';
 export * from './async';
+export * from './binary';
 export * from './date';
 export * from './email';
 export * from './func';
