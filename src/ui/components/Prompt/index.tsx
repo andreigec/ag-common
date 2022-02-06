@@ -86,8 +86,8 @@ const PromptModal = ({
           <TextInput
             value={text}
             onChange={(c) => setText(c)}
-            type="text"
             placeholder={placeholder}
+            focus
           />
           <Bottom noGrow>
             <Button onClick={() => ret(text)}>{okText}</Button>

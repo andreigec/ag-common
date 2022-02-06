@@ -11,7 +11,7 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { notEmpty } from '../..';
-import { distinctBy } from '../../common/helpers/distinctBy';
+import { distinctBy } from '../../common/helpers/array';
 import { warn } from '../../common/helpers/log';
 import { ILambdaConfigs } from '../types';
 // eslint-disable-next-line

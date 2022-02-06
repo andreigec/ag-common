@@ -52,7 +52,7 @@ export const useQueryStringRaw = <T>({
     const g = parsed.get(name);
     const newv = g ? parse(g) : defaultValue;
 
-    if (state !== newv) {
+    if (JSON.stringify(state) !== JSON.stringify(newv)) {
       setStateRaw(newv);
     }
   }, [defaultValue, name, parse, raw, state]);

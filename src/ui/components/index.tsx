@@ -8,7 +8,6 @@ export * from './FlexColumn';
 export * from './FlexRow';
 export * from './HeadersRaw';
 export * from './Icon';
-export * from './Input';
 export * from './Loader';
 export * from './LoginButton';
 export * from './LogoutButton';
