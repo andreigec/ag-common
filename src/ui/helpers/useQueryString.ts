@@ -1,94 +1,98 @@
 import { useEffect, useState } from 'react';
+import { objectToString, paramsToObject } from '../../common/helpers/object';
 export const isServer = typeof window === 'undefined';
 
+/**
+ * hook for query string value
+ * @param param0 can provide for SSR - queryValues will default to window if available
+ * @returns
+ */
 export const useQueryStringRaw = <T>({
   name,
-  searchOverride,
+  queryValues,
   defaultValue,
   stringify,
   parse,
 }: {
   name: string;
-  searchOverride?: string;
+  queryValues?: Record<string, string>;
   defaultValue: T;
   stringify: (v: T) => string | undefined;
   parse: (v: string | undefined) => T;
 }): [T, (v: T) => void] => {
-  const raw = isServer ? searchOverride : window.location.search;
-  const [state, setStateRaw] = useState<T>(() => {
-    if (!raw) {
-      return defaultValue;
-    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const qv: Record<string, string> = isServer
+    ? queryValues || {}
+    : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      paramsToObject(new URLSearchParams(window.location.search));
 
-    const parsed = new URLSearchParams(raw);
-    const g = parsed.get(name);
-    if (!g) {
-      return defaultValue;
-    }
-    return parse(g) || defaultValue;
-  });
-
+  const qsv = parse(qv[name]) || defaultValue;
+  const [state, setStateRaw] = useState<T>(qsv);
+  //
   const setState = (v: T) => {
-    const searchParams = new URLSearchParams(window.location.search);
     const sv = !v ? undefined : stringify(v);
     if (sv) {
-      searchParams.set(name, sv);
+      qv[name] = sv;
     } else {
-      searchParams.delete(name);
+      delete qv[name];
     }
 
-    let qs = '';
-    if (Array.from(searchParams).length !== 0) {
-      qs = '?' + searchParams.toString();
-    }
-
-    const loc = `${location.pathname}${qs}${window.location.hash}`;
+    const qs = '?' + objectToString(qv, '=', '&');
+    const loc = location.pathname + qs + window.location.hash;
     window.history.replaceState({}, '', loc);
     setStateRaw(v);
   };
+  //
 
   useEffect(() => {
-    const parsed = new URLSearchParams(raw);
-    const g = parsed.get(name);
-    const newv = g ? parse(g) : defaultValue;
-
-    if (JSON.stringify(state) !== JSON.stringify(newv)) {
-      setStateRaw(newv);
+    if (JSON.stringify(state) !== JSON.stringify(qsv)) {
+      setStateRaw(qsv);
     }
-  }, [defaultValue, name, parse, raw, state]);
+  }, [name, parse, qsv, state]);
 
   return [state, setState];
 };
+
+/**
+ * hook for query string value - string array type
+ * @param param0 can provide for SSR - queryValues will default to window if available
+ * @returns
+ */
 export const useQueryStringArray = ({
   name,
-  searchOverride,
+  queryValues,
   defaultValue,
 }: {
   name: string;
-  searchOverride?: string;
+  queryValues?: Record<string, string>;
   defaultValue: string[];
 }) =>
   useQueryStringRaw<string[]>({
     name,
     defaultValue,
-    searchOverride,
+    queryValues,
     stringify: (v) => (v.length === 0 ? undefined : v.join(',')),
     parse: (v) => (!v ? defaultValue : v.split(',')),
   });
 
+/**
+ * hook for query string value - single value
+ * @param param0 can provide for SSR - queryValues will default to window if available
+ * @returns
+ */
 export const useQueryStringSingle = ({
   name,
-  searchOverride,
+  queryValues,
   defaultValue,
 }: {
   name: string;
-  searchOverride?: string;
+  queryValues?: Record<string, string>;
   defaultValue: string | undefined;
 }) =>
   useQueryStringRaw<string | undefined>({
     name,
     defaultValue,
-    searchOverride,
+    queryValues,
     stringify: (v) => v,
     parse: (v) => (!v ? defaultValue : v),
   });

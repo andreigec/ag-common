@@ -20,12 +20,12 @@ interface IIcon {
   className?: string;
 }
 export const IconF = styled.span<IIcon>`
+  transition: all 200ms;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 2rem;
   padding: ${({ padding }) => padding || '0'};
-  transition: background-color 200ms;
   margin: ${({ margin }) => (!margin ? 'unset' : margin)};
   cursor: ${({ disabled, canHover }) =>
     disabled || !canHover ? 'inherit' : 'pointer'};
