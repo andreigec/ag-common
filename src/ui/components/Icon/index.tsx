@@ -8,7 +8,7 @@ interface IIcon {
   outline?: string;
   width?: string;
   height?: string;
-  flip?: boolean;
+  rotate?: number;
   canHover?: boolean;
   margin?: string;
   padding?: string;
@@ -66,10 +66,10 @@ export const IconF = styled.span<IIcon>`
 
   width: ${({ width }) => width || '100%'};
   height: ${({ height }) => height || '100%'};
-  ${({ flip }) =>
-    flip &&
+  ${({ rotate }) =>
+    rotate &&
     css`
-      transform: rotate(180deg);
+      transform: rotate(${rotate}deg);
     `};
 
   svg {

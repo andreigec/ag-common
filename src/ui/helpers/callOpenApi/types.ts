@@ -1,9 +1,10 @@
 import { AxiosResponse } from 'axios';
-import { User } from './jwt';
+import { User } from '../jwt';
 
 export interface OverrideAuth {
   id_token?: string;
 }
+
 export interface ICallOpenApi<T, TDefaultApi> {
   func: (f: TDefaultApi) => Promise<AxiosResponse<T>>;
   apiUrl: string;

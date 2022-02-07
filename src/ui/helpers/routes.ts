@@ -1,6 +1,6 @@
 import { TLang } from '../../common/helpers/i18n';
 import { ICognitoAuth } from './cognito';
-import { AxiosWrapper } from './jwt';
+import { AxiosWrapperLite } from './jwt';
 
 export interface LocationSubset {
   pathname: string;
@@ -14,7 +14,7 @@ export interface LocationSubset {
 export type CacheItems = CacheItem<any>[];
 export interface CacheItem<T> {
   cacheKey: string;
-  prefillData: AxiosWrapper<T>;
+  prefillData: AxiosWrapperLite<T>;
   ttlSeconds: number;
 }
 export interface IInitialStateCommon {

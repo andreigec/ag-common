@@ -1,9 +1,9 @@
 import { AxiosError } from 'axios';
-import { getCookieWrapper } from './cookie';
-import { sleep } from '../../common/helpers/sleep';
-import { AxiosWrapper } from './jwt';
-import { notEmpty } from '../../common/helpers/array';
+import { getCookieWrapper } from '../cookie';
+import { sleep } from '../../../common/helpers/sleep';
+import { notEmpty } from '../../../common/helpers/array';
 import { ICallOpenApi } from './types';
+import { AxiosWrapperLite } from '../jwt';
 
 export const callOpenApi = async <T, TDefaultApi>({
   func,
@@ -13,7 +13,7 @@ export const callOpenApi = async <T, TDefaultApi>({
   logout,
   newDefaultApi,
   headers,
-}: ICallOpenApi<T, TDefaultApi>): Promise<AxiosWrapper<T>> => {
+}: ICallOpenApi<T, TDefaultApi>): Promise<AxiosWrapperLite<T>> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let error: AxiosError<unknown, any> | undefined;
   let data: T = undefined as unknown as T;
@@ -22,14 +22,15 @@ export const callOpenApi = async <T, TDefaultApi>({
     baseOptions: { headers: { authorization: '', ...(headers || {}) } },
   };
 
-  const isAuthed = !!getCookieWrapper<string>({ cname: 'id_token' });
-
   if (overrideAuth?.id_token) {
     config.baseOptions.headers.authorization = `Bearer ${overrideAuth?.id_token}`;
-  } else if (isAuthed) {
-    const updated = await refreshToken();
-    if (updated?.jwt?.id_token) {
-      config.baseOptions.headers.authorization = `Bearer ${updated?.jwt?.id_token}`;
+  } else {
+    const isAuthed = !!getCookieWrapper<string>({ cname: 'id_token' });
+    if (isAuthed) {
+      const updated = await refreshToken();
+      if (updated?.jwt?.id_token) {
+        config.baseOptions.headers.authorization = `Bearer ${updated?.jwt?.id_token}`;
+      }
     }
   }
 
@@ -68,10 +69,6 @@ export const callOpenApi = async <T, TDefaultApi>({
         return {
           error: ae,
           data: undefined as unknown as T,
-          datetime: new Date().getTime(),
-          loading: false,
-          reFetch: async () => {},
-          url: func.toString(),
         };
       }
 
@@ -87,9 +84,5 @@ export const callOpenApi = async <T, TDefaultApi>({
   return {
     data,
     ...(error && { error }),
-    loading: false,
-    reFetch: async () => func(cl),
-    url: func.toString(),
-    datetime: new Date().getTime(),
   };
 };

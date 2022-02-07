@@ -22,26 +22,53 @@ const ChevronIcon = (
 );
 
 export const Chevron = ({
-  down,
   width = '1.2rem',
   className,
   colour = 'black',
   onToggle,
+  point = 'right',
 }: {
+  /**
+   * default right
+   */
+  point: 'up' | 'down' | 'left' | 'right';
   colour?: string;
   className?: string;
   width?: string;
-  down: boolean;
   onToggle?: () => void;
-}) => (
-  <SChevron
-    className={className}
-    onClick={() => onToggle?.()}
-    onTouchStart={() => onToggle?.()}
-    onKeyPress={(e) => e.key === 'Enter' && onToggle?.()}
-  >
-    <IconStyled flip={down} fill={colour} width={width} height={width}>
-      {ChevronIcon}
-    </IconStyled>
-  </SChevron>
-);
+}) => {
+  let rotate = 0;
+  switch (point) {
+    case 'down': {
+      rotate = 180;
+      break;
+    }
+
+    case 'left': {
+      rotate = 270;
+      break;
+    }
+
+    case 'up': {
+      rotate = 0;
+      break;
+    }
+
+    case 'right': {
+      rotate = 90;
+    }
+  }
+
+  return (
+    <SChevron
+      className={className}
+      onClick={() => onToggle?.()}
+      onTouchStart={() => onToggle?.()}
+      onKeyPress={(e) => e.key === 'Enter' && onToggle?.()}
+    >
+      <IconStyled rotate={rotate} fill={colour} width={width} height={width}>
+        {ChevronIcon}
+      </IconStyled>
+    </SChevron>
+  );
+};

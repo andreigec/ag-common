@@ -1,17 +1,19 @@
-import { AxiosWrapper } from './jwt';
+import { AxiosWrapper } from '../jwt';
 import { ICallOpenApi } from './types';
 import { useEffect, useState } from 'react';
-import { callOpenApi } from './callOpenApi';
-import { CacheItems } from './routes';
-import NodeCache from 'node-cache';
+import { CacheItems } from '../routes';
+import { callOpenApiCached, callOpenApiCachedRaw } from './cached';
 
 type AxiosWrapperWrap<T> = AxiosWrapper<T | undefined> & {
   loaded: boolean;
   loadcount: number;
 };
 
-let useCallOpenApiCache: NodeCache | undefined;
-
+/**
+ * hooks+cached call to callOpenApi
+ * @param p
+ * @returns
+ */
 export const useCallOpenApi = <T, TDefaultApi>(
   p: ICallOpenApi<T, TDefaultApi> & {
     cacheKey: string;
@@ -25,15 +27,6 @@ export const useCallOpenApi = <T, TDefaultApi>(
     cacheTtl?: number;
   },
 ): AxiosWrapperWrap<T> => {
-  if (!useCallOpenApiCache) {
-    useCallOpenApiCache = new NodeCache({ stdTTL: p.cacheTtl || 120 });
-  }
-
-  const ssrCached = p.ssrCacheItems?.find((s) => s.cacheKey === p.cacheKey);
-  if (!useCallOpenApiCache.get<T>(p.cacheKey) && ssrCached) {
-    useCallOpenApiCache.set(p.cacheKey, ssrCached);
-  }
-
   const defv = {
     data: undefined,
     url: '',
@@ -44,25 +37,24 @@ export const useCallOpenApi = <T, TDefaultApi>(
     reFetch: async () => {},
   };
 
-  const cached = useCallOpenApiCache.get<T>(p.cacheKey);
+  const cachedData = callOpenApiCachedRaw({ ...p, onlyCached: true })?.data;
   const [data, setData] = useState<AxiosWrapperWrap<T>>({
     ...defv,
-    data: cached,
-    loaded: !!cached,
+    ...(cachedData && { data: cachedData }),
+    loaded: !!cachedData,
   });
 
   useEffect(() => {
     async function run() {
-      const resp = await callOpenApi(p);
-      if (useCallOpenApiCache) {
-        useCallOpenApiCache.set<T>(p.cacheKey, resp.data);
-      }
-
+      const resp = await callOpenApiCached(p);
       setData((d) => ({
-        ...(resp as AxiosWrapper<T>),
+        ...resp,
         loaded: true,
         loading: false,
         loadcount: d.loadcount + 1,
+        reFetch: async () => {},
+        url: '',
+        datetime: new Date().getTime(),
       }));
     }
 
@@ -75,7 +67,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
 
     setData((d) => ({ ...d, loading: true }));
     void run();
-  }, [cached, data, p, setData]);
+  }, [data, p, setData]);
 
   return {
     ...data,

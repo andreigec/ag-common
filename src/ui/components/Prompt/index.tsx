@@ -88,6 +88,7 @@ const PromptModal = ({
             onChange={(c) => setText(c)}
             placeholder={placeholder}
             focus
+            onKeyPress={(e) => e.key === 'Enter' && ret(text)}
           />
           <Bottom noGrow>
             <Button onClick={() => ret(text)}>{okText}</Button>

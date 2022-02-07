@@ -64,6 +64,11 @@ export interface AxiosWrapper<T> {
   datetime: number;
 }
 
+export interface AxiosWrapperLite<T> {
+  data: T;
+  error?: AxiosError;
+}
+
 export interface AuthedUserContext {
   loading: boolean;
   isAuthenticated: boolean;
