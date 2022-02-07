@@ -66,19 +66,22 @@ export const callOpenApiCachedRaw = <T, TDefaultApi>(
     callOpenApiCache = new NodeCache({ stdTTL: p.cacheTtl || 120 });
   }
 
-  const ssrCached = p.ssrCacheItems?.find((s) => s.cacheKey === p.cacheKey);
-  if (
-    !callOpenApiCache.get<T>(userPrefixedCacheKey) &&
-    ssrCached?.prefillData?.data
-  ) {
-    callOpenApiCache.set<T>(userPrefixedCacheKey, ssrCached.prefillData?.data);
+  //get ssr cache value
+  const ssrCached: T | undefined = p.ssrCacheItems?.find(
+    (s) => s.cacheKey === p.cacheKey,
+  )?.prefillData?.data;
+
+  //if we have ssr cache and there is no existing cache then set
+  if (!callOpenApiCache.get<T>(userPrefixedCacheKey) && ssrCached) {
+    callOpenApiCache.set<T>(userPrefixedCacheKey, ssrCached);
   }
 
-  const cached = callOpenApiCache.get<T>(userPrefixedCacheKey);
-  if (cached) {
-    return { data: cached };
+  //return cached data, or ssr data if that has already expired (ttl <=0)
+  const data = callOpenApiCache.get<T>(userPrefixedCacheKey) || ssrCached;
+  if (!data) {
+    return undefined;
   }
-  return undefined;
+  return { data };
 };
 
 export const callOpenApiCached = async <T, TDefaultApi>(

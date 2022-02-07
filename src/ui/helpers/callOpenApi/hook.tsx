@@ -2,7 +2,8 @@ import { AxiosWrapper } from '../jwt';
 import { ICallOpenApi } from './types';
 import { useEffect, useState } from 'react';
 import { CacheItems } from '../routes';
-import { callOpenApiCached, callOpenApiCachedRaw } from './cached';
+import { callOpenApiCachedRaw } from './cached';
+import { callOpenApi } from './direct';
 
 type AxiosWrapperWrap<T> = AxiosWrapper<T | undefined> & {
   loaded: boolean;
@@ -46,7 +47,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
 
   useEffect(() => {
     async function run() {
-      const resp = await callOpenApiCached(p);
+      const resp = await callOpenApi(p);
       setData((d) => ({
         ...resp,
         loaded: true,
