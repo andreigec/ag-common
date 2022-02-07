@@ -15,6 +15,7 @@ export * from './LogoutButton';
 export * from './Modal';
 export * from './Prompt';
 export * from './RowOrColumn';
+export * from './Sidebar';
 export * from './Table';
 export * from './TextEdit';
 export * from './TextInput';
