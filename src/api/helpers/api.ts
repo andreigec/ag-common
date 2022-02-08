@@ -31,25 +31,25 @@ export const returnCode = <T>(
   };
 };
 
+/**
+ * strip all dynamo generated keys. can optionally keep PK
+ * @param record
+ * @param keepPk if true, will keep PK. default true
+ * @returns stripped record
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const stripPKs = <T>(
-  r: T,
-  /**
-   * default true
-   * if true, will keep PK
-   */
-  excludePK = true,
-): T => {
-  if (!r) {
+export const stripPKs = <T>(record: T, keepPk = true): T => {
+  if (!record) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return null as any;
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { PK, PK1, PK2, PK3, PK4, PK5, L1, L2, L3, L4, L5, L6, ...rest } = r;
+  const { PK, PK1, PK2, PK3, PK4, PK5, L1, L2, L3, L4, L5, L6, ...rest } =
+    record;
 
-  if (!excludePK) {
+  if (keepPk) {
     //@ts-ignore
     rest.PK = PK;
   }

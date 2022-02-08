@@ -105,7 +105,7 @@ export const Sidebar = ({
    */
   key?: string;
   /**
-   * pass in SSR cookiedocument
+   * optionally pass in SSR cookiedocument
    */
   cookieDocument?: string;
 }) => {
