@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useCookie } from '../../helpers/cookie';
+import { useCookieBoolean } from '../../helpers/cookie';
 import { NoTextSelect, Shadow } from '../../styles/common';
 import { Chevron } from '../Chevron';
 
@@ -109,14 +109,11 @@ export const Sidebar = ({
    */
   cookieDocument?: string;
 }) => {
-  const [openRaw, setOpenRaw] = useCookie<string>({
-    key,
-    defaultValue: 'false',
+  const [open, setOpen] = useCookieBoolean({
+    name: key,
+    defaultValue: false,
     cookieDocument: cookieDocument,
   });
-
-  const open = openRaw === 'true';
-  const setOpen = (o: boolean) => setOpenRaw(o.toString());
 
   return (
     <Base

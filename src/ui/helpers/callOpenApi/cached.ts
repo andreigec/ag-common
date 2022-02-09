@@ -37,7 +37,12 @@ function getCacheKey({
   overrideAuth?: OverrideAuth;
 }) {
   const authkeyPrefix =
-    overrideAuth?.id_token || getCookieWrapper<string>({ cname: 'id_token' });
+    overrideAuth?.id_token ||
+    getCookieWrapper<string>({
+      name: 'id_token',
+      defaultValue: '',
+      parse: (s) => s,
+    });
 
   let cacheKeyRet: string | undefined;
 

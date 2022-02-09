@@ -25,7 +25,12 @@ export const callOpenApi = async <T, TDefaultApi>({
   if (overrideAuth?.id_token) {
     config.baseOptions.headers.authorization = `Bearer ${overrideAuth?.id_token}`;
   } else {
-    const isAuthed = !!getCookieWrapper<string>({ cname: 'id_token' });
+    const isAuthed = !!getCookieWrapper<string>({
+      name: 'id_token',
+      defaultValue: '',
+      parse: (s) => s,
+    });
+
     if (isAuthed) {
       const updated = await refreshToken();
       if (updated?.jwt?.id_token) {

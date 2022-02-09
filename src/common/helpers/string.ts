@@ -166,3 +166,6 @@ export const safeStringify = (obj: any, indent = 2) => {
   cache = null;
   return retVal;
 };
+
+export const chunkString = (str: string, length: number) =>
+  str.match(new RegExp(`.{1,${length}}`, 'g')) as string[];
