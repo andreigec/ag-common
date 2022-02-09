@@ -47,6 +47,7 @@ const Right = styled.div`
 
 const Icon = styled.div`
   width: 1.5rem;
+  display: flex;
   cursor: pointer;
   &:hover {
     filter: saturate(3);
@@ -64,7 +65,11 @@ export const TextEdit = ({
   onClickNotEditing,
   className,
   singleLine = false,
+  noGrow = false,
 }: {
+  /**
+   * forces single row input style. will also enable 'Enter' to auto submit
+   */
   singleLine?: boolean;
   className?: string;
   defaultValue: string;
@@ -78,6 +83,10 @@ export const TextEdit = ({
   onEditingChange?: (editing: boolean) => void;
   onClickOutsideWithNoValue?: () => void;
   onClickNotEditing?: () => void;
+  /**
+   * if true, will not grow. default false
+   */
+  noGrow?: boolean;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const taref = useRef<HTMLTextAreaElement>(null);
@@ -129,6 +138,7 @@ export const TextEdit = ({
         data-editing="false"
         onClick={() => onClickNotEditing?.()}
         data-pointer={onClickNotEditing ? 'true' : 'false'}
+        data-nogrow={noGrow}
       >
         <ValueReadonly data-type="text">{value}</ValueReadonly>
         <Right>
@@ -160,12 +170,13 @@ export const TextEdit = ({
 
   return (
     <ValueBoxEdit
-      data-editing="true"
       {...noDrag}
+      className={className}
+      data-editing="true"
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={ref as any}
       tabIndex={editing ? 0 : undefined}
-      className={className}
+      data-nogrow={noGrow}
     >
       <Comp
         data-editing="true"

@@ -7,7 +7,7 @@ import { Button } from '../Button';
 import { FlexColumn } from '../FlexColumn';
 import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal';
-import { TextInput } from '../TextInput';
+import { TextEdit } from '../TextEdit';
 
 const Base = styled.div`
   width: 95vw;
@@ -83,12 +83,13 @@ const PromptModal = ({
         <Content>
           {topText && <TopText>{topText}</TopText>}
           <BottomText>{bottomText}</BottomText>
-          <TextInput
-            value={text}
-            onChange={(c) => setText(c)}
+          <TextEdit
+            defaultValue={text}
+            onSubmit={(c) => setText(c)}
             placeholder={placeholder}
-            focus
-            onKeyPress={(e) => e.key === 'Enter' && ret(text)}
+            defaultEditing={{ focus: true }}
+            singleLine
+            noGrow
           />
           <Bottom noGrow>
             <Button onClick={() => ret(text)}>{okText}</Button>
