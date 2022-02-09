@@ -18,6 +18,5 @@ export * from './RowOrColumn';
 export * from './Sidebar';
 export * from './Table';
 export * from './TextEdit';
-export * from './TextInput';
 export * from './Toast';
 export * from './UserImage';

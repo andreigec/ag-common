@@ -95,15 +95,25 @@ export function setCookieWrapper<T>(p: {
   value: T;
   name: string;
   cookieDocument?: string;
-  stringify: (s: T) => string;
+  /**
+   * required for objects. defaults to JSON.stringify
+   */
+  stringify?: (s: T) => string;
 }) {
+  const stringify = (s: T): string => {
+    if (p.stringify) {
+      return p.stringify(s);
+    }
+    return JSON.stringify(s);
+  };
+
   wipeCookies(p.name);
 
   if (!p.value) {
     return;
   }
 
-  const str = toBase64(p.stringify(p.value));
+  const str = toBase64(stringify(p.value));
   const chunks = chunkString(str, maxCookieLen);
 
   for (const index1 in chunks) {
@@ -121,13 +131,27 @@ export function getCookieWrapper<T>({
   name,
   cookieDocument,
   defaultValue,
-  parse,
+  parse: parseRaw,
 }: {
   defaultValue: T;
   name: string;
   cookieDocument?: string;
-  parse: (s: string) => T;
+  /**
+   * required for objects. defaults to JSON.parse
+   */
+  parse?: (s: string) => T;
 }): T {
+  const parse: TParse<T> = (s) => {
+    if (!s) {
+      return defaultValue;
+    }
+
+    if (parseRaw) {
+      return parseRaw(s);
+    }
+    return JSON.parse(s);
+  };
+
   let raw = '';
   let currentCount = 0;
 
