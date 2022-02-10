@@ -9,7 +9,7 @@ const FixedBackground = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,11 +80,12 @@ export const Modal = ({
   }
 
   return (
-    <FixedBackground className={className}>
+    <FixedBackground>
       <ModalBase
         data-position={position}
         data-topposition={topPosition}
         ref={ref}
+        className={className}
       >
         {showCloseButton && <CloseStyled onClick={() => setOpen(false)} />}
         {children}
