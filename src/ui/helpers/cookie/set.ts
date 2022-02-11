@@ -91,3 +91,9 @@ export function setCookieRawWrapper<T>(p: {
     setCookieRaw({ ...p, name: p.name + index1, value: chunk });
   }
 }
+
+export const setCookieString = (p: {
+  value: string;
+  name: string;
+  cookieDocument?: string;
+}) => setCookieRawWrapper({ ...p, stringify: (s) => s });

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { notEmpty } from '.';
 
 export type TLogType = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL';
@@ -20,7 +20,7 @@ export const SetLogLevel = (l: string) => {
 
 SetLogLevel(process.env.LOG_LEVEL || '');
 
-function logprocess(type: TLogType, args: any[]) {
+function logprocess(type: TLogType, args: unknown[]) {
   const min = GetLogLevel(userLogLevel);
   const typesLogLevel = GetLogLevel(type);
 
@@ -136,25 +136,25 @@ function printStackTrace(...args: undefined[]) {
   return callstack.join('\n');
 }
 
-export const debug = (...args: any[]) => logprocess('DEBUG', args);
+export const debug = (...args: unknown[]) => logprocess('DEBUG', args);
 
-export const info = (...args: any[]) => logprocess('INFO', args);
+export const info = (...args: unknown[]) => logprocess('INFO', args);
 
-export const warn = (...args: any[]) => logprocess('WARN', args);
+export const warn = (...args: unknown[]) => logprocess('WARN', args);
 
 //
 
-export const trace = (...args: any[]) => {
+export const trace = (...args: unknown[]) => {
   args.push(printStackTrace());
   logprocess('TRACE', args);
 };
 
-export const error = (...args: any[]) => {
+export const error = (...args: unknown[]) => {
   args.push(printStackTrace());
   logprocess('ERROR', args);
 };
 
-export const fatal = (...args: any[]) => {
+export const fatal = (...args: unknown[]) => {
   args.push(printStackTrace());
   logprocess('FATAL', args);
 };

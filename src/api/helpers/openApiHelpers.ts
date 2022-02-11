@@ -148,8 +148,7 @@ const lambdaNameSafe = (raw: string) =>
   raw.replace(/[^a-zA-Z0-9-.]/gim, '-').replace(/(-){2,}/gim, '-');
 
 export const openApiImpl = (p: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  schema: any;
+  schema: unknown;
   stack: Construct;
   NODE_ENV: string;
   baseUrl: string;

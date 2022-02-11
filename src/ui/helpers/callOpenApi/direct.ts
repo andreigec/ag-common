@@ -16,7 +16,7 @@ export const callOpenApi = async <T, TDefaultApi>({
 }: ICallOpenApi<T, TDefaultApi>): Promise<AxiosWrapperLite<T>> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let error: AxiosError<unknown, any> | undefined;
-  let data: T = undefined as unknown as T;
+  let data: T | undefined = undefined;
   const config = {
     basePath: apiUrl,
     baseOptions: { headers: { authorization: '', ...(headers || {}) } },
@@ -72,7 +72,7 @@ export const callOpenApi = async <T, TDefaultApi>({
         logout();
         return {
           error: ae,
-          data: undefined as unknown as T,
+          data: undefined,
         };
       }
 

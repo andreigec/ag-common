@@ -54,7 +54,7 @@ export interface User {
 }
 
 export interface AxiosWrapper<T> {
-  data: T;
+  data: T | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: AxiosError<unknown, any>;
   loading: boolean;
@@ -65,7 +65,7 @@ export interface AxiosWrapper<T> {
 }
 
 export interface AxiosWrapperLite<T> {
-  data: T;
+  data: T | undefined;
   error?: AxiosError;
 }
 

@@ -23,8 +23,7 @@ export const useQueryStringRaw = <T>({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const qv: Record<string, string> = isServer
     ? queryValues || {}
-    : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      paramsToObject(new URLSearchParams(window.location.search));
+    : paramsToObject(new URLSearchParams(window.location.search));
 
   const qsv = parse(qv[name]) || defaultValue;
   const [state, setStateRaw] = useState<T>(qsv);
@@ -87,7 +86,10 @@ export const useQueryStringSingle = ({
 }: {
   name: string;
   queryValues?: Record<string, string>;
-  defaultValue: string | undefined;
+  /**
+   * default value. default undefined
+   */
+  defaultValue?: string | undefined;
 }) =>
   useQueryStringRaw<string | undefined>({
     name,

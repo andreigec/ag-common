@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function shuffle(array: any[], seed: number) {
+export function shuffle(array: unknown[], seed: number) {
   let currentIndex = array.length;
   let temporaryValue;
   let randomIndex;

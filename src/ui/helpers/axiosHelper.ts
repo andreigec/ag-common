@@ -70,8 +70,7 @@ export const axiosHelper = async <TOut>({
           timeoutErrorMessage: `${url} timeout`,
         });
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (body && isJson(body as any)) {
+        if (body && isJson(body)) {
           setHeaders['Content-Type'] =
             setHeaders['Content-Type'] || 'application/json';
         }

@@ -148,8 +148,7 @@ export function containsInsensitive(str: string, ...args: string[]) {
  * @param indent
  * @returns
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const safeStringify = (obj: any, indent = 2) => {
+export const safeStringify = (obj: unknown, indent = 2) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cache: any = [];
   const retVal = JSON.stringify(

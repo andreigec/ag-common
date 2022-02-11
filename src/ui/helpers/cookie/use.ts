@@ -3,7 +3,6 @@ import { TParse, ReturnType } from './const';
 import { getCookieRawWrapper } from './get';
 import { setCookieRawWrapper } from './set';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useCookie<T>(p: {
   defaultValue: T;
   name: string;
@@ -52,13 +51,25 @@ export function useCookie<T>(p: {
 }
 
 export const useCookieString = (p: {
-  defaultValue: string;
+  /**
+   * default value. default ""
+   */
+  defaultValue?: string;
   name: string;
   cookieDocument?: string;
-}) => useCookie<string>({ ...p, parse: (s) => s || '', stringify: (s) => s });
+}) =>
+  useCookie<string>({
+    ...p,
+    parse: (s) => s || '',
+    stringify: (s) => s,
+    defaultValue: p.defaultValue || '',
+  });
 
 export const useCookieNumber = (p: {
-  defaultValue: number | undefined;
+  /**
+   * default value. default undefined
+   */
+  defaultValue?: number | undefined;
   name: string;
   cookieDocument?: string;
 }) =>
@@ -66,6 +77,7 @@ export const useCookieNumber = (p: {
     ...p,
     parse: (s) => (!s ? undefined : Number.parseFloat(s)),
     stringify: (s) => (!s ? '' : s.toString()),
+    defaultValue: p.defaultValue,
   });
 
 export const useCookieBoolean = (p: {

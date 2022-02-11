@@ -15,7 +15,7 @@ export const tryJsonParse = <T>(
   }
 };
 
-export function isJson(str: string | Record<string, unknown>) {
+export function isJson(str: unknown) {
   try {
     JSON.parse(typeof str === 'string' ? str : JSON.stringify(str));
   } catch (e) {

@@ -90,7 +90,7 @@ export const callOpenApiCachedRaw = <T, TDefaultApi>(
 
 export const callOpenApiCached = async <T, TDefaultApi>(
   p: TCallOpenApiCached<T, TDefaultApi>,
-): Promise<AxiosWrapperLite<T>> => {
+): Promise<AxiosWrapperLite<T | undefined>> => {
   const raw = callOpenApiCachedRaw(p);
   if (raw) {
     return raw;
@@ -98,14 +98,13 @@ export const callOpenApiCached = async <T, TDefaultApi>(
 
   const resp = await callOpenApi(p);
   if (resp.error) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return { error: resp.error, data: undefined as any };
+    return { error: resp.error, data: undefined };
   }
 
   const userPrefixedCacheKey = getCacheKey(p);
 
   if (callOpenApiCache && userPrefixedCacheKey) {
-    callOpenApiCache.set<T>(userPrefixedCacheKey, resp.data);
+    callOpenApiCache.set<T | undefined>(userPrefixedCacheKey, resp.data);
   }
   return resp;
 };

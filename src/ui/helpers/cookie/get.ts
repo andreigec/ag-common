@@ -89,7 +89,15 @@ export function getCookieRawWrapper<T>({
 }
 
 export const getCookieString = (p: {
-  defaultValue: string;
+  /**
+   * default value. default ''
+   */
+  defaultValue?: string;
   name: string;
   cookieDocument?: string;
-}) => getCookieRawWrapper({ ...p, parse: (s) => s });
+}) =>
+  getCookieRawWrapper({
+    ...p,
+    parse: (s) => s,
+    defaultValue: p.defaultValue || '',
+  });
