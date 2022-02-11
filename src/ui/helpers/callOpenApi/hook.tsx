@@ -5,9 +5,12 @@ import { CacheItems } from '../routes';
 import { callOpenApiCachedRaw } from './cached';
 import { callOpenApi } from './direct';
 
-type AxiosWrapperWrap<T> = AxiosWrapper<T | undefined> & {
+export type TUseCallOpenApiDispatch<A> = (value: A) => A;
+
+export type TUseCallOpenApi<T> = AxiosWrapper<T> & {
   loaded: boolean;
   loadcount: number;
+  setData: (d: TUseCallOpenApiDispatch<T | undefined>) => void;
 };
 
 /**
@@ -27,8 +30,8 @@ export const useCallOpenApi = <T, TDefaultApi>(
      */
     cacheTtl?: number;
   },
-): AxiosWrapperWrap<T> => {
-  const defv = {
+): TUseCallOpenApi<T> => {
+  const defv: TUseCallOpenApi<T> = {
     data: undefined,
     url: '',
     datetime: 0,
@@ -36,10 +39,11 @@ export const useCallOpenApi = <T, TDefaultApi>(
     loading: false,
     loaded: false,
     reFetch: async () => {},
+    setData: () => {},
   };
 
   const cachedData = callOpenApiCachedRaw({ ...p, onlyCached: true })?.data;
-  const [data, setData] = useState<AxiosWrapperWrap<T>>({
+  const [data, setData] = useState<TUseCallOpenApi<T>>({
     ...defv,
     ...(cachedData && { data: cachedData }),
     loaded: !!cachedData,
@@ -56,6 +60,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
         reFetch: async () => {},
         url: '',
         datetime: new Date().getTime(),
+        setData: () => {},
       }));
     }
 
@@ -74,6 +79,9 @@ export const useCallOpenApi = <T, TDefaultApi>(
     ...data,
     reFetch: async () => {
       setData(defv);
+    },
+    setData: (d) => {
+      setData({ ...data, data: d(data.data), datetime: new Date().getTime() });
     },
   };
 };

@@ -107,7 +107,7 @@ export const getAndValidateToken = async ({
     try {
       await jwtVerify({ token, jwksUri, issuer });
 
-      const decoded = decode(token) as unknown as IdJwt;
+      const decoded = decode(token) as IdJwt;
       debug(`decoded=${JSON.stringify(decoded, null, 2)}`);
       if (!decoded.email) {
         const m = 'auth error, no email';
