@@ -54,12 +54,11 @@ export const UserProfileImage = ({
   className?: string;
   user: AxiosWrapper<User>;
 }) => {
-  let image = user?.data?.picture;
+  const image = user?.data?.picture;
 
-  if (user?.data?.picture) {
-    if (!images.domains.find((i) => user.data.picture.includes(i))) {
-      image = image || '';
-      warn(`bad domain:${user.data.picture}`);
+  if (image) {
+    if (!images.domains.find((i) => (image as string).includes(i))) {
+      warn(`bad domain:${image}`);
     }
   }
 
