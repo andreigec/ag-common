@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { getCookieWrapper } from '../cookie';
+import { getCookieString } from '../cookie';
 import { sleep } from '../../../common/helpers/sleep';
 import { notEmpty } from '../../../common/helpers/array';
 import { ICallOpenApi } from './types';
@@ -25,10 +25,9 @@ export const callOpenApi = async <T, TDefaultApi>({
   if (overrideAuth?.id_token) {
     config.baseOptions.headers.authorization = `Bearer ${overrideAuth?.id_token}`;
   } else {
-    const isAuthed = !!getCookieWrapper<string>({
+    const isAuthed = !!getCookieString({
       name: 'id_token',
       defaultValue: '',
-      parse: (s) => s,
     });
 
     if (isAuthed) {

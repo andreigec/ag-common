@@ -1,4 +1,4 @@
-import { getCookieWrapper } from '../cookie';
+import { getCookieString } from '../cookie';
 import { ICallOpenApi, OverrideAuth } from './types';
 import { CacheItems } from '../routes';
 import NodeCache from 'node-cache';
@@ -38,10 +38,9 @@ function getCacheKey({
 }) {
   const authkeyPrefix =
     overrideAuth?.id_token ||
-    getCookieWrapper<string>({
+    getCookieString({
       name: 'id_token',
       defaultValue: '',
-      parse: (s) => s,
     });
 
   let cacheKeyRet: string | undefined;
