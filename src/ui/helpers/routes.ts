@@ -1,6 +1,8 @@
 import { TLang } from '../../common/helpers/i18n';
 import { ICognitoAuth } from './cognito';
 import { AxiosWrapperLite } from './jwt';
+import { parse } from 'url';
+import { stringToObject } from '../../common/helpers/string';
 
 export interface LocationSubset {
   /**
@@ -67,3 +69,72 @@ export interface IStateCommon<TRequest extends IRequestCommon>
    */
   cookieDocument: string | undefined;
 }
+
+const calculateServerHref = ({
+  host,
+  pathname,
+}: {
+  pathname: string;
+  host: string;
+}) => {
+  if (!host) {
+    return undefined;
+  }
+
+  let href = '';
+
+  if (host.includes('localhost')) {
+    href += 'http://';
+  } else {
+    href += 'https://';
+  }
+
+  href += host + pathname;
+  return href;
+};
+
+/**
+ * get parsed url. will use window if possible
+ * @param param0
+ * @returns
+ */
+export const getClientOrServerReqHref = ({ href }: { href?: string }) => {
+  if (typeof window !== 'undefined') {
+    href = window.location.href;
+  }
+
+  if (!href) {
+    throw new Error('no href');
+  }
+
+  const parsed = parse(href);
+  const ret: LocationSubset = {
+    hash: parsed.hash || '',
+    host: parsed.host || '',
+    origin: `${parsed.protocol}//${parsed.host}`,
+    href: `${parsed.protocol}//${parsed.host}${parsed.path}${
+      parsed.hash || ''
+    }`,
+    path: `${parsed.path}${parsed.hash || ''}`,
+    pathname: parsed.pathname || '',
+    protocol: parsed.protocol || '',
+    query: stringToObject(parsed.query || '', '=', '&'),
+  };
+
+  return ret;
+};
+
+export const getClientOrServerReq = ({
+  host,
+  pathname,
+}: {
+  pathname: string;
+  host: string;
+}) => {
+  const href = calculateServerHref({
+    host,
+    pathname,
+  });
+
+  return getClientOrServerReqHref({ href });
+};
