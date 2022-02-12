@@ -8,6 +8,10 @@ export interface LocationSubset {
   origin: string;
   query: Record<string, string>;
   host: string;
+  /**
+   * eg http: or https:
+   */
+  protocol: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
