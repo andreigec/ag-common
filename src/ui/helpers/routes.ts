@@ -3,17 +3,39 @@ import { ICognitoAuth } from './cognito';
 import { AxiosWrapperLite } from './jwt';
 
 export interface LocationSubset {
+  /**
+   * slash only path eg /aaa/bbb
+   */
   pathname: string;
+  /**
+   * eg #aaa
+   */
   hash: string;
+  /**
+   * up to first slash eg http://aaa.com:1111
+   */
   origin: string;
+  /**
+   * parse querystring keyvalues
+   */
   query: Record<string, string>;
+  /**
+   * protocol less up to first slash eg aaa.com:1111
+   */
   host: string;
   /**
    * eg http: or https:
    */
   protocol: string;
+  /**
+   * full url
+   */
+  href: string;
+  /**
+   * url from first slash eg /aaa/bbb?q=a#111
+   */
+  path: string;
 }
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CacheItems = CacheItem<any>[];
 export interface CacheItem<T> {
