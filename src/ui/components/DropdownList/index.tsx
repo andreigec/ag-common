@@ -15,7 +15,11 @@ const SBase = styled.div`
   flex-grow: 0;
 `;
 
-const SItems = styled.div<{ open?: boolean; shadow?: string }>`
+const SItems = styled.div<{
+  open?: boolean;
+  shadow?: string;
+  maxHeight: string;
+}>`
   flex-flow: column;
   z-index: 5;
   top: 100%;
@@ -25,6 +29,13 @@ const SItems = styled.div<{ open?: boolean; shadow?: string }>`
   cursor: default;
   width: 100%;
   max-width: 95vw;
+  ${({ maxHeight }) =>
+    maxHeight &&
+    css`
+      max-height: ${maxHeight};
+    `}
+
+  overflow-y: scroll;
   ${({ open }) =>
     open &&
     css`
@@ -85,6 +96,7 @@ export function DropdownList<T>({
   renderF,
   children,
   shadow = '#555',
+  maxHeight = '50vh',
 }: {
   options: T[];
   value?: T;
@@ -97,6 +109,10 @@ export function DropdownList<T>({
    * colour of dropdown shadow. default #555
    */
   shadow?: string;
+  /**
+   * max height of items list. default 50vh
+   */
+  maxHeight?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState(value);
@@ -147,7 +163,7 @@ export function DropdownList<T>({
         setOpen(!open);
       }}
     >
-      <SItems open={open} style={style} shadow={shadow}>
+      <SItems open={open} style={style} shadow={shadow} maxHeight={maxHeight}>
         {open &&
           options.map((s, i) => (
             <SItem
