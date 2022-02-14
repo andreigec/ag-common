@@ -132,3 +132,51 @@ export function objectToString(
   ret = trim(ret, joinKeyValue);
   return ret;
 }
+
+/**
+ * run func over values in object. can be used to cast value type string[]|string to string
+ * @param orig
+ * @param castF
+ * @returns
+ */
+export const castObject = <TIn, TOut>(
+  orig: Record<string, TIn>,
+  castF: (t: TIn) => TOut,
+) => {
+  const ret: Record<string, TOut> = {};
+  Object.entries(orig).forEach(([k, v]) => {
+    ret[k] = castF(v);
+  });
+  return ret;
+};
+
+export const removeUndefValuesFromObject = <T>(orig: Record<string, T>) => {
+  const ret: Record<string, T> = {};
+  Object.entries(orig).forEach(([k, v]) => {
+    if (v !== null && v !== undefined) {
+      ret[k] = v;
+    }
+  });
+  return ret;
+};
+
+/**
+ * cast Record<string,string[]|string> to Record<string,string>. can be used for querystring params
+ * @param orig
+ * @returns
+ */
+export const castStringlyObject = (
+  orig: Record<string, string | string[] | undefined>,
+): Record<string, string> => {
+  const noundef = removeUndefValuesFromObject(orig) as Record<
+    string,
+    string[] | string
+  >;
+
+  return castObject(noundef, (s) => {
+    if (Array.isArray(s)) {
+      return s.join(',');
+    }
+    return s;
+  });
+};

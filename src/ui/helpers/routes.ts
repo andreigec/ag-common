@@ -3,6 +3,7 @@ import { ICognitoAuth } from './cognito';
 import { AxiosWrapperLite } from './jwt';
 import { parse } from 'url';
 import { stringToObject } from '../../common/helpers/string';
+import { castStringlyObject } from '../../common/helpers/object';
 
 export interface LocationSubset {
   /**
@@ -94,11 +95,18 @@ const calculateServerHref = ({
 };
 
 /**
- * get parsed url. will use window if possible
+ * get parsed url.
  * @param param0
  * @returns
  */
-export const getClientOrServerReqHref = ({ href }: { href?: string }) => {
+export const getClientOrServerReqHref = ({
+  href,
+}: {
+  /**
+   * will use window if possible
+   */
+  href?: string;
+}) => {
   if (typeof window !== 'undefined') {
     href = window.location.href;
   }
@@ -124,17 +132,40 @@ export const getClientOrServerReqHref = ({ href }: { href?: string }) => {
   return ret;
 };
 
+/**
+ * get parsed url from nextjs server host,pathname
+ * @param param0 * @returns
+ */
 export const getServerReq = ({
   host,
   pathname,
+  query,
 }: {
-  pathname: string;
+  /**
+   * eg ctx?.req?.headers?.host
+   */
   host: string;
+  /**
+   * eg ctx.asPath || '/'
+   */
+  pathname: string;
+  /**
+   * eg ctx.query
+   */
+  query: Record<string, string | string[] | undefined>;
 }) => {
   const href = calculateServerHref({
     host,
     pathname,
   });
 
-  return getClientOrServerReqHref({ href });
+  const ret = getClientOrServerReqHref({ href });
+  if (query && Object.keys(query).length > 0) {
+    ret.query = {
+      ...ret.query,
+      ...castStringlyObject(query),
+    };
+  }
+
+  return ret;
 };
