@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.x",
-    "aws-sdk": "2.1072.0",
-    "axios": "0.25.0",
+    "aws-sdk": "2.1073.0",
+    "axios": "0.26.0",
     "constructs": "10.x",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
