@@ -90,7 +90,7 @@ const calculateServerHref = ({
   }
 
   href += host + pathname;
-  return href;
+  return decodeURIComponent(href);
 };
 
 /**
@@ -124,7 +124,7 @@ export const getClientOrServerReqHref = ({ href }: { href?: string }) => {
   return ret;
 };
 
-export const getClientOrServerReq = ({
+export const getServerReq = ({
   host,
   pathname,
 }: {

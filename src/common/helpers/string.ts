@@ -191,7 +191,9 @@ export function stringToObject(
 
   raw.split(splitKeys).forEach((set) => {
     const [k, v] = set.split(splitKeyValue);
-    ret[k] = v;
+    if (k) {
+      ret[k] = v;
+    }
   });
   return ret;
 }
