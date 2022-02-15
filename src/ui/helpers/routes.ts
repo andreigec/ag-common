@@ -102,6 +102,7 @@ const calculateServerHref = ({
 export const getClientOrServerReqHref = ({
   href,
   query,
+  forceServer = false,
 }: {
   /**
    * will use window if possible
@@ -111,8 +112,12 @@ export const getClientOrServerReqHref = ({
    * pass in query string params
    */
   query?: Record<string, string>;
+  /**
+   * if true, wont use window location. default false
+   */
+  forceServer?: boolean;
 }) => {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && !forceServer) {
     href = window.location.href;
   }
 
@@ -147,7 +152,7 @@ export const getServerReq = ({
   query,
 }: {
   /**
-   * eg ctx?.req?.headers?.host
+   * eg ctx?.req?.headers?.host OR (user provided host eg test.com)
    */
   host: string;
   /**
@@ -169,7 +174,11 @@ export const getServerReq = ({
       ? undefined
       : castStringlyObject(query);
 
-  const ret = getClientOrServerReqHref({ href, query: parsedQuery });
+  const ret = getClientOrServerReqHref({
+    href,
+    query: parsedQuery,
+    forceServer: true,
+  });
 
   return ret;
 };
@@ -183,12 +192,3 @@ export interface INextCtx {
   asPath?: string;
   query: Record<string, string | string[] | undefined>;
 }
-
-export const getServerReqNextJs = (ctx: INextCtx) => {
-  const host = ctx?.req?.headers?.host;
-  const pathname = ctx?.asPath;
-  if (!host || !pathname) {
-    return null;
-  }
-  return getServerReq({ host, pathname, query: ctx.query });
-};
