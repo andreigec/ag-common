@@ -137,6 +137,43 @@ export const getClientOrServerReqHref = ({
   return ret;
 };
 
+/**
+ * get server side parsed url
+ * @param param0 * @returns
+ */
+export const getServerReq = ({
+  host,
+  pathname,
+  query,
+}: {
+  /**
+   * eg ctx?.req?.headers?.host
+   */
+  host: string;
+  /**
+   * eg ctx.asPath || '/'
+   */
+  pathname: string;
+  /**
+   * eg ctx.query
+   */
+  query: Record<string, string | string[] | undefined>;
+}) => {
+  const href = calculateServerHref({
+    host,
+    pathname,
+  });
+
+  const parsedQuery =
+    !query || Object.keys(query).length === 0
+      ? undefined
+      : castStringlyObject(query);
+
+  const ret = getClientOrServerReqHref({ href, query: parsedQuery });
+
+  return ret;
+};
+
 export interface INextCtx {
   req?: {
     headers?: {
@@ -146,26 +183,12 @@ export interface INextCtx {
   asPath?: string;
   query: Record<string, string | string[] | undefined>;
 }
-/**
- * get parsed url from nextjs server host/pathname/query
- * @param param0 * @returns
- */
-export const getServerReq = (ctx: INextCtx) => {
-  if (!ctx?.req?.headers?.host || !ctx?.asPath) {
+
+export const getServerReqNextJs = (ctx: INextCtx) => {
+  const host = ctx?.req?.headers?.host;
+  const pathname = ctx?.asPath;
+  if (!host || !pathname) {
     return null;
   }
-
-  const href = calculateServerHref({
-    host: ctx.req.headers.host,
-    pathname: ctx.asPath,
-  });
-
-  const parsedQuery =
-    !ctx.query || Object.keys(ctx.query).length === 0
-      ? undefined
-      : castStringlyObject(ctx.query);
-
-  const ret = getClientOrServerReqHref({ href, query: parsedQuery });
-
-  return ret;
+  return getServerReq({ host, pathname, query: ctx.query });
 };
