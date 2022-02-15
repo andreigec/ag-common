@@ -66,6 +66,7 @@ export const TextEdit = ({
   className,
   singleLine = false,
   noGrow = false,
+  attributes,
 }: {
   /**
    * forces single row input style. will also enable 'Enter' to auto submit
@@ -96,6 +97,10 @@ export const TextEdit = ({
    * if true, will not grow. default false
    */
   noGrow?: boolean;
+  /**
+   * will set these attributes directly on element. can put data-* here
+   */
+  attributes?: Record<string, string | number | boolean>;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const taref = useRef<HTMLTextAreaElement>(null);
@@ -148,6 +153,7 @@ export const TextEdit = ({
         onClick={() => onClickNotEditing?.()}
         data-pointer={onClickNotEditing ? 'true' : 'false'}
         data-nogrow={noGrow}
+        {...attributes}
       >
         <ValueReadonly data-type="text">{value}</ValueReadonly>
         <Right>
@@ -186,6 +192,7 @@ export const TextEdit = ({
       ref={ref as any}
       tabIndex={editing ? 0 : undefined}
       data-nogrow={noGrow}
+      {...attributes}
     >
       <Comp
         data-editing="true"
