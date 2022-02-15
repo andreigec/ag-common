@@ -1,6 +1,6 @@
 on: [pull_request]
 concurrency:
-  group: 'PR'
+  group: ${{ github.workflow }}
   cancel-in-progress: true
 
 jobs:

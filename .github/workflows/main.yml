@@ -1,6 +1,6 @@
 name: main-npm
 concurrency:
-  group: 'main'
+  group: ${{ github.workflow }}
   cancel-in-progress: true
 on:
   push:
