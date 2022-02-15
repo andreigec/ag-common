@@ -5,5 +5,6 @@
   "extends": [
     "github>andreigec/renovate"
   ],
-  "schedule": "before 7am on tuesday and friday"
+  "schedule": "before 7am on tuesday and friday",
+  "prHourlyLimit": 0
 }
