@@ -1,4 +1,7 @@
 name: main-npm
+concurrency:
+  group: 'main'
+  cancel-in-progress: true
 on:
   push:
     branches: [ main ]
@@ -10,10 +13,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    concurrency:
-      group: 'main'
-      cancel-in-progress: true
-
     steps:
     - uses: actions/checkout@v2
 
