@@ -77,7 +77,16 @@ export const TextEdit = ({
    * if truthy will enable. if focus is true, will also focus on open
    */
   defaultEditing?: { focus: boolean };
-  onSubmit: (val: string) => void;
+  /**
+   * on submit.
+   */
+  onSubmit: (
+    val: string,
+    /**
+     * if true, was passed by pressing Enter
+     */
+    enterPressed: boolean,
+  ) => void;
   disableEdit?: boolean;
   placeholder?: string;
   onEditingChange?: (editing: boolean) => void;
@@ -95,7 +104,7 @@ export const TextEdit = ({
   const valueChange = value !== defaultValue;
   useOnClickOutside({ ref, moveMouseOutside: false }, () => {
     if (valueChange) {
-      onSubmit(value);
+      onSubmit(value, false);
     } else {
       if (!disableEdit && editing && defaultEditing) {
         return;
@@ -188,12 +197,18 @@ export const TextEdit = ({
         placeholder={placeholder}
         rows={singleLine ? 1 : undefined}
         onKeyDown={(e) =>
-          singleLine && e.code.endsWith('Enter') && onSubmit(value) && false
+          singleLine &&
+          e.code.endsWith('Enter') &&
+          onSubmit(value, true) &&
+          false
         }
       />
       <Right>
         {valueChange && (
-          <Icon style={iconLeft} onClick={() => valueChange && onSubmit(value)}>
+          <Icon
+            style={iconLeft}
+            onClick={() => valueChange && onSubmit(value, false)}
+          >
             <SaveIcon />
           </Icon>
         )}

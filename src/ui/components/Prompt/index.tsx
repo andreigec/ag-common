@@ -85,7 +85,13 @@ const PromptModal = ({
           <BottomText>{bottomText}</BottomText>
           <TextEdit
             defaultValue={text}
-            onSubmit={(c) => setText(c)}
+            onSubmit={(c, enter) => {
+              if (enter) {
+                ret(c);
+              } else {
+                setText(c);
+              }
+            }}
             placeholder={placeholder}
             defaultEditing={{ focus: true }}
             singleLine
