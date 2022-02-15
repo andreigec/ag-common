@@ -95,17 +95,22 @@ const calculateServerHref = ({
 };
 
 /**
- * get parsed url.
+ * get parsed url. use on client/SSR. defaults to window location if possible
  * @param param0
  * @returns
  */
 export const getClientOrServerReqHref = ({
   href,
+  query,
 }: {
   /**
    * will use window if possible
    */
   href?: string;
+  /**
+   * pass in query string params
+   */
+  query?: Record<string, string>;
 }) => {
   if (typeof window !== 'undefined') {
     href = window.location.href;
@@ -126,46 +131,41 @@ export const getClientOrServerReqHref = ({
     path: `${parsed.path}${parsed.hash || ''}`,
     pathname: parsed.pathname || '',
     protocol: parsed.protocol || '',
-    query: stringToObject(parsed.query || '', '=', '&'),
+    query: { ...query, ...stringToObject(parsed.query || '', '=', '&') },
   };
 
   return ret;
 };
 
+export interface INextCtx {
+  req?: {
+    headers?: {
+      host?: string;
+    };
+  };
+  asPath?: string;
+  query: Record<string, string | string[] | undefined>;
+}
 /**
- * get parsed url from nextjs server host,pathname
+ * get parsed url from nextjs server host/pathname/query
  * @param param0 * @returns
  */
-export const getServerReq = ({
-  host,
-  pathname,
-  query,
-}: {
-  /**
-   * eg ctx?.req?.headers?.host
-   */
-  host: string;
-  /**
-   * eg ctx.asPath || '/'
-   */
-  pathname: string;
-  /**
-   * eg ctx.query
-   */
-  query: Record<string, string | string[] | undefined>;
-}) => {
+export const getServerReq = (ctx: INextCtx) => {
+  if (!ctx?.req?.headers?.host || !ctx?.asPath) {
+    return null;
+  }
+
   const href = calculateServerHref({
-    host,
-    pathname,
+    host: ctx.req.headers.host,
+    pathname: ctx.asPath,
   });
 
-  const ret = getClientOrServerReqHref({ href });
-  if (query && Object.keys(query).length > 0) {
-    ret.query = {
-      ...ret.query,
-      ...castStringlyObject(query),
-    };
-  }
+  const parsedQuery =
+    !ctx.query || Object.keys(ctx.query).length === 0
+      ? undefined
+      : castStringlyObject(ctx.query);
+
+  const ret = getClientOrServerReqHref({ href, query: parsedQuery });
 
   return ret;
 };
