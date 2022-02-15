@@ -35,7 +35,7 @@ const SItems = styled.div<{
       max-height: ${maxHeight};
     `}
 
-  overflow-y: scroll;
+  overflow-y: auto;
   ${({ open }) =>
     open &&
     css`
