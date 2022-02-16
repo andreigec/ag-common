@@ -16,5 +16,6 @@ export * from './useLocalStorage';
 export * from './useLockBodyScroll';
 export * from './useOnClickOutside';
 export * from './useOnScroll';
+export * from './useOverloadPageSearch';
 export * from './useQueryString';
 export * from './useResize';

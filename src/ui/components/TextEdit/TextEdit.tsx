@@ -55,32 +55,35 @@ const Icon = styled.div`
 `;
 
 export const TextEdit = ({
-  defaultValue,
+  defaultValue = '',
   defaultEditing,
-  onSubmit,
   disableEdit = false,
   placeholder,
-  onEditingChange,
-  onClickOutsideWithNoValue,
-  onClickNotEditing,
   className,
   singleLine = false,
   noGrow = false,
   attributes,
+  leftContent,
+
+  onSubmit,
+  onEditingChange,
+  onClickOutsideWithNoValue,
+  onClickNotEditing,
+  allowUndo = true,
 }: {
   /**
    * forces single row input style. will also enable 'Enter' to auto submit
    */
   singleLine?: boolean;
   className?: string;
-  defaultValue: string;
   /**
-   * if truthy will enable. if focus is true, will also focus on open
+   * default value of field. default empty
    */
-  defaultEditing?: { focus: boolean };
+  defaultValue?: string;
   /**
-   * on submit.
+   * if truthy will enable text edit mode by default. if focus is true, will also focus on open
    */
+  defaultEditing?: { focus?: boolean };
   onSubmit: (
     val: string,
     /**
@@ -88,6 +91,9 @@ export const TextEdit = ({
      */
     enterPressed: boolean,
   ) => void;
+  /**
+   * disable edit text functionality
+   */
   disableEdit?: boolean;
   placeholder?: string;
   onEditingChange?: (editing: boolean) => void;
@@ -101,6 +107,14 @@ export const TextEdit = ({
    * will set these attributes directly on element. can put data-* here
    */
   attributes?: Record<string, string | number | boolean>;
+  /**
+   * optional content at the left of the box
+   */
+  leftContent?: JSX.Element;
+  /**
+   * if true, will add undo button after changes. if false, will submit after every keypress. default true
+   */
+  allowUndo?: boolean;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const taref = useRef<HTMLTextAreaElement>(null);
@@ -155,6 +169,7 @@ export const TextEdit = ({
         data-nogrow={noGrow}
         {...attributes}
       >
+        {leftContent || null}
         <ValueReadonly data-type="text">{value}</ValueReadonly>
         <Right>
           {!disableEdit && (
@@ -171,10 +186,6 @@ export const TextEdit = ({
         </Right>
       </ValueBox>
     );
-  }
-
-  if (!open) {
-    return <></>;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -194,13 +205,19 @@ export const TextEdit = ({
       data-nogrow={noGrow}
       {...attributes}
     >
+      {leftContent || null}
       <Comp
         data-editing="true"
         data-valuechange={valueChange.toString()}
         ref={taref}
         data-type="text"
         value={value}
-        onChange={(v) => setValue(v.currentTarget.value)}
+        onChange={(v) => {
+          setValue(v.currentTarget.value);
+          if (!allowUndo) {
+            onSubmit(v.currentTarget.value, false);
+          }
+        }}
         placeholder={placeholder}
         rows={singleLine ? 1 : undefined}
         onKeyDown={(e) =>
@@ -210,27 +227,29 @@ export const TextEdit = ({
           false
         }
       />
-      <Right>
-        {valueChange && (
-          <Icon
-            style={iconLeft}
-            onClick={() => valueChange && onSubmit(value, false)}
-          >
-            <SaveIcon />
-          </Icon>
-        )}
-        {(valueChange || editing !== !!defaultEditing) && (
-          <Icon
-            style={iconRight}
-            onClick={() => {
-              setEditing(!!defaultEditing);
-              setValue(defaultValue);
-            }}
-          >
-            <UndoIcon />
-          </Icon>
-        )}
-      </Right>
+      {allowUndo && (
+        <Right>
+          {valueChange && (
+            <Icon
+              style={iconLeft}
+              onClick={() => valueChange && onSubmit(value, false)}
+            >
+              <SaveIcon />
+            </Icon>
+          )}
+          {(valueChange || editing !== !!defaultEditing) && (
+            <Icon
+              style={iconRight}
+              onClick={() => {
+                setEditing(!!defaultEditing);
+                setValue(defaultValue);
+              }}
+            >
+              <UndoIcon />
+            </Icon>
+          )}
+        </Right>
+      )}
     </ValueBoxEdit>
   );
 };

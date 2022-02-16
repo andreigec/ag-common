@@ -23,6 +23,11 @@ export const NoTextSelect = css`
   -ms-user-select: none; /* Internet Explorer/Edge */
 `;
 
+export const TextOverflowEllipsis = css`
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 export const CssTransparentBlock = css`
   background-color: rgba(150, 150, 150, 0.5);
   border-radius: 3px;

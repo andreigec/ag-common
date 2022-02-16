@@ -2,7 +2,7 @@ type TLangExceptEn = 'id' | 'vi';
 export type TLang = TLangExceptEn | 'en';
 export const AllLang: TLang[] = ['en', 'id', 'vi'];
 export type TResource = {
-  [k in TLangExceptEn]: string | null;
+  [k in TLangExceptEn]?: string;
 } & { en: string };
 
 export const getValidatedLang = (raw: string): TLang => {
