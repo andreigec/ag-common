@@ -1,13 +1,13 @@
 {
   "name": "ag-common",
-  "version": "0.0.157",
+  "version": "0.0.158",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "author": "Andrei Gec <@andreigec> (https://gec.dev/)",
   "repository": "github:andreigec/ag-common",
   "license": "ISC",
   "scripts": {
-    "format":"npx eslint --ext .ts,.tsx ./src --fix",
+    "format": "npx eslint --ext .ts,.tsx ./src --fix",
     "build": "rimraf dist && yarn checklint && tsc",
     "checklint": "npx eslint --ext .ts,.tsx ./src",
     "start": "tsc --watch"
