@@ -44,22 +44,22 @@ export const Chevron = ({
   let rotate = 0;
   switch (point) {
     case 'down': {
-      rotate = 270;
-      break;
-    }
-
-    case 'left': {
-      rotate = 0;
-      break;
-    }
-
-    case 'up': {
       rotate = 90;
       break;
     }
 
-    case 'right': {
+    case 'left': {
       rotate = 180;
+      break;
+    }
+
+    case 'up': {
+      rotate = 270;
+      break;
+    }
+
+    case 'right': {
+      rotate = 0;
     }
   }
 

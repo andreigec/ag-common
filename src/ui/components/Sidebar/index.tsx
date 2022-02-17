@@ -123,7 +123,7 @@ export const Sidebar = ({
       data-hover
     >
       <Hamburger data-open={open} onClick={() => setOpen(!open)} data-hover>
-        <ChevronStyled point={open ? 'right' : 'left'} width="100%" />
+        <ChevronStyled point={open ? 'left' : 'right'} width="100%" />
       </Hamburger>
       <ContentBlock data-content data-open={open}>
         <Content
