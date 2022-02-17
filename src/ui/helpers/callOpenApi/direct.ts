@@ -1,9 +1,9 @@
-import { AxiosError } from 'axios';
+import { ICallOpenApi } from './types';
 import { getCookieString } from '../cookie';
 import { sleep } from '../../../common/helpers/sleep';
 import { notEmpty } from '../../../common/helpers/array';
-import { ICallOpenApi } from './types';
 import { AxiosWrapperLite } from '../jwt';
+import { AxiosError } from 'axios';
 
 export const callOpenApi = async <T, TDefaultApi>({
   func,

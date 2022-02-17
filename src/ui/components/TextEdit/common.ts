@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
 import { colours } from '../../styles/colours';
+import styled, { css } from 'styled-components';
 
 export const ValueBox = styled.div`
   padding: 0.5rem;

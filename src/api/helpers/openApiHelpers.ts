@@ -1,4 +1,8 @@
 /* eslint-disable no-new */
+import { distinctBy, notEmpty } from '../../common/helpers/array';
+import { warn } from '../../common/helpers/log';
+import { ILambdaConfigs } from '../types';
+import { Construct } from 'constructs';
 import {
   aws_apigateway as apigw,
   aws_logs as logs,
@@ -9,10 +13,6 @@ import {
   aws_lambda_nodejs as nodejs,
   Duration,
 } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-import { distinctBy, notEmpty } from '../../common/helpers/array';
-import { warn } from '../../common/helpers/log';
-import { ILambdaConfigs } from '../types';
 // eslint-disable-next-line
 const getPaths = (schema: any) =>
   Object.entries(

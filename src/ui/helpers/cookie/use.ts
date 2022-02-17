@@ -1,7 +1,7 @@
-import { SetStateAction, useState } from 'react';
 import { TParse, ReturnType } from './const';
 import { getCookieRawWrapper } from './get';
 import { setCookieRawWrapper } from './set';
+import { SetStateAction, useState } from 'react';
 
 export function useCookie<T>(p: {
   defaultValue: T;

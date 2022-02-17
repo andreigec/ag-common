@@ -1,9 +1,9 @@
 import { colours } from '../../styles/colours';
-import React, { useEffect, useState, useRef } from 'react';
-import styled, { css } from 'styled-components';
 import { Icon } from '../Icon';
 import { convertRemToPixels } from '../../helpers/dom';
 import { Shadow } from '../../styles/common';
+import styled, { css } from 'styled-components';
+import React, { useEffect, useState, useRef } from 'react';
 
 const SBase = styled.div`
   display: flex;

@@ -1,6 +1,6 @@
+import { plural } from './plural';
 import { addDays } from '../../common/helpers/date';
 import { toFixedDown } from '../../common/helpers/math';
-import { plural } from './plural';
 
 export const daydiffstr = (dayticks: number) => {
   const ticksSince = new Date().getTime() - dayticks;

@@ -1,10 +1,10 @@
+import { IGeneratedDynamoData } from '../types';
 import {
   Fn,
   Stack,
   aws_ssm as ssm,
   aws_dynamodb as dynamodb,
 } from 'aws-cdk-lib';
-import { IGeneratedDynamoData } from '../types';
 export const generateTableRef = ({
   stack,
   baseKey,

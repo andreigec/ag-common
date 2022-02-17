@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
-import styled from 'styled-components';
 import { debounce } from '../../helpers/debounce';
 import { bigScreen, smallScreen } from '../../styles/media';
 import { Modal } from '../Modal';
 import { TextEdit } from '../TextEdit/TextEdit';
+import styled from 'styled-components';
+import ReactDOM from 'react-dom';
+import React, { useEffect, useState } from 'react';
 
 const ModalStyled = styled(Modal)`
   top: 10rem;

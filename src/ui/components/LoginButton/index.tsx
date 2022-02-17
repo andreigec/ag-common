@@ -1,6 +1,6 @@
+import { ButtonBase } from '../Button';
 import React from 'react';
 import styled from 'styled-components';
-import { ButtonBase } from '../Button';
 
 const Base = styled.a`
   ${ButtonBase}

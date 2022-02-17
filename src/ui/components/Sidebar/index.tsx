@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
 import { useCookieBoolean } from '../../helpers/cookie/use';
 import { NoTextSelect, Shadow } from '../../styles/common';
 import { Chevron } from '../Chevron';
+import styled from 'styled-components';
+import React from 'react';
 
 const Base = styled.div`
   position: relative;

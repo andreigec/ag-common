@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
-import styled from 'styled-components';
 import { Close } from '../Close';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
+import React, { useRef } from 'react';
+import styled from 'styled-components';
 const FixedBackground = styled.div`
   position: fixed;
   top: 0;

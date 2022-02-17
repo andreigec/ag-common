@@ -1,6 +1,6 @@
-import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import { debug } from '../../common/helpers/log';
 import { isJson } from '../../common/helpers/object';
+import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 
 /**
  *

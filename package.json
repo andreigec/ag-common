@@ -7,8 +7,8 @@
   "repository": "github:andreigec/ag-common",
   "license": "ISC",
   "scripts": {
+    "format":"npx eslint --ext .ts,.tsx ./src --fix",
     "build": "rimraf dist && yarn checklint && tsc",
-    "fix": "./node_modules/.bin/eslint --fix './src/**/*.ts' './src/**/*.tsx'",
     "checklint": "npx eslint --ext .ts,.tsx ./src",
     "start": "tsc --watch"
   },

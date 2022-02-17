@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
 import { colours } from './colours';
+import styled, { css } from 'styled-components';
 
 export const HardOutline = (colour: string) => css`
   filter: drop-shadow(1px 1px 0px ${colour}) drop-shadow(-1px 1px 0px ${colour})

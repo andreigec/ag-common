@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
+import { colours } from '../../styles/colours';
 import React, { KeyboardEventHandler, MouseEventHandler } from 'react';
 import styled, { css } from 'styled-components';
-import { colours } from '../../styles/colours';
 
 export const ButtonBase = css`
   text-decoration: none;

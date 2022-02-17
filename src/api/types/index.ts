@@ -1,10 +1,10 @@
 /* eslint-disable no-new */
+import { Key } from './aws';
 import {
   aws_dynamodb as dynamodb,
   aws_iam as iam,
   aws_lambda as lambda,
 } from 'aws-cdk-lib';
-import { Key } from './aws';
 
 export interface DYNAMOKEYS {
   type: string;

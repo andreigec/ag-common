@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
+import { bigScreen, smallScreen } from '../../styles/media';
 import React from 'react';
 import styled from 'styled-components';
-import { bigScreen, smallScreen } from '../../styles/media';
 
 const Base = styled.div`
   display: flex;

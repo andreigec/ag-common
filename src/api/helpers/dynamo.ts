@@ -2,18 +2,18 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable prefer-const */
+import { IQueryDynamo, Key } from '../types';
+import { info, error as errorF, debug, warn } from '../../common/helpers/log';
+import { chunk, notEmpty, take } from '../../common/helpers/array';
+import { sleep } from '../../common/helpers/sleep';
+import { asyncForEach } from '../../common/helpers/async';
+import AWS, { AWSError, Response } from 'aws-sdk';
 import {
   DocumentClient,
   PutItemInput,
   QueryInput,
   QueryOutput,
 } from 'aws-sdk/clients/dynamodb';
-import AWS, { AWSError, Response } from 'aws-sdk';
-import { IQueryDynamo, Key } from '../types';
-import { info, error as errorF, debug, warn } from '../../common/helpers/log';
-import { chunk, notEmpty, take } from '../../common/helpers/array';
-import { sleep } from '../../common/helpers/sleep';
-import { asyncForEach } from '../../common/helpers/async';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let dynamoDb = new AWS.DynamoDB.DocumentClient();

@@ -1,10 +1,10 @@
-import { getCookieString } from '../cookie';
 import { ICallOpenApi, OverrideAuth } from './types';
-import { CacheItems } from '../routes';
-import NodeCache from 'node-cache';
 import { callOpenApi } from './direct';
+import { CacheItems } from '../routes';
+import { getCookieString } from '../cookie';
 import { toBase64 } from '../../../common/helpers/string';
 import { AxiosWrapperLite } from '../jwt';
+import NodeCache from 'node-cache';
 
 export type TCallOpenApiCached<T, TDefaultApi> = ICallOpenApi<
   T,

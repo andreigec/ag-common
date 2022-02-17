@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { objectToString, paramsToObject } from '../../common/helpers/object';
+import { useEffect, useState } from 'react';
 export const isServer = typeof window === 'undefined';
 
 /**

@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/no-onchange */
-import React, { useState, useEffect, useRef } from 'react';
 import { SaveIcon, UndoIcon } from './images';
 import {
   IconD as Icon,
@@ -10,8 +9,9 @@ import {
 } from './common';
 import { noDrag } from '../../styles/common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
-import styled from 'styled-components';
 import { FlexRow } from '../FlexRow';
+import styled from 'styled-components';
+import React, { useState, useEffect, useRef } from 'react';
 
 const Icons = styled(FlexRow)`
   position: absolute;

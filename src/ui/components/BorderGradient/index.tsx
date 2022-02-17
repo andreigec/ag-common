@@ -1,6 +1,6 @@
+import { colours } from '../../styles/colours';
 import styled, { css } from 'styled-components';
 import React from 'react';
-import { colours } from '../../styles/colours';
 
 interface IBG {
   left?: string;

@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/no-onchange */
-import React, { useState, useEffect, useRef } from 'react';
 import { SaveIcon, UndoIcon, PencilIcon } from './images';
 import { iconLeft, iconRight, ValueBox, valueCss } from './common';
-import styled, { css, StyledComponent } from 'styled-components';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
+import styled, { css, StyledComponent } from 'styled-components';
+import React, { useState, useEffect, useRef } from 'react';
 
 export const ValueReadonly = styled.div`
   ${valueCss};

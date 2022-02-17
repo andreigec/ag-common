@@ -1,6 +1,6 @@
+import { Icon } from '../Icon';
 import styled from 'styled-components';
 import React from 'react';
-import { Icon } from '../Icon';
 
 const SChevron = styled.span`
   font-size: 2rem;

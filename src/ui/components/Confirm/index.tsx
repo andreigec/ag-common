@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
-import ReactDOM from 'react-dom';
-import styled from 'styled-components';
 import { Button } from '../Button';
 import { FlexColumn } from '../FlexColumn';
 import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal';
+import styled from 'styled-components';
+import ReactDOM from 'react-dom';
+import React from 'react';
 
 const Base = styled.div`
   width: 95vw;

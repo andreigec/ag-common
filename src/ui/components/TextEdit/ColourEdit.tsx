@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-onchange */
-import React, { useState, useEffect, useRef } from 'react';
 import { SaveIcon, UndoIcon } from './images';
 import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
+import React, { useState, useEffect, useRef } from 'react';
 export const ColourEdit = ({
   defaultValue,
   onSubmit,

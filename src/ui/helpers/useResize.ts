@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { bigScreenPx, smallScreenPx } from '../styles/media';
+import { useState, useEffect } from 'react';
 
 export interface Dimensions {
   width: number;

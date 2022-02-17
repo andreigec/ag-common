@@ -1,6 +1,6 @@
+import { HardOutline } from '../../styles/common';
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { HardOutline } from '../../styles/common';
 
 interface IIcon {
   disabled?: boolean;

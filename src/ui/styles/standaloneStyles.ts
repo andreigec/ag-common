@@ -1,6 +1,6 @@
-import styled from 'styled-components';
 import { FullScreenPage } from './common';
 import { smallScreen } from './media';
+import styled from 'styled-components';
 
 export const SOBase = styled(FullScreenPage)`
   > h1,

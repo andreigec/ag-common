@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
 import { colours } from '../../styles/colours';
 import { Button } from '../Button';
+import React from 'react';
+import styled from 'styled-components';
 const Door = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
     <path d="M3 3h8V1H3a2 2 0 00-2 2v14a2 2 0 002 2h8v-2H3z" />

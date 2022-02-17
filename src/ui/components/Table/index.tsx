@@ -1,6 +1,6 @@
+import { groupByList } from '../../../common/helpers/groupBy';
 import React from 'react';
 import styled from 'styled-components';
-import { groupByList } from '../../../common/helpers/groupBy';
 
 const Base = styled.div`
   display: flex;

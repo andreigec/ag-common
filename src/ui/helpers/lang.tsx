@@ -1,5 +1,5 @@
-import React from 'react';
 import { TLang, TResource } from '../../common/helpers/i18n';
+import React from 'react';
 export const useTranslation = <T extends { [a: string]: TResource }>(
   texts: T,
   lang: TLang,
