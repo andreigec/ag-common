@@ -12,7 +12,9 @@ export const useOverloadPageSearch = ({
 }) => {
   useEffect(() => {
     const ctrlF = (e: KeyboardEvent) => {
-      if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+      const macSearch = e.metaKey && e.code === 'KeyF';
+      const winSearch = e.ctrlKey && e.code === 'KeyF';
+      if (winSearch || macSearch) {
         e.preventDefault();
         onTrigger();
       }
