@@ -1,6 +1,6 @@
 {
   "name": "ag-common",
-  "version": "0.0.160",
+  "version": "0.0.161",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "author": "Andrei Gec <@andreigec> (https://gec.dev/)",
