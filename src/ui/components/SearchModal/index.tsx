@@ -47,6 +47,7 @@ const CloseButton = styled.div`
   font-weight: bold;
   margin-left: 1rem;
   font-size: 1.1rem;
+  z-index: 1;
   color: #333;
   cursor: pointer;
   &:hover {
