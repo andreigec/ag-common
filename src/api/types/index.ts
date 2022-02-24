@@ -32,7 +32,15 @@ export interface ILambdaConfig {
   policies?: iam.PolicyStatement[];
   env?: Record<string, string>;
   layers?: lambda.ILayerVersion[];
+  /**
+   * use the name of the lambda authorizer passed in in the openApiImpl config
+   */
+  authorizerName?: string;
 }
+
+/**
+ * 'default' will be applied to all functions
+ */
 export interface ILambdaConfigs {
   [pathHyphenVerb: string]: ILambdaConfig & {
     default?: ILambdaConfig;

@@ -13,6 +13,7 @@ import {
   aws_lambda_nodejs as nodejs,
   Duration,
 } from 'aws-cdk-lib';
+import { TokenAuthorizer } from 'aws-cdk-lib/aws-apigateway/lib/authorizers/lambda';
 // eslint-disable-next-line
 const getPaths = (schema: any) =>
   Object.entries(
@@ -74,11 +75,13 @@ const setupLambda = ({
   pathV,
   verb,
   seenPermissions,
+  authorizers,
 }: {
   pathV: string;
   verb: string;
   lambdaConfig: ILambdaConfigs;
   seenPermissions: { [a: string]: boolean };
+  authorizers?: Record<string, TokenAuthorizer>;
 }) => {
   const pathCompute = pathV + '/' + verb;
   const lp = lambdaConfig?.[pathCompute];
@@ -112,13 +115,33 @@ const setupLambda = ({
     notEmpty,
   );
 
+  let authorizerName = lp?.authorizerName;
+  if (authorizerName === undefined) {
+    authorizerName = def.authorizerName;
+  }
+
+  if (authorizerName && (!authorizers || !authorizers[authorizerName])) {
+    throw new Error('unseen auth name:' + authorizerName);
+  }
+
+  const authorizer = !authorizerName
+    ? undefined
+    : authorizers?.[authorizerName];
+
   const env = { ...(def.env || {}), ...(lp?.env || {}) };
   const tables = [...readTables, ...writeTables];
   const environment: Record<string, string> = env;
   Object.values(tables).forEach((v) => {
     environment[v.shortName] = v.table.tableName;
   });
-  return { environment, readTables, writeTables, policies, layers };
+  return {
+    environment,
+    readTables,
+    writeTables,
+    policies,
+    layers,
+    authorizer,
+  };
 };
 
 const addApiPaths = (
@@ -163,6 +186,10 @@ export const openApiImpl = (p: {
     allowHeaders: apigw.Cors.DEFAULT_HEADERS,
    */
   cors?: { allowOrigins: string[]; allowHeaders: string[] };
+  /**
+   * dictionary of named authorizer functions. these names are to be used in the lambdaConfig param
+   */
+  authorizers?: Record<string, TokenAuthorizer>;
 }) => {
   if (!p.schema) {
     throw new Error('no openapi schema found');
@@ -176,13 +203,20 @@ export const openApiImpl = (p: {
   paths.forEach(({ fullPath, verbs, pathList }) => {
     const apiPath = addApiPaths(api, pathList, apiRoots);
     verbs.forEach((verb) => {
-      const { environment, readTables, writeTables, policies, layers } =
-        setupLambda({
-          lambdaConfig,
-          pathV: fullPath,
-          verb,
-          seenPermissions,
-        });
+      const {
+        environment,
+        readTables,
+        writeTables,
+        policies,
+        layers,
+        authorizer,
+      } = setupLambda({
+        lambdaConfig,
+        pathV: fullPath,
+        verb,
+        seenPermissions,
+        authorizers: p.authorizers,
+      });
 
       const lambdaName = lambdaNameSafe(
         `${p.shortStackName}-${fullPath}-${verb}-${NODE_ENV}`,
@@ -213,6 +247,7 @@ export const openApiImpl = (p: {
       apiPath.addMethod(
         verb.toUpperCase(),
         new apigw.LambdaIntegration(lambdaV, {}),
+        { authorizer },
       );
     });
   });

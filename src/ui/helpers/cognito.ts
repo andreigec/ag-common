@@ -5,7 +5,6 @@ export type TOnMessage = (
 
 export interface ICognitoAuth {
   AWSRegion: string;
-  poolUrl: string;
   identityPool?: string;
   UserPoolId: string;
   ClientId: string;
