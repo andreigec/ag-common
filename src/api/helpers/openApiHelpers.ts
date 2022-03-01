@@ -115,6 +115,8 @@ const setupLambda = ({
     notEmpty,
   );
 
+  const memory = lp?.memory || def?.memory || 128;
+  const timeout = Duration.seconds(lp?.timeoutS || def?.timeoutS || 30);
   let authorizerName = lp?.authorizerName;
   if (authorizerName === undefined) {
     authorizerName = def.authorizerName;
@@ -141,6 +143,8 @@ const setupLambda = ({
     policies,
     layers,
     authorizer,
+    memory,
+    timeout,
   };
 };
 
@@ -203,14 +207,7 @@ export const openApiImpl = (p: {
   paths.forEach(({ fullPath, verbs, pathList }) => {
     const apiPath = addApiPaths(api, pathList, apiRoots);
     verbs.forEach((verb) => {
-      const {
-        environment,
-        readTables,
-        writeTables,
-        policies,
-        layers,
-        authorizer,
-      } = setupLambda({
+      const lc = setupLambda({
         lambdaConfig,
         pathV: fullPath,
         verb,
@@ -227,9 +224,9 @@ export const openApiImpl = (p: {
         functionName: lambdaName,
         runtime: lambda.Runtime.NODEJS_14_X,
         handler: 'handler',
-        environment,
-        memorySize: 128,
-        timeout: Duration.seconds(30),
+        environment: lc.environment,
+        memorySize: lc.memory,
+        timeout: lc.timeout,
         description: '(cdk)',
         entry: entry,
         bundling: {
@@ -237,17 +234,17 @@ export const openApiImpl = (p: {
         },
         reservedConcurrentExecutions: 5,
         logRetention: logs.RetentionDays.FIVE_DAYS,
-        layers,
+        layers: lc.layers,
       });
 
-      readTables.forEach((t) => t.table.grantReadData(lambdaV));
-      writeTables.forEach((t) => t.table.grantReadWriteData(lambdaV));
-      policies.forEach((p1) => lambdaV.addToRolePolicy(p1));
+      lc.readTables.forEach((t) => t.table.grantReadData(lambdaV));
+      lc.writeTables.forEach((t) => t.table.grantReadWriteData(lambdaV));
+      lc.policies.forEach((p1) => lambdaV.addToRolePolicy(p1));
       //
       apiPath.addMethod(
         verb.toUpperCase(),
         new apigw.LambdaIntegration(lambdaV, {}),
-        { authorizer },
+        { authorizer: lc.authorizer },
       );
     });
   });

@@ -36,6 +36,14 @@ export interface ILambdaConfig {
    * use the name of the lambda authorizer passed in in the openApiImpl config
    */
   authorizerName?: string;
+  /**
+   * timeout in seconds. defaults to 30
+   */
+  timeoutS?: number;
+  /**
+   * lambda memory. defaults to 128
+   */
+  memory?: number;
 }
 
 /**
