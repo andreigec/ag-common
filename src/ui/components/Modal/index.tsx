@@ -16,12 +16,15 @@ const FixedBackground = styled.div`
 `;
 
 const ModalBase = styled.div`
+  display: flex;
   position: absolute;
   z-index: 1;
   background-color: white;
   border: solid 1px transparent;
   border-radius: 0.5rem;
   box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.6), 0 2px 15px 0 rgba(0, 0, 0, 0.05);
+  max-width: 95vw;
+  max-height: 95vh;
   &[data-position='left'] {
     left: 0;
   }
