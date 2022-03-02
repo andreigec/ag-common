@@ -1,10 +1,9 @@
 import { TLang, TResource } from '../../common/helpers/i18n';
-import React from 'react';
 export const useTranslation = <T extends { [a: string]: TResource }>(
   texts: T,
   lang: TLang,
 ) => {
-  const ret = (lineText: keyof T) => {
+  const ret = (lineText: keyof T): string | undefined => {
     let v1 = texts[lineText]?.[lang];
     const missing = v1 === undefined;
     if (missing) {
@@ -12,7 +11,7 @@ export const useTranslation = <T extends { [a: string]: TResource }>(
     }
 
     if (missing) {
-      return <div style={{ backgroundColor: 'rgb(255,230,230)' }}>{v1}</div>;
+      return '???';
     }
     return v1;
   };
