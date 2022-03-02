@@ -11,6 +11,7 @@ export * from './jwt';
 export * from './lang';
 export * from './plural';
 export * from './routes';
+export * from './serviceWorker';
 export * from './useContextMenu';
 export * from './useLocalStorage';
 export * from './useLockBodyScroll';

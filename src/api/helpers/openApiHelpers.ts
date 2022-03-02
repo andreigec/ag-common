@@ -180,6 +180,10 @@ export const openApiImpl = (p: {
   NODE_ENV: string;
   baseUrl: string;
   endpointsBase: string;
+
+  /**
+   * 'default' will be applied to all functions
+   */
   lambdaConfig: ILambdaConfigs;
   certificate: certmgr.ICertificate;
   hostedZone: route53.IHostedZone;
