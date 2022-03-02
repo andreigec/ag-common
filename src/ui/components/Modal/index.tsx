@@ -97,6 +97,10 @@ export const Modal = ({
   );
 };
 
+const ModalDropListStyled = styled(Modal)`
+  flex-flow: column;
+`;
+
 export const ModalDropList = (p: {
   options: (string | JSX.Element)[];
   onSelect?: (
@@ -111,7 +115,7 @@ export const ModalDropList = (p: {
   showCloseButton?: boolean;
   className?: string;
 }) => (
-  <Modal {...p} className={p.className}>
+  <ModalDropListStyled {...p} className={p.className}>
     {p.options.map((option, index) => (
       <ModalItem
         key={option as unknown as never}
@@ -125,5 +129,5 @@ export const ModalDropList = (p: {
         {option}
       </ModalItem>
     ))}
-  </Modal>
+  </ModalDropListStyled>
 );
