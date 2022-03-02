@@ -3,7 +3,7 @@ export const useTranslation = <T extends { [a: string]: TResource }>(
   texts: T,
   lang: TLang,
 ) => {
-  const ret = (lineText: keyof T): string | undefined => {
+  const ret = (lineText: keyof T): string => {
     let v1 = texts[lineText]?.[lang];
     const missing = v1 === undefined;
     if (missing) {
@@ -11,6 +11,10 @@ export const useTranslation = <T extends { [a: string]: TResource }>(
     }
 
     if (missing) {
+      return '???';
+    }
+
+    if (v1 === undefined || v1 === null) {
       return '???';
     }
     return v1;
