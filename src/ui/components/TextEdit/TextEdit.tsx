@@ -125,12 +125,12 @@ export const TextEdit = ({
     if (valueChange) {
       onSubmit(value, false);
     } else {
-      if (!disableEdit && editing && defaultEditing) {
-        return;
+      if (!disableEdit && onClickOutsideWithNoValue) {
+        onClickOutsideWithNoValue();
       }
 
-      if (onClickOutsideWithNoValue) {
-        onClickOutsideWithNoValue();
+      if (!disableEdit && editing && defaultEditing) {
+        return;
       }
 
       setEditingRaw(false);
