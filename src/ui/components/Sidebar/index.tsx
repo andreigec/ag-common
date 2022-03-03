@@ -120,11 +120,6 @@ export const Sidebar = ({
     cookieDocument: cookieDocument,
   });
 
-  let contentBlockWidth = undefined;
-  if (open) {
-    contentBlockWidth = width;
-  }
-
   return (
     <Base
       className={className}
@@ -139,7 +134,7 @@ export const Sidebar = ({
       <ContentBlock
         data-content
         data-open={open}
-        style={{ width: contentBlockWidth }}
+        style={{ width: open ? undefined : width }}
       >
         <Content
           data-open={open}
