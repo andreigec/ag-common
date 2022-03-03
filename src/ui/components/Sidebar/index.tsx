@@ -7,10 +7,10 @@ import React from 'react';
 const Base = styled.div`
   position: relative;
   transition: all 200ms;
-  width: 15rem;
   border-right: solid 1px #ccc;
   margin-right: 1rem;
   padding-left: 0.5rem;
+  //width set in style
 
   &[data-open='false'] {
     width: 0.5rem;
@@ -40,7 +40,7 @@ const ContentBlock = styled.div`
     position: absolute;
     top: 0;
     z-index: 1;
-    width: 15rem;
+    //width set in style
   }
 `;
 
@@ -96,6 +96,7 @@ export const Sidebar = ({
   className,
   key = 'sidebar',
   cookieDocument,
+  width = '15rem',
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
@@ -108,6 +109,10 @@ export const Sidebar = ({
    * optionally pass in SSR cookiedocument
    */
   cookieDocument?: string;
+  /**
+   * default 15rem
+   */
+  width?: string;
 }) => {
   const [open, setOpen] = useCookieBoolean({
     name: key,
@@ -115,17 +120,27 @@ export const Sidebar = ({
     cookieDocument: cookieDocument,
   });
 
+  let contentBlockWidth = undefined;
+  if (open) {
+    contentBlockWidth = width;
+  }
+
   return (
     <Base
       className={className}
       data-open={open}
       onClick={() => !open && setOpen(true)}
       data-hover
+      style={{ width }}
     >
       <Hamburger data-open={open} onClick={() => setOpen(!open)} data-hover>
         <ChevronStyled point={open ? 'left' : 'right'} width="100%" />
       </Hamburger>
-      <ContentBlock data-content data-open={open}>
+      <ContentBlock
+        data-content
+        data-open={open}
+        style={{ width: contentBlockWidth }}
+      >
         <Content
           data-open={open}
           onClick={(e) => {
