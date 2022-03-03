@@ -13,7 +13,6 @@ const Base = styled.div`
   //width set in style
 
   &[data-open='false'] {
-    width: 0.5rem;
     background-color: rgba(0, 0, 0, 0.1);
     cursor: pointer;
     &:hover,
@@ -126,7 +125,7 @@ export const Sidebar = ({
       data-open={open}
       onClick={() => !open && setOpen(true)}
       data-hover
-      style={{ width }}
+      style={{ width: !open ? '0.5rem' : width }}
     >
       <Hamburger data-open={open} onClick={() => setOpen(!open)} data-hover>
         <ChevronStyled point={open ? 'left' : 'right'} width="100%" />
@@ -134,7 +133,7 @@ export const Sidebar = ({
       <ContentBlock
         data-content
         data-open={open}
-        style={{ width: open ? undefined : width }}
+        style={{ width: !open ? width : undefined }}
       >
         <Content
           data-open={open}
