@@ -6,6 +6,7 @@
   "author": "Andrei Gec <@andreigec> (https://gec.dev/)",
   "repository": "github:andreigec/ag-common",
   "license": "ISC",
+  "packageManager": "yarn@3.2.0",
   "scripts": {
     "format": "npx eslint --ext .ts,.tsx ./src --fix",
     "build": "rimraf dist && yarn checklint && tsc",
