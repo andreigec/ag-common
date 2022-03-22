@@ -10,26 +10,27 @@ export const LoginButton = ({
   className,
   text,
   invert,
-  savePath = true,
+  savePath,
   loginPath,
   style,
 }: {
   invert?: boolean;
   text: string;
   className?: string;
-  savePath?: boolean;
+  /**
+   * pass in request.url.path to save redirect. undefined will not set redirect
+   */
+  savePath: string | undefined;
   loginPath: (state?: Record<string, unknown> | undefined) => string;
   style?: Record<string, string | number | boolean>;
 }) => {
-  const lp = loginPath(
-    !savePath || typeof window === 'undefined'
-      ? undefined
-      : {
-          redirect: window.location.href.substring(
-            window.location.origin.length,
-          ),
-        },
-  );
+  const state = !savePath
+    ? undefined
+    : {
+        redirect: savePath,
+      };
+
+  const lp = loginPath(state);
 
   return (
     <Base
