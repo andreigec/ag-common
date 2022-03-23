@@ -105,7 +105,9 @@ export const generateDynamoPKS = ({
     ...(L5 && { L5 }),
     ...(L6 && { L6 }),
     PK1: L1,
-    PK2: [keys[0], keys[1]].join(c),
+    ...(keys.length >= 2 && {
+      PK2: [keys[0], keys[1]].join(c),
+    }),
     ...(keys.length >= 3 && {
       PK3: [keys[0], keys[1], keys[2]].join(c),
     }),

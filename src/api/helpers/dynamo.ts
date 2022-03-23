@@ -290,15 +290,24 @@ export const queryDynamo = async <T>({
   tableName,
   pkName,
   pkValue,
+  /**
+   * default =
+   */
   pkOperator = '=',
   skName,
   skValue,
+  /**
+   * default =
+   */
   skOperator = '=',
   indexName,
   count = 1000,
   startKey: startKeyIn,
   filterName,
   filterValue,
+  /**
+   * default =
+   */
   filterOperator = '=',
 }: IQueryDynamo): Promise<{ Items: T[]; startKey?: Key }> => {
   let startKey = startKeyIn;

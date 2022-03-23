@@ -15,7 +15,7 @@ export interface DYNAMOKEYS {
   L5?: string;
   PK: string;
   PK1: string;
-  PK2: string;
+  PK2?: string;
   PK3?: string;
   PK4?: string;
 }
