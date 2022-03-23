@@ -29,18 +29,18 @@ const getPaths = (schema: any) =>
 const setUpApiGw = ({
   stack,
   NODE_ENV,
-  baseUrl,
   certificate,
   hostedZone,
   shortStackName,
+  apiUrl,
   cors = {
     allowOrigins: apigw.Cors.ALL_ORIGINS,
     allowHeaders: apigw.Cors.DEFAULT_HEADERS,
   },
 }: {
+  apiUrl?: string;
   stack: Construct;
   NODE_ENV: string;
-  baseUrl: string;
   certificate: certmgr.ICertificate;
   hostedZone: route53.IHostedZone;
   shortStackName: string;
@@ -53,20 +53,23 @@ const setUpApiGw = ({
     },
   });
 
-  const dn = new apigw.DomainName(stack, 'domain', {
-    domainName: `api.${baseUrl}`,
-    certificate,
-    endpointType: apigw.EndpointType.EDGE,
-    securityPolicy: apigw.SecurityPolicy.TLS_1_2,
-    mapping: api,
-  });
+  if (apiUrl) {
+    const dn = new apigw.DomainName(stack, 'domain', {
+      domainName: apiUrl,
+      certificate,
+      endpointType: apigw.EndpointType.EDGE,
+      securityPolicy: apigw.SecurityPolicy.TLS_1_2,
+      mapping: api,
+    });
 
-  new route53.ARecord(stack, 'ARecord', {
-    comment: '(cdk)',
-    recordName: 'api',
-    zone: hostedZone,
-    target: route53.RecordTarget.fromAlias(new targets.ApiGatewayDomain(dn)),
-  });
+    new route53.ARecord(stack, 'ARecord', {
+      comment: '(cdk)',
+      recordName: apiUrl.substring(0, apiUrl.indexOf('.')),
+      zone: hostedZone,
+      target: route53.RecordTarget.fromAlias(new targets.ApiGatewayDomain(dn)),
+    });
+  }
+
   return api;
 };
 
@@ -188,10 +191,13 @@ const lambdaNameSafe = (raw: string) =>
   raw.replace(/[^a-zA-Z0-9-.]/gim, '-').replace(/(-){2,}/gim, '-');
 
 export const openApiImpl = (p: {
-  schema: unknown;
   stack: Construct;
+  /**
+   * pass in generated openapi file
+   * eg schema: require('common/openapi.generated').default;
+   */
+  schema: unknown;
   NODE_ENV: string;
-  baseUrl: string;
   endpointsBase: string;
 
   /**
@@ -199,7 +205,6 @@ export const openApiImpl = (p: {
    */
   lambdaConfig: ILambdaConfigs;
   certificate: certmgr.ICertificate;
-  hostedZone: route53.IHostedZone;
   shortStackName: string;
   /**
    * defaults:
@@ -211,6 +216,12 @@ export const openApiImpl = (p: {
    * dictionary of named authorizer functions. these names are to be used in the lambdaConfig param
    */
   authorizers?: Record<string, TokenAuthorizer>;
+  hostedZone: route53.IHostedZone;
+  /**
+   * A record will be created in hosted zone for the apigw on this path. if undefined, record wont be created
+   * eg api.mydomain.com
+   */
+  apiUrl?: string;
 }) => {
   if (!p.schema) {
     throw new Error('no openapi schema found');
