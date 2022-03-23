@@ -116,6 +116,18 @@ const setupLambda = ({
   );
 
   const memory = lp?.memory || def?.memory || 128;
+  // null forces undefined, undefined forces 5
+  let reservedConcurrentExecutions = lp?.reservedConcurrentExecutions;
+  if (reservedConcurrentExecutions === undefined) {
+    reservedConcurrentExecutions = def?.reservedConcurrentExecutions;
+  }
+
+  if (reservedConcurrentExecutions === undefined) {
+    reservedConcurrentExecutions = 5;
+  }
+
+  reservedConcurrentExecutions = reservedConcurrentExecutions ?? undefined;
+  //
   const timeout = Duration.seconds(lp?.timeoutS || def?.timeoutS || 30);
   let authorizerName = lp?.authorizerName;
   if (authorizerName === undefined) {
@@ -145,6 +157,7 @@ const setupLambda = ({
     authorizer,
     memory,
     timeout,
+    reservedConcurrentExecutions,
   };
 };
 
@@ -236,7 +249,7 @@ export const openApiImpl = (p: {
         bundling: {
           externalModules: ['aws-sdk', 'aws-lambda'],
         },
-        reservedConcurrentExecutions: 5,
+        reservedConcurrentExecutions: lc.reservedConcurrentExecutions,
         logRetention: logs.RetentionDays.FIVE_DAYS,
         layers: lc.layers,
       });

@@ -44,6 +44,10 @@ export interface ILambdaConfig {
    * lambda memory. defaults to 128
    */
   memory?: number;
+  /**
+   * reserved lambda concurrency. defaults to 5. if null, doesnt apply
+   */
+  reservedConcurrentExecutions?: number | null;
 }
 
 /**
@@ -55,13 +59,14 @@ export interface ILambdaConfigs {
   };
 }
 
+export type TSkOperator = 'BETWEEN' | '<' | '<=' | '=' | '>=' | '>';
 export interface IQueryDynamo {
   pkName: string;
   pkValue: string | number;
   pkOperator?: string;
   skName?: string;
   skValue?: string | number | string[] | number[];
-  skOperator?: string;
+  skOperator?: TSkOperator;
   tableName: string;
   indexName?: string;
   count?: number;

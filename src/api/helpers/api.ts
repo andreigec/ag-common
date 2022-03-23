@@ -59,6 +59,16 @@ export const stripPKs = <T>(record: T, keepPk = true): T => {
   return rest;
 };
 
+/**
+ * generate dynamo PKs.
+ * PK = all Ls joined with #
+ * PK1 = L1
+ * PK2 = L1#L2
+ * PK3 = L1#L2#L3
+ * ...
+ * @param param0
+ * @returns
+ */
 export const generateDynamoPKS = ({
   type,
   L1,
