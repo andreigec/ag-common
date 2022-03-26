@@ -38,6 +38,12 @@ export const CSharpToJs = (charpTicks: number) => {
   return tickDate;
 };
 
+/**
+ *
+ * @param minutes
+ * @param date default = now
+ * @returns
+ */
 export const dateTimeToNearestMinute = (minutes: number, date?: Date) => {
   const coeff = 1000 * 60 * minutes;
   if (!date) {

@@ -3,6 +3,7 @@ import React from 'react';
 
 const SClose = styled.div`
   position: absolute;
+  z-index: 1;
   width: 32px;
   height: 32px;
   opacity: 0.3;
