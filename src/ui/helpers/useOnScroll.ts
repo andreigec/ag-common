@@ -23,23 +23,40 @@ function debounce<T>(
   };
 }
 
-export function useOnScroll() {
+export function useOnScroll({
+  onScroll,
+  element,
+}: {
+  /**
+   * defaults to window
+   */
+  element?: Element;
+  /**
+   * if provided will call on move
+   */
+  onScroll?: (e: Event, st: IScroll) => void;
+} = {}) {
   const [state, setState] = useState<IScroll>({ scrolled: false, x: 0, y: 0 });
   useEffect(() => {
-    const listener = () => {
-      const y = window.scrollY;
-      const x = window.scrollX;
+    const listener = (e: Event) => {
+      const y = element?.scrollTop ?? window.scrollY;
+      const x = element?.scrollLeft ?? window.scrollX;
       const r: IScroll = { y, x, scrolled: !!y || !!x };
       setState(r);
+      onScroll?.(e, r);
     };
 
-    document.addEventListener(`scroll`, debounce(listener, 10), {
-      passive: true,
-    });
+    document.addEventListener(
+      `scroll`,
+      (e) => debounce<Event>(() => listener(e), 10),
+      {
+        passive: true,
+      },
+    );
 
     return () => {
       document.removeEventListener(`scroll`, listener);
     };
-  }, []);
+  }, [element, onScroll]);
   return state;
 }
