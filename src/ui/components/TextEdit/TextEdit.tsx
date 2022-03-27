@@ -70,6 +70,7 @@ export const TextEdit = ({
   onClickOutsideWithNoValue,
   onClickNotEditing,
   allowUndo = true,
+  onEscape,
 }: {
   /**
    * forces single row input style. will also enable 'Enter' to auto submit
@@ -115,6 +116,10 @@ export const TextEdit = ({
    * if true, will add undo button after changes. if false, will submit after every keypress. default true
    */
   allowUndo?: boolean;
+  /**
+   * will call on user pressed escape
+   */
+  onEscape?: () => void;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const taref = useRef<HTMLTextAreaElement>(null);
@@ -220,12 +225,15 @@ export const TextEdit = ({
         }}
         placeholder={placeholder}
         rows={singleLine ? 1 : undefined}
-        onKeyDown={(e) =>
-          singleLine &&
-          e.code.endsWith('Enter') &&
-          onSubmit(value, true) &&
-          false
-        }
+        onKeyDown={(e) => {
+          if (singleLine && e.code.endsWith('Enter')) {
+            onSubmit(value, true);
+          }
+
+          if (onEscape && e.code.endsWith('Escape')) {
+            onEscape();
+          }
+        }}
       />
       {allowUndo && (
         <Right>
