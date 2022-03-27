@@ -7,6 +7,8 @@ import ReactDOM from 'react-dom';
 import React, { useEffect, useState } from 'react';
 
 const ModalStyled = styled(Modal)`
+  display: flex;
+  flex-flow: column;
   top: 10rem;
   @media ${bigScreen} {
     width: 50vw;
