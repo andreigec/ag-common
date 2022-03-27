@@ -33,7 +33,9 @@ export function useOnScroll() {
       setState(r);
     };
 
-    document.addEventListener(`scroll`, debounce(listener, 10));
+    document.addEventListener(`scroll`, debounce(listener, 10), {
+      passive: true,
+    });
 
     return () => {
       document.removeEventListener(`scroll`, listener);
