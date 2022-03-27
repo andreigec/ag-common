@@ -96,6 +96,9 @@ export interface ISearchDialog<T> {
    */
   getKeyF: (i: T) => string;
 }
+export type TSearchModalRes<T> =
+  | undefined
+  | { foundItem: T; searchText: string };
 const SearchModal = <T,>({
   res,
   wrapper,
@@ -106,7 +109,7 @@ const SearchModal = <T,>({
   willDisplayItem,
   getKeyF,
 }: ISearchDialog<T> & {
-  res: (v: T | undefined) => void;
+  res: (v: TSearchModalRes<T>) => void;
   wrapper: HTMLDivElement;
 }) => {
   let originalStyle: string | undefined;
@@ -117,16 +120,20 @@ const SearchModal = <T,>({
       document.body.style.overflow = 'hidden';
     }
   }, []);
-  const ret = (v: T | undefined) => {
+  const [searchText, setSearchText] = useState('');
+  const resWrap = (foundItem: T | undefined) => {
     try {
       document.body.style.overflow = originalStyle || '';
-      res(v);
+      if (!foundItem) {
+        res(undefined);
+      } else {
+        res({ foundItem, searchText });
+      }
     } finally {
       wrapper.remove();
     }
   };
 
-  const [searchText, setSearchText] = useState('');
   const filteredItems = displayItems.filter((i) =>
     willDisplayItem(searchText, i),
   );
@@ -136,7 +143,7 @@ const SearchModal = <T,>({
       position="center"
       topPosition="center"
       open={true}
-      setOpen={() => ret(undefined)}
+      setOpen={() => resWrap(undefined)}
       showCloseButton={false}
       closeOnClickOutside={true}
     >
@@ -158,11 +165,13 @@ const SearchModal = <T,>({
           noGrow
           allowUndo={false}
         />
-        <CloseButton onClick={() => ret(undefined)}>{closeText}</CloseButton>
+        <CloseButton onClick={() => resWrap(undefined)}>
+          {closeText}
+        </CloseButton>
       </SearchBox>
       <Content>
         {filteredItems.map((i) => (
-          <Row key={getKeyF(i)} onClick={() => ret(i)}>
+          <Row key={getKeyF(i)} onClick={() => resWrap(i)}>
             {renderItem(searchText, i)}
           </Row>
         ))}
@@ -171,9 +180,14 @@ const SearchModal = <T,>({
   );
 };
 
+/**
+ * opens a searchmodal programatically, and resolves to either undefined, or the selected item
+ * @param p
+ * @returns
+ */
 export const searchDialog = async <T,>(
   p: ISearchDialog<T>,
-): Promise<T | undefined> => {
+): Promise<TSearchModalRes<T>> => {
   const placeholderText = p.placeholderText || '';
   const closeText = p.closeText || 'CLOSE';
 
