@@ -15,6 +15,7 @@ const ModalStyled = styled(Modal)`
     max-width: 60rem;
   }
   @media ${smallScreen} {
+    width: 100%;
     max-width: 95vw;
   }
 `;
@@ -64,7 +65,9 @@ const Content = styled.div`
   align-items: center;
   max-height: calc(100vh - 20rem);
   overflow-y: auto;
-  padding-bottom: 0.5rem;
+  &[data-hasitems='true'] {
+    padding-bottom: 0.5rem;
+  }
 `;
 
 const Row = styled.div`
@@ -147,7 +150,7 @@ export const SearchModal = <T,>({
           {closeText}
         </CloseButton>
       </SearchBox>
-      <Content>
+      <Content data-hasitems={!!filteredItems.length}>
         {filteredItems.map((i) => (
           <Row key={getKeyF(i)} onClick={() => resWrap(i)}>
             {renderItem(searchText, i)}
