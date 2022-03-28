@@ -7,6 +7,9 @@ const SLoader = styled.div`
   border-radius: 50%;
   animation: spin 2s linear infinite;
   padding: 2px;
+  width: 100%;
+  overflow: hidden;
+
   @keyframes spin {
     0% {
       transform: rotate(0deg);
