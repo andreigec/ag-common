@@ -7,7 +7,6 @@ const SLoader = styled.div`
   border-radius: 50%;
   animation: spin 2s linear infinite;
   padding: 2px;
-  width: 100%;
   overflow: hidden;
 
   @keyframes spin {
@@ -38,7 +37,21 @@ const LoadingBack = styled.div`
   transition: opacity 5s;
 `;
 
-export const Loader = ({ name }: { name: string }) => {
+export const Loader = ({
+  name,
+  height = '2rem',
+  width = '2rem',
+}: {
+  /**
+   * default 2rem
+   */
+  width?: string;
+  /**
+   * default 2rem
+   */
+  height?: string;
+  name: string;
+}) => {
   const [trans, setTrans] = useState(true);
   useEffect(() => {
     setTrans(false);
@@ -46,7 +59,7 @@ export const Loader = ({ name }: { name: string }) => {
 
   return (
     <LoadingBack data-loading={name} data-transparent={trans}>
-      <SLoader />
+      <SLoader style={{ width, height }} />
     </LoadingBack>
   );
 };
