@@ -39,27 +39,34 @@ const LoadingBack = styled.div`
 
 export const Loader = ({
   name,
-  height = '2rem',
-  width = '2rem',
+  height,
+  width,
 }: {
   /**
    * default 2rem
    */
-  width?: string;
+  width?: string | null;
   /**
    * default 2rem
    */
-  height?: string;
+  height?: string | null;
   name: string;
 }) => {
   const [trans, setTrans] = useState(true);
   useEffect(() => {
     setTrans(false);
   }, []);
+  const style: React.CSSProperties = {};
+  if (width !== null) {
+    style.width = width ?? '2rem';
+  }
 
+  if (height !== null) {
+    style.height = height ?? '2rem';
+  }
   return (
     <LoadingBack data-loading={name} data-transparent={trans}>
-      <SLoader style={{ width, height }} />
+      <SLoader style={style} />
     </LoadingBack>
   );
 };
