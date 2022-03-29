@@ -1,6 +1,6 @@
 import { warn } from '../../../common/helpers/log';
 import { notEmpty } from '../../../common/helpers/array';
-import { AxiosWrapper, User } from '../../helpers/jwt';
+import { User } from '../../helpers/jwt';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 export const UserImageIcon = (
@@ -52,9 +52,9 @@ export const UserProfileImage = ({
   user,
 }: {
   className?: string;
-  user: AxiosWrapper<User>;
+  user?: User;
 }) => {
-  const image = user?.data?.picture;
+  const image = user?.picture;
 
   if (image) {
     if (!images.domains.find((i) => (image as string).includes(i))) {
@@ -62,7 +62,7 @@ export const UserProfileImage = ({
     }
   }
 
-  const titleA = [user?.data?.fullname, user?.data?.userId].filter(notEmpty);
+  const titleA = [user?.fullname, user?.userId].filter(notEmpty);
   const title = titleA.length === 0 ? '' : titleA.join(' - ');
 
   return (
