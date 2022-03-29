@@ -77,7 +77,7 @@ export interface AuthedUserContext {
    */
   loginWithRedirect: (stateqs?: string) => Promise<void>;
   logout: () => Promise<void>;
-  user: AxiosWrapper<User>;
+  user?: User;
   error: Error | undefined;
   refreshToken: () => Promise<User | undefined>;
 }
