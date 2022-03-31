@@ -15,15 +15,15 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.x",
-    "aws-sdk": "2.1102.0",
+    "aws-sdk": "2.x",
     "axios": "0.26.1",
     "constructs": "10.x",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
     "node-cache": "5.1.2",
     "openapi-request-validator": "10.0.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
     "react-hot-toast": "2.2.0",
     "styled-components": "5.3.5",
     "typescript": "4.6.3"
@@ -44,7 +44,7 @@
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.29.4",
-    "eslint-plugin-react-hooks": "4.3.0",
+    "eslint-plugin-react-hooks": "4.4.0",
     "prettier": "2.6.1",
     "rimraf": "3.0.2",
     "typescript-styled-plugin": "0.18.2"

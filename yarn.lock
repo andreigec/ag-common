@@ -2007,7 +2007,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.17.0
     "@typescript-eslint/parser": 5.17.0
     aws-cdk-lib: 2.x
-    aws-sdk: 2.1102.0
+    aws-sdk: 2.x
     axios: 0.26.1
     constructs: 10.x
     eslint: 8.12.0
@@ -2018,14 +2018,14 @@ __metadata:
     eslint-plugin-jsx-a11y: 6.5.1
     eslint-plugin-prettier: 4.0.0
     eslint-plugin-react: 7.29.4
-    eslint-plugin-react-hooks: 4.3.0
+    eslint-plugin-react-hooks: 4.4.0
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
     node-cache: 5.1.2
     openapi-request-validator: 10.0.0
     prettier: 2.6.1
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.0.0
+    react-dom: 18.0.0
     react-hot-toast: 2.2.0
     rimraf: 3.0.2
     styled-components: 5.3.5
@@ -2171,27 +2171,27 @@ __metadata:
   linkType: hard
 
 "aws-cdk-lib@npm:2.x":
-  version: 2.12.0
-  resolution: "aws-cdk-lib@npm:2.12.0"
+  version: 2.18.0
+  resolution: "aws-cdk-lib@npm:2.18.0"
   dependencies:
     "@balena/dockerignore": ^1.0.2
     case: 1.6.3
     fs-extra: ^9.1.0
     ignore: ^5.2.0
     jsonschema: ^1.4.0
-    minimatch: ^3.0.5
+    minimatch: ^3.1.2
     punycode: ^2.1.1
     semver: ^7.3.5
     yaml: 1.10.2
   peerDependencies:
     constructs: ^10.0.0
-  checksum: b65c85cd15ac3cabad43f14779932da4193dcb6725b7bf1f4927cd134a2c0e921ed1ff2f50eaacf58864d5c0b419d4d70ba0d987c9867bbe0c42222bf760d44e
+  checksum: 2223788346e2c81f402e92fb85a2c9fe75380010059758e5b81146d5b6a43bfa25b63d13259ca98d3fc74d8fb07ec728444666bbeaec5803fbbe69e1e660999d
   languageName: node
   linkType: hard
 
-"aws-sdk@npm:2.1102.0":
-  version: 2.1102.0
-  resolution: "aws-sdk@npm:2.1102.0"
+"aws-sdk@npm:2.x":
+  version: 2.1104.0
+  resolution: "aws-sdk@npm:2.1104.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
@@ -2202,7 +2202,7 @@ __metadata:
     url: 0.10.3
     uuid: 3.3.2
     xml2js: 0.4.19
-  checksum: eaf6b5e3edfb384c5d884d33fdb8f333215208885e49632f56d090d7585a16270a9c1d4ee617ae74f7d36f45c885eef3a8f4a9a07bfdac36acda93b168c6c200
+  checksum: 7e59bc158e50291ff55c4f81d0e4e36650778e2ba01649f3cf44711f1da86de074f8833bc2f0672ed9ec073be8325e2d75b3358d3b0054925dd499bc868c262b
   languageName: node
   linkType: hard
 
@@ -2523,9 +2523,9 @@ __metadata:
   linkType: hard
 
 "constructs@npm:10.x":
-  version: 10.0.63
-  resolution: "constructs@npm:10.0.63"
-  checksum: c53bc729dd24a576fc219860e7db2917076d509bf503d4f1aaa8b90bb15c8b72c05025d70ad43ef3523ba80c317e8f9ecc9c2262cc4ceb5e46a3b4d0940c27a9
+  version: 10.0.101
+  resolution: "constructs@npm:10.0.101"
+  checksum: 3557669fb211e1a184db89b9aea36f2b68e44f3c6d781e617d4aaf189a9a1f1219b6bc7476eea788fdc343011ea33f91507e32878924a54c7e8ee23a3cce4df5
   languageName: node
   linkType: hard
 
@@ -2968,7 +2968,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:4.3.0, eslint-plugin-react-hooks@npm:^4.3.0":
+"eslint-plugin-react-hooks@npm:4.4.0":
+  version: 4.4.0
+  resolution: "eslint-plugin-react-hooks@npm:4.4.0"
+  peerDependencies:
+    eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
+  checksum: 350b50d45677cb2df682b9e54475912746bd2f56fc342e4d47fad78d71eb1b2b742e702f1e6c04ab2196346d3d7a2e327b5eee826f5b96bfb84b5c41d35e44e9
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-react-hooks@npm:^4.3.0":
   version: 4.3.0
   resolution: "eslint-plugin-react-hooks@npm:4.3.0"
   peerDependencies:
@@ -4046,7 +4055,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^3.0.4, minimatch@npm:^3.0.5, minimatch@npm:^3.1.2":
+"minimatch@npm:^3.0.4, minimatch@npm:^3.1.2":
   version: 3.1.2
   resolution: "minimatch@npm:3.1.2"
   dependencies:
@@ -4408,16 +4417,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:17.0.2":
-  version: 17.0.2
-  resolution: "react-dom@npm:17.0.2"
+"react-dom@npm:18.0.0":
+  version: 18.0.0
+  resolution: "react-dom@npm:18.0.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    scheduler: ^0.20.2
+    scheduler: ^0.21.0
   peerDependencies:
-    react: 17.0.2
-  checksum: 1c1eaa3bca7c7228d24b70932e3d7c99e70d1d04e13bb0843bbf321582bc25d7961d6b8a6978a58a598af2af496d1cedcfb1bf65f6b0960a0a8161cb8dab743c
+    react: ^18.0.0
+  checksum: dd0ba9f2f31dd728076c892a95b2f5a8dfe79136431b0289afb46eec39d0ca6b6f0f40a60fd8aa6ef702c98ce7c26100d3d4dbc35c7c9e87429cd04f84cb58bd
   languageName: node
   linkType: hard
 
@@ -4447,13 +4455,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:17.0.2":
-  version: 17.0.2
-  resolution: "react@npm:17.0.2"
+"react@npm:18.0.0":
+  version: 18.0.0
+  resolution: "react@npm:18.0.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
+  checksum: 293020b96536b3c7113ee57ca5c990a3f25649d1751b1c7a3aabd16dff0691fe9f1eed1206616d0906d05933536052037340a0c8d0941ff870b0eb469a2f975b
   languageName: node
   linkType: hard
 
@@ -4653,13 +4660,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.20.2":
-  version: 0.20.2
-  resolution: "scheduler@npm:0.20.2"
+"scheduler@npm:^0.21.0":
+  version: 0.21.0
+  resolution: "scheduler@npm:0.21.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: c4b35cf967c8f0d3e65753252d0f260271f81a81e427241295c5a7b783abf4ea9e905f22f815ab66676f5313be0a25f47be582254db8f9241b259213e999b8fc
+  checksum: 4f8285076041ed2c81acdd1faa987f1655fdbd30554bc667c1ea64743fc74fb3a04ca7d27454b3d678735df5a230137a3b84756061b43dc5796e80701b66d124
   languageName: node
   linkType: hard
 
