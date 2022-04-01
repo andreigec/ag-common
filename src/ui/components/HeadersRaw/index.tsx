@@ -14,19 +14,17 @@ export const HeadersRaw = ({
   siteDesc: string;
 }) => {
   const fullTitle = `${title ? `${title} | ` : ''}${SiteShort} | ${siteDesc}`;
-  const titleBlock =
-    title === undefined
-      ? []
-      : [
-          <title key="1">{fullTitle}</title>,
-          <meta key="2" property="og:title" content={title} />,
-          <meta key="3" name="twitter:title" content={title} />,
-          <meta key="4" itemProp="name" content={title} />,
-          <meta key="5" name="description" content={fullTitle} />,
-          <meta key="6" itemProp="description" content={fullTitle} />,
-          <meta key="7" property="og:description" content={fullTitle} />,
-          <meta key="8" name="twitter:description" content={fullTitle} />,
-        ];
+  const titleFallback = title || fullTitle;
+  const titleBlock = [
+    <title key="1">{fullTitle}</title>,
+    <meta key="2" property="og:title" content={titleFallback} />,
+    <meta key="3" name="twitter:title" content={titleFallback} />,
+    <meta key="4" itemProp="name" content={titleFallback} />,
+    <meta key="5" name="description" content={fullTitle} />,
+    <meta key="6" itemProp="description" content={fullTitle} />,
+    <meta key="7" property="og:description" content={fullTitle} />,
+    <meta key="8" name="twitter:description" content={fullTitle} />,
+  ];
 
   const imagearr = !image
     ? []
