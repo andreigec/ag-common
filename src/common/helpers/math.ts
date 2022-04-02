@@ -72,3 +72,23 @@ export function toFixedDown(num: number, scale: number) {
   // @ts-ignore
   return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)}e-${scale}`;
 }
+
+/**
+ * get percentage of value within supplied range
+ * @param param0
+ * @returns
+ */
+export function rangePercentage({
+  value,
+  min,
+  max,
+}: {
+  value: number;
+  min: number;
+  max: number;
+}) {
+  const v = clamp({ value, min, max });
+  const r = (v - min) / (max - min);
+
+  return r;
+}
