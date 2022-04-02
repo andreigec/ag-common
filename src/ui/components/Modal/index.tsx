@@ -72,11 +72,18 @@ export const Modal = ({
   closeOnClickOutside?: boolean;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside({ ref, moveMouseOutside: closeOnMoveMouseOutside }, () => {
-    if (closeOnClickOutside && open) {
-      setOpen(false);
-    }
-  });
+  useOnClickOutside(
+    {
+      disabled: !open,
+      ref,
+      moveMouseOutside: closeOnMoveMouseOutside,
+    },
+    () => {
+      if (closeOnClickOutside && open) {
+        setOpen(false);
+      }
+    },
+  );
 
   if (!open) {
     return <></>;

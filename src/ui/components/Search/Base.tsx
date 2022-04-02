@@ -1,24 +1,8 @@
 import { ISearchDialog, TSearchModalRes } from './types';
-import { debounce } from '../../helpers/debounce';
-import { bigScreen, smallScreen } from '../../styles/media';
-import { Modal } from '../Modal';
-import { TextEdit } from '../TextEdit/TextEdit';
+import { debounce } from '../../helpers';
+import { TextEdit } from '../TextEdit';
 import styled from 'styled-components';
-import React, { useEffect, useState } from 'react';
-
-const ModalStyled = styled(Modal)`
-  display: flex;
-  flex-flow: column;
-  top: 10rem;
-  @media ${bigScreen} {
-    width: 50vw;
-    max-width: 60rem;
-  }
-  @media ${smallScreen} {
-    width: 100%;
-    max-width: 95vw;
-  }
-`;
+import React, { useState } from 'react';
 
 const SearchBox = styled.div`
   padding: 1rem;
@@ -26,6 +10,8 @@ const SearchBox = styled.div`
   flex-flow: row;
   justify-content: center;
   align-items: center;
+  width: calc(100% - 2rem);
+  margin: auto;
 `;
 
 const MagnifyIconSvg = (
@@ -59,6 +45,8 @@ const CloseButton = styled.div`
 `;
 
 const Content = styled.div`
+  width: calc(100% - 2rem);
+  margin: auto;
   display: flex;
   flex-flow: column;
   justify-content: flex-start;
@@ -79,9 +67,9 @@ const Row = styled.div`
   align-items: center;
 `;
 
-export const SearchModal = <T,>({
-  res,
-  wrapper,
+export const Base = <T,>({
+  onSelectItem,
+  onSearchTextChange,
   placeholderText,
   closeText,
   renderItem,
@@ -89,28 +77,15 @@ export const SearchModal = <T,>({
   willDisplayItem,
   getKeyF,
 }: ISearchDialog<T> & {
-  res: (v: TSearchModalRes<T>) => void;
-  wrapper: HTMLDivElement;
+  onSearchTextChange?: (v: string) => void;
+  onSelectItem?: (v: TSearchModalRes<T>) => void;
 }) => {
-  let originalStyle: string | undefined;
-  useEffect(() => {
-    if (originalStyle === undefined) {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      originalStyle = window.getComputedStyle(document.body).overflow || '';
-      document.body.style.overflow = 'hidden';
-    }
-  }, []);
   const [searchText, setSearchText] = useState('');
   const resWrap = (foundItem: T | undefined) => {
-    try {
-      document.body.style.overflow = originalStyle || '';
-      if (!foundItem) {
-        res(undefined);
-      } else {
-        res({ foundItem, searchText });
-      }
-    } finally {
-      wrapper.remove();
+    if (!foundItem) {
+      onSelectItem?.(undefined);
+    } else {
+      onSelectItem?.({ foundItem, searchText });
     }
   };
 
@@ -119,14 +94,7 @@ export const SearchModal = <T,>({
   );
 
   return (
-    <ModalStyled
-      position="center"
-      topPosition="center"
-      open={true}
-      setOpen={() => resWrap(undefined)}
-      showCloseButton={false}
-      closeOnClickOutside={true}
-    >
+    <>
       <SearchBox>
         <TextEdit
           placeholder={placeholderText}
@@ -135,6 +103,7 @@ export const SearchModal = <T,>({
             debounce(
               () => {
                 setSearchText(v);
+                onSearchTextChange?.(v);
               },
               { key: 'pagesearch', time: 200 },
             )
@@ -145,6 +114,7 @@ export const SearchModal = <T,>({
           noGrow
           allowUndo={false}
           onEscape={() => resWrap(undefined)}
+          onClickOutsideWithNoValue={null}
         />
         <CloseButton onClick={() => resWrap(undefined)}>
           {closeText}
@@ -157,6 +127,6 @@ export const SearchModal = <T,>({
           </Row>
         ))}
       </Content>
-    </ModalStyled>
+    </>
   );
 };

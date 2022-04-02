@@ -97,8 +97,14 @@ export const TextEdit = ({
    */
   disableEdit?: boolean;
   placeholder?: string;
+  /**
+   * when the user edits or unselects edit
+   */
   onEditingChange?: (editing: boolean) => void;
-  onClickOutsideWithNoValue?: () => void;
+  /**
+   * if null will disable click outside
+   */
+  onClickOutsideWithNoValue?: (() => void) | null;
   onClickNotEditing?: () => void;
   /**
    * if true, will not grow. default false
@@ -126,21 +132,28 @@ export const TextEdit = ({
   const [value, setValue] = useState(defaultValue);
   const [editing, setEditingRaw] = useState(!!defaultEditing);
   const valueChange = value !== defaultValue;
-  useOnClickOutside({ ref, moveMouseOutside: false }, () => {
-    if (valueChange) {
-      onSubmit(value, false);
-    } else {
-      if (!disableEdit && onClickOutsideWithNoValue) {
-        onClickOutsideWithNoValue();
-      }
+  useOnClickOutside(
+    {
+      disabled: onClickOutsideWithNoValue === null,
+      ref,
+      moveMouseOutside: false,
+    },
+    () => {
+      if (valueChange) {
+        onSubmit(value, false);
+      } else {
+        if (!disableEdit && onClickOutsideWithNoValue) {
+          onClickOutsideWithNoValue();
+        }
 
-      if (!disableEdit && editing && defaultEditing) {
-        return;
-      }
+        if (!disableEdit && editing && defaultEditing) {
+          return;
+        }
 
-      setEditingRaw(false);
-    }
-  });
+        setEditingRaw(false);
+      }
+    },
+  );
 
   const setEditing = (b: boolean) => {
     setEditingRaw(b);

@@ -66,7 +66,7 @@ const PromptModal = ({
     try {
       res(v);
     } finally {
-      wrapper.remove();
+      ReactDOM.unmountComponentAtNode(wrapper);
     }
   };
 
