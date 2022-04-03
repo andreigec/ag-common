@@ -26,6 +26,11 @@ jobs:
       run: |
         yarn --frozen-lockfile
 
+    - name: Run storybook build
+      env:
+        CI: false
+      run: yarn build-storybook
+
     - uses:  'phips28/gh-action-bump-version@master'
       name:  'Automated Version Bump'
       env:
@@ -43,3 +48,9 @@ jobs:
       with:
         token: ${{ secrets.NPM_TOKEN }}
         package: package.json
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GH_TOKEN }}
+        publish_dir: ./docs

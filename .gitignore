@@ -25,3 +25,4 @@ cdk.out/
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+docs/
