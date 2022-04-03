@@ -1,4 +1,4 @@
-name: main-npm
+name: main-storybook
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
@@ -8,7 +8,7 @@ on:
     paths:
       - 'package.json'
       - 'src/story/**'
-      - '.github/workflows/storybook.yml'
+      - '.github/workflows/main-storybook.yml'
 
 jobs:
   build:
