@@ -2,7 +2,7 @@ export * from './BorderGradient';
 export * from './Button';
 export * from './Chevron';
 export * from './Close';
-export * from './Confirm';
+export * from './Confirm/xdialog';
 export * from './Dropdown';
 export * from './DropdownList';
 export * from './FlexColumn';

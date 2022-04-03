@@ -1,4 +1,4 @@
-import { confirm, IConfirmAction } from '../../ui/components/Confirm';
+import { confirm, IConfirmAction } from '../../ui/components/Confirm/xdialog';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
