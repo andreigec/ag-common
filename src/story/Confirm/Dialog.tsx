@@ -1,13 +1,12 @@
-import { confirm, IConfirmAction } from '../../ui/components/Confirm/xdialog';
+import {
+  ConfirmDialog,
+  IConfirmAction,
+} from '../../ui/components/Confirm/Dialog';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-const ActionWrapper = (
-  args: IConfirmAction & {
-    onClick: (b: boolean) => void;
-  },
-) => (
+const ActionWrapper = (args: IConfirmAction) => (
   <div
     style={{
       color: 'white',
@@ -21,8 +20,9 @@ const ActionWrapper = (
     tabIndex={-1}
     onKeyDown={() => {}}
     onClick={async () => {
-      const res = await confirm(args);
-      args.onClick(res);
+      const res = await ConfirmDialog(args);
+      // eslint-disable-next-line no-alert
+      window.alert('result=' + JSON.stringify(res, null, 2));
     }}
   >
     click to open

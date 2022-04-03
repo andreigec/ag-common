@@ -93,7 +93,6 @@ export const SearchBase = <T,>({
     willDisplayItem(searchText, i),
   );
 
-  console.log('fi=', filteredItems);
   return (
     <>
       <SearchBox>

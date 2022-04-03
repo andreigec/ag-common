@@ -1,5 +1,5 @@
 import { ISearchDialog, TSearchModalRes } from './types';
-import { SearchModal } from './SearchModal';
+import { SearchModal } from './Modal';
 import { error } from '../../../common';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -8,13 +8,13 @@ import ReactDOM from 'react-dom';
  * @param p
  * @returns
  */
-export const searchDialog = async <T,>(
+export const SearchDialog = async <T,>(
   p: ISearchDialog<T>,
 ): Promise<TSearchModalRes<T>> => {
   const placeholderText = p.placeholderText || '';
   const closeText = p.closeText || 'CLOSE';
   let originalStyle: string | undefined;
-  console.log('x1');
+
   return new Promise((res) => {
     const idName = 'ag-search-dialog';
     if (document.body.querySelectorAll('#' + idName).length !== 0) {
@@ -38,7 +38,6 @@ export const searchDialog = async <T,>(
       try {
         document.body.style.overflow = originalStyle || '';
         res(f);
-        console.log('r1', f, wrapper);
       } finally {
         ReactDOM.unmountComponentAtNode(wrapper);
         wrapper.remove();

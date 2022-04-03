@@ -8,7 +8,7 @@ export interface IConfirmAction {
   bottomText: string;
 }
 
-export const confirm = async ({
+export const ConfirmDialog = async ({
   bottomText,
   topText,
 }: IConfirmAction): Promise<boolean> => {
@@ -27,6 +27,7 @@ export const confirm = async ({
         res(v);
       } finally {
         ReactDOM.unmountComponentAtNode(wrapper);
+        wrapper.remove();
       }
     };
 

@@ -1,17 +1,10 @@
-import { searchDialog } from '../../ui/components/Search/searchDialog';
-import {
-  ISearchDialog,
-  TSearchModalRes,
-} from '../../ui/components/Search/types';
+import { SearchDialog } from '../../ui/components/Search/Dialog';
+import { ISearchDialog } from '../../ui/components/Search/types';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-const ActionWrapper = <T,>(
-  args: ISearchDialog<T> & {
-    onClick: (f: TSearchModalRes<T>) => void;
-  },
-) => (
+const ActionWrapper = <T,>(args: ISearchDialog<T>) => (
   <div
     style={{
       color: 'white',
@@ -25,9 +18,9 @@ const ActionWrapper = <T,>(
     tabIndex={-1}
     onKeyDown={() => {}}
     onClick={async () => {
-      const res = await searchDialog(args);
-      console.log('Res=', res, args);
-      args.onClick(res);
+      const res = await SearchDialog(args);
+      // eslint-disable-next-line no-alert
+      window.alert('result=' + JSON.stringify(res, null, 2));
     }}
   >
     click to open
@@ -40,13 +33,13 @@ export default {
 } as ComponentMeta<typeof ActionWrapper>;
 
 const TemplateModal: ComponentStory<typeof ActionWrapper> = (args) => (
-  <ActionWrapper {...args} onClick={(e) => e} />
+  <ActionWrapper {...args} />
 );
 
 export const Dialog = TemplateModal.bind({});
 Dialog.args = {
-  displayItems: [1, 2, 3],
-  renderItem: (st, i) => (i as any).toString(),
-  willDisplayItem: (st, i) => !st || (i as any).toString() === st,
-  getKeyF: (i) => (i as any).toString(),
+  displayItems: ['1', '2', '3'],
+  renderItem: (st, i) => i as string,
+  willDisplayItem: (st, i) => !st || i === st,
+  getKeyF: (i) => i as string,
 };

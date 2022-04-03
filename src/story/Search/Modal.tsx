@@ -1,19 +1,19 @@
-import { SearchInline } from '../../ui/components/Search/Inline';
+import { SearchModal } from '../../ui/components/Search/Modal';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
   title: 'UI/Search',
-  component: SearchInline,
-} as ComponentMeta<typeof SearchInline>;
+  component: SearchModal,
+} as ComponentMeta<typeof SearchModal>;
 
-const Template: ComponentStory<typeof SearchInline> = (args) => (
-  <SearchInline {...args} />
+const Template: ComponentStory<typeof SearchModal> = (args) => (
+  <SearchModal {...args} />
 );
 
-export const Inline = Template.bind({});
-Inline.args = {
+export const Modal = Template.bind({});
+Modal.args = {
   displayItems: ['1', '2', '3'],
   renderItem: (st, i) => i as string,
   willDisplayItem: (st, i) => !st || i === st,

@@ -14,6 +14,6 @@ const Template: ComponentStory<typeof DropdownList> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  options: [1, 2, 3],
-  renderF: (v: any) => v.toString(),
+  options: ['1', '2', '3'],
+  renderF: (v) => v as string,
 };

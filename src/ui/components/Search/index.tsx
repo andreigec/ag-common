@@ -1,4 +1,4 @@
 export * from './types';
-export * from './SearchModal';
-export * from './searchDialog';
+export * from './Modal';
+export * from './Dialog';
 export * from './Inline';
