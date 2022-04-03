@@ -1,5 +1,5 @@
 import { ISearchDialog, TSearchModalRes } from './types';
-import { Base } from './Base';
+import { SearchBase } from './Base';
 import { bigScreen, smallScreen } from '../../styles';
 import { Modal } from '../Modal';
 import styled from 'styled-components';
@@ -32,6 +32,6 @@ export const SearchModal = <T,>(
     showCloseButton={false}
     closeOnClickOutside={true}
   >
-    <Base<T> {...p} />
+    <SearchBase<T> {...p} />
   </ModalStyled>
 );

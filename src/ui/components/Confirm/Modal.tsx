@@ -1,11 +1,8 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Button } from '../Button';
 import { FlexColumn } from '../FlexColumn';
 import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal';
 import styled from 'styled-components';
-import ReactDOM from 'react-dom';
 import React from 'react';
 
 const Base = styled.div`
@@ -77,33 +74,4 @@ export const ConfirmModal = ({
       </Base>
     </Modal>
   );
-};
-
-export interface IConfirmAction {
-  topText?: string;
-  bottomText: string;
-}
-export const confirm = async ({
-  bottomText,
-  topText,
-}: IConfirmAction): Promise<boolean> => {
-  return new Promise((res) => {
-    const wrapper = document.body.appendChild(document.createElement('div'));
-    const onSubmit = (v: boolean) => {
-      try {
-        res(v);
-      } finally {
-        ReactDOM.unmountComponentAtNode(wrapper);
-      }
-    };
-
-    ReactDOM.render(
-      <ConfirmModal
-        bottomText={bottomText}
-        topText={topText}
-        onSubmit={onSubmit}
-      />,
-      wrapper,
-    );
-  });
 };

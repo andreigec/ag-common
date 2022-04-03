@@ -67,7 +67,7 @@ const Row = styled.div`
   align-items: center;
 `;
 
-export const Base = <T,>({
+export const SearchBase = <T,>({
   onSelectItem,
   onSearchTextChange,
   placeholderText,
@@ -93,6 +93,7 @@ export const Base = <T,>({
     willDisplayItem(searchText, i),
   );
 
+  console.log('fi=', filteredItems);
   return (
     <>
       <SearchBox>

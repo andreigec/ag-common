@@ -4,7 +4,9 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 const ActionWrapper = (
-  args: IConfirmAction & { onClick: (b: boolean) => void },
+  args: IConfirmAction & {
+    onClick: (b: boolean) => void;
+  },
 ) => (
   <div
     style={{
@@ -30,15 +32,14 @@ const ActionWrapper = (
 export default {
   title: 'UI/Confirm',
   component: ActionWrapper,
-  argTypes: { onClick: { action: 'clicked' } },
 } as ComponentMeta<typeof ActionWrapper>;
 
 const TemplateModal: ComponentStory<typeof ActionWrapper> = (args) => (
   <ActionWrapper {...args} />
 );
 
-export const Action = TemplateModal.bind({});
-Action.args = {
+export const Dialog = TemplateModal.bind({});
+Dialog.args = {
   bottomText: 'bottom',
   topText: 'top',
 };

@@ -24,13 +24,7 @@ const Point = styled.div`
   width: 1px;
 `;
 
-export type TSparkLineData = { x: number; y: number };
-export const SparkLine = ({
-  data: raw,
-  className,
-  pointTitleF,
-  pointColour = '#4d76ff',
-}: {
+export interface ISparkLine {
   /**
    * default #4d76ff
    */
@@ -38,7 +32,14 @@ export const SparkLine = ({
   className?: string;
   data: TSparkLineData[];
   pointTitleF?: (p: TSparkLineData) => string;
-}) => {
+}
+export type TSparkLineData = { x: number; y: number };
+export const SparkLine = ({
+  data: raw,
+  className,
+  pointTitleF,
+  pointColour = '#4d76ff',
+}: ISparkLine) => {
   const xMin = Math.min(...raw.map((d) => d.x));
   const xMax = Math.max(...raw.map((d) => d.x));
   const yMin = Math.min(...raw.map((d) => d.y));

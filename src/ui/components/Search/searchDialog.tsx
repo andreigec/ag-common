@@ -14,9 +14,10 @@ export const searchDialog = async <T,>(
   const placeholderText = p.placeholderText || '';
   const closeText = p.closeText || 'CLOSE';
   let originalStyle: string | undefined;
-
+  console.log('x1');
   return new Promise((res) => {
-    if (document.querySelectorAll('#ag-search-dialog').length !== 0) {
+    const idName = 'ag-search-dialog';
+    if (document.body.querySelectorAll('#' + idName).length !== 0) {
       error('searchDialog already open');
       res(undefined);
       return;
@@ -26,7 +27,7 @@ export const searchDialog = async <T,>(
       document.createElement('div'),
     );
 
-    wrapper.id = 'ag-search-dialog';
+    wrapper.id = idName;
     if (originalStyle === undefined) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       originalStyle = window.getComputedStyle(document.body).overflow || '';
@@ -37,8 +38,10 @@ export const searchDialog = async <T,>(
       try {
         document.body.style.overflow = originalStyle || '';
         res(f);
+        console.log('r1', f, wrapper);
       } finally {
         ReactDOM.unmountComponentAtNode(wrapper);
+        wrapper.remove();
       }
     };
 
