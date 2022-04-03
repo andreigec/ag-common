@@ -41,35 +41,25 @@ const Bottom = styled(FlexRow)`
   }
 `;
 
-const ConfirmModal = ({
-  wrapper,
-  res,
+export const ConfirmModal = ({
+  onSubmit,
   bottomText,
   topText,
   okText = 'OK',
   cancelText = 'Cancel',
 }: {
-  res: (v: boolean) => void;
-  wrapper: HTMLDivElement;
+  onSubmit: (v: boolean) => void;
   topText?: string;
   bottomText: string;
   okText?: string;
   cancelText?: string;
 }) => {
-  const ret = (v: boolean) => {
-    try {
-      res(v);
-    } finally {
-      ReactDOM.unmountComponentAtNode(wrapper);
-    }
-  };
-
   return (
     <Modal
       position="center"
       topPosition="center"
       open={true}
-      setOpen={() => ret(false)}
+      setOpen={() => onSubmit(false)}
       showCloseButton={false}
       closeOnClickOutside={false}
     >
@@ -78,8 +68,8 @@ const ConfirmModal = ({
           {topText && <TopText>{topText}</TopText>}
           <BottomText>{bottomText}</BottomText>
           <Bottom noGrow>
-            <Button onClick={() => ret(true)}>{okText}</Button>
-            <Button invert onClick={() => ret(false)}>
+            <Button onClick={() => onSubmit(true)}>{okText}</Button>
+            <Button invert onClick={() => onSubmit(false)}>
               {cancelText}
             </Button>
           </Bottom>
@@ -89,21 +79,29 @@ const ConfirmModal = ({
   );
 };
 
+export interface IConfirmAction {
+  topText?: string;
+  bottomText: string;
+}
 export const confirm = async ({
   bottomText,
   topText,
-}: {
-  topText?: string;
-  bottomText: string;
-}): Promise<boolean> => {
+}: IConfirmAction): Promise<boolean> => {
   return new Promise((res) => {
     const wrapper = document.body.appendChild(document.createElement('div'));
+    const onSubmit = (v: boolean) => {
+      try {
+        res(v);
+      } finally {
+        ReactDOM.unmountComponentAtNode(wrapper);
+      }
+    };
+
     ReactDOM.render(
       <ConfirmModal
         bottomText={bottomText}
         topText={topText}
-        res={res}
-        wrapper={wrapper}
+        onSubmit={onSubmit}
       />,
       wrapper,
     );

@@ -1,4 +1,4 @@
-import { ModalDropList } from '../Modal';
+import { DropdownModal } from './Modal';
 import { noDrag } from '../../styles/common';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -53,9 +53,38 @@ export const Dropdown = ({
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => void;
   enableHoverOpen?: boolean;
+  /**
+   * if not provided, will show ... dots to click to open (default)
+   */
   children?: JSX.Element;
 }) => {
   const [open, setOpen] = useState(false);
+  const child = !children ? (
+    <Icon
+      data-fixedsize={true}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setOpen(!open);
+      }}
+    >
+      {Dots}
+    </Icon>
+  ) : (
+    <div
+      tabIndex={-1}
+      role="button"
+      onKeyDown={(e) => e.key === 'Enter' && setOpen(!open)}
+      data-fixedsize={false}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setOpen(!open);
+      }}
+    >
+      {children}
+    </div>
+  );
 
   return (
     <Base
@@ -65,17 +94,9 @@ export const Dropdown = ({
       className={className}
       {...noDrag}
     >
-      <Icon
-        data-fixedsize={!children}
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          setOpen(!open);
-        }}
-      >
-        {children || Dots}
-      </Icon>
-      <ModalDropList
+      {child}
+
+      <DropdownModal
         position={position}
         topPosition={topPosition}
         options={options}

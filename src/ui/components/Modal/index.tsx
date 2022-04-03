@@ -103,38 +103,3 @@ export const Modal = ({
     </FixedBackground>
   );
 };
-
-const ModalDropListStyled = styled(Modal)`
-  flex-flow: column;
-`;
-
-export const ModalDropList = (p: {
-  options: (string | JSX.Element)[];
-  onSelect?: (
-    i: number,
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => void;
-  position?: 'left' | 'right';
-  topPosition?: 'bottom' | 'top';
-  open: boolean;
-  setOpen: (b: boolean) => void;
-  closeOnMoveMouseOutside?: boolean;
-  showCloseButton?: boolean;
-  className?: string;
-}) => (
-  <ModalDropListStyled {...p} className={p.className}>
-    {p.options.map((option, index) => (
-      <ModalItem
-        key={option as unknown as never}
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          p.onSelect?.(index, e);
-          p.setOpen(false);
-        }}
-      >
-        {option}
-      </ModalItem>
-    ))}
-  </ModalDropListStyled>
-);
