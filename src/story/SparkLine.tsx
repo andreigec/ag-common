@@ -1,4 +1,4 @@
-import { SparkLine } from '../ui/components/zSparkline';
+import { SparkLine } from '../ui/components/SparkLine';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';

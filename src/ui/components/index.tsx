@@ -17,7 +17,7 @@ export * from './Prompt';
 export * from './RowOrColumn';
 export * from './Search';
 export * from './Sidebar';
-export * from './Sparkline';
+export * from './SparkLine';
 export * from './Table';
 export * from './TextEdit';
 export * from './Toast';
