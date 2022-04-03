@@ -2,6 +2,7 @@ import { colours } from '../../styles/colours';
 import { Icon } from '../Icon';
 import { convertRemToPixels } from '../../helpers/dom';
 import { Shadow } from '../../styles/common';
+import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import styled, { css } from 'styled-components';
 import React, { useEffect, useState, useRef } from 'react';
 
@@ -117,18 +118,9 @@ export function DropdownList<T>({
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState(value);
   const [open, setOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const click = (e: any) => {
-    const outside = !ref.current?.contains(e.target);
-    if (outside) {
-      setOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('click', click, true);
-    return () => document.removeEventListener('click', click, true);
-  }, []);
+  useOnClickOutside({ disabled: !open, ref, moveMouseOutside: false }, () => {
+    setOpen(false);
+  });
 
   useEffect(() => {
     const newv = value;

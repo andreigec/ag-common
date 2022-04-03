@@ -16,4 +16,6 @@ export const NoChildren = Template.bind({});
 NoChildren.args = {
   options: ['1', '2', '3'],
   enableHoverOpen: false,
+  topPosition: 'top',
+  position: 'right',
 };

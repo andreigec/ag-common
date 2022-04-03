@@ -31,10 +31,10 @@ const ModalBase = styled.div`
   &[data-position='right'] {
     right: 0;
   }
-  &[data-topposition='bottom'] {
+  &[data-topposition='top'] {
     top: 0;
   }
-  &[data-topposition='top'] {
+  &[data-topposition='bottom'] {
     bottom: 0;
   }
 `;
@@ -55,7 +55,7 @@ export const Modal = ({
   setOpen,
   children,
   position = 'left',
-  topPosition = 'bottom',
+  topPosition = 'top',
   showCloseButton = true,
   closeOnMoveMouseOutside = false,
   className,

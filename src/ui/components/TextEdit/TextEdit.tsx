@@ -134,7 +134,7 @@ export const TextEdit = ({
   const valueChange = value !== defaultValue;
   useOnClickOutside(
     {
-      disabled: onClickOutsideWithNoValue === null,
+      disabled: onClickOutsideWithNoValue === null || disableEdit,
       ref,
       moveMouseOutside: false,
     },
