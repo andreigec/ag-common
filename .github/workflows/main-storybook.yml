@@ -6,7 +6,6 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'package.json'
       - 'src/story/**'
       - '.github/workflows/main-storybook.yml'
 

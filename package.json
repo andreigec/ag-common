@@ -12,7 +12,7 @@
     "build": "rimraf dist && yarn checklint && tsc && rimraf dist/story",
     "checklint": "npx eslint --ext .ts,.tsx ./src",
     "storybook": "cross-env BROWSER=none start-storybook -p 6006",
-    "build-storybook": "build-storybook -o docs"
+    "build-storybook": "build-storybook -o docs --quiet"
   },
   "dependencies": {
     "aws-cdk-lib": "2.x",
