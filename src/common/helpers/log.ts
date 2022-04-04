@@ -9,7 +9,7 @@ export const GetLogLevel = (l: TLogType) =>
   );
 
 let userLogLevel: TLogType = 'WARN';
-export const SetLogLevel = (l: string) => {
+export const SetLogLevel = (l: TLogType) => {
   const lu = l?.toUpperCase() as TLogType;
   if (GetLogLevel(lu) === -1) {
     return;
@@ -18,7 +18,7 @@ export const SetLogLevel = (l: string) => {
   userLogLevel = lu;
 };
 
-SetLogLevel(process.env.LOG_LEVEL || '');
+SetLogLevel(process.env.LOG_LEVEL as TLogType);
 
 function logprocess(type: TLogType, args: unknown[]) {
   const min = GetLogLevel(userLogLevel);
