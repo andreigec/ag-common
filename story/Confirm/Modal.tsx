@@ -1,4 +1,4 @@
-import { ConfirmModal } from '../../ui/components/Confirm/Modal';
+import { ConfirmModal } from '../../src/ui/components/Confirm/Modal';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';

@@ -1,4 +1,4 @@
-import { Chevron } from '../ui/components/Chevron';
+import { Chevron } from '../src/ui/components/Chevron';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';

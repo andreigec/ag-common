@@ -9,7 +9,7 @@
   "packageManager": "yarn@3.2.0",
   "scripts": {
     "format": "npx eslint --ext .ts,.tsx ./src --fix",
-    "build": "rimraf dist && yarn lint && tsc && rimraf dist/story",
+    "build": "rimraf dist && yarn lint && tsc",
     "lint": "npx eslint --ext .ts,.tsx ./src",
     "start": "cross-env BROWSER=none start-storybook -p 6006",
     "build-storybook": "build-storybook -o docs --quiet"

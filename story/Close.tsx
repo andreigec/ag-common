@@ -1,4 +1,4 @@
-import { Close } from '../ui/components/Close';
+import { Close } from '../src/ui/components/Close';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';

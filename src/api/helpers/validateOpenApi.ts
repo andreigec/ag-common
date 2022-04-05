@@ -6,7 +6,7 @@ import {
   objectKeysToLowerCase,
   tryJsonParse,
 } from '../../common/helpers/object';
-import { User } from '../../ui/helpers/jwt';
+import { User } from '../../src/ui/helpers/jwt';
 import { getValidatedLang, TLang } from '../../common/helpers/i18n';
 import { APIGatewayEvent, APIGatewayProxyResult } from '../types';
 import OpenAPIRequestValidator from 'openapi-request-validator';

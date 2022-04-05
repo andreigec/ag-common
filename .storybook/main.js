@@ -1,7 +1,7 @@
 exports.default = {
   stories: [
-    "../src/story/**/*.mdx",
-    "../src/story/**/*.@(ts|tsx)"
+    "../story/**/*.mdx",
+    "../story/**/*.@(ts|tsx)"
   ],
   "addons": [
     "@storybook/addon-links",

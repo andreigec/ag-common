@@ -1,4 +1,4 @@
-import { DropdownList } from '../ui/components/DropdownList';
+import { DropdownList } from '../src/ui/components/DropdownList';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';

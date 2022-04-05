@@ -1,5 +1,5 @@
-import { SearchDialog } from '../../ui/components/Search/Dialog';
-import { ISearchDialog } from '../../ui/components/Search/types';
+import { SearchDialog } from '../../src/ui/components/Search/Dialog';
+import { ISearchDialog } from '../../src/ui/components/Search/types';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';

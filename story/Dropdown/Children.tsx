@@ -1,4 +1,4 @@
-import { Dropdown } from '../../ui/components/Dropdown';
+import { Dropdown } from '../../src/ui/components/Dropdown';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -12,10 +12,9 @@ const Template: ComponentStory<typeof Dropdown> = (args) => (
   <Dropdown {...args} />
 );
 
-export const NoChildren = Template.bind({});
-NoChildren.args = {
+export const Children = Template.bind({});
+Children.args = {
   options: ['1', '2', '3'],
   enableHoverOpen: false,
-  topPosition: 'top',
-  position: 'right',
+  children: <div>click me to open</div>,
 };
