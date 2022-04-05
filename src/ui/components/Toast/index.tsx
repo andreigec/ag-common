@@ -1,12 +1,12 @@
 import toastx, { Toaster, ToastPosition } from 'react-hot-toast';
 import React from 'react';
 
-interface Options {
+export interface IToastOptions {
   appearance: 'error' | 'success';
   autoClose?: number;
 }
 
-export const addToast = (m: string, options?: Options) => {
+export const addToast = (m: string, options?: IToastOptions) => {
   if (options?.appearance === 'error') {
     toastx.error(m, {
       duration: options?.autoClose || 5000,

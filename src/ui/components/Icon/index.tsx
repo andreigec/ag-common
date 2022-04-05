@@ -2,7 +2,7 @@ import { HardOutline } from '../../styles/common';
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-interface IIcon {
+export interface IIconProps {
   disabled?: boolean;
   fill?: string;
   outline?: string;
@@ -19,7 +19,7 @@ interface IIcon {
   tabIndex?: number;
   className?: string;
 }
-export const IconF = styled.span<IIcon>`
+export const IconF = styled.span<IIconProps>`
   transition: all 200ms;
   display: flex;
   justify-content: center;
@@ -78,7 +78,7 @@ export const IconF = styled.span<IIcon>`
   }
 `;
 
-export const Icon = (pr: IIcon) => {
+export const Icon = (pr: IIconProps) => {
   const { className, children, disabled, onClick } = pr;
 
   return (

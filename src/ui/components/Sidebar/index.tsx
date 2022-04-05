@@ -34,7 +34,7 @@ const Base = styled.div`
 
 const ContentBlock = styled.div`
   left: -18rem;
-  transition left 200ms;
+  transition: left 200ms;
   &[data-open='false'] {
     position: absolute;
     top: 0;

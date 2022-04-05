@@ -1,18 +1,19 @@
 import React from 'react';
 
+export interface IHeadersRaw {
+  title?: string;
+  image?: string;
+  SiteShort: string;
+  FullSiteUrl: string;
+  siteDesc: string;
+}
 export const HeadersRaw = ({
   title,
   image,
   SiteShort,
   FullSiteUrl,
   siteDesc,
-}: {
-  title?: string;
-  image?: string;
-  SiteShort: string;
-  FullSiteUrl: string;
-  siteDesc: string;
-}) => {
+}: IHeadersRaw) => {
   const fullTitle = `${title ? `${title} | ` : ''}${SiteShort} | ${siteDesc}`;
   const titleFallback = title || fullTitle;
   const titleBlock = [
