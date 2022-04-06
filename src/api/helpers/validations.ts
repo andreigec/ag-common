@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import { returnCode } from './api';
 import { debug, error, info } from '../../common/helpers/log';
-import { IdJwt, User } from '../../src/ui/helpers/jwt';
+import { IdJwt, User } from '../../ui/helpers/jwt';
 import { APIGatewayProxyResult } from '../types';
 import { verify, decode } from 'jsonwebtoken';
 import JwksClient from 'jwks-rsa';
