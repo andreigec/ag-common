@@ -42,14 +42,16 @@ const Base = styled.button`
   ${ButtonBase}
 `;
 
-export const Button: React.FC<{
+export interface IButton {
   title?: string;
   invert?: boolean;
   disabled?: boolean;
   className?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onKeyPress?: KeyboardEventHandler<HTMLButtonElement>;
-}> = (props) => (
+  children: string | JSX.Element;
+}
+export const Button = (props: IButton) => (
   <Base
     className={props.className}
     data-invert={props.invert}
