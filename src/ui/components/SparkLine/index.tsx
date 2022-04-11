@@ -32,14 +32,11 @@ export interface ISparkLine {
   className?: string;
   data: TSparkLineData[];
   pointTitleF?: (p: TSparkLineData) => string;
+  title?: string;
 }
 export type TSparkLineData = { x: number; y: number };
-export const SparkLine = ({
-  data: raw,
-  className,
-  pointTitleF,
-  pointColour = '#4d76ff',
-}: ISparkLine) => {
+export const SparkLine = (p: ISparkLine) => {
+  const { data: raw, pointColour = '#4d76ff' } = p;
   const xMin = Math.min(...raw.map((d) => d.x));
   const xMax = Math.max(...raw.map((d) => d.x));
   const yMin = Math.min(...raw.map((d) => d.y));
@@ -61,18 +58,18 @@ export const SparkLine = ({
   }));
 
   return (
-    <Base className={className}>
+    <Base className={p.className} title={p.title}>
       <Points>
-        {data.map((p) => (
+        {data.map((pt) => (
           <Point
-            title={pointTitleF?.(p.orig) ?? ''}
-            key={p.x + ' ' + p.y}
+            title={p.pointTitleF?.(pt.orig) ?? ''}
+            key={pt.x + ' ' + pt.y}
             style={{
               backgroundColor: pointColour,
               borderColor: pointColour,
-              left: p.x + '%',
+              left: pt.x + '%',
               bottom: 0,
-              height: p.y + '%',
+              height: pt.y + '%',
             }}
           />
         ))}
