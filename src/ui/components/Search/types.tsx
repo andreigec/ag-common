@@ -4,7 +4,11 @@ export interface ISearchDialog<T> {
   /**
    * method run to render each filtered item
    */
-  renderItem: (searchText: string, item: T) => JSX.Element | string;
+  renderItem: (
+    searchText: string,
+    item: T,
+    index: number,
+  ) => JSX.Element | string;
   /**
    * all potential items
    */

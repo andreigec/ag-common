@@ -1,15 +1,25 @@
-export const toObject = <T, Indexer extends string | number>(
-  arr: T[],
-  keyF: (a: T) => Indexer,
-): { [a in Indexer]: T } => {
-  const ret: { [a in Indexer]: T } = {} as { [a in Indexer]: T };
+export const arrayToObject = <TIn, Indexer extends string | number, TOut>(
+  /**
+   * array items
+   */
+  arr: TIn[],
+  /**
+   * from an array item, get the indexer
+   */
+  keyF: (a: TIn) => Indexer,
+  /**
+   * from an array item, return the new value
+   */
+  valueF: (a: TIn) => TOut,
+): { [a in Indexer]: TOut } => {
+  const ret: { [a in Indexer]: TOut } = {} as { [a in Indexer]: TOut };
   if (!arr || !keyF) {
     return ret;
   }
 
   arr.forEach((v) => {
     const k = keyF(v);
-    ret[k] = v;
+    ret[k] = valueF(v);
   });
   return ret;
 };

@@ -1,19 +1,44 @@
-import { ICallOpenApi } from './types';
+import { ICallOpenApi, OverrideAuth } from './types';
 import { getCookieString } from '../cookie';
 import { sleep } from '../../../common/helpers/sleep';
 import { notEmpty } from '../../../common/helpers/array';
-import { AxiosWrapperLite } from '../jwt';
+import { AxiosWrapperLite, User } from '../jwt';
 import { AxiosError } from 'axios';
 
-export const callOpenApi = async <T, TDefaultApi>({
-  func,
-  apiUrl,
+async function getIdTokenAuthHeader({
   overrideAuth,
   refreshToken,
-  logout,
-  newDefaultApi,
-  headers,
-}: ICallOpenApi<T, TDefaultApi>): Promise<AxiosWrapperLite<T>> => {
+}: {
+  refreshToken: () => Promise<User | undefined>;
+  overrideAuth?: OverrideAuth;
+}) {
+  let idToken: string | undefined;
+
+  //if override supplied will only use that and not refresh
+  if (overrideAuth?.id_token) {
+    idToken = overrideAuth?.id_token;
+  } else {
+    idToken = getCookieString({
+      name: 'id_token',
+      defaultValue: '',
+    });
+
+    //if we have a cookie token, can try to refresh
+    if (idToken) {
+      const updated = await refreshToken();
+      if (updated?.jwt?.id_token) {
+        idToken = updated?.jwt?.id_token;
+      }
+    }
+  }
+
+  return idToken;
+}
+
+export const callOpenApi = async <T, TDefaultApi>(
+  p: ICallOpenApi<T, TDefaultApi>,
+): Promise<AxiosWrapperLite<T>> => {
+  const { func, apiUrl, logout, newDefaultApi, headers } = p;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let error: AxiosError<unknown, any> | undefined;
   let data: T | undefined = undefined;
@@ -22,20 +47,9 @@ export const callOpenApi = async <T, TDefaultApi>({
     baseOptions: { headers: { authorization: '', ...(headers || {}) } },
   };
 
-  if (overrideAuth?.id_token) {
-    config.baseOptions.headers.authorization = `Bearer ${overrideAuth?.id_token}`;
-  } else {
-    const isAuthed = !!getCookieString({
-      name: 'id_token',
-      defaultValue: '',
-    });
-
-    if (isAuthed) {
-      const updated = await refreshToken();
-      if (updated?.jwt?.id_token) {
-        config.baseOptions.headers.authorization = `Bearer ${updated?.jwt?.id_token}`;
-      }
-    }
+  const idToken = await getIdTokenAuthHeader(p);
+  if (idToken) {
+    config.baseOptions.headers.authorization = `Bearer ${idToken}`;
   }
 
   const cl = newDefaultApi(config);

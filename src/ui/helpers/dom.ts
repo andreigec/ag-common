@@ -1,3 +1,5 @@
+import { arrayToObject } from '../../common/helpers/array';
+
 export const domContains = (e: DOMRect | undefined, x: number, y: number) => {
   if (!e) {
     return false;
@@ -12,4 +14,22 @@ export const convertRemToPixels = (rem: number) => {
     fontSize = getComputedStyle(document.documentElement).fontSize;
   }
   return rem * parseFloat(fontSize);
+};
+
+/**
+ * can use to nested wrap styledcomponent components, but persist data- attributes
+ * @param p
+ * @returns
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const filterDataProps = (p: any): Record<string, string> => {
+  const x = Object.entries(p)
+    .filter((r) => r[0].startsWith('data-'))
+    .map((r) => r as unknown as [string, string]);
+
+  return arrayToObject(
+    x,
+    (s) => s[0],
+    (s) => s[1],
+  );
 };

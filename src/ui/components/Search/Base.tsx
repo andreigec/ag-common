@@ -121,9 +121,9 @@ export const SearchBase = <T,>({
         </CloseButton>
       </SearchBox>
       <Content data-hasitems={!!filteredItems.length}>
-        {filteredItems.map((i) => (
+        {filteredItems.map((i, index) => (
           <Row key={getKeyF(i)} onClick={() => resWrap(i)}>
-            {renderItem(searchText, i)}
+            {renderItem(searchText, i, index)}
           </Row>
         ))}
       </Content>
