@@ -30,7 +30,9 @@ function setCookieRaw({
     !value || expiryDays < 0 ? expireDate : d.toUTCString()
   }`;
 
-  document.cookie = `${name}=${!value ? '' : value};${expires};path=/`;
+  document.cookie = `${name}=${
+    !value ? '' : value
+  };${expires};path=/; SameSite=Strict; Secure`;
 }
 
 export function wipeCookies(name: string) {
