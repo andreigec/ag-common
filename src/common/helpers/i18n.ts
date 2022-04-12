@@ -22,3 +22,19 @@ export const t = (res: TResource, lang: TLang): string => {
   }
   return res[lang] ?? res.en;
 };
+
+export const useTranslation = <T extends { [a: string]: TResource }>(
+  texts: T,
+  lang: TLang,
+) => {
+  const ret = (lineText: keyof T): string => {
+    const v1 = texts[lineText]?.[lang];
+    if (v1 || v1 === null) {
+      return v1 ?? '';
+    }
+
+    return texts[lineText].en ?? '???';
+  };
+
+  return ret;
+};

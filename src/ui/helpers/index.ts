@@ -8,7 +8,6 @@ export * from './debounce';
 export * from './dom';
 export * from './extractAttributes';
 export * from './jwt';
-export * from './lang';
 export * from './plural';
 export * from './routes';
 export * from './serviceWorker';
