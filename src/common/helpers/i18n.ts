@@ -1,8 +1,11 @@
-type TLangExceptEn = 'id' | 'vi';
+type TLangExceptEn = 'id' | 'vi' | 'pr';
 export type TLang = TLangExceptEn | 'en';
-export const AllLang: TLang[] = ['en', 'id', 'vi'];
+export const AllLang: TLang[] = ['en', 'id', 'vi', 'pr'];
+/**
+ * null = wont translate. undefined = fallback to eng
+ */
 export type TResource = {
-  [k in TLangExceptEn]?: string;
+  [k in TLangExceptEn]?: string | null;
 } & { en: string };
 
 export const getValidatedLang = (raw: string): TLang => {
@@ -12,4 +15,10 @@ export const getValidatedLang = (raw: string): TLang => {
   }
   return f;
 };
-export const t = (res: TResource, lang: TLang): string => res[lang] ?? res.en;
+
+export const t = (res: TResource, lang: TLang): string => {
+  if (res[lang] === null) {
+    return '';
+  }
+  return res[lang] ?? res.en;
+};
