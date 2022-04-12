@@ -1,6 +1,6 @@
-type TLangExceptEn = 'id' | 'vi' | 'pr';
+type TLangExceptEn = 'id' | 'vi' | 'pt';
 export type TLang = TLangExceptEn | 'en';
-export const AllLang: TLang[] = ['en', 'id', 'vi', 'pr'];
+export const AllLang: TLang[] = ['en', 'id', 'vi', 'pt'];
 /**
  * null = wont translate. undefined = fallback to eng
  */
