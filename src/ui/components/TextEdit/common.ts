@@ -10,7 +10,7 @@ export const ValueBox = styled.div`
 
   justify-content: flex-start;
   flex-grow: 1;
-  width: calc(100% - 2rem - 2px); //padding + border
+  width: calc(100% - 1rem - 2px); //padding + border
   border: solid 1px transparent;
 
   &[data-pointer='true'] {

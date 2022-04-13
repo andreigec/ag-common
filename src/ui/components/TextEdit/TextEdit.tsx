@@ -2,6 +2,7 @@
 import { SaveIcon, UndoIcon, PencilIcon } from './images';
 import { iconLeft, iconRight, ValueBox, valueCss } from './common';
 import { ITextEdit } from './types';
+import { TextEditLengthBox } from './LengthBox';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
 import styled, { css, StyledComponent } from 'styled-components';
@@ -43,6 +44,11 @@ const Right = styled.div`
   display: flex;
   flex-flow: row;
   align-content: center;
+  &[data-singleLine='false'] {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+  }
 `;
 
 const Icon = styled.div`
@@ -201,6 +207,12 @@ export const TextEdit = ({
           }
         }}
       />
+
+      {maxLength && (
+        <Right data-singleLine={singleLine}>
+          <TextEditLengthBox min={value.length} max={maxLength} />
+        </Right>
+      )}
       {allowUndo && (
         <Right>
           {valueChange && (
