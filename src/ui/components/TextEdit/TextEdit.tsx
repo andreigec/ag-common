@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/no-onchange */
 import { SaveIcon, UndoIcon, PencilIcon } from './images';
 import { iconLeft, iconRight, ValueBox, valueCss } from './common';
+import { ITextEdit } from './types';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
 import styled, { css, StyledComponent } from 'styled-components';
 import React, { useState, useEffect, useRef } from 'react';
-
 export const ValueReadonly = styled.div`
   ${valueCss};
   word-break: break-word;
@@ -71,62 +71,9 @@ export const TextEdit = ({
   onClickNotEditing,
   allowUndo = true,
   onEscape,
-}: {
-  /**
-   * forces single row input style. will also enable 'Enter' to auto submit
-   */
-  singleLine?: boolean;
-  className?: string;
-  /**
-   * default value of field. default empty
-   */
-  defaultValue?: string;
-  /**
-   * if truthy will enable text edit mode by default. if focus is true, will also focus on open
-   */
-  defaultEditing?: { focus?: boolean };
-  onSubmit: (
-    val: string,
-    /**
-     * if true, was passed by pressing Enter
-     */
-    enterPressed: boolean,
-  ) => void;
-  /**
-   * disable edit text functionality
-   */
-  disableEdit?: boolean;
-  placeholder?: string;
-  /**
-   * when the user edits or unselects edit
-   */
-  onEditingChange?: (editing: boolean) => void;
-  /**
-   * if null will disable click outside
-   */
-  onClickOutsideWithNoValue?: (() => void) | null;
-  onClickNotEditing?: () => void;
-  /**
-   * if true, will not grow. default false
-   */
-  noGrow?: boolean;
-  /**
-   * will set these attributes directly on element. can put data-* here
-   */
-  attributes?: Record<string, string | number | boolean>;
-  /**
-   * optional content at the left of the box
-   */
-  leftContent?: JSX.Element;
-  /**
-   * if true, will add undo button after changes. if false, will submit after every keypress. default true
-   */
-  allowUndo?: boolean;
-  /**
-   * will call on user pressed escape
-   */
-  onEscape?: () => void;
-}) => {
+  maxLength,
+  onKeyDown,
+}: ITextEdit) => {
   const ref = useRef<HTMLDivElement>(null);
   const taref = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState(defaultValue);
@@ -238,7 +185,13 @@ export const TextEdit = ({
         }}
         placeholder={placeholder}
         rows={singleLine ? 1 : undefined}
+        maxLength={maxLength}
         onKeyDown={(e) => {
+          if (onKeyDown?.(e) === false) {
+            e.preventDefault();
+            return;
+          }
+
           if (singleLine && e.code.endsWith('Enter')) {
             onSubmit(value, true);
           }
