@@ -23,7 +23,7 @@ const SItems = styled.div<{
 }>`
   flex-flow: column;
   z-index: 5;
-  top: 100%;
+
   display: none;
   position: absolute;
   background-color: white;
@@ -124,25 +124,40 @@ export function DropdownList<T>({
 
   useEffect(() => {
     const newv = value;
-    if (JSON.stringify(newv) !== JSON.stringify(value)) setState(newv);
+    if (JSON.stringify(newv) !== JSON.stringify(value)) {
+      setState(newv);
+    }
   }, [options, value]);
 
-  let style: Record<string, string | number> = {};
-  if (open) {
+  const [style, setStyle] = useState<Record<string, string | number>>({});
+  useEffect(() => {
     const maxLen = Math.max(...options.map((s) => renderF(s).length));
-    style = {
+    const newStyle: Record<string, string | number> = {
       width: `calc(${maxLen}ch + 2rem)`,
     };
 
-    const minLeft = convertRemToPixels(2 + maxLen / 2);
-    const offsetList = ref?.current?.offsetLeft ?? 0;
+    const minPx = convertRemToPixels(2 + maxLen / 2);
+    const offsetLeft = ref?.current?.offsetLeft ?? 0;
 
-    if (offsetList < minLeft) {
-      style.left = 0;
+    if (offsetLeft < minPx) {
+      newStyle.left = '0';
     } else {
-      style.right = 0;
+      newStyle.right = '1rem';
     }
-  }
+
+    const b = ref?.current?.getBoundingClientRect() ?? { bottom: 0 };
+    const ih = typeof window !== 'undefined' ? window.innerHeight : 0;
+    //below screen
+    if (b.bottom + 50 > ih) {
+      newStyle.bottom = '1rem';
+    } else {
+      newStyle.top = '100%';
+    }
+
+    if (JSON.stringify(style) !== JSON.stringify(newStyle)) {
+      setStyle(newStyle);
+    }
+  }, [open, options, renderF, style]);
 
   return (
     <SBase
