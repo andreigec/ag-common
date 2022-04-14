@@ -2424,28 +2424,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addons@npm:6.4.20":
-  version: 6.4.20
-  resolution: "@storybook/addons@npm:6.4.20"
-  dependencies:
-    "@storybook/api": 6.4.20
-    "@storybook/channels": 6.4.20
-    "@storybook/client-logger": 6.4.20
-    "@storybook/core-events": 6.4.20
-    "@storybook/csf": 0.0.2--canary.87bc651.0
-    "@storybook/router": 6.4.20
-    "@storybook/theming": 6.4.20
-    "@types/webpack-env": ^1.16.0
-    core-js: ^3.8.2
-    global: ^4.4.0
-    regenerator-runtime: ^0.13.7
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: d6b28b585a494b6f706e4980578ae0650fcdd8f5e56324a61db74625b182ec9a6b373e60fbbea626aa978f5bbf636f4a30cb3b78cada922d89a6061f9bf500d7
-  languageName: node
-  linkType: hard
-
 "@storybook/addons@npm:6.4.22":
   version: 6.4.22
   resolution: "@storybook/addons@npm:6.4.22"
@@ -2465,34 +2443,6 @@ __metadata:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
   checksum: c1372cb5e04ebc08b3f2df764630f370b9ccce0c7b47b5126c4964d53971e8a21efb1ef913a376cb6c289e6c492133e5273a36bd6ee4e39e1073acc12be51ee2
-  languageName: node
-  linkType: hard
-
-"@storybook/api@npm:6.4.20":
-  version: 6.4.20
-  resolution: "@storybook/api@npm:6.4.20"
-  dependencies:
-    "@storybook/channels": 6.4.20
-    "@storybook/client-logger": 6.4.20
-    "@storybook/core-events": 6.4.20
-    "@storybook/csf": 0.0.2--canary.87bc651.0
-    "@storybook/router": 6.4.20
-    "@storybook/semver": ^7.3.2
-    "@storybook/theming": 6.4.20
-    core-js: ^3.8.2
-    fast-deep-equal: ^3.1.3
-    global: ^4.4.0
-    lodash: ^4.17.21
-    memoizerific: ^1.11.3
-    regenerator-runtime: ^0.13.7
-    store2: ^2.12.0
-    telejson: ^5.3.2
-    ts-dedent: ^2.0.0
-    util-deprecate: ^1.0.2
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: 8fe31d8af8c0d8c8ec2880f61a50a181b636a2d6d73c0b76877f4dedc9467f7cd041bffbb670c740b07242084a2de501e6dc1e241a8a420ed930fd543ef3ef7e
   languageName: node
   linkType: hard
 
@@ -2635,17 +2585,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/channels@npm:6.4.20":
-  version: 6.4.20
-  resolution: "@storybook/channels@npm:6.4.20"
-  dependencies:
-    core-js: ^3.8.2
-    ts-dedent: ^2.0.0
-    util-deprecate: ^1.0.2
-  checksum: 4cd8420ee2b21b93b44f81574d0f4fcaf28ea981417997fc962f7ca86d11ffbdddbfcd24896387589b036fea6134baf1c1c2ee6956bc4e898c8b994502a777d4
-  languageName: node
-  linkType: hard
-
 "@storybook/channels@npm:6.4.22":
   version: 6.4.22
   resolution: "@storybook/channels@npm:6.4.22"
@@ -2685,16 +2624,6 @@ __metadata:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
   checksum: 606bde50ca49467863370062957f45ca83a39897c2c1997b87af08420deb2a60afba643c0eddebff74219cae1584c4a05e4a1ff69ca0e0bdff087a20939d87ce
-  languageName: node
-  linkType: hard
-
-"@storybook/client-logger@npm:6.4.20":
-  version: 6.4.20
-  resolution: "@storybook/client-logger@npm:6.4.20"
-  dependencies:
-    core-js: ^3.8.2
-    global: ^4.4.0
-  checksum: 1b6f89ebce09ee6021de9f0acdf6c499570723f733d8081478ef449581337d12ef016ab66891f2b9a5e833f3847185cb430d586206f12f3df21c288a26a96c8b
   languageName: node
   linkType: hard
 
@@ -2838,15 +2767,6 @@ __metadata:
     typescript:
       optional: true
   checksum: afcbeb5878a3e01ec8b6258a64bb74610345419f10db6e8a9d9c5149b83a6dc4db8c5e60dac5967e0d0fe2c45b6cefb1877975756689c2b6ad7721f117f4c634
-  languageName: node
-  linkType: hard
-
-"@storybook/core-events@npm:6.4.20":
-  version: 6.4.20
-  resolution: "@storybook/core-events@npm:6.4.20"
-  dependencies:
-    core-js: ^3.8.2
-  checksum: 5f8db3f4f940db309d67a23cdd41d7b326b4cbede70fa19f906a145b7b9863f5985ef01b5bf70ce71c8cd35457092974790d26629db8d8e78d6368fb237f349c
   languageName: node
   linkType: hard
 
@@ -3149,28 +3069,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/router@npm:6.4.20":
-  version: 6.4.20
-  resolution: "@storybook/router@npm:6.4.20"
-  dependencies:
-    "@storybook/client-logger": 6.4.20
-    core-js: ^3.8.2
-    fast-deep-equal: ^3.1.3
-    global: ^4.4.0
-    history: 5.0.0
-    lodash: ^4.17.21
-    memoizerific: ^1.11.3
-    qs: ^6.10.0
-    react-router: ^6.0.0
-    react-router-dom: ^6.0.0
-    ts-dedent: ^2.0.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: 3aac1445f0795773b07e8ef6cec881a3018df5ceccfe7758654acf4a06229c3cfaa425b74cb9bc55df45c1b6f33f2f672b50a322346d97838fb9d7185c6b0efc
-  languageName: node
-  linkType: hard
-
 "@storybook/router@npm:6.4.22":
   version: 6.4.22
   resolution: "@storybook/router@npm:6.4.22"
@@ -3249,29 +3147,6 @@ __metadata:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
   checksum: b2bd7be4aa3b71f17d371b0acb9cc5e39cd76c485b8f6c830f313ffb899a93496a352f17755d42c315108b6ab6b2ff576e7536c167fbe47a93ba65c55bf33874
-  languageName: node
-  linkType: hard
-
-"@storybook/theming@npm:6.4.20":
-  version: 6.4.20
-  resolution: "@storybook/theming@npm:6.4.20"
-  dependencies:
-    "@emotion/core": ^10.1.1
-    "@emotion/is-prop-valid": ^0.8.6
-    "@emotion/styled": ^10.0.27
-    "@storybook/client-logger": 6.4.20
-    core-js: ^3.8.2
-    deep-object-diff: ^1.1.0
-    emotion-theming: ^10.0.27
-    global: ^4.4.0
-    memoizerific: ^1.11.3
-    polished: ^4.0.5
-    resolve-from: ^5.0.0
-    ts-dedent: ^2.0.0
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: 38c73bac73e6c9d42673d60cf52aa835c051a7508de316b1f4d051d66fc3d4063342ae7d3b8bb65044b3ec632c8c564994915d6add7e3c9decd219c671b66b6a
   languageName: node
   linkType: hard
 
@@ -4164,9 +4039,9 @@ __metadata:
     "@storybook/addon-essentials": 6.4.22
     "@storybook/addon-interactions": 6.4.22
     "@storybook/addon-links": 6.4.22
-    "@storybook/addons": 6.4.20
+    "@storybook/addons": 6.4.22
     "@storybook/react": 6.4.22
-    "@storybook/theming": 6.4.20
+    "@storybook/theming": 6.4.22
     "@types/jsonwebtoken": 8.5.8
     "@types/node": 17.0.24
     "@types/react": 17.0.43
