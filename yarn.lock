@@ -4055,7 +4055,7 @@ __metadata:
     constructs: 10.x
     cross-env: 7.0.3
     eslint: 8.13.0
-    eslint-config-airbnb-typescript: 16.2.0
+    eslint-config-airbnb-typescript: 17.0.0
     eslint-config-prettier: 8.5.0
     eslint-plugin-import: 2.26.0
     eslint-plugin-jsx-a11y: 6.5.1
@@ -4065,7 +4065,7 @@ __metadata:
     jsonwebtoken: 8.x
     jwks-rsa: 2.x
     node-cache: 5.x
-    openapi-request-validator: 10.0.0
+    openapi-request-validator: 11.0.0
     prettier: 2.6.2
     react: 18.0.0
     react-dom: 18.0.0
@@ -6755,17 +6755,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-airbnb-typescript@npm:16.2.0":
-  version: 16.2.0
-  resolution: "eslint-config-airbnb-typescript@npm:16.2.0"
+"eslint-config-airbnb-typescript@npm:17.0.0":
+  version: 17.0.0
+  resolution: "eslint-config-airbnb-typescript@npm:17.0.0"
   dependencies:
     eslint-config-airbnb-base: ^15.0.0
   peerDependencies:
-    "@typescript-eslint/eslint-plugin": ^5.0.0
+    "@typescript-eslint/eslint-plugin": ^5.13.0
     "@typescript-eslint/parser": ^5.0.0
     eslint: ^7.32.0 || ^8.2.0
     eslint-plugin-import: ^2.25.3
-  checksum: eb44e32874f6ac566da7bfb451f7d271eab3c6f6f4e863bbacc13a7c6d09671f02819886d37f8fe670bafa6cc5fbe38450632cc9f8862e405734fd7bb813d02a
+  checksum: e598ae7bcc3629bbc847a749f8c1ad69e6ef111335b60d88bde91d1bb335077b06688868257fe2fcc95c3687a0d6e3e1f91e0534cc633f5a118239e52bb05a54
   languageName: node
   linkType: hard
 
@@ -10742,33 +10742,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-jsonschema-parameters@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "openapi-jsonschema-parameters@npm:10.0.0"
+"openapi-jsonschema-parameters@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "openapi-jsonschema-parameters@npm:11.0.0"
   dependencies:
-    openapi-types: ^10.0.0
-  checksum: b057f64253e9aaf7ababc8b47b77695b2db218f98614867ec8abc053674986359cab6bfd308f2a194d702ba919aadc7301462f2858ca3a1f120ba49384316f3a
+    openapi-types: ^11.0.0
+  checksum: c73d0d91249910898e2b6ee4255cf6036414b0146fb04161dc5b97871054ba6ec622aa5a273132f588830c3011c603c19cdd145e1fc498904090fa238150ae59
   languageName: node
   linkType: hard
 
-"openapi-request-validator@npm:10.0.0":
-  version: 10.0.0
-  resolution: "openapi-request-validator@npm:10.0.0"
+"openapi-request-validator@npm:11.0.0":
+  version: 11.0.0
+  resolution: "openapi-request-validator@npm:11.0.0"
   dependencies:
     ajv: ^8.3.0
     ajv-formats: ^2.1.0
     content-type: ^1.0.4
-    openapi-jsonschema-parameters: ^10.0.0
-    openapi-types: ^10.0.0
+    openapi-jsonschema-parameters: ^11.0.0
+    openapi-types: ^11.0.0
     ts-log: ^2.1.4
-  checksum: adb8f6026a04d1e3e582ea9f0b6a8c490f651ad5181309e2bb31902163b7f366377eba0e58239d555ec30ba741e121ff52244158d88fe4494d0683c30fa0b312
+  checksum: 578511c14306808905b287bf38a5df0828d4bd4025c138ad7be1ee3a4b53ac09000afa7170f02b804dc9f594ff55ac09cff5499b08f13161493609d94f467382
   languageName: node
   linkType: hard
 
-"openapi-types@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "openapi-types@npm:10.0.0"
-  checksum: 8cc8b5bf40ea10b1f9c56fb05aada74bfe3d9e94e141464561a5c3cd0a933906e57d9bf4e059219ec8e63a97a69e0655d21c9dd3f4de1ff4f71672d10664cfc0
+"openapi-types@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "openapi-types@npm:11.0.0"
+  checksum: 2c54c8edcd20b25713fceb51b5b3829b80c67ee070779f32e99e7fe26cf08afa3d53a047e62fe6e6831f80cd6a803b17ad16b0ae3c6f3abe638363832b6a917f
   languageName: node
   linkType: hard
 
