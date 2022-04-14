@@ -17,6 +17,7 @@ const Base = styled.div`
   overflow: visible;
   &[data-allowoverflow='false'] {
     overflow: hidden;
+    max-width: 100%;
   }
 `;
 
