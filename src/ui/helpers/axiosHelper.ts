@@ -1,5 +1,6 @@
 import { debug } from '../../common/helpers/log';
 import { isJson } from '../../common/helpers/object';
+import { sleep } from '../../common';
 import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 
 /**
@@ -25,6 +26,7 @@ export const axiosHelper = async <TOut>({
   onStaleAuth?: () => void;
 }): Promise<AxiosResponse<TOut>> => {
   let retry = 0;
+  let ret: AxiosResponse<TOut> | undefined;
   do {
     try {
       const setHeaders: { [a: string]: string } = {
@@ -33,7 +35,7 @@ export const axiosHelper = async <TOut>({
       };
 
       if (verb === 'get') {
-        const ret = await Axios.get<TOut>(url, {
+        ret = await Axios.get<TOut>(url, {
           headers: setHeaders,
           timeout,
           timeoutErrorMessage: `${url} timeout`,
@@ -60,8 +62,6 @@ export const axiosHelper = async <TOut>({
         axios = Axios.delete;
         noBody = true;
       }
-
-      let ret: AxiosResponse<TOut> | undefined;
 
       if (noBody) {
         ret = await axios<TOut>(url, {
@@ -95,6 +95,7 @@ export const axiosHelper = async <TOut>({
       }
     }
     retry += 1;
+    await sleep(1000);
   } while (retry <= retryMax);
   throw new Error('unexpected');
 };

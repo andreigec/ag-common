@@ -53,6 +53,7 @@ const Content = styled.div`
   align-items: center;
   max-height: calc(100vh - 20rem);
   overflow-y: auto;
+  overflow-x: hidden;
   &[data-hasitems='true'] {
     padding-bottom: 0.5rem;
   }

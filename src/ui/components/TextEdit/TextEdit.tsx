@@ -23,6 +23,9 @@ const basecss = css`
   font-size: inherit;
   font-weight: inherit;
   font-family: inherit;
+  &::placeholder {
+    color: #bbb;
+  }
 `;
 
 const ValueTextArea = styled.textarea`

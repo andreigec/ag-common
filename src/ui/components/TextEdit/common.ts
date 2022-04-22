@@ -7,6 +7,7 @@ export const ValueBox = styled.div`
   display: flex;
   position: relative;
   align-items: center;
+  background-color: white;
 
   justify-content: flex-start;
   flex-grow: 1;
