@@ -6,7 +6,7 @@ import { TextEditLengthBox } from './LengthBox';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
 import styled, { css, StyledComponent } from 'styled-components';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 export const ValueReadonly = styled.div`
   ${valueCss};
   word-break: break-word;
@@ -111,12 +111,15 @@ export const TextEdit = ({
     },
   );
 
-  const setEditing = (b: boolean) => {
-    setEditingRaw(b);
-    if (onEditingChange) {
-      onEditingChange(b);
-    }
-  };
+  const setEditing = useCallback(
+    (b: boolean) => {
+      setEditingRaw(b);
+      if (onEditingChange) {
+        onEditingChange(b);
+      }
+    },
+    [onEditingChange],
+  );
 
   useEffect(() => {
     setValue(defaultValue);
@@ -127,10 +130,8 @@ export const TextEdit = ({
     if (defaultEditing?.focus && taref.current) {
       taref.current.focus();
     }
-
-    setEditing(!!defaultEditing);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultEditing]);
+  }, []);
 
   if (!editing || disableEdit) {
     return (
