@@ -1,5 +1,5 @@
 import { ICallOpenApi } from './types';
-import { callOpenApiCachedRaw } from './cached';
+import { callOpenApiCachedRaw, setOpenApiCacheRaw } from './cached';
 import { callOpenApi } from './direct';
 import { CacheItems } from '../routes';
 import { AxiosWrapper } from '../jwt';
@@ -11,9 +11,13 @@ export type TUseCallOpenApi<T> = AxiosWrapper<T> & {
   loaded: boolean;
   loadcount: number;
   setData: (d: TUseCallOpenApiDispatch<T | undefined>) => void;
+  /**
+   * call when you want to refetch, but at a later point (ie same hook/cachekey across different components)
+   */
+  invalidateCacheKey: () => void;
 };
 
-type TUseCallOpenApi1<T, TDefaultApi> = ICallOpenApi<T, TDefaultApi> & {
+type TUseCallOpenApiInt<T, TDefaultApi> = ICallOpenApi<T, TDefaultApi> & {
   cacheKey: string;
   /**
    * will shortcut and return the appropriate axioswrapper data if cachekey is found
@@ -26,12 +30,12 @@ type TUseCallOpenApi1<T, TDefaultApi> = ICallOpenApi<T, TDefaultApi> & {
 };
 
 const defaultState = <T, TDefaultApi>(
-  p: TUseCallOpenApi1<T, TDefaultApi>,
+  p: TUseCallOpenApiInt<T, TDefaultApi>,
   /**
    * default false
    */
   noSsr = false,
-): TUseCallOpenApi<T> => {
+): Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData' | 'invalidateCacheKey'> => {
   const cachedData = noSsr
     ? undefined
     : callOpenApiCachedRaw({ ...p, onlyCached: true })?.data;
@@ -42,8 +46,6 @@ const defaultState = <T, TDefaultApi>(
     datetime: 0,
     loadcount: 0,
     loading: false,
-    reFetch: async () => {},
-    setData: () => {},
     ...(cachedData && { data: cachedData }),
     loaded: !!cachedData,
   };
@@ -55,34 +57,40 @@ const defaultState = <T, TDefaultApi>(
  * @returns
  */
 export const useCallOpenApi = <T, TDefaultApi>(
-  pIn: TUseCallOpenApi1<T, TDefaultApi>,
+  pIn: TUseCallOpenApiInt<T, TDefaultApi>,
 ): TUseCallOpenApi<T> => {
-  const [p, setP] = useState<TUseCallOpenApi1<T, TDefaultApi>>(pIn);
-  const [data, setData] = useState<TUseCallOpenApi<T>>(defaultState(p));
+  const [data, setData] = useState<
+    [
+      TUseCallOpenApiInt<T, TDefaultApi>,
+      Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData' | 'invalidateCacheKey'>,
+    ]
+  >([pIn, defaultState(pIn)]);
+
   useEffect(() => {
-    if (JSON.stringify(p) !== JSON.stringify(pIn)) {
-      setP(pIn);
-      setData(defaultState(pIn, true));
+    if (JSON.stringify(data[0]) !== JSON.stringify(pIn)) {
+      setData([pIn, defaultState(pIn, true)]);
     }
-  }, [p, pIn]);
+  }, [data, pIn]);
 
   useEffect(() => {
     async function run() {
-      const resp = await callOpenApi(p);
-      setData((d) => ({
-        ...resp,
-        loaded: true,
-        loading: false,
-        loadcount: d.loadcount + 1,
-        reFetch: async () => {},
-        url: '',
-        datetime: new Date().getTime(),
-        setData: () => {},
-      }));
+      const resp = await callOpenApi(data[0]);
+      setData((d) => [
+        d[0],
+        {
+          ...resp,
+          loaded: true,
+          loading: false,
+          loadcount: d[1].loadcount + 1,
+          url: '',
+          datetime: new Date().getTime(),
+        },
+      ]);
     }
 
-    const { error, loaded, loading, loadcount } = data;
-    const ng = p.disabled || loaded || loading || (error && loadcount > 2);
+    const { error, loaded, loading, loadcount } = data[1];
+    const ng =
+      data[0].disabled || loaded || loading || (error && loadcount > 2);
 
     if (ng) {
       return;
@@ -90,13 +98,19 @@ export const useCallOpenApi = <T, TDefaultApi>(
 
     setData((d) => ({ ...d, loading: true }));
     void run();
-  }, [data, p, setData]);
+  }, [data, setData]);
 
-  return {
-    ...data,
-    reFetch: async () => setData(defaultState(p, true)),
+  const ret: TUseCallOpenApi<T> = {
+    ...data[1],
+    reFetch: async () => setData([data[0], defaultState(data[0], true)]),
     setData: (d) => {
-      setData({ ...data, data: d(data.data), datetime: new Date().getTime() });
+      setData([
+        data[0],
+        { ...data[1], data: d(data[1].data), datetime: new Date().getTime() },
+      ]);
     },
+    invalidateCacheKey: () => setOpenApiCacheRaw(data[0], undefined),
   };
+
+  return ret;
 };

@@ -52,6 +52,20 @@ function getCacheKey({
   return cacheKeyRet;
 }
 
+export const setOpenApiCacheRaw = async <T>(
+  p: {
+    cacheKey: string;
+    overrideAuth?: OverrideAuth | undefined;
+  },
+  data: T,
+) => {
+  const userPrefixedCacheKey = getCacheKey(p);
+
+  if (callOpenApiCache && userPrefixedCacheKey) {
+    callOpenApiCache.set<T | undefined>(userPrefixedCacheKey, data);
+  }
+};
+
 /**
  * sync call to callOpenApiCache.
  * @param p
@@ -101,10 +115,6 @@ export const callOpenApiCached = async <T, TDefaultApi>(
     return { error: resp.error, data: undefined };
   }
 
-  const userPrefixedCacheKey = getCacheKey(p);
-
-  if (callOpenApiCache && userPrefixedCacheKey) {
-    callOpenApiCache.set<T | undefined>(userPrefixedCacheKey, resp.data);
-  }
+  await setOpenApiCacheRaw(p, resp.data);
   return resp;
 };
