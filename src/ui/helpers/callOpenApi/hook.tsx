@@ -1,5 +1,5 @@
 import { ICallOpenApi } from './types';
-import { callOpenApiCachedRaw, setOpenApiCacheRaw } from './cached';
+import { callOpenApiCachedRaw } from './cached';
 import { callOpenApi } from './direct';
 import { CacheItems } from '../routes';
 import { AxiosWrapper } from '../jwt';
@@ -11,10 +11,6 @@ export type TUseCallOpenApi<T> = AxiosWrapper<T> & {
   loaded: boolean;
   loadcount: number;
   setData: (d: TUseCallOpenApiDispatch<T | undefined>) => void;
-  /**
-   * call when you want to refetch, but at a later point (ie same hook/cachekey across different components)
-   */
-  invalidateCacheKey: () => void;
 };
 
 type TUseCallOpenApiInt<T, TDefaultApi> = ICallOpenApi<T, TDefaultApi> & {
@@ -35,7 +31,7 @@ const defaultState = <T, TDefaultApi>(
    * default false
    */
   noSsr = false,
-): Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData' | 'invalidateCacheKey'> => {
+): Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData'> => {
   const cachedData = noSsr
     ? undefined
     : callOpenApiCachedRaw({ ...p, onlyCached: true })?.data;
@@ -62,7 +58,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
   const [data, setData] = useState<
     [
       TUseCallOpenApiInt<T, TDefaultApi>,
-      Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData' | 'invalidateCacheKey'>,
+      Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData'>,
     ]
   >([pIn, defaultState(pIn)]);
 
@@ -96,7 +92,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
       return;
     }
 
-    setData((d) => ({ ...d, loading: true }));
+    setData((d) => [d[0], { ...d[1], loading: true }]);
     void run();
   }, [data, setData]);
 
@@ -109,7 +105,6 @@ export const useCallOpenApi = <T, TDefaultApi>(
         { ...data[1], data: d(data[1].data), datetime: new Date().getTime() },
       ]);
     },
-    invalidateCacheKey: () => setOpenApiCacheRaw(data[0], undefined),
   };
 
   return ret;

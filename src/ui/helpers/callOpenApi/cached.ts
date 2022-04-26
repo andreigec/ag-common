@@ -4,6 +4,7 @@ import { CacheItems } from '../routes';
 import { getCookieString } from '../cookie';
 import { toBase64 } from '../../../common/helpers/string';
 import { AxiosWrapperLite } from '../jwt';
+import { hashCode } from '../../../common';
 import NodeCache from 'node-cache';
 
 export type TCallOpenApiCached<T, TDefaultApi> = ICallOpenApi<
@@ -29,26 +30,39 @@ export type TCallOpenApiCached<T, TDefaultApi> = ICallOpenApi<
 };
 
 let callOpenApiCache: NodeCache | undefined;
+/**
+ * cache differs per user and per SSR provided data
+ * @param param0
+ * @returns
+ */
 function getCacheKey({
   cacheKey,
   overrideAuth,
+  ssrCacheItems,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ssrCacheItems?: any;
   cacheKey: string;
   overrideAuth?: OverrideAuth;
 }) {
-  const authkeyPrefix =
+  const authkeyPrefix1 =
     overrideAuth?.id_token ||
     getCookieString({
       name: 'id_token',
       defaultValue: '',
     });
 
+  const authPref = !authkeyPrefix1 ? '' : hashCode(toBase64(authkeyPrefix1));
+  const ssrCachePref = !ssrCacheItems
+    ? ''
+    : hashCode(toBase64(JSON.stringify(ssrCacheItems)));
+
   let cacheKeyRet: string | undefined;
 
   if (cacheKey) {
-    const pref = !authkeyPrefix ? '' : toBase64(authkeyPrefix);
-    cacheKeyRet = cacheKey + '||' + pref;
+    cacheKeyRet = `${cacheKey}||${authPref}||${ssrCachePref}`;
   }
+
   return cacheKeyRet;
 }
 
@@ -56,14 +70,23 @@ export const setOpenApiCacheRaw = async <T>(
   p: {
     cacheKey: string;
     overrideAuth?: OverrideAuth | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ssrCacheItems?: any;
+    cacheTtl?: number;
   },
   data: T,
 ) => {
   const userPrefixedCacheKey = getCacheKey(p);
 
-  if (callOpenApiCache && userPrefixedCacheKey) {
-    callOpenApiCache.set<T | undefined>(userPrefixedCacheKey, data);
+  if (!userPrefixedCacheKey) {
+    return;
   }
+
+  if (!callOpenApiCache) {
+    callOpenApiCache = new NodeCache({ stdTTL: p.cacheTtl || 120 });
+  }
+
+  callOpenApiCache.set<T | undefined>(userPrefixedCacheKey, data);
 };
 
 /**
