@@ -25,8 +25,16 @@ type TUseCallOpenApi1<T, TDefaultApi> = ICallOpenApi<T, TDefaultApi> & {
   cacheTtl?: number;
 };
 
-const defaultState = <T, TDefaultApi>(p: TUseCallOpenApi1<T, TDefaultApi>) => {
-  const cachedData = callOpenApiCachedRaw({ ...p, onlyCached: true })?.data;
+const defaultState = <T, TDefaultApi>(
+  p: TUseCallOpenApi1<T, TDefaultApi>,
+  /**
+   * default false
+   */
+  noSsr = false,
+): TUseCallOpenApi<T> => {
+  const cachedData = noSsr
+    ? undefined
+    : callOpenApiCachedRaw({ ...p, onlyCached: true })?.data;
 
   return {
     data: undefined,
@@ -54,7 +62,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
   useEffect(() => {
     if (JSON.stringify(p) !== JSON.stringify(pIn)) {
       setP(pIn);
-      setData(defaultState(pIn));
+      setData(defaultState(pIn, true));
     }
   }, [p, pIn]);
 
@@ -86,7 +94,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
 
   return {
     ...data,
-    reFetch: async () => setData(defaultState(p)),
+    reFetch: async () => setData(defaultState(p, true)),
     setData: (d) => {
       setData({ ...data, data: d(data.data), datetime: new Date().getTime() });
     },
