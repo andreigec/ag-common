@@ -1,4 +1,4 @@
-import { DropdownList } from '../src/ui/components/DropdownList';
+import { DropdownList } from '../../src/ui/components/DropdownList';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -12,8 +12,8 @@ const Template: ComponentStory<typeof DropdownList> = (args) => (
   <DropdownList {...args} />
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const Closed = Template.bind({});
+Closed.args = {
   options: ['1', '2', '3'],
   renderF: (v) => v as string,
 };

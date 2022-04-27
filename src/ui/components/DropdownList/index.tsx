@@ -1,8 +1,9 @@
-import { colours } from '../../styles/colours';
+import { IDropdownList } from './types';
 import { Icon } from '../Icon';
 import { convertRemToPixels } from '../../helpers/dom';
 import { Shadow } from '../../styles/common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
+import { colours } from '../../styles/colours';
 import styled, { css } from 'styled-components';
 import React, { useEffect, useState, useRef } from 'react';
 
@@ -16,8 +17,7 @@ const SBase = styled.div`
   flex-grow: 0;
 `;
 
-const SItems = styled.div<{
-  open?: boolean;
+const DropItems = styled.div<{
   shadow?: string;
   maxHeight: string;
 }>`
@@ -25,7 +25,7 @@ const SItems = styled.div<{
   z-index: 5;
 
   display: none;
-  position: absolute;
+
   background-color: white;
   cursor: default;
   width: 100%;
@@ -37,12 +37,13 @@ const SItems = styled.div<{
     `}
 
   overflow-y: auto;
-  ${({ open }) =>
-    open &&
-    css`
-      display: flex;
-    `}
-  ${({ shadow }) => shadow && Shadow(shadow)}
+  &[data-open='true'] {
+    display: flex;
+  }
+  &[data-defaultopen='false'] {
+    position: absolute;
+    ${({ shadow }) => shadow && Shadow(shadow)}
+  }
 `;
 
 const Dots = (
@@ -56,30 +57,29 @@ const Dots = (
   </svg>
 );
 
-const SItem = styled.div<{ selected?: boolean }>`
+const IconStyled = styled(Icon)`
+  position: absolute;
+`;
+
+const SList = styled.div`
   z-index: 1;
   font-weight: 500;
   padding-left: 0.5rem;
   flex-grow: 1;
   padding: 1rem;
   cursor: pointer;
-  ${({ selected }) =>
-    selected &&
-    css`
-      opacity: 1 !important;
-    `}
-  &:hover {
-    opacity: 0.9 !important;
-    background-color: ${colours.orange} !important;
+  &[data-selected='true'] {
+    cursor: default;
+    opacity: 1 !important;
+    background-color: ${colours.orangeRed} !important;
   }
-  ${({ selected }) =>
-    selected &&
-    css`
-      background-color: ${colours.orangeRed} !important;
-      &:hover {
-        background-color: ${colours.orangeRed} !important;
-      }
-    `}
+  &[data-selected='false'] {
+    &:hover {
+      opacity: 0.9 !important;
+      background-color: ${colours.orange} !important;
+    }
+  }
+
   &:nth-child(even) {
     background-color: rgba(0, 0, 0, 0.1);
   }
@@ -88,39 +88,55 @@ const SItem = styled.div<{ selected?: boolean }>`
   }
 `;
 
-export function DropdownList<T>({
+const List = <T,>({
   options,
-  value,
-  onChange,
-  placeholder,
-  className,
   renderF,
-  children,
-  shadow = '#555',
-  maxHeight = '50vh',
-}: {
-  options: T[];
-  value?: T;
-  onChange: (v: T, index: number) => void;
-  placeholder?: string;
-  className?: string;
-  renderF: (v: T) => string;
-  children?: JSX.Element;
-  /**
-   * colour of dropdown shadow. default #555
-   */
-  shadow?: string;
-  /**
-   * max height of items list. default 50vh
-   */
-  maxHeight?: string;
-}) {
+  onChange,
+  state,
+}: IDropdownList<T> & { state?: T }) => {
+  return (
+    <>
+      {options.map((s, i) => (
+        <SList
+          key={renderF(s)}
+          data-selected={s === state}
+          onClick={(e) => {
+            if (s !== state) {
+              onChange(s, i);
+            }
+
+            e.preventDefault();
+          }}
+        >
+          {renderF(s)}
+        </SList>
+      ))}
+    </>
+  );
+};
+
+export function DropdownList<T>(p: IDropdownList<T>) {
+  const {
+    options,
+    value,
+    placeholder,
+    className,
+    renderF,
+    children,
+    shadow = '#555',
+    maxHeight = '50vh',
+    defaultOpen = false,
+  } = p;
+
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState(value);
-  const [open, setOpen] = useState(false);
-  useOnClickOutside({ disabled: !open, ref, moveMouseOutside: false }, () => {
-    setOpen(false);
-  });
+  const [open, setOpen] = useState(defaultOpen);
+  useOnClickOutside(
+    { disabled: !open || defaultOpen, ref, moveMouseOutside: false },
+    () => {
+      setOpen(false);
+    },
+  );
 
   useEffect(() => {
     const newv = value;
@@ -133,7 +149,7 @@ export function DropdownList<T>({
   useEffect(() => {
     const maxLen = Math.max(...options.map((s) => renderF(s).length));
     const newStyle: Record<string, string | number> = {
-      width: `calc(${maxLen}ch + 2rem)`,
+      width: defaultOpen ? '100%' : `calc(${maxLen}ch + 2rem)`,
     };
 
     const minPx = convertRemToPixels(2 + maxLen / 2);
@@ -157,7 +173,7 @@ export function DropdownList<T>({
     if (JSON.stringify(style) !== JSON.stringify(newStyle)) {
       setStyle(newStyle);
     }
-  }, [open, options, renderF, style]);
+  }, [defaultOpen, open, options, renderF, style]);
 
   return (
     <SBase
@@ -165,42 +181,38 @@ export function DropdownList<T>({
       ref={ref}
       title={placeholder}
       onClick={(e) => {
+        if (defaultOpen) {
+          return;
+        }
+
         e.stopPropagation();
         e.preventDefault();
         setOpen(!open);
       }}
     >
-      <SItems open={open} style={style} shadow={shadow} maxHeight={maxHeight}>
-        {open &&
-          options.map((s, i) => (
-            <SItem
-              key={renderF(s)}
-              selected={s === state}
-              onClick={(e) => {
-                if (s !== state) {
-                  onChange(s, i);
-                }
-
-                e.preventDefault();
-              }}
-            >
-              {renderF(s)}
-            </SItem>
-          ))}
-      </SItems>
-      {children || (
-        <Icon
-          width="2rem"
-          height="2rem"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            setOpen(!open);
-          }}
-        >
-          {Dots}
-        </Icon>
-      )}
+      <DropItems
+        data-defaultopen={p.defaultOpen}
+        data-open={open}
+        style={style}
+        shadow={shadow}
+        maxHeight={maxHeight}
+      >
+        {open && <List {...p} state={state} />}
+      </DropItems>
+      {children ||
+        (!defaultOpen && (
+          <IconStyled
+            width="2rem"
+            height="2rem"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              setOpen(!open);
+            }}
+          >
+            {Dots}
+          </IconStyled>
+        ))}
     </SBase>
   );
 }
