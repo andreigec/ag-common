@@ -176,12 +176,13 @@ export const TextEdit = ({
       data-editing="true"
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={ref as any}
-      tabIndex={editing ? 0 : undefined}
+      tabIndex={-1}
       data-nogrow={noGrow}
       {...attributes}
     >
       {leftContent || null}
       <Comp
+        tabIndex={editing ? 0 : undefined}
         data-editing="true"
         data-valuechange={valueChange.toString()}
         ref={taref}
