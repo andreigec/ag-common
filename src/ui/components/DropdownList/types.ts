@@ -15,7 +15,7 @@ export interface IDropdownList<T> {
    */
   maxHeight?: string;
   /**
-   * if true, will show expanded. default false
+   * if true, will show expanded first item. default false
    */
   defaultOpen?: boolean;
 }

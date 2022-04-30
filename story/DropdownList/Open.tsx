@@ -9,7 +9,9 @@ export default {
 } as ComponentMeta<typeof DropdownList>;
 
 const Template: ComponentStory<typeof DropdownList> = (args) => (
-  <DropdownList {...args} />
+  <div style={{ width: '5rem' }}>
+    <DropdownList {...args} />
+  </div>
 );
 
 export const Open = Template.bind({});

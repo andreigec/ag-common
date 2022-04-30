@@ -23,13 +23,12 @@ const DropItems = styled.div<{
 }>`
   flex-flow: column;
   z-index: 5;
-
   display: none;
-
   background-color: white;
   cursor: default;
   width: 100%;
-  max-width: 95vw;
+  position: absolute;
+  ${({ shadow }) => shadow && Shadow(shadow)}
   ${({ maxHeight }) =>
     maxHeight &&
     css`
@@ -39,10 +38,6 @@ const DropItems = styled.div<{
   overflow-y: auto;
   &[data-open='true'] {
     display: flex;
-  }
-  &[data-defaultopen='false'] {
-    position: absolute;
-    ${({ shadow }) => shadow && Shadow(shadow)}
   }
 `;
 
@@ -61,7 +56,7 @@ const IconStyled = styled(Icon)`
   position: absolute;
 `;
 
-const SList = styled.div`
+const ListItemStyle = styled.div`
   z-index: 1;
   font-weight: 500;
   padding-left: 0.5rem;
@@ -88,32 +83,33 @@ const SList = styled.div`
   }
 `;
 
-const List = <T,>({
-  options,
+const ListItem = <T,>({
+  s,
+  i,
   renderF,
   onChange,
   state,
-}: IDropdownList<T> & { state?: T }) => {
-  return (
-    <>
-      {options.map((s, i) => (
-        <SList
-          key={renderF(s)}
-          data-selected={s === state}
-          onClick={(e) => {
-            if (s !== state) {
-              onChange(s, i);
-            }
+}: {
+  s: T;
+  i: number;
+  renderF: (v: T) => string;
+  state: T | undefined;
+  onChange: (v: T, index: number) => void;
+}) => (
+  <ListItemStyle
+    key={renderF(s)}
+    data-selected={s === state}
+    onClick={(e) => {
+      if (s !== state) {
+        onChange(s, i);
+      }
 
-            e.preventDefault();
-          }}
-        >
-          {renderF(s)}
-        </SList>
-      ))}
-    </>
-  );
-};
+      e.preventDefault();
+    }}
+  >
+    {renderF(s)}
+  </ListItemStyle>
+);
 
 export function DropdownList<T>(p: IDropdownList<T>) {
   const {
@@ -130,13 +126,10 @@ export function DropdownList<T>(p: IDropdownList<T>) {
 
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState(value);
-  const [open, setOpen] = useState(defaultOpen);
-  useOnClickOutside(
-    { disabled: !open || defaultOpen, ref, moveMouseOutside: false },
-    () => {
-      setOpen(false);
-    },
-  );
+  const [open, setOpen] = useState(false);
+  useOnClickOutside({ disabled: !open, ref, moveMouseOutside: false }, () => {
+    setOpen(false);
+  });
 
   useEffect(() => {
     const newv = value;
@@ -166,41 +159,41 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     //below screen
     if (b.bottom + 50 > ih) {
       newStyle.bottom = '1rem';
-    } else {
+    } else if (!defaultOpen) {
       newStyle.top = '100%';
+    } else if (defaultOpen) {
+      newStyle.top = '0';
     }
 
     if (JSON.stringify(style) !== JSON.stringify(newStyle)) {
       setStyle(newStyle);
     }
   }, [defaultOpen, open, options, renderF, style]);
-
   return (
     <SBase
       className={className}
       ref={ref}
       title={placeholder}
       onClick={(e) => {
-        if (defaultOpen) {
-          return;
-        }
-
         e.stopPropagation();
         e.preventDefault();
         setOpen(!open);
       }}
     >
       <DropItems
-        data-defaultopen={p.defaultOpen}
         data-open={open}
         style={style}
         shadow={shadow}
         maxHeight={maxHeight}
       >
-        {open && <List {...p} state={state} />}
+        {open &&
+          options.map((s, i) => (
+            <ListItem key={p.renderF(s)} s={s} i={i} {...p} state={state} />
+          ))}
       </DropItems>
+
       {children ||
-        (!defaultOpen && (
+        (!defaultOpen ? (
           <IconStyled
             width="2rem"
             height="2rem"
@@ -212,6 +205,14 @@ export function DropdownList<T>(p: IDropdownList<T>) {
           >
             {Dots}
           </IconStyled>
+        ) : (
+          <ListItem
+            key={p.renderF(options[0])}
+            s={options[0]}
+            i={0}
+            {...p}
+            state={state}
+          />
         ))}
     </SBase>
   );
