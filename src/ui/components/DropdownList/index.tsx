@@ -1,9 +1,9 @@
 import { IDropdownList } from './types';
-import { Icon } from '../Icon';
 import { convertRemToPixels } from '../../helpers/dom';
 import { Shadow } from '../../styles/common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { colours } from '../../styles/colours';
+import { KebabDots } from '../KebabDots';
 import styled, { css } from 'styled-components';
 import React, { useEffect, useState, useRef } from 'react';
 
@@ -41,21 +41,6 @@ const DropItems = styled.div<{
   }
 `;
 
-const Dots = (
-  <svg
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-    fillRule="evenodd"
-    clipRule="evenodd"
-  >
-    <path d="M16 12a3.001 3.001 0 016 0 3.001 3.001 0 01-6 0zm1 0a2 2 0 114.001.001A2 2 0 0117 12zm-8 0a3.001 3.001 0 016 0 3.001 3.001 0 01-6 0zm1 0a2 2 0 114.001.001A2 2 0 0110 12zm-8 0a3.001 3.001 0 016 0 3.001 3.001 0 01-6 0zm1 0a2 2 0 114.001.001A2 2 0 013 12z" />
-  </svg>
-);
-
-const IconStyled = styled(Icon)`
-  position: absolute;
-`;
-
 const ListItemStyle = styled.div`
   z-index: 1;
   font-weight: 500;
@@ -63,8 +48,11 @@ const ListItemStyle = styled.div`
   flex-grow: 1;
   padding: 1rem;
   cursor: pointer;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
   &[data-selected='true'] {
-    cursor: default;
     opacity: 1 !important;
     background-color: ${colours.orangeRed} !important;
   }
@@ -83,31 +71,29 @@ const ListItemStyle = styled.div`
   }
 `;
 
-const ListItem = <T,>({
-  s,
-  i,
-  renderF,
+const ListItem = ({
+  render,
   onChange,
-  state,
+  selected,
+  key,
 }: {
-  s: T;
-  i: number;
-  renderF: (v: T) => string;
-  state: T | undefined;
-  onChange: (v: T, index: number) => void;
+  key: string;
+  selected: boolean;
+  render: JSX.Element | string;
+  onChange?: () => void;
 }) => (
   <ListItemStyle
-    key={renderF(s)}
-    data-selected={s === state}
+    key={key}
+    data-selected={selected}
     onClick={(e) => {
-      if (s !== state) {
-        onChange(s, i);
+      if (!selected) {
+        onChange?.();
       }
 
       e.preventDefault();
     }}
   >
-    {renderF(s)}
+    {render}
   </ListItemStyle>
 );
 
@@ -118,10 +104,8 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     placeholder,
     className,
     renderF,
-    children,
     shadow = '#555',
     maxHeight = '50vh',
-    defaultOpen = false,
   } = p;
 
   const ref = useRef<HTMLDivElement>(null);
@@ -142,16 +126,15 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   useEffect(() => {
     const maxLen = Math.max(...options.map((s) => renderF(s).length));
     const newStyle: Record<string, string | number> = {
-      width: defaultOpen ? '100%' : `calc(${maxLen}ch + 2rem)`,
+      minWidth: `calc(${maxLen}ch + 2rem)`,
     };
 
     const minPx = convertRemToPixels(2 + maxLen / 2);
     const offsetLeft = ref?.current?.offsetLeft ?? 0;
-
     if (offsetLeft < minPx) {
       newStyle.left = '0';
     } else {
-      newStyle.right = '1rem';
+      newStyle.right = '0';
     }
 
     const b = ref?.current?.getBoundingClientRect() ?? { bottom: 0 };
@@ -159,16 +142,21 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     //below screen
     if (b.bottom + 50 > ih) {
       newStyle.bottom = '1rem';
-    } else if (!defaultOpen) {
-      newStyle.top = '100%';
-    } else if (defaultOpen) {
+    } else {
       newStyle.top = '0';
     }
 
     if (JSON.stringify(style) !== JSON.stringify(newStyle)) {
       setStyle(newStyle);
     }
-  }, [defaultOpen, open, options, renderF, style]);
+  }, [open, options, renderF, style]);
+
+  const defaultRender = !p.value ? <KebabDots /> : <>{p.renderF(p.value)}</>;
+  const defaultKey = !p.value ? '(noval)' : p.renderF(p.value);
+  const openDisplay = p.children || (
+    <ListItem selected render={defaultRender} key={defaultKey} />
+  );
+
   return (
     <SBase
       className={className}
@@ -188,32 +176,16 @@ export function DropdownList<T>(p: IDropdownList<T>) {
       >
         {open &&
           options.map((s, i) => (
-            <ListItem key={p.renderF(s)} s={s} i={i} {...p} state={state} />
+            <ListItem
+              key={p.renderF(s)}
+              render={p.renderF(s)}
+              onChange={() => p.onChange(s, i)}
+              selected={s === state}
+            />
           ))}
       </DropItems>
 
-      {children ||
-        (!defaultOpen ? (
-          <IconStyled
-            width="2rem"
-            height="2rem"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              setOpen(!open);
-            }}
-          >
-            {Dots}
-          </IconStyled>
-        ) : (
-          <ListItem
-            key={p.renderF(options[0])}
-            s={options[0]}
-            i={0}
-            {...p}
-            state={state}
-          />
-        ))}
+      {openDisplay}
     </SBase>
   );
 }

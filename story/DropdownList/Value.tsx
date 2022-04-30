@@ -1,4 +1,5 @@
 import { DropdownList } from '../../src/ui/components/DropdownList';
+import { IDropdownList } from '../../src/ui/components/DropdownList/types';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -9,14 +10,15 @@ export default {
 } as ComponentMeta<typeof DropdownList>;
 
 const Template: ComponentStory<typeof DropdownList> = (args) => (
-  <div style={{ width: '5rem' }}>
+  <div style={{ width: '5rem', marginLeft: '5rem' }}>
     <DropdownList {...args} />
   </div>
 );
 
-export const Open = Template.bind({});
-Open.args = {
-  options: ['1', '2', '3'],
+export const Value = Template.bind({});
+Value.args = {
+  options: ['LONG VALUEEEE', '1', '3'],
   renderF: (v) => v as string,
-  defaultOpen: true,
-};
+  value: 'LONG VALUEEEE',
+  placeholder: 'test ph',
+} as IDropdownList<string>;

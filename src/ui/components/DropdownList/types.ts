@@ -1,11 +1,22 @@
 export interface IDropdownList<T> {
+  /**
+   * all items that can be in dropdown
+   */
   options: T[];
+  /**
+   * selected item from options.
+   */
   value?: T;
   onChange: (v: T, index: number) => void;
+  /**
+   * placeholder title for list
+   */
   placeholder?: string;
   className?: string;
+  /**
+   * function to render value
+   */
   renderF: (v: T) => string;
-  children?: JSX.Element;
   /**
    * colour of dropdown shadow. default #555
    */
@@ -15,7 +26,7 @@ export interface IDropdownList<T> {
    */
   maxHeight?: string;
   /**
-   * if true, will show expanded first item. default false
+   * if not provided, will default display value, then kebab dots
    */
-  defaultOpen?: boolean;
+  children?: JSX.Element;
 }
