@@ -75,15 +75,12 @@ const ListItem = ({
   render,
   onChange,
   selected,
-  key,
 }: {
-  key: string;
   selected: boolean;
   render: JSX.Element | string;
   onChange?: () => void;
 }) => (
   <ListItemStyle
-    key={key}
     data-selected={selected}
     onClick={(e) => {
       if (!selected) {
