@@ -12,7 +12,7 @@ export interface IOpenApi {
   servers: { url: string }[];
   components: { securitySchemes: { [name: string]: IOpenApiSecurityScheme } };
 }
-export interface ICodeBlock<TDefaultApi> {
+export interface IOpenApiCodeBlock<TDefaultApi> {
   /**
    * openapi schema. eg
    * const schema: any = require('common/openapi.generated').default;

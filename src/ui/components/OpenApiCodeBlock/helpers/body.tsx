@@ -1,10 +1,10 @@
 import { Highlight, Highlight2 } from './common';
 import { indexOfNumber } from '../../../../common';
-import { ICodeBlock } from '../types';
+import { IOpenApiCodeBlock } from '../types';
 import React from 'react';
 
 export const getBody = <TDefaultApi,>(
-  p: ICodeBlock<TDefaultApi>,
+  p: IOpenApiCodeBlock<TDefaultApi>,
 ): { content: JSX.Element | undefined; header: JSX.Element | undefined } => {
   const body = p.funcF.toString();
   const bstart = indexOfNumber(body, '(', 1);

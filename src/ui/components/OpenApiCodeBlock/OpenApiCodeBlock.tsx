@@ -1,4 +1,4 @@
-import { ICodeBlock } from './types';
+import { IOpenApiCodeBlock } from './types';
 import { getLines, Highlight } from './helpers/common';
 import { FlexRow } from '../FlexRow';
 import React from 'react';
@@ -42,7 +42,9 @@ const Curl = styled.div`
   white-space: pre;
 `;
 
-export const OpenApiCodeBlock = <TDefaultApi,>(p: ICodeBlock<TDefaultApi>) => {
+export const OpenApiCodeBlock = <TDefaultApi,>(
+  p: IOpenApiCodeBlock<TDefaultApi>,
+) => {
   const { path, verb, error, headerLines, fullApiUrl, bodyLine, operation } =
     getLines(p);
 

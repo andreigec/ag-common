@@ -1,10 +1,10 @@
 import { Highlight, Highlight2 } from './common';
-import { ICodeBlock, IOpenApiOperation } from '../types';
+import { IOpenApiCodeBlock, IOpenApiOperation } from '../types';
 import { toTitleCase } from '../../../../common/helpers/string';
 import React from 'react';
 
 export const getSecurityLine = <TDefaultApi,>(
-  p: ICodeBlock<TDefaultApi>,
+  p: IOpenApiCodeBlock<TDefaultApi>,
   { operation }: { operation: IOpenApiOperation },
 ): { error?: string; content: JSX.Element } => {
   const security1 = operation.security?.[0];

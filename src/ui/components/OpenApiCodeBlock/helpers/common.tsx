@@ -1,6 +1,6 @@
 import { getSecurityLine } from './security';
 import { getBody } from './body';
-import { ICodeBlock } from '../types';
+import { IOpenApiCodeBlock } from '../types';
 import { indexOfNumber } from '../../../../common/helpers/string';
 import styled from 'styled-components';
 import React from 'react';
@@ -11,11 +11,11 @@ export const Highlight = styled.span`
 export const Highlight2 = styled.span`
   color: indianred;
 `;
-const getApiUrl = <TDefaultApi,>(p: ICodeBlock<TDefaultApi>) => {
+const getApiUrl = <TDefaultApi,>(p: IOpenApiCodeBlock<TDefaultApi>) => {
   return p.schema.servers[0].url;
 };
 
-const getFunctionName = <TDefaultApi,>(p: ICodeBlock<TDefaultApi>) => {
+const getFunctionName = <TDefaultApi,>(p: IOpenApiCodeBlock<TDefaultApi>) => {
   let ret = p.funcF.toString();
   const i1 = ret.indexOf('.') + 1;
   const i2 = indexOfNumber(ret, '(', 1);
@@ -23,7 +23,7 @@ const getFunctionName = <TDefaultApi,>(p: ICodeBlock<TDefaultApi>) => {
   return ret;
 };
 
-const getOperation = <TDefaultApi,>(p: ICodeBlock<TDefaultApi>) => {
+const getOperation = <TDefaultApi,>(p: IOpenApiCodeBlock<TDefaultApi>) => {
   let path: string | undefined;
   let verb: string | undefined;
   const func = getFunctionName(p);
@@ -44,7 +44,7 @@ const getOperation = <TDefaultApi,>(p: ICodeBlock<TDefaultApi>) => {
   return { operation, verb, path };
 };
 
-export const getLines = <TDefaultApi,>(p: ICodeBlock<TDefaultApi>) => {
+export const getLines = <TDefaultApi,>(p: IOpenApiCodeBlock<TDefaultApi>) => {
   const ops = getOperation(p);
   if (ops.error || !ops.operation) {
     return { error: ops.error };
