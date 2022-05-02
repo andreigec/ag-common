@@ -42,11 +42,11 @@ const Curl = styled.div`
   white-space: pre;
 `;
 
-export const CodeBlock = <TDefaultApi,>(p: ICodeBlock<TDefaultApi>) => {
+export const OpenApiCodeBlock = <TDefaultApi,>(p: ICodeBlock<TDefaultApi>) => {
   const { path, verb, error, headerLines, fullApiUrl, bodyLine, operation } =
     getLines(p);
 
-  if (error || !verb) {
+  if (error || !verb || !operation) {
     return <Base>{error}</Base>;
   }
 

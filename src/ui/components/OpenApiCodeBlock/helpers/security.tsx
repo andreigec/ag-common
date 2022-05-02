@@ -1,12 +1,11 @@
 import { Highlight, Highlight2 } from './common';
-import { ICodeBlock } from '../types';
+import { ICodeBlock, IOpenApiOperation } from '../types';
 import { toTitleCase } from '../../../../common/helpers/string';
 import React from 'react';
 
 export const getSecurityLine = <TDefaultApi,>(
   p: ICodeBlock<TDefaultApi>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { operation }: { operation: any },
+  { operation }: { operation: IOpenApiOperation },
 ): { error?: string; content: JSX.Element } => {
   const security1 = operation.security?.[0];
   const security2 = !security1 ? undefined : Object.keys(security1)[0];

@@ -2,7 +2,7 @@ export * from './BorderGradient';
 export * from './Button';
 export * from './Chevron';
 export * from './Close';
-export * from './CodeBlock';
+export * from './OpenApiCodeBlock';
 export * from './Confirm/Dialog';
 export * from './DropdownList';
 export * from './FlexColumn';
