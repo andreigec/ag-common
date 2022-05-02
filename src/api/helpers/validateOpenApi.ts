@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
-import { getAndValidateToken } from './validations';
+import { getAndValidateToken, TGetAndValidateToken } from './validations';
 import { returnCode } from './api';
 import { warn, error as errorF, info, debug } from '../../common/helpers/log';
 import {
@@ -73,7 +73,9 @@ export async function validateOpenApi<T>({
   schema,
   COGNITO_USER_POOL_ID,
   jwksRegion = 'ap-southeast-2',
+  getAndValidateTokenOverride,
 }: {
+  getAndValidateTokenOverride?: TGetAndValidateToken;
   COGNITO_USER_POOL_ID: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: any;
@@ -156,7 +158,8 @@ export async function validateOpenApi<T>({
     event.headers?.Authorization || event.headers?.authorization;
 
   if (authorized === true || (authorized === 'optional' && authHeader)) {
-    ({ error, userProfile } = await getAndValidateToken({
+    const vf = getAndValidateTokenOverride ?? getAndValidateToken;
+    ({ error, userProfile } = await vf({
       tokenRaw: authHeader,
       COGNITO_USER_POOL_ID,
       jwksRegion,

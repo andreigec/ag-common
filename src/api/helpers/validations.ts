@@ -66,22 +66,24 @@ const jwtVerify = async ({
   });
 };
 
-export const getAndValidateToken = async ({
-  tokenRaw,
-  jwksRegion = 'ap-southeast-2',
-  COGNITO_USER_POOL_ID,
-}: {
+export interface IGetAndValidateToken {
   /**
    * default ap-southeast-2
    */
   jwksRegion?: string;
   tokenRaw?: string;
   COGNITO_USER_POOL_ID: string;
-}): Promise<{
+}
+export type TGetAndValidateToken = (p: IGetAndValidateToken) => Promise<{
   error?: APIGatewayProxyResult;
   token?: string;
   userProfile?: User;
-}> => {
+}>;
+export const getAndValidateToken: TGetAndValidateToken = async ({
+  tokenRaw,
+  jwksRegion = 'ap-southeast-2',
+  COGNITO_USER_POOL_ID,
+}) => {
   const jwksUri = `https://cognito-idp.${jwksRegion}.amazonaws.com/${COGNITO_USER_POOL_ID}/.well-known/jwks.json`;
   const issuer = `https://cognito-idp.${jwksRegion}.amazonaws.com/${COGNITO_USER_POOL_ID}`;
   let token = '';

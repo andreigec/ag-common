@@ -232,3 +232,15 @@ export function stringToObject(
   });
   return ret;
 }
+
+export const indexOfNumber = (str: string, char: string, num = 0) => {
+  let ret = -1;
+  for (let c = 0; c <= num; c += 1) {
+    ret = str.indexOf(char, ret + 1);
+  }
+
+  if (ret === -1) {
+    return undefined;
+  }
+  return ret;
+};
