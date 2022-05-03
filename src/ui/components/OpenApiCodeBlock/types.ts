@@ -1,7 +1,7 @@
 export interface IOpenApiOperation {
   description: string;
   operationId: string;
-  security?: { [name: string]: string };
+  security?: { [name: string]: string }[];
 }
 export interface IOpenApiSecurityScheme {
   in: string;
@@ -21,4 +21,31 @@ export interface IOpenApiCodeBlock<TDefaultApi> {
   apiKey?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   funcF: (f: TDefaultApi) => Promise<any>;
+}
+
+export interface ICurlLines {
+  error?: string;
+  verb?: string;
+  path?: string;
+  headerLines?: JSX.Element[];
+  fullApiUrl?: string;
+  bodyLine?: JSX.Element;
+  operation?: IOpenApiOperation;
+}
+
+export interface IFetchLines {
+  error?: string;
+  verb?: string;
+  path?: string;
+  fullApiUrl?: string;
+  reqContent?: JSX.Element;
+  operation?: IOpenApiOperation;
+}
+
+export interface IOpenApiOperationBlock {
+  error?: string;
+  operation: IOpenApiOperation;
+  verb: string;
+  path: string;
+  fullApiUrl: string;
 }

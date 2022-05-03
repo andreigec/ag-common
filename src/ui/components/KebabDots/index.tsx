@@ -14,6 +14,7 @@ const Dots = (
 
 const IconStyled = styled(Icon)`
   position: absolute;
+  background-color: white;
 `;
 
 export const KebabDots = ({ onClick }: { onClick?: () => Promise<void> }) => (

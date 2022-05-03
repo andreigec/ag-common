@@ -1,12 +1,14 @@
 import { IOpenApiCodeBlock } from './types';
-import { getLines, Highlight } from './helpers/common';
+import { getOperation } from './helpers/common';
+import { Curl } from './curl';
+import { Fetch } from './fetch';
 import { FlexRow } from '../FlexRow';
 import React from 'react';
 import styled from 'styled-components';
 const Base = styled.div`
   display: flex;
   flex-flow: column;
-  width: 100%;
+  width: calc(100% - 4rem);
   flex-grow: 1;
   border: solid 1px #333;
   margin: 1rem;
@@ -38,19 +40,16 @@ const Block = styled.div`
   margin-top: 0.5rem;
 `;
 
-const Curl = styled.div`
-  white-space: pre;
-`;
-
 export const OpenApiCodeBlock = <TDefaultApi,>(
   p: IOpenApiCodeBlock<TDefaultApi>,
 ) => {
-  const { path, verb, error, headerLines, fullApiUrl, bodyLine, operation } =
-    getLines(p);
+  const ops = getOperation(p);
 
-  if (error || !verb || !operation) {
-    return <Base>{error}</Base>;
+  if (ops.error || !ops.verb || !ops.operation) {
+    return <Base>{ops.error}</Base>;
   }
+
+  const { verb, operation, path } = ops;
 
   return (
     <Base>
@@ -62,17 +61,13 @@ export const OpenApiCodeBlock = <TDefaultApi,>(
       <Block>
         {verb.toUpperCase()} {path}
       </Block>
-      <BlockTitle>Example Request</BlockTitle>
+      <BlockTitle>Example curl Request</BlockTitle>
       <Block>
-        <Curl>
-          curl --request {verb.toUpperCase()}&nbsp;\
-          <br />
-          --url <Highlight>&apos;{fullApiUrl}&apos;</Highlight>&nbsp;\
-          <br />
-          <>{headerLines}</>
-          <br />
-          {bodyLine}
-        </Curl>
+        <Curl ops={ops} p={p} />
+      </Block>
+      <BlockTitle>Example fetch Request</BlockTitle>
+      <Block>
+        <Fetch ops={ops} p={p} />
       </Block>
     </Base>
   );
