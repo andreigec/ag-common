@@ -1,19 +1,6 @@
 import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../../types';
-import {
-  Highlight2,
-  Highlight,
-  getBodyJson,
-  getSecurity,
-} from '../../helpers/common';
-import { joinJsxWithComma } from '../../helpers/joinJsx';
-import { toTitleCase } from '../../../../../common';
+import { Highlight2, Highlight } from '../../helpers/common';
 import React from 'react';
-import styled from 'styled-components';
-const rb = <>&#125;</>;
-const lb = <>&#123;</>;
-const Lpad = styled.div`
-  padding-left: 0.5rem;
-`;
 
 export const getFetchCall = <TDefaultApi,>(
   p: IOpenApiCodeBlock<TDefaultApi>,
@@ -22,7 +9,9 @@ export const getFetchCall = <TDefaultApi,>(
   return (
     <>
       <Highlight>const</Highlight>&nbsp;response = <Highlight>await</Highlight>{' '}
-      <Highlight2>fetch</Highlight2>
+      <Highlight2>fetch</Highlight2>(
+      <Highlight>&apos;{ops.fullApiUrl}&apos;</Highlight>,&nbsp;
+      requestOptions);
     </>
   );
 };

@@ -25,7 +25,7 @@ const schema: IOpenApi = {
   },
   paths: {
     '/testpath': {
-      get: {
+      post: {
         description: 'test path',
         operationId: 'testop',
         security: [{ TestSec: 'TestSec' }],

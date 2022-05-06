@@ -1,12 +1,11 @@
 import { IDropdownList } from './types';
 import { convertRemToPixels } from '../../helpers/dom';
-import { Shadow } from '../../styles/common';
+import { Shadow, bounce } from '../../styles/common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { colours } from '../../styles/colours';
 import { KebabDots } from '../KebabDots';
 import styled, { css } from 'styled-components';
 import React, { useEffect, useState, useRef } from 'react';
-
 const SBase = styled.div`
   display: flex;
   flex-flow: row;
@@ -39,6 +38,7 @@ const DropItems = styled.div<{
   &[data-open='true'] {
     display: flex;
   }
+  ${bounce('data-bounced')}
 `;
 
 const ListItemStyle = styled.div`
@@ -52,14 +52,16 @@ const ListItemStyle = styled.div`
   overflow: hidden;
   justify-content: center;
   align-items: center;
-  &[data-selected='true'] {
-    opacity: 1 !important;
-    background-color: ${colours.orangeRed} !important;
-  }
-  &[data-selected='false'] {
-    &:hover {
-      opacity: 0.9 !important;
-      background-color: ${colours.orange} !important;
+  &[data-default='false'] {
+    &[data-selected='true'] {
+      opacity: 1 !important;
+      background-color: ${colours.orangeRed} !important;
+    }
+    &[data-selected='false'] {
+      &:hover {
+        opacity: 0.9 !important;
+        background-color: ${colours.orange} !important;
+      }
     }
   }
 
@@ -75,13 +77,16 @@ const ListItem = ({
   render,
   onChange,
   selected,
+  defaultV = false,
 }: {
+  defaultV?: boolean;
   selected: boolean;
   render: JSX.Element | string;
   onChange?: () => void;
 }) => (
   <ListItemStyle
     data-selected={selected}
+    data-default={defaultV}
     onClick={(e) => {
       if (!selected) {
         onChange?.();
@@ -108,8 +113,10 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState(value);
   const [open, setOpen] = useState(false);
+  const [bounced, setBounced] = useState(false);
   useOnClickOutside({ disabled: !open, ref, moveMouseOutside: false }, () => {
     setOpen(false);
+    setBounced(false);
   });
 
   useEffect(() => {
@@ -151,8 +158,19 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   const defaultRender = !p.value ? <KebabDots /> : <>{p.renderF(p.value)}</>;
   const defaultKey = !p.value ? '(noval)' : p.renderF(p.value);
   const openDisplay = p.children || (
-    <ListItem selected render={defaultRender} key={defaultKey} />
+    <ListItem
+      selected
+      render={defaultRender}
+      key={defaultKey}
+      defaultV={!p.value}
+    />
   );
+
+  useEffect(() => {
+    if (!bounced && open) {
+      setBounced(true);
+    }
+  }, [bounced, open]);
 
   return (
     <SBase
@@ -170,6 +188,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
         style={style}
         shadow={shadow}
         maxHeight={maxHeight}
+        data-bounced={bounced}
       >
         {open &&
           options.map((s, i) => (

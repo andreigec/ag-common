@@ -1,6 +1,7 @@
 import { Close } from '../Close';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
-import React, { useRef } from 'react';
+import { bounce } from '../../styles';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 const FixedBackground = styled.div`
   position: fixed;
@@ -37,6 +38,7 @@ const ModalBase = styled.div`
   &[data-topposition='bottom'] {
     bottom: 0;
   }
+  ${bounce('data-bounced')}
 `;
 export const ModalItem = styled.div`
   display: flex;
@@ -71,6 +73,7 @@ export const Modal = ({
   className?: string;
   closeOnClickOutside?: boolean;
 }) => {
+  const [bounced, setBounced] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(
     {
@@ -81,9 +84,16 @@ export const Modal = ({
     () => {
       if (closeOnClickOutside && open) {
         setOpen(false);
+        setBounced(false);
       }
     },
   );
+
+  useEffect(() => {
+    if (!bounced && open) {
+      setBounced(true);
+    }
+  }, [open, bounced]);
 
   if (!open) {
     return <></>;
@@ -92,6 +102,7 @@ export const Modal = ({
   return (
     <FixedBackground>
       <ModalBase
+        data-bounced={bounced}
         data-position={position}
         data-topposition={topPosition}
         ref={ref}
