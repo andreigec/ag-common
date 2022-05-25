@@ -46,7 +46,7 @@ export const stripPKs = <T>(record: T, keepPk = true): T => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { PK, PK1, PK2, PK3, PK4, PK5, L1, L2, L3, L4, L5, L6, ...rest } =
+  const { PK, PK1, PK2, PK3, PK4, PK5, L1, L2, L3, L4, L5, L6, type, ...rest } =
     record;
 
   if (keepPk) {

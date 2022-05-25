@@ -8,9 +8,7 @@ export const ButtonBase = css`
   display: flex;
   justify-content: center;
   align-items: center;
-
   border: 0;
-
   font-weight: bold;
   font-family: inherit;
   font-size: 1.2rem;
@@ -23,7 +21,6 @@ export const ButtonBase = css`
   }
   padding-left: 1rem;
   padding-right: 1rem;
-
   background-color: ${colours.darkGreen};
   color: white;
   &[data-invert='true'] {
