@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-onchange */
 import { SaveIcon, UndoIcon, PencilIcon } from './images';
 import { iconLeft, iconRight, ValueBox, valueCss } from './common';
 import { ITextEdit } from './types';

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-onchange */
 import { SaveIcon, UndoIcon } from './images';
 import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
 import { noDrag } from '../../styles/common';
