@@ -6,10 +6,15 @@ export const ListboxEdit = ({
   defaultValue,
   onSubmit,
   values,
+  canEdit = true,
 }: {
   defaultValue: string;
-  onSubmit: (val: string[]) => void;
+  onSubmit: (val: string) => void;
   values: string[];
+  /**
+   * if true can revert or explicit save. default true
+   */
+  canEdit?: boolean;
 }) => {
   const [value, setValue] = useState(defaultValue);
   useEffect(() => {
@@ -18,25 +23,28 @@ export const ListboxEdit = ({
 
   return (
     <ValueBox {...noDrag}>
-      <select size={5} value={value} onChange={(v) => setValue(v.target.value)}>
+      <select
+        size={5}
+        value={value}
+        onChange={(v) =>
+          canEdit ? setValue(v.target.value) : onSubmit(v.target.value)
+        }
+      >
         {values.map((v) => (
           <option key={v} value={v}>
             {v}
           </option>
         ))}
       </select>
-      {value !== defaultValue && (
+      {canEdit && value !== defaultValue && (
         <Icon
           style={iconLeft}
-          onClick={() =>
-            value !== defaultValue &&
-            onSubmit(value.split(',').map((s) => s.trim()))
-          }
+          onClick={() => value !== defaultValue && onSubmit(value)}
         >
           <SaveIcon />
         </Icon>
       )}
-      {value !== defaultValue && (
+      {canEdit && value !== defaultValue && (
         <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
           <UndoIcon />
         </Icon>
