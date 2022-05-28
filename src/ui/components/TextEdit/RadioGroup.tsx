@@ -28,10 +28,13 @@ export const RadioGroup = <T,>({
   values: T[];
 }) => {
   const [name] = useState(getRandomInt(10000).toString());
-  const [value, setValue] = useState(defaultValue);
+  const [value, setValue] = useState(renderValue(defaultValue));
   useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
+    const rv = renderValue(defaultValue);
+    if (value !== rv) {
+      setValue(rv);
+    }
+  }, [defaultValue, renderValue, value]);
 
   return (
     <ValueBox {...noDrag}>
@@ -43,7 +46,7 @@ export const RadioGroup = <T,>({
             key={renderValue(v)}
             value={renderValue(v)}
             name={name}
-            checked={v === value}
+            checked={renderValue(v) === value}
             onChange={() => onSubmit(v)}
           />
         </FlexColumn>

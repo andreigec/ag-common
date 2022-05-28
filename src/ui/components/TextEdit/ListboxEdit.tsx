@@ -2,19 +2,25 @@ import { SaveIcon, UndoIcon } from './images';
 import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
 import { noDrag } from '../../styles/common';
 import React, { useState, useEffect } from 'react';
-export const ListboxEdit = ({
+export const ListboxEdit = <T,>({
   defaultValue,
   onSubmit,
   values,
   canEdit = true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderLabel = (e: T) => (e as any).toString(),
 }: {
-  defaultValue: string;
-  onSubmit: (val: string) => void;
-  values: string[];
+  defaultValue: T;
+  onSubmit: (val: T) => void;
+  values: T[];
   /**
    * if true can revert or explicit save. default true
    */
   canEdit?: boolean;
+  /**
+   * can overload the render of the label. defaults to toString
+   */
+  renderLabel?: (a: T) => string;
 }) => {
   const [value, setValue] = useState(defaultValue);
   useEffect(() => {
@@ -25,14 +31,22 @@ export const ListboxEdit = ({
     <ValueBox {...noDrag}>
       <select
         size={5}
-        value={value}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        value={(value as any).toString()}
         onChange={(v) =>
-          canEdit ? setValue(v.target.value) : onSubmit(v.target.value)
+          canEdit
+            ? setValue(v.target.value as unknown as T)
+            : onSubmit(v.target.value as unknown as T)
         }
       >
         {values.map((v) => (
-          <option key={v} value={v}>
-            {v}
+          <option
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            key={(value as any).toString()}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            value={(value as any).toString()}
+          >
+            {renderLabel(v)}
           </option>
         ))}
       </select>

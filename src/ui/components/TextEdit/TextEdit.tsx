@@ -144,7 +144,9 @@ export const TextEdit = ({
         {...attributes}
       >
         {leftContent || null}
-        <ValueReadonly data-type="text">{value}</ValueReadonly>
+        <ValueReadonly data-type="text">
+          {value || <span style={{ color: '#ccc' }}>{placeholder}</span>}
+        </ValueReadonly>
         <Right>
           {!disableEdit && (
             <Icon
