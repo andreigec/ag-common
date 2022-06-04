@@ -1,4 +1,5 @@
 import { objectToString, paramsToObject } from '../../common/helpers/object';
+import { info } from '../../common';
 import { useEffect, useState } from 'react';
 export const isServer = typeof window === 'undefined';
 
@@ -37,8 +38,13 @@ export const useQueryStringRaw = <T>({
     }
 
     const qs = '?' + objectToString(qv, '=', '&');
-    const loc = location.pathname + qs + window.location.hash;
-    window.history.replaceState({}, '', loc);
+    if (!isServer) {
+      const loc = window.location.pathname + qs + window.location.hash;
+      window.history.replaceState({}, '', loc);
+    } else {
+      info('cant change url params on server');
+    }
+
     setStateRaw(v);
   };
   //
