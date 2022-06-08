@@ -21,6 +21,7 @@ export interface ISearchDialog<T> {
    * get unique render key
    */
   getKeyF: (i: T) => string;
+  className?: string;
 }
 export type TSearchModalRes<T> =
   | undefined

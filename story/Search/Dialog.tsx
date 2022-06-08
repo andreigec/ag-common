@@ -1,9 +1,9 @@
+import { searchLongList } from './common';
 import { SearchDialog } from '../../src/ui/components/Search/Dialog';
 import { ISearchDialog } from '../../src/ui/components/Search/types';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-
 const ActionWrapper = <T,>(args: ISearchDialog<T>) => (
   <div
     style={{
@@ -38,7 +38,7 @@ const TemplateModal: ComponentStory<typeof ActionWrapper> = (args) => (
 
 export const Dialog = TemplateModal.bind({});
 Dialog.args = {
-  displayItems: ['1', '2', '3'],
+  displayItems: searchLongList,
   renderItem: (st, i) => i as string,
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,

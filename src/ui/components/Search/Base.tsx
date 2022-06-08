@@ -1,8 +1,16 @@
 import { ISearchDialog, TSearchModalRes } from './types';
 import { debounce } from '../../helpers';
 import { TextEdit } from '../TextEdit';
+import { smallScreen } from '../../styles';
 import styled from 'styled-components';
 import React, { useState } from 'react';
+
+const Base = styled.div`
+  display: flex;
+  flex-flow: column;
+  flex-grow: 1;
+  width: 100%;
+`;
 
 const SearchBox = styled.div`
   padding: 1rem;
@@ -12,6 +20,12 @@ const SearchBox = styled.div`
   align-items: center;
   width: calc(100% - 2rem);
   margin: auto;
+
+  @media ${smallScreen} {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
 `;
 
 const MagnifyIconSvg = (
@@ -54,8 +68,15 @@ const Content = styled.div`
   max-height: calc(100vh - 20rem);
   overflow-y: auto;
   overflow-x: hidden;
+
+  flex-grow: 1;
   &[data-hasitems='true'] {
     padding-bottom: 0.5rem;
+  }
+  @media ${smallScreen} {
+    margin: 0;
+    width: 100%;
+    margin-top: 1rem;
   }
 `;
 
@@ -77,6 +98,7 @@ export const SearchBase = <T,>({
   displayItems,
   willDisplayItem,
   getKeyF,
+  className,
 }: ISearchDialog<T> & {
   onSearchTextChange?: (v: string) => void;
   onSelectItem?: (v: TSearchModalRes<T>) => void;
@@ -95,8 +117,8 @@ export const SearchBase = <T,>({
   );
 
   return (
-    <>
-      <SearchBox>
+    <Base className={className}>
+      <SearchBox data-type="search">
         <TextEdit
           placeholder={placeholderText}
           defaultValue=""
@@ -121,13 +143,13 @@ export const SearchBase = <T,>({
           {closeText}
         </CloseButton>
       </SearchBox>
-      <Content data-hasitems={!!filteredItems.length}>
+      <Content data-hasitems={!!filteredItems.length} data-type="content">
         {filteredItems.map((i, index) => (
           <Row key={getKeyF(i)} onClick={() => resWrap(i)}>
             {renderItem(searchText, i, index)}
           </Row>
         ))}
       </Content>
-    </>
+    </Base>
   );
 };
