@@ -22,6 +22,12 @@ export interface ISearchDialog<T> {
    */
   getKeyF: (i: T) => string;
   className?: string;
+  texts?: {
+    /**
+     * default if not provided: "showing X out of Y total items"
+     */
+    totalItems?: (showing: number, outof: number) => string;
+  };
 }
 export type TSearchModalRes<T> =
   | undefined

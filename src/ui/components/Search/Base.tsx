@@ -82,11 +82,6 @@ const Content = styled.div`
 
 const Row = styled.div`
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
 `;
 
 export const SearchBase = <T,>({
@@ -99,6 +94,7 @@ export const SearchBase = <T,>({
   willDisplayItem,
   getKeyF,
   className,
+  texts,
 }: ISearchDialog<T> & {
   onSearchTextChange?: (v: string) => void;
   onSelectItem?: (v: TSearchModalRes<T>) => void;
@@ -115,6 +111,11 @@ export const SearchBase = <T,>({
   const filteredItems = displayItems.filter((i) =>
     willDisplayItem(searchText, i),
   );
+
+  const showText =
+    texts?.totalItems?.(filteredItems.length, displayItems.length) ??
+    `Showing ${filteredItems.length} out of ${displayItems.length} total
+  items`;
 
   return (
     <Base className={className}>
@@ -149,6 +150,7 @@ export const SearchBase = <T,>({
             {renderItem(searchText, i, index)}
           </Row>
         ))}
+        {searchText && <Row>{showText}</Row>}
       </Content>
     </Base>
   );
