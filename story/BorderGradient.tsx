@@ -9,7 +9,9 @@ export default {
 } as ComponentMeta<typeof BorderGradient>;
 
 const Template: ComponentStory<typeof BorderGradient> = (args) => (
-  <BorderGradient {...args} />
+  <BorderGradient {...args}>
+    <div>child</div>
+  </BorderGradient>
 );
 
 export const Primary = Template.bind({});
