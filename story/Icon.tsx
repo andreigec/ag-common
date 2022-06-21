@@ -1,11 +1,11 @@
-import { Icon } from '../src/ui/components/Icon';
+import { Icon, IIconProps } from '../src/ui/components/Icon';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 const TestSvg = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 118">
-    <path d="M62,3c0,45,55,78-21,114c-5-40-80-61,21-114" fill="#5e962d" />
+    <path d="M62,3c0,45,55,78-21,114c-5-40-80-61,21-114" />
     <path d="M17,15c6,35-52,65,24,102c50-37,46-80-24-102" fill="#8ad945" />
   </svg>
 );
@@ -23,4 +23,5 @@ export const Primary = Template.bind({});
 Primary.args = {
   width: '2rem',
   height: '2rem',
-};
+  fill: 'red',
+} as IIconProps;

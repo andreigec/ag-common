@@ -6,11 +6,15 @@ export interface IIconProps {
   disabled?: boolean;
   fill?: string;
   outline?: string;
+  /** default 100% */
   width?: string;
+  /** default 100% */
   height?: string;
   rotate?: number;
   canHover?: boolean;
+  /** default 'unset' */
   margin?: string;
+  /** default 0 */
   padding?: string;
   onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
   children?: JSX.Element | JSX.Element[];
@@ -19,58 +23,36 @@ export interface IIconProps {
   tabIndex?: number;
   className?: string;
 }
-export const IconF = styled.span<IIconProps>`
+export const IconF = styled.span`
   transition: all 200ms;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 2rem;
-  padding: ${({ padding }) => padding || '0'};
-  margin: ${({ margin }) => (!margin ? 'unset' : margin)};
-  cursor: ${({ disabled, canHover }) =>
-    disabled || !canHover ? 'inherit' : 'pointer'};
+  cursor: inherit;
+  &[data-chnd='true'] {
+    cursor: pointer;
+    &:hover {
+      filter: saturate(3);
+    }
+  }
+
   > svg {
     flex-grow: 1;
   }
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      filter: grayscale(1);
-    `}
-  ${({ canHover, disabled }) =>
-    canHover &&
-    !disabled &&
-    css`
-      &:hover {
-        filter: saturate(3);
-      }
-    `}
 
-  
+  fill: var(--fill);
 
-  ${({ fill }) =>
-    fill &&
-    css`
-      fill: ${fill};
+  svg {
+    fill: var(--fill);
+  }
 
-      svg {
-        fill: ${fill};
-      }
+  linearGradient > *,
+  radialGradient > * {
+    stop-color: var(--fill) !important;
+  }
 
-      linearGradient > *,
-      radialGradient > * {
-        stop-color: ${fill} !important;
-      }
-    `};
-  ${({ outline }) => outline && HardOutline(outline)};
-
-  width: ${({ width }) => width || '100%'};
-  height: ${({ height }) => height || '100%'};
-  ${({ rotate }) =>
-    rotate &&
-    css`
-      transform: rotate(${rotate}deg);
-    `};
+  ${HardOutline}
 
   svg {
     width: 100%;
@@ -80,6 +62,17 @@ export const IconF = styled.span<IIconProps>`
 
 export const Icon = (pr: IIconProps) => {
   const { className, children, disabled, onClick } = pr;
+  const CHND = pr.canHover && !pr.disabled;
+  const style: Record<string, string> = {
+    '--fill': pr.fill || '',
+    width: pr.width || '100%',
+    height: pr.height || '100%',
+    padding: pr.padding || '0',
+    margin: pr.margin || 'unset',
+    transform: !pr.rotate ? '' : `rotate(${pr.rotate || 0}deg)`,
+    filter: !pr.disabled ? '' : 'grayscale(1)',
+    '--outlinecolour': pr.outline || '',
+  };
 
   return (
     <IconF
@@ -88,6 +81,8 @@ export const Icon = (pr: IIconProps) => {
       onClick={(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) =>
         !disabled && onClick?.(e)
       }
+      style={style}
+      data-chnd={CHND}
     >
       {children}
     </IconF>
