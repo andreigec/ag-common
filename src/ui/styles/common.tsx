@@ -1,18 +1,11 @@
 import { colours } from './colours';
 import styled, { css } from 'styled-components';
 
-export const HardOutline = `
-  filter: drop-shadow(1px 1px 0px var(--outlinecolour)) drop-shadow(-1px 1px 0px var(--outlinecolour))
-    drop-shadow(1px -1px 0px var(--outlinecolour)) drop-shadow(-1px -1px 0px var(--outlinecolour));
-`;
-
-export const Shadow = (
-  /**
-   * colour of shadow, default #555
-   */
-  colour = '#555',
-) => css`
-  filter: drop-shadow(1px 1px 0.5rem ${colour});
+export const HardOutline = css`
+  filter: drop-shadow(1px 1px 0px var(--outlinecolour))
+    drop-shadow(-1px 1px 0px var(--outlinecolour))
+    drop-shadow(1px -1px 0px var(--outlinecolour))
+    drop-shadow(-1px -1px 0px var(--outlinecolour));
 `;
 
 export const NoTextSelect = css`

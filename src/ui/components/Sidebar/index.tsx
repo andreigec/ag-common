@@ -1,5 +1,5 @@
 import { useCookieBoolean } from '../../helpers/cookie/use';
-import { NoTextSelect, Shadow } from '../../styles/common';
+import { NoTextSelect } from '../../styles/common';
 import { Chevron } from '../Chevron';
 import styled from 'styled-components';
 import React from 'react';
@@ -53,7 +53,7 @@ const Content = styled.div`
   &[data-open='false'] {
     padding: 1rem;
     background-color: white;
-    ${Shadow()};
+    filter: drop-shadow(1px 1px 0.5rem #555);
     border-radius: 1rem;
   }
 `;
@@ -80,7 +80,6 @@ const Hamburger = styled.div`
   }
   border-radius: 50%;
   border: solid 1px rgba(0, 0, 0, 0.5);
-
   cursor: pointer;
 `;
 
