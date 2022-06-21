@@ -79,6 +79,7 @@ export type TGetAndValidateToken = (p: IGetAndValidateToken) => Promise<{
   token?: string;
   userProfile?: User;
 }>;
+/** extracts user details from oauth token */
 export const getAndValidateToken: TGetAndValidateToken = async ({
   tokenRaw,
   jwksRegion = 'ap-southeast-2',

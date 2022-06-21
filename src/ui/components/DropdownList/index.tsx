@@ -1,10 +1,10 @@
 import { IDropdownList } from './types';
 import { convertRemToPixels } from '../../helpers/dom';
-import { Shadow, bounce } from '../../styles/common';
+import { bounce } from '../../styles/common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { colours } from '../../styles/colours';
 import { KebabDots } from '../KebabDots';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import React, { useEffect, useState, useRef } from 'react';
 const SBase = styled.div`
   display: flex;
@@ -16,10 +16,7 @@ const SBase = styled.div`
   flex-grow: 0;
 `;
 
-const DropItems = styled.div<{
-  shadow?: string;
-  maxHeight: string;
-}>`
+const DropItems = styled.div`
   flex-flow: column;
   z-index: 5;
   display: none;
@@ -27,12 +24,6 @@ const DropItems = styled.div<{
   cursor: default;
   width: 100%;
   position: absolute;
-  ${({ shadow }) => shadow && Shadow(shadow)}
-  ${({ maxHeight }) =>
-    maxHeight &&
-    css`
-      max-height: ${maxHeight};
-    `}
 
   overflow-y: auto;
   &[data-open='true'] {
@@ -150,10 +141,13 @@ export function DropdownList<T>(p: IDropdownList<T>) {
       newStyle.top = '0';
     }
 
+    newStyle.filter = `drop-shadow(1px 1px 0.5rem ${shadow})`;
+    newStyle.maxHeight = maxHeight;
+
     if (JSON.stringify(style) !== JSON.stringify(newStyle)) {
       setStyle(newStyle);
     }
-  }, [open, options, renderF, style]);
+  }, [maxHeight, open, options, renderF, shadow, style]);
 
   const defaultRender = !p.value ? <KebabDots /> : <>{p.renderF(p.value)}</>;
   const defaultKey = !p.value ? '(noval)' : p.renderF(p.value);
@@ -183,13 +177,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
         setOpen(!open);
       }}
     >
-      <DropItems
-        data-open={open}
-        style={style}
-        shadow={shadow}
-        maxHeight={maxHeight}
-        data-bounced={bounced}
-      >
+      <DropItems data-open={open} style={style} data-bounced={bounced}>
         {open &&
           options.map((s, i) => (
             <ListItem
