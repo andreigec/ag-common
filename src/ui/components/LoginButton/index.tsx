@@ -1,9 +1,8 @@
-import { ButtonBase } from '../Button';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from '@linaria/react';
 
 const Base = styled.a`
-  ${ButtonBase}
+  color: red;
 `;
 
 export const LoginButton = ({

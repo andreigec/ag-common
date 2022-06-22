@@ -8,6 +8,7 @@ export * from './generator';
 export * from './groupBy';
 export * from './hashCode';
 export * from './i18n';
+export * from './json';
 export * from './log';
 export * from './math';
 export * from './memo';
