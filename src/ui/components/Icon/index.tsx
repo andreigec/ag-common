@@ -1,4 +1,5 @@
 import { HardOutline } from '../../styles/common';
+import { removeUndefValuesFromObject } from '../../../common/helpers/object';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -41,18 +42,22 @@ export const IconF = styled.span`
     flex-grow: 1;
   }
 
-  fill: var(--fill);
-
-  svg {
+  &[data-hasfill='true'] {
     fill: var(--fill);
+
+    svg {
+      fill: var(--fill);
+    }
+
+    linearGradient > *,
+    radialGradient > * {
+      stop-color: var(--fill) !important;
+    }
   }
 
-  linearGradient > *,
-  radialGradient > * {
-    stop-color: var(--fill) !important;
+  &[data-hasoutline='true'] {
+    ${HardOutline}
   }
-
-  ${HardOutline}
 
   svg {
     width: 100%;
@@ -63,16 +68,16 @@ export const IconF = styled.span`
 export const Icon = (pr: IIconProps) => {
   const { className, children, disabled, onClick } = pr;
   const CHND = pr.canHover && !pr.disabled;
-  const style: Record<string, string> = {
-    '--fill': pr.fill || '',
+  const style: Record<string, string | null> = removeUndefValuesFromObject({
+    '--fill': pr.fill || null,
     width: pr.width || '100%',
     height: pr.height || '100%',
     padding: pr.padding || '0',
     margin: pr.margin || 'unset',
-    transform: !pr.rotate ? '' : `rotate(${pr.rotate || 0}deg)`,
-    filter: !pr.disabled ? '' : 'grayscale(1)',
-    '--outlinecolour': pr.outline || '',
-  };
+    transform: !pr.rotate ? null : `rotate(${pr.rotate || 0}deg)`,
+    filter: !pr.disabled ? null : 'grayscale(1)',
+    '--outlinecolour': pr.outline || null,
+  });
 
   return (
     <IconF
@@ -83,6 +88,8 @@ export const Icon = (pr: IIconProps) => {
       }
       style={style}
       data-chnd={CHND}
+      data-hasoutline={pr.outline}
+      data-hasfill={!!pr.fill}
     >
       {children}
     </IconF>
