@@ -4,6 +4,7 @@ import { ITextEdit } from './types';
 import { TextEditLengthBox } from './LengthBox';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
+import { filterDataProps } from '../../helpers/dom';
 import styled, { css, StyledComponent } from 'styled-components';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 export const ValueReadonly = styled.div`
@@ -62,26 +63,27 @@ const Icon = styled.div`
   }
 `;
 
-export const TextEdit = ({
-  defaultValue = '',
-  defaultEditing,
-  disableEdit = false,
-  placeholder,
-  className,
-  singleLine = false,
-  noGrow = false,
-  attributes,
-  leftContent,
+export const TextEdit = (p: ITextEdit) => {
+  const {
+    defaultValue = '',
+    defaultEditing,
+    disableEdit = false,
+    placeholder,
+    className,
+    singleLine = false,
+    noGrow = false,
+    leftContent,
 
-  onSubmit,
-  onEditingChange,
-  onClickOutsideWithNoValue,
-  onClickNotEditing,
-  allowUndo = true,
-  onEscape,
-  maxLength,
-  onKeyDown,
-}: ITextEdit) => {
+    onSubmit,
+    onEditingChange,
+    onClickOutsideWithNoValue,
+    onClickNotEditing,
+    allowUndo = true,
+    onEscape,
+    maxLength,
+    onKeyDown,
+  } = p;
+
   const ref = useRef<HTMLDivElement>(null);
   const taref = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState(defaultValue);
@@ -144,7 +146,7 @@ export const TextEdit = ({
         onClick={() => onClickNotEditing?.()}
         data-pointer={onClickNotEditing ? 'true' : 'false'}
         data-nogrow={noGrow}
-        {...attributes}
+        {...filterDataProps(p)}
       >
         {leftContent || null}
         <ValueReadonly data-type="text">
@@ -182,7 +184,7 @@ export const TextEdit = ({
       ref={ref as any}
       tabIndex={-1}
       data-nogrow={noGrow}
-      {...attributes}
+      {...filterDataProps(p)}
     >
       {leftContent || null}
       <Comp
