@@ -105,7 +105,9 @@ export const TextEdit = ({
           return;
         }
 
-        setEditingRaw(false);
+        if (editing) {
+          setEditingRaw(false);
+        }
       }
     },
   );
