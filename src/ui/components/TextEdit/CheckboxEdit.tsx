@@ -22,10 +22,15 @@ export const CheckboxEdit = ({
   defaultValue,
   onSubmit,
   noGrow = false,
+  allowUndo = true,
 }: {
   defaultValue: boolean;
   onSubmit: (val: boolean) => void;
   noGrow?: boolean;
+  /**
+   * if true, will add undo button after changes. if false, will submit after every keypress. default true
+   */
+  allowUndo?: boolean;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState(defaultValue);
@@ -45,26 +50,34 @@ export const CheckboxEdit = ({
         type="checkbox"
         data-type="checkbox"
         checked={value}
-        onChange={() => setValue(!value)}
+        onChange={() => {
+          if (allowUndo) {
+            setValue(!value);
+          } else {
+            onSubmit(!value);
+          }
+        }}
         onKeyPress={(e) =>
           e.key === 'Enter' && value !== defaultValue && onSubmit(value)
         }
       />
-      <Icons center enableOverflow>
-        {value !== defaultValue && (
-          <Icon
-            style={iconLeft}
-            onClick={() => value !== defaultValue && onSubmit(value)}
-          >
-            <SaveIcon />
-          </Icon>
-        )}
-        {value !== defaultValue && (
-          <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
-            <UndoIcon />
-          </Icon>
-        )}
-      </Icons>
+      {allowUndo && (
+        <Icons center enableOverflow>
+          {value !== defaultValue && (
+            <Icon
+              style={iconLeft}
+              onClick={() => value !== defaultValue && onSubmit(value)}
+            >
+              <SaveIcon />
+            </Icon>
+          )}
+          {value !== defaultValue && (
+            <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
+              <UndoIcon />
+            </Icon>
+          )}
+        </Icons>
+      )}
     </ValueBox>
   );
 };
