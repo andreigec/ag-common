@@ -150,10 +150,15 @@ export const castObject = <TIn, TOut>(
   return ret;
 };
 
-export const removeUndefValuesFromObject = <T>(orig: Record<string, T>) => {
+/** remove key values from an object where the value is null or undefined or other specific passed in values  */
+export const removeUndefValuesFromObject = <T>(
+  orig: Record<string, T>,
+  /** other than null or undefined */
+  ...additionalRemoves: T[]
+) => {
   const ret: Record<string, T> = {};
   Object.entries(orig).forEach(([k, v]) => {
-    if (v !== null && v !== undefined) {
+    if (v !== null && v !== undefined && !additionalRemoves?.includes(v)) {
       ret[k] = v;
     }
   });
