@@ -1,7 +1,6 @@
 import { ValueBox } from './common';
 import { FlexColumn } from '../FlexColumn';
 import { noDrag } from '../../styles/common';
-import { getRandomInt } from '../../../common/helpers/math';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 const Label = styled.label``;
@@ -27,7 +26,6 @@ export const RadioGroup = <T,>({
   onSubmit: (val: T) => void;
   values: T[];
 }) => {
-  const [name] = useState(getRandomInt(10000).toString());
   const [value, setValue] = useState(renderValue(defaultValue));
   useEffect(() => {
     const rv = renderValue(defaultValue);
@@ -39,13 +37,13 @@ export const RadioGroup = <T,>({
   return (
     <ValueBox {...noDrag}>
       {values.map((v) => (
-        <FlexColumn key={name + v}>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <FlexColumn key={(v as any).toString()}>
           <Label>{renderLabel(v)}</Label>
           <input
             type="radio"
             key={renderValue(v)}
             value={renderValue(v)}
-            name={name}
             checked={renderValue(v) === value}
             onChange={() => onSubmit(v)}
           />
