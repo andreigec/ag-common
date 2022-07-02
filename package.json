@@ -26,8 +26,10 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "2.x",
-    "styled-components": "5.x",
     "typescript": "4.x"
+  },
+  "peerDependencies": {
+    "styled-components": ">=5"
   },
   "devDependencies": {
     "@babel/core": "7.18.6",
@@ -56,7 +58,8 @@
     "eslint-plugin-react": "7.30.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "prettier": "2.7.1",
-    "rimraf": "3.0.2"
+    "rimraf": "3.0.2",
+    "styled-components": "5.3.5"
   },
   "files": [
     "dist/**/*",
