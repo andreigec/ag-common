@@ -8,8 +8,15 @@ const Base = styled.div`
   width: 100%;
 `;
 
-const Row = styled.div`
+const TableRow = styled.div`
+  display: flex;
   border: solid 1px #ccc;
+  &[data-header='true'] {
+    border-bottom: solid 1px #888;
+  }
+  &:not(:first-of-type) {
+    border-top: 0;
+  }
 `;
 
 const Group = styled.div`
@@ -29,21 +36,32 @@ export interface TableItem {
 export const Table = ({
   children,
   className,
+  headerRow,
 }: {
   children: TableItem[];
   className?: string;
+  headerRow?: JSX.Element;
 }) => {
   const grouped = groupByList(children, (s) => s.groupTitle);
 
   return (
     <Base className={className}>
       {grouped.map((group) => (
-        <Group key={group.key}>
-          <GroupTitle>{group.key}</GroupTitle>
-          {group.items.map((item) => (
-            <Row key={item.content.key}>{item.content}</Row>
-          ))}
-        </Group>
+        <>
+          {group.key && (
+            <GroupTitle key={`grouptitle${group.key}`}>{group.key}</GroupTitle>
+          )}
+          <Group key={`group${group.key}`}>
+            {headerRow && (
+              <TableRow data-header="true" key={`headrow${group.key}`}>
+                {headerRow}
+              </TableRow>
+            )}
+            {group.items.map((item) => (
+              <TableRow key={item.content.key}>{item.content}</TableRow>
+            ))}
+          </Group>
+        </>
       ))}
     </Base>
   );

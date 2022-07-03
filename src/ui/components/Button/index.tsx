@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import { colours } from '../../styles/colours';
 import React, { KeyboardEventHandler, MouseEventHandler } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, StyledComponent } from 'styled-components';
 
 export const ButtonBase = css`
   text-decoration: none;
@@ -35,7 +35,11 @@ export const ButtonBase = css`
   }
 `;
 
-const Base = styled.button`
+const BaseButton = styled.button`
+  ${ButtonBase}
+`;
+
+const BaseA = styled.a`
   ${ButtonBase}
 `;
 
@@ -47,16 +51,25 @@ export interface IButton {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onKeyPress?: KeyboardEventHandler<HTMLButtonElement>;
   children: string | JSX.Element;
+  href?: string;
 }
-export const Button = (props: IButton) => (
-  <Base
-    className={props.className}
-    data-invert={props.invert}
-    data-disabled={props.disabled ?? false}
-    {...props}
-    role="button"
-    title={props.title || undefined}
-  >
-    {props.children}
-  </Base>
-);
+export const Button = (props: IButton) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Component: StyledComponent<'button', any> = props.href
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (BaseA as any)
+    : BaseButton;
+
+  return (
+    <Component
+      className={props.className}
+      data-invert={props.invert}
+      data-disabled={props.disabled ?? false}
+      role="button"
+      title={props.title || undefined}
+      {...props}
+    >
+      {props.children}
+    </Component>
+  );
+};
