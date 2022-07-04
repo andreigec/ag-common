@@ -22,10 +22,16 @@ const TableRow = styled.div`
 const Group = styled.div`
   display: flex;
   flex-flow: column;
+  width: 100%;
 `;
 
 const GroupTitle = styled.div`
   font-size: 1.5rem;
+`;
+
+const GroupWrap = styled.div`
+  display: flex;
+  flex-flow: row;
 `;
 
 export interface TableItem {
@@ -47,11 +53,11 @@ export const Table = ({
   return (
     <Base className={className}>
       {grouped.map((group) => (
-        <>
+        <GroupWrap key={'gk' + group.key}>
           {group.key && (
-            <GroupTitle key={`grouptitle${group.key}`}>{group.key}</GroupTitle>
+            <GroupTitle key={`gt${group.key}`}>{group.key}</GroupTitle>
           )}
-          <Group key={`group${group.key}`}>
+          <Group key={`g${group.key}`}>
             {headerRow && (
               <TableRow data-header="true" key={`headrow${group.key}`}>
                 {headerRow}
@@ -61,7 +67,7 @@ export const Table = ({
               <TableRow key={item.content.key}>{item.content}</TableRow>
             ))}
           </Group>
-        </>
+        </GroupWrap>
       ))}
     </Base>
   );
