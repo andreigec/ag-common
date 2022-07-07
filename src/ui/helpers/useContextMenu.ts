@@ -9,7 +9,8 @@ export const useContextMenu = ({
   const [yPos, setYPos] = useState('0px');
   const [showMenu, setShowMenu] = useState(false);
   const handleContextMenu = useCallback(
-    (e) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (e: any) => {
       if (!ref.current?.contains(e.target)) {
         return;
       }
