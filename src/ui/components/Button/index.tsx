@@ -21,17 +21,29 @@ export const ButtonBase = css`
   }
   padding-left: 1rem;
   padding-right: 1rem;
-  background-color: ${colours.darkGreen};
   color: white;
-  &[data-invert='true'] {
-    color: ${colours.darkGreen};
-    background-color: white;
-    border: solid 1px ${colours.darkGreen};
-  }
 
   &[data-disabled='true'] {
     cursor: default;
     background-color: #888;
+  }
+
+  &[data-theme='green'] {
+    background-color: ${colours.darkGreen};
+    &[data-invert='true'] {
+      color: ${colours.darkGreen};
+      background-color: white;
+      border: solid 1px ${colours.darkGreen};
+    }
+  }
+
+  &[data-theme='red'] {
+    background-color: ${colours.orangeRed};
+    &[data-invert='true'] {
+      color: ${colours.orangeRed};
+      background-color: white;
+      border: solid 1px ${colours.orangeRed};
+    }
   }
 `;
 
@@ -52,6 +64,7 @@ export interface IButton {
   onKeyPress?: KeyboardEventHandler<HTMLButtonElement>;
   children: string | JSX.Element;
   href?: string;
+  colourTheme?: 'green' | 'red';
 }
 export const Button = (props: IButton) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -67,6 +80,7 @@ export const Button = (props: IButton) => {
       data-disabled={props.disabled ?? false}
       role="button"
       title={props.title || undefined}
+      data-theme={props.colourTheme || 'green'}
       {...props}
     >
       {props.children}
