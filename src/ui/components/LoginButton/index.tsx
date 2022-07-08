@@ -40,6 +40,7 @@ export const LoginButton = ({
       data-invert={invert}
       data-disabled={false}
       className={className}
+      data-theme="green"
     >
       {text}
     </Base>
