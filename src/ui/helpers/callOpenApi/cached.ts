@@ -1,7 +1,6 @@
 import { ICallOpenApi, OverrideAuth } from './types';
-import { callOpenApi } from './direct';
+import { callOpenApi, getIdTokenAuthHeaderRaw } from './direct';
 import { CacheItems } from '../routes';
-import { getCookieString } from '../cookie';
 import { toBase64 } from '../../../common/helpers/string';
 import { AxiosWrapperLite } from '../jwt';
 import { hashCode } from '../../../common';
@@ -45,12 +44,9 @@ function getCacheKey({
   cacheKey: string;
   overrideAuth?: OverrideAuth;
 }) {
-  const authkeyPrefix1 =
-    overrideAuth?.id_token ||
-    getCookieString({
-      name: 'id_token',
-      defaultValue: '',
-    });
+  const authkeyPrefix1 = getIdTokenAuthHeaderRaw({
+    overrideAuth: overrideAuth,
+  });
 
   const authPref = !authkeyPrefix1 ? '' : hashCode(toBase64(authkeyPrefix1));
   const ssrCachePref = !ssrCacheItems

@@ -3,13 +3,15 @@ import { getCookieString } from '../cookie';
 import { sleep } from '../../../common/helpers/sleep';
 import { notEmpty } from '../../../common/helpers/array';
 import { AxiosWrapperLite, User } from '../jwt';
+import { getLocalStorageItem } from '../useLocalStorage';
 import { AxiosError } from 'axios';
 
-async function getIdTokenAuthHeader({
+/**
+ * get the id_token from provided value, or cookie, or LS
+ */
+export function getIdTokenAuthHeaderRaw({
   overrideAuth,
-  refreshToken,
 }: {
-  refreshToken: () => Promise<User | undefined>;
   overrideAuth?: OverrideAuth;
 }) {
   let idToken: string | undefined;
@@ -22,13 +24,33 @@ async function getIdTokenAuthHeader({
       name: 'id_token',
       defaultValue: '',
     });
-
-    //if we have a cookie token, can try to refresh
-    if (idToken) {
-      const updated = await refreshToken();
-      if (updated?.jwt?.id_token) {
-        idToken = updated?.jwt?.id_token;
+    if (!idToken) {
+      const userLs = getLocalStorageItem<User | undefined>('user', undefined);
+      if (userLs?.jwt?.id_token) {
+        idToken = userLs.jwt.id_token;
       }
+    }
+  }
+  return idToken;
+}
+
+/**
+ * get id_token, and then refresh
+ */
+async function getIdTokenAuthHeader({
+  overrideAuth,
+  refreshToken,
+}: {
+  refreshToken: () => Promise<User | undefined>;
+  overrideAuth?: OverrideAuth;
+}) {
+  let idToken = getIdTokenAuthHeaderRaw({ overrideAuth });
+
+  //if we have a cookie token, can try to refresh
+  if (idToken) {
+    const updated = await refreshToken();
+    if (updated?.jwt?.id_token) {
+      idToken = updated?.jwt?.id_token;
     }
   }
 
