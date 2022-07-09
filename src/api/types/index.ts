@@ -59,7 +59,14 @@ export interface ILambdaConfigs {
   };
 }
 
-export type TSkOperator = 'BETWEEN' | '<' | '<=' | '=' | '>=' | '>';
+export type TSkOperator =
+  | 'BETWEEN'
+  | '<'
+  | '<='
+  | '='
+  | '>='
+  | '>'
+  | 'BEGINS_WITH';
 export interface IQueryDynamo {
   pkName: string;
   pkValue: string | number;

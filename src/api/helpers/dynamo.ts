@@ -330,6 +330,11 @@ export const queryDynamo = async <T>({
       eav[`:${skName1}`] = sp0 as any;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       eav[`:${skName2}`] = sp1 as any;
+    } else if (skOperator === 'BEGINS_WITH') {
+      kce += ` and ${skOperator.toLowerCase()}(#${skName.toLowerCase()}, :${skName.toLowerCase()})`;
+      ean[`#${skName.toLowerCase()}`] = skName;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      eav[`:${skName.toLowerCase()}`] = skValue as any;
     } else {
       kce += ` and #${skName.toLowerCase()} ${skOperator} :${skName.toLowerCase()}`;
       ean[`#${skName.toLowerCase()}`] = skName;
