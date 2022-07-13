@@ -49,16 +49,13 @@ export interface CacheItem<T> {
 export interface IInitialStateCommon {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   openApiCache?: CacheItem<any>[];
-  headerTitle?: string;
-  seed?: number;
 }
 
 export interface IRequestCommon {
   darkMode: boolean;
   url: LocationSubset;
-  headerTitle?: string;
-  seed?: number;
   lang: TLang;
+  userAgent: string;
 }
 export interface IStateCommon<TRequest extends IRequestCommon>
   extends IInitialStateCommon {
