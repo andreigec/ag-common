@@ -5,5 +5,6 @@ export * from './enforceDynamoProvisionCap';
 export * from './dynamoInfra';
 export * from './openApiHelpers';
 export * from './s3';
+export * from './sqs';
 export * from './validateOpenApi';
 export * from './validations';

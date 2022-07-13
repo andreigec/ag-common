@@ -1,7 +1,7 @@
 import { Button } from '../Button';
 import { FlexColumn } from '../FlexColumn';
 import { FlexRow } from '../FlexRow';
-import { Modal } from '../Modal';
+import { Modal } from '../Modal/Modal';
 import { TextEdit } from '../TextEdit';
 import styled from 'styled-components';
 import ReactDOM from 'react-dom';

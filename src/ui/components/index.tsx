@@ -13,7 +13,7 @@ export * from './KebabDots';
 export * from './Loader';
 export * from './LoginButton';
 export * from './LogoutButton';
-export * from './Modal';
+export * from './Modal/Modal';
 export * from './Prompt';
 export * from './RowOrColumn';
 export * from './Search';

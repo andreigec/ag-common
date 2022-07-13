@@ -1,7 +1,7 @@
 import { ISearchDialog, TSearchModalRes } from './types';
 import { SearchBase } from './Base';
 import { bigScreen, smallScreen } from '../../styles';
-import { Modal } from '../Modal';
+import { Modal } from '../Modal/Modal';
 import styled from 'styled-components';
 import React from 'react';
 
