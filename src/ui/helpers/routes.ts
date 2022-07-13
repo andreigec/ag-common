@@ -97,31 +97,28 @@ const calculateServerHref = ({
  * @returns
  */
 export const getClientOrServerReqHref = ({
-  href,
-  query,
-  forceServer = false,
+  url: { href, query },
   userAgent,
 }: {
-  /**
-   * will use window if possible
-   */
-  href?: string;
-  /**
-   * pass in query string params
-   */
-  query?: Record<string, string>;
-  /**
-   * if true, wont use window location. default false
-   */
-  forceServer?: boolean;
+  url: {
+    /**
+     * parse querystring keyvalues
+     */
+    query?: Record<string, string>;
+    /**
+     * full url
+     */
+    href?: string;
+  };
+
   /** will use navigator if possible */
   userAgent?: string;
 }) => {
-  if (typeof window !== 'undefined' && !forceServer) {
+  if (typeof window !== 'undefined') {
     href = window.location.href;
   }
 
-  if (typeof navigator !== 'undefined' && !forceServer) {
+  if (typeof navigator !== 'undefined') {
     if (navigator.userAgent) {
       userAgent = navigator.userAgent;
     }
@@ -189,8 +186,10 @@ export const getServerReq = ({
       : castStringlyObject(query);
 
   const ret = getClientOrServerReqHref({
-    href,
-    query: parsedQuery,
+    url: {
+      href,
+      query: parsedQuery,
+    },
     forceServer: true,
     userAgent: headers['user-agent']?.toLowerCase(),
   });
