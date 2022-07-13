@@ -98,6 +98,7 @@ const calculateServerHref = ({
  */
 export const getClientOrServerReqHref = ({
   url: { href, query },
+  forceServer = false,
   userAgent,
 }: {
   url: {
@@ -110,15 +111,18 @@ export const getClientOrServerReqHref = ({
      */
     href?: string;
   };
-
+  /**
+   * if true, wont use window location. default false
+   */
+  forceServer?: boolean;
   /** will use navigator if possible */
   userAgent?: string;
 }) => {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && !forceServer) {
     href = window.location.href;
   }
 
-  if (typeof navigator !== 'undefined') {
+  if (typeof navigator !== 'undefined' && !forceServer) {
     if (navigator.userAgent) {
       userAgent = navigator.userAgent;
     }
