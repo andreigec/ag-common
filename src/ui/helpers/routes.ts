@@ -100,6 +100,7 @@ export const getClientOrServerReqHref = ({
   href,
   query,
   forceServer = false,
+  userAgent,
 }: {
   /**
    * will use window if possible
@@ -113,9 +114,21 @@ export const getClientOrServerReqHref = ({
    * if true, wont use window location. default false
    */
   forceServer?: boolean;
+  /** will use navigator if possible */
+  userAgent?: string;
 }) => {
   if (typeof window !== 'undefined' && !forceServer) {
     href = window.location.href;
+  }
+
+  if (typeof navigator !== 'undefined' && !forceServer) {
+    if (navigator.userAgent) {
+      userAgent = navigator.userAgent;
+    }
+  }
+
+  if (!userAgent) {
+    userAgent = '?';
   }
 
   if (!href) {
@@ -123,7 +136,7 @@ export const getClientOrServerReqHref = ({
   }
 
   const parsed = parse(href);
-  const ret: LocationSubset = {
+  const url: LocationSubset = {
     hash: parsed.hash || '',
     host: parsed.host || '',
     origin: `${parsed.protocol}//${parsed.host}`,
@@ -136,7 +149,7 @@ export const getClientOrServerReqHref = ({
     query: { ...query, ...stringToObject(parsed.query || '', '=', '&') },
   };
 
-  return ret;
+  return { url, userAgent };
 };
 
 /**
@@ -144,14 +157,18 @@ export const getClientOrServerReqHref = ({
  * @param param0 * @returns
  */
 export const getServerReq = ({
-  host,
+  defaultHost,
   pathname,
   query,
+  headers,
 }: {
   /**
-   * eg ctx?.req?.headers?.host OR (user provided host eg test.com)
+   * eg ctx?.req?.headers || {}
    */
-  host: string;
+  headers: { host?: string; 'user-agent'?: string };
+
+  /** what to use if host is not available on headers */
+  defaultHost: string;
   /**
    * eg ctx.asPath || '/'
    */
@@ -162,7 +179,7 @@ export const getServerReq = ({
   query: Record<string, string | string[] | undefined>;
 }) => {
   const href = calculateServerHref({
-    host,
+    host: headers.host || defaultHost,
     pathname,
   });
 
@@ -175,6 +192,7 @@ export const getServerReq = ({
     href,
     query: parsedQuery,
     forceServer: true,
+    userAgent: headers['user-agent']?.toLowerCase(),
   });
 
   return ret;
