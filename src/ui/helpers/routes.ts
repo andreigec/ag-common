@@ -1,6 +1,6 @@
 import { ICognitoAuth } from './cognito';
 import { AxiosWrapperLite } from './jwt';
-import { TLang } from '../../common/helpers/i18n';
+import { getValidatedLang, TLang } from '../../common/helpers/i18n';
 import { stringToObject } from '../../common/helpers/string';
 import { castStringlyObject } from '../../common/helpers/object';
 import { parse } from 'url';
@@ -56,6 +56,7 @@ export interface IRequestCommon {
   url: LocationSubset;
   lang: TLang;
   userAgent: string;
+  defaultHost: string;
 }
 export interface IStateCommon<TRequest extends IRequestCommon>
   extends IInitialStateCommon {
@@ -91,6 +92,27 @@ const calculateServerHref = ({
   return decodeURIComponent(href);
 };
 
+const getRenderLanguage = ({
+  defaultHost,
+  url,
+}: {
+  defaultHost: string;
+  url: LocationSubset;
+}): TLang => {
+  const prefixReg = new RegExp(
+    `(.*?).(local|${defaultHost.toLowerCase()})`,
+    'gim',
+  );
+
+  const host = url.host?.toLowerCase()?.trim() ?? '';
+  const prefix = host.trim().length !== 0 && prefixReg.exec(host)?.[1];
+
+  if (!prefix) {
+    return 'en';
+  }
+  return getValidatedLang(prefix);
+};
+
 /**
  * get parsed url. use on client/SSR. defaults to window location if possible
  * @param param0
@@ -100,6 +122,8 @@ export const getClientOrServerReqHref = ({
   url: { href, query },
   forceServer = false,
   userAgent,
+  darkMode,
+  defaultHost,
 }: {
   url: {
     /**
@@ -117,19 +141,22 @@ export const getClientOrServerReqHref = ({
   forceServer?: boolean;
   /** will use navigator if possible */
   userAgent?: string;
+  /** will use window.matchMedia  */
+  darkMode?: boolean;
+  defaultHost: string;
 }) => {
-  if (typeof window !== 'undefined' && !forceServer) {
-    href = window.location.href;
-  }
-
-  if (typeof navigator !== 'undefined' && !forceServer) {
-    if (navigator.userAgent) {
-      userAgent = navigator.userAgent;
+  if (typeof window !== 'undefined') {
+    if (!forceServer) {
+      href = window.location.href;
     }
+
+    darkMode =
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
-  if (!userAgent) {
-    userAgent = '?';
+  if (typeof navigator !== 'undefined') {
+    userAgent = navigator.userAgent;
   }
 
   if (!href) {
@@ -150,7 +177,13 @@ export const getClientOrServerReqHref = ({
     query: { ...query, ...stringToObject(parsed.query || '', '=', '&') },
   };
 
-  return { url, userAgent };
+  return {
+    url,
+    userAgent: userAgent ?? '?',
+    darkMode: darkMode ?? false,
+    lang: getRenderLanguage({ url, defaultHost }),
+    defaultHost,
+  };
 };
 
 /**
@@ -196,6 +229,7 @@ export const getServerReq = ({
     },
     forceServer: true,
     userAgent: headers['user-agent']?.toLowerCase(),
+    defaultHost,
   });
 
   return ret;
