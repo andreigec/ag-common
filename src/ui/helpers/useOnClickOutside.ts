@@ -1,3 +1,4 @@
+import { isRightClick } from './dom';
 import { useEffect, RefObject } from 'react';
 
 type Event = MouseEvent | TouchEvent;
@@ -19,6 +20,12 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
     }
 
     const listener = (event: Event) => {
+      //
+      const isRightMB = isRightClick(event);
+      if (isRightMB) {
+        return;
+      }
+
       const el = p.ref?.current;
       // Do nothing if clicking ref's element or descendent elements
       if (!el || el.contains((event?.target as Node) || null)) {

@@ -33,3 +33,18 @@ export const filterDataProps = (p: any): Record<string, string> => {
     (s) => s[1],
   );
 };
+
+export const isRightClick = (event: MouseEvent | TouchEvent) => {
+  //
+  let isRightMB = false;
+
+  if ('which' in event)
+    // Gecko (Firefox), WebKit (Safari/Chrome) & Opera
+    isRightMB = event.which == 3;
+  else if ('button' in event)
+    // IE, Opera
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    isRightMB = (event as any).button == 2;
+
+  return isRightMB;
+};
