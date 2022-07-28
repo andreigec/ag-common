@@ -30,19 +30,20 @@ const images = {
 export const UserImage = ({
   image,
   className,
+  title = 'user image',
 }: {
   image?: string;
   className?: string;
+  title?: string;
 }) => {
   const [fallback, setFallback] = useState(false);
-  const showImage = image && !fallback;
 
   return (
-    <Base className={className} title={'user image'}>
-      {showImage && (
+    <Base className={className} title={title}>
+      {image && !fallback && (
         <Img alt="user" src={image} onError={() => setFallback(true)} />
       )}
-      {!showImage && UserImageIcon}
+      {(!image || fallback) && UserImageIcon}
     </Base>
   );
 };
@@ -65,10 +66,5 @@ export const UserProfileImage = ({
   const titleA = [user?.fullname, user?.userId].filter(notEmpty);
   const title = titleA.length === 0 ? '' : titleA.join(' - ');
 
-  return (
-    <Base className={className} title={title}>
-      {image && <Img alt="user" src={image} />}
-      {!image && UserImageIcon}
-    </Base>
-  );
+  return <UserImage image={image} title={title} className={className} />;
 };
