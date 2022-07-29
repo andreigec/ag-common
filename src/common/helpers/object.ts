@@ -185,3 +185,6 @@ export const castStringlyObject = (
     return s;
   });
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isObject = (o: any) =>
+  o && typeof o === 'object' && !Array.isArray(o);

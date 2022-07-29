@@ -12,6 +12,7 @@ export * from './plural';
 export * from './routes';
 export * from './serviceWorker';
 export * from './useContextMenu';
+export * from './useGranularHook';
 export * from './useLocalStorage';
 export * from './useLockBodyScroll';
 export * from './useOnClickOutside';
