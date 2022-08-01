@@ -66,6 +66,7 @@ export type TSkOperator =
   | '='
   | '>='
   | '>'
+  | '<>'
   | 'BEGINS_WITH';
 export interface IQueryDynamo {
   pkName: string;
@@ -79,7 +80,7 @@ export interface IQueryDynamo {
   count?: number;
   startKey?: Key;
   filterName?: string;
-  filterValue?: string | number;
+  filterValue?: string | number | boolean;
   filterOperator?: string;
 }
 export * from './aws';
