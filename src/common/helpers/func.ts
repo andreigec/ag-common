@@ -1,11 +1,11 @@
 import { error } from './log';
 
-export function retry(
+export function retry<T>(
   name: string,
-  fn: () => Promise<string>,
+  fn: () => Promise<T>,
   retriesLeft = 3,
   interval = 1000,
-) {
+): Promise<T> {
   return new Promise((resolve, reject) => {
     fn()
       .then(resolve)
