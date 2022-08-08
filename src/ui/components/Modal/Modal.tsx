@@ -99,7 +99,9 @@ export const Modal = ({
         ref={ref}
         className={className}
       >
-        {showCloseButton && <CloseStyled onClick={() => setOpen(false)} />}
+        {showCloseButton && (
+          <CloseStyled data-type="modal-close" onClick={() => setOpen(false)} />
+        )}
         {children}
       </ModalBase>
     </FixedBackground>
