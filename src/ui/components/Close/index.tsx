@@ -1,3 +1,4 @@
+import { filterDataProps } from '../../helpers/dom';
 import styled from 'styled-components';
 import React from 'react';
 
@@ -30,10 +31,16 @@ const SClose = styled.div`
     transform: rotate(-45deg);
   }
 `;
-export const Close = ({
-  className,
-  onClick,
-}: {
+
+export const Close = (p: {
   onClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   className?: string;
-}) => <SClose className={className} onClick={(e) => onClick?.(e)} />;
+}) => {
+  return (
+    <SClose
+      {...filterDataProps(p)}
+      className={p.className}
+      onClick={(e) => p.onClick?.(e)}
+    />
+  );
+};
