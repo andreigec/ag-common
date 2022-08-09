@@ -1,6 +1,6 @@
 import { HardOutline } from '../../styles/common';
 import { removeUndefValuesFromObject } from '../../../common/helpers/object';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 export interface IIconProps {
@@ -18,7 +18,7 @@ export interface IIconProps {
   /** default 0 */
   padding?: string;
   onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
-  children?: JSX.Element | JSX.Element[];
+  children?: ReactNode;
   role?: string;
   title?: string;
   tabIndex?: number;

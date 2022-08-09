@@ -1,5 +1,4 @@
-/* eslint-disable react/destructuring-assignment */
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 const Base = styled.div`
@@ -21,13 +20,13 @@ const Base = styled.div`
   }
 `;
 
-export const FlexColumn: React.FC<
-  React.ComponentPropsWithoutRef<'div'> & {
-    noGrow?: boolean;
-    center?: boolean;
-    allowOverflow?: boolean;
-  }
-> = (props) => (
+export const FlexColumn = (props: {
+  noGrow?: boolean;
+  center?: boolean;
+  allowOverflow?: boolean;
+  children: ReactNode;
+  className?: string;
+}) => (
   <Base
     data-nogrow={props.noGrow ?? false}
     data-center={props.center ?? false}

@@ -1,6 +1,5 @@
-/* eslint-disable react/destructuring-assignment */
 import { bigScreen, smallScreen } from '../../styles/media';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 const Base = styled.div`
@@ -29,13 +28,13 @@ const Base = styled.div`
   }
 `;
 
-export const RowOrColumn: React.FC<
-  React.ComponentPropsWithoutRef<'div'> & {
-    noGrow?: boolean;
-    center?: boolean;
-    noWrap?: boolean;
-  }
-> = (props) => (
+export const RowOrColumn = (props: {
+  noGrow?: boolean;
+  center?: boolean;
+  noWrap?: boolean;
+  children: ReactNode;
+  className?: string;
+}) => (
   <Base
     data-nogrow={props.noGrow ?? false}
     data-center={props.center ?? false}

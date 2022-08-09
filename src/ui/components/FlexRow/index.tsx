@@ -1,5 +1,4 @@
-/* eslint-disable react/destructuring-assignment */
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 const Base = styled.div`
@@ -31,14 +30,14 @@ const Base = styled.div`
   }
 `;
 
-export const FlexRow: React.FC<
-  React.ComponentPropsWithoutRef<'div'> & {
-    noWrap?: boolean;
-    noGrow?: boolean;
-    center?: boolean;
-    enableOverflow?: boolean;
-  }
-> = (props) => (
+export const FlexRow = (props: {
+  noWrap?: boolean;
+  noGrow?: boolean;
+  center?: boolean;
+  enableOverflow?: boolean;
+  children: ReactNode;
+  className?: string;
+}) => (
   <Base
     data-nowrap={props.noWrap ?? false}
     data-nogrow={props.noGrow ?? false}

@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export interface IDropdownList<T> {
   /**
    * all items that can be in dropdown
@@ -28,5 +30,5 @@ export interface IDropdownList<T> {
   /**
    * if not provided, will default display value, then kebab dots
    */
-  children?: JSX.Element;
+  children?: ReactNode;
 }

@@ -61,21 +61,17 @@ export const CheckboxEdit = ({
           e.key === 'Enter' && value !== defaultValue && onSubmit(value)
         }
       />
-      {allowUndo && (
+      {allowUndo && value !== defaultValue && (
         <Icons center enableOverflow>
-          {value !== defaultValue && (
-            <Icon
-              style={iconLeft}
-              onClick={() => value !== defaultValue && onSubmit(value)}
-            >
-              <SaveIcon />
-            </Icon>
-          )}
-          {value !== defaultValue && (
-            <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
-              <UndoIcon />
-            </Icon>
-          )}
+          <Icon
+            style={iconLeft}
+            onClick={() => value !== defaultValue && onSubmit(value)}
+          >
+            <SaveIcon />
+          </Icon>
+          <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
+            <UndoIcon />
+          </Icon>
         </Icons>
       )}
     </ValueBox>
