@@ -19,4 +19,5 @@ Primary.args = {
   open: true,
   position: 'center',
   topPosition: 'center',
+  setOpen: () => {},
 };

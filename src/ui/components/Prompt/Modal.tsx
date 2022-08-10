@@ -95,6 +95,7 @@ export const PromptModal = ({
             defaultEditing={{ focus: true }}
             singleLine
             noGrow
+            allowUndo={false}
           />
           <Bottom noGrow>
             <Button onClick={() => ret(text)}>{okText}</Button>

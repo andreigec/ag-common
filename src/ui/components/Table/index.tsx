@@ -31,7 +31,7 @@ const GroupTitle = styled.div`
 
 const GroupWrap = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
 `;
 
 export interface TableItem {

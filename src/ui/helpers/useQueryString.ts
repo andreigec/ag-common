@@ -21,7 +21,6 @@ export const useQueryStringRaw = <T>({
   stringify: (v: T) => string | undefined;
   parse: (v: string | undefined) => T;
 }): [T, (v: T) => void] => {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const qv: Record<string, string> = isServer
     ? queryValues || {}
     : paramsToObject(new URLSearchParams(window.location.search));

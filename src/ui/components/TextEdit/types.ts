@@ -1,4 +1,8 @@
 import React from 'react';
+export interface IRefTextEdit {
+  /** Set the internal value of the typed string. Can be used to clear externally */
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+}
 export interface ITextEdit {
   /**
    * forces single row input style. will also enable 'Enter' to auto submit

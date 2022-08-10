@@ -1,12 +1,20 @@
+/* eslint-disable react/display-name */
 import { SaveIcon, UndoIcon, PencilIcon } from './images';
 import { iconLeft, iconRight, ValueBox, valueCss } from './common';
-import { ITextEdit } from './types';
+import { IRefTextEdit, ITextEdit } from './types';
 import { TextEditLengthBox } from './LengthBox';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
 import { filterDataProps } from '../../helpers/dom';
 import styled, { css, StyledComponent } from 'styled-components';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 export const ValueReadonly = styled.div`
   ${valueCss};
   word-break: break-word;
@@ -63,7 +71,7 @@ const Icon = styled.div`
   }
 `;
 
-export const TextEdit = (p: ITextEdit) => {
+export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
   const {
     defaultValue = '',
     defaultEditing,
@@ -84,15 +92,19 @@ export const TextEdit = (p: ITextEdit) => {
     onKeyDown,
   } = p;
 
-  const ref = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
   const taref = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState(defaultValue);
   const [editing, setEditingRaw] = useState(!!defaultEditing);
   const valueChange = value !== defaultValue;
+  useImperativeHandle(ref, () => ({
+    setValue,
+  }));
+
   useOnClickOutside(
     {
       disabled: onClickOutsideWithNoValue === null || disableEdit,
-      ref,
+      ref: divRef,
       moveMouseOutside: false,
     },
     () => {
@@ -127,15 +139,13 @@ export const TextEdit = (p: ITextEdit) => {
 
   useEffect(() => {
     setValue(defaultValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue]);
 
   useEffect(() => {
     if (defaultEditing?.focus && taref.current) {
       taref.current.focus();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [defaultEditing?.focus]);
 
   if (!editing || disableEdit) {
     return (
@@ -249,4 +259,4 @@ export const TextEdit = (p: ITextEdit) => {
       )}
     </ValueBoxEdit>
   );
-};
+});

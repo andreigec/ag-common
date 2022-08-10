@@ -1,12 +1,7 @@
 import { Modal } from './Modal';
 import React from 'react';
 import ReactDOM from 'react-dom';
-export interface IPromptAction {
-  topText?: string;
-  bottomText: string;
-  defaultValue?: string;
-  placeholder?: string;
-}
+
 export const ModalDialog = async (
   content: JSX.Element,
 ): Promise<string | undefined> => {

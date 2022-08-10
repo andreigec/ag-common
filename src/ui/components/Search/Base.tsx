@@ -1,9 +1,10 @@
 import { ISearchDialog, TSearchModalRes } from './types';
+import { CrossIcon } from './images';
 import { debounce } from '../../helpers';
-import { TextEdit } from '../TextEdit';
+import { IRefTextEdit, TextEdit } from '../TextEdit';
 import { smallScreen } from '../../styles';
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { createRef, useState } from 'react';
 
 const Base = styled.div`
   display: flex;
@@ -24,6 +25,7 @@ const SearchBox = styled.div`
   @media ${smallScreen} {
     margin: 0;
     padding: 0;
+    padding-top: 0.5rem;
     width: 100%;
   }
 `;
@@ -44,18 +46,6 @@ const Icon = styled.div`
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.5rem;
-`;
-
-const CloseButton = styled.div`
-  font-weight: bold;
-  margin-left: 1rem;
-  font-size: 1.1rem;
-  z-index: 1;
-  color: #333;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 const Content = styled.div`
@@ -82,13 +72,18 @@ const Content = styled.div`
 
 const Row = styled.div`
   width: 100%;
+  cursor: pointer;
+`;
+
+const CrossIconStyled = styled(CrossIcon)`
+  position: absolute;
+  right: 1rem;
 `;
 
 export const SearchBase = <T,>({
   onSelectItem,
   onSearchTextChange,
   placeholderText,
-  closeText,
   renderItem,
   displayItems,
   willDisplayItem,
@@ -117,12 +112,22 @@ export const SearchBase = <T,>({
     `Showing ${filteredItems.length} out of ${displayItems.length} total
   items`;
 
+  const textEditRef = createRef<IRefTextEdit>();
+
   return (
     <Base className={className}>
       <SearchBox data-type="search">
         <TextEdit
+          ref={textEditRef}
           placeholder={placeholderText}
           defaultValue=""
+          defaultEditing={{ focus: true }}
+          singleLine
+          leftContent={<Icon>{MagnifyIconSvg}</Icon>}
+          noGrow
+          allowUndo={false}
+          onEscape={() => resWrap(undefined)}
+          onClickOutsideWithNoValue={null}
           onSubmit={(v) =>
             debounce(
               () => {
@@ -132,17 +137,15 @@ export const SearchBase = <T,>({
               { key: 'pagesearch', time: 200 },
             )
           }
-          defaultEditing={{ focus: true }}
-          singleLine
-          leftContent={<Icon>{MagnifyIconSvg}</Icon>}
-          noGrow
-          allowUndo={false}
-          onEscape={() => resWrap(undefined)}
-          onClickOutsideWithNoValue={null}
         />
-        <CloseButton onClick={() => resWrap(undefined)}>
-          {closeText}
-        </CloseButton>
+        {searchText && (
+          <CrossIconStyled
+            onClick={() => {
+              textEditRef.current?.setValue('');
+              setSearchText('');
+            }}
+          />
+        )}
       </SearchBox>
       <Content data-hasitems={!!filteredItems.length} data-type="content">
         {filteredItems.map((i, index) => (

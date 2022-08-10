@@ -21,7 +21,7 @@ const ActionWrapper = (args: [string, IToastOptions]) => (
     tabIndex={-1}
     onKeyDown={() => {}}
     onClick={async () => {
-      await addToast(...args);
+      await addToast(args[0], args[1]);
     }}
   >
     click to open

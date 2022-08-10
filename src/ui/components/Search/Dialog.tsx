@@ -12,7 +12,6 @@ export const SearchDialog = async <T,>(
   p: ISearchDialog<T>,
 ): Promise<TSearchModalRes<T>> => {
   const placeholderText = p.placeholderText || '';
-  const closeText = p.closeText || 'CLOSE';
   let originalStyle: string | undefined;
 
   return new Promise((res) => {
@@ -29,27 +28,23 @@ export const SearchDialog = async <T,>(
 
     wrapper.id = idName;
     if (originalStyle === undefined) {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       originalStyle = window.getComputedStyle(document.body).overflow || '';
       document.body.style.overflow = 'hidden';
     }
-
-    const onSelectItem = (f: TSearchModalRes<T>) => {
-      try {
-        document.body.style.overflow = originalStyle || '';
-        res(f);
-      } finally {
-        ReactDOM.unmountComponentAtNode(wrapper);
-        wrapper.remove();
-      }
-    };
 
     ReactDOM.render(
       <SearchModal
         {...p}
         placeholderText={placeholderText}
-        closeText={closeText}
-        onSelectItem={onSelectItem}
+        onSelectItem={(f: TSearchModalRes<T>) => {
+          try {
+            document.body.style.overflow = originalStyle || '';
+            res(f);
+          } finally {
+            ReactDOM.unmountComponentAtNode(wrapper);
+            wrapper.remove();
+          }
+        }}
       />,
       wrapper,
     );
