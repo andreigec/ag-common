@@ -1,4 +1,5 @@
 import { FlexRow } from '../src/ui/components/FlexRow';
+import { IRowOrColumn } from '../src/ui/components/RowOrColumn';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -17,4 +18,7 @@ const Template: ComponentStory<typeof FlexRow> = (args) => (
 );
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  title: 'test title',
+  enableOverflow: true,
+} as IRowOrColumn;

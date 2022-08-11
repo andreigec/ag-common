@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+import { IRowOrColumn } from '../RowOrColumn';
+import React from 'react';
 import styled from 'styled-components';
 
 const Base = styled.div`
@@ -14,23 +15,18 @@ const Base = styled.div`
     flex-grow: 0;
   }
   overflow: visible;
-  &[data-allowoverflow='false'] {
+  &[data-enableoverflow='false'] {
     overflow: hidden;
     max-width: 100%;
   }
 `;
 
-export const FlexColumn = (props: {
-  noGrow?: boolean;
-  center?: boolean;
-  allowOverflow?: boolean;
-  children: ReactNode;
-  className?: string;
-}) => (
+export const FlexColumn = (props: IRowOrColumn) => (
   <Base
+    title={props.title}
     data-nogrow={props.noGrow ?? false}
     data-center={props.center ?? false}
-    data-allowoverflow={props.allowOverflow ?? false}
+    data-enableoverflow={props.enableOverflow ?? false}
     {...props}
   >
     {props.children}

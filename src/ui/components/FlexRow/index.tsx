@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+import { IRowOrColumn } from '../RowOrColumn';
+import React from 'react';
 import styled from 'styled-components';
 
 const Base = styled.div`
@@ -30,15 +31,9 @@ const Base = styled.div`
   }
 `;
 
-export const FlexRow = (props: {
-  noWrap?: boolean;
-  noGrow?: boolean;
-  center?: boolean;
-  enableOverflow?: boolean;
-  children: ReactNode;
-  className?: string;
-}) => (
+export const FlexRow = (props: IRowOrColumn) => (
   <Base
+    title={props.title}
     data-nowrap={props.noWrap ?? false}
     data-nogrow={props.noGrow ?? false}
     data-center={props.center ?? false}

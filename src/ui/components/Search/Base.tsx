@@ -120,7 +120,6 @@ export const SearchBase = <T,>({
         <TextEdit
           ref={textEditRef}
           placeholder={placeholderText}
-          defaultValue=""
           defaultEditing={{ focus: true }}
           singleLine
           leftContent={<Icon>{MagnifyIconSvg}</Icon>}

@@ -26,19 +26,26 @@ const Base = styled.div`
     flex-grow: 0;
     width: auto;
   }
+  &[data-enableoverflow='true'] {
+    overflow: visible;
+  }
 `;
-
-export const RowOrColumn = (props: {
+export interface IRowOrColumn {
   noGrow?: boolean;
   center?: boolean;
   noWrap?: boolean;
   children: ReactNode;
   className?: string;
-}) => (
+  title?: string;
+  enableOverflow?: boolean;
+}
+export const RowOrColumn = (props: IRowOrColumn) => (
   <Base
+    title={props.title}
     data-nogrow={props.noGrow ?? false}
     data-center={props.center ?? false}
     data-nowrap={props.noWrap ?? false}
+    data-enableoverflow={props.enableOverflow ?? false}
     {...props}
   >
     {props.children}
