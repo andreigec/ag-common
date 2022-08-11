@@ -5,6 +5,7 @@ import { stringToObject } from '../../common/helpers/string';
 import { castStringlyObject } from '../../common/helpers/object';
 import { parse } from 'url';
 
+export type TProtocol = 'http:' | 'https:';
 export interface LocationSubset {
   /**
    * slash only path eg /aaa/bbb
@@ -26,10 +27,8 @@ export interface LocationSubset {
    * protocol less up to first slash eg aaa.com:1111
    */
   host: string;
-  /**
-   * eg http: or https:
-   */
-  protocol: string;
+
+  protocol: TProtocol;
   /**
    * full url
    */
@@ -119,7 +118,7 @@ const getRenderLanguage = ({
  * @returns
  */
 export const getClientOrServerReqHref = ({
-  url: { href, query },
+  url: { href, query, protocol },
   forceServer = false,
   userAgent,
   darkMode,
@@ -134,6 +133,7 @@ export const getClientOrServerReqHref = ({
      * full url
      */
     href?: string;
+    protocol: TProtocol;
   };
   /**
    * if true, wont use window location. default false
@@ -148,6 +148,7 @@ export const getClientOrServerReqHref = ({
   if (typeof window !== 'undefined') {
     if (!forceServer) {
       href = window.location.href;
+      protocol = window.location.protocol as TProtocol;
     }
 
     darkMode =
@@ -167,13 +168,11 @@ export const getClientOrServerReqHref = ({
   const url: LocationSubset = {
     hash: parsed.hash || '',
     host: parsed.host || '',
-    origin: `${parsed.protocol}//${parsed.host}`,
-    href: `${parsed.protocol}//${parsed.host}${parsed.path}${
-      parsed.hash || ''
-    }`,
+    origin: `${protocol}//${parsed.host}`,
+    href: `${protocol}//${parsed.host}${parsed.path}${parsed.hash || ''}`,
     path: `${parsed.path}${parsed.hash || ''}`,
     pathname: parsed.pathname || '',
-    protocol: parsed.protocol || '',
+    protocol: protocol || '',
     query: { ...query, ...stringToObject(parsed.query || '', '=', '&') },
   };
 
@@ -195,11 +194,16 @@ export const getServerReq = ({
   pathname,
   query,
   headers,
+  encrypted,
 }: {
   /**
    * eg ctx?.req?.headers || {}
    */
-  headers: { host?: string; 'user-agent'?: string };
+  headers: {
+    host?: string;
+    'user-agent'?: string;
+    'x-forwarded-proto'?: 'http' | 'https';
+  };
 
   /** what to use if host is not available on headers */
   defaultHost: string;
@@ -211,11 +215,20 @@ export const getServerReq = ({
    * eg ctx.query
    */
   query: Record<string, string | string[] | undefined>;
+  /**
+   * eg (ctx?.req?.socket as any)?.encrypted)
+   */
+  encrypted: boolean;
 }) => {
   const href = calculateServerHref({
     host: headers.host || defaultHost,
     pathname,
   });
+
+  let protocol: TProtocol = 'http:';
+  if (headers['x-forwarded-proto']?.includes('https') || encrypted) {
+    protocol = 'https:';
+  }
 
   const parsedQuery =
     !query || Object.keys(query).length === 0
@@ -226,6 +239,7 @@ export const getServerReq = ({
     url: {
       href,
       query: parsedQuery,
+      protocol,
     },
     forceServer: true,
     userAgent: headers['user-agent']?.toLowerCase(),
