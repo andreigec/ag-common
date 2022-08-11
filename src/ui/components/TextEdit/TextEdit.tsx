@@ -55,7 +55,7 @@ const Right = styled.div`
   display: flex;
   flex-flow: row;
   align-content: center;
-  &[data-singleLine='false'] {
+  &[data-singleline='false'] {
     position: absolute;
     bottom: 0.5rem;
     right: 0.5rem;
@@ -230,7 +230,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
       />
 
       {maxLength && (
-        <Right data-singleLine={singleLine}>
+        <Right data-singleline={singleLine}>
           <TextEditLengthBox min={value.length} max={maxLength} />
         </Right>
       )}
