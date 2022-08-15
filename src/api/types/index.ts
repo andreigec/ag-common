@@ -71,16 +71,22 @@ export type TSkOperator =
 export interface IQueryDynamo {
   pkName: string;
   pkValue: string | number;
+  /** default, = */
   pkOperator?: string;
   skName?: string;
   skValue?: string | number | string[] | number[];
+  /** default, = */
   skOperator?: TSkOperator;
   tableName: string;
   indexName?: string;
+  /** default 1000 */
   count?: number;
   startKey?: Key;
   filterName?: string;
   filterValue?: string | number | boolean;
+  /** default, = */
   filterOperator?: string;
+  /** default = true */
+  sortAscending?: boolean;
 }
 export * from './aws';

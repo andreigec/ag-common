@@ -290,25 +290,17 @@ export const queryDynamo = async <T>({
   tableName,
   pkName,
   pkValue,
-  /**
-   * default =
-   */
   pkOperator = '=',
   skName,
   skValue,
-  /**
-   * default =
-   */
   skOperator = '=',
   indexName,
   count = 1000,
   startKey: startKeyIn,
   filterName,
   filterValue,
-  /**
-   * default =
-   */
   filterOperator = '=',
+  sortAscending = true,
 }: IQueryDynamo): Promise<{ Items: T[]; startKey?: Key }> => {
   let startKey = startKeyIn;
   let kce = `#${pkName.toLowerCase()} ${pkOperator} :${pkName.toLowerCase()}`;
@@ -363,6 +355,7 @@ export const queryDynamo = async <T>({
       ExpressionAttributeValues: eav,
       ExclusiveStartKey: startKey,
       FilterExpression,
+      ScanIndexForward: sortAscending,
     };
 
     if (count > 0) {
