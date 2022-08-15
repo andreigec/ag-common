@@ -47,10 +47,7 @@ export const putDynamo = async <T>(
   return { data: item };
 };
 
-let batchWriteRaw = async (
-  req: DocumentClient.BatchWriteItemRequestMap,
-  debugMsg?: (s: string) => void,
-) => {
+let batchWriteRaw = async (req: DocumentClient.BatchWriteItemRequestMap) => {
   let count = 0;
   let max = 5;
   // eslint-disable-next-line no-constant-condition
@@ -66,24 +63,24 @@ let batchWriteRaw = async (
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let es = (e as any).toString();
+      let msg = es;
+      warn('dynamo write error', msg);
+
       if (
         es.indexOf('429') !== -1 ||
         es.indexOf('ProvisionedThroughputExceeded') !== -1
       ) {
         count += 1;
+        msg = `batch write throttled. retry ${count}/${max}`;
+      } else {
+        throw e;
       }
 
       if (count >= max) {
         throw e;
       }
 
-      let msg = `batch write throttled. retry ${count}/${max}`;
-      if (!debugMsg) {
-        info(msg);
-      } else {
-        debugMsg(msg);
-      }
-
+      warn(`dynamo retry ${count}/${max}`);
       await sleep(2000);
     }
 };
@@ -107,10 +104,7 @@ export const batchWrite = async <T extends {}>(
       })),
     };
 
-    let res = await batchWriteRaw(req, (m) =>
-      info(`${m} remaining=${rest.length}`),
-    );
-
+    let res = await batchWriteRaw(req);
     const newError = res.$response?.error ?? null;
     if (newError) {
       error.push(newError);
