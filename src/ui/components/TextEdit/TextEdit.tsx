@@ -1,5 +1,4 @@
 /* eslint-disable react/display-name */
-import { SaveIcon, UndoIcon, PencilIcon } from './images';
 import { iconLeft, iconRight, ValueBox, valueCss } from './common';
 import { IRefTextEdit, ITextEdit } from './types';
 import { TextEditLengthBox } from './LengthBox';
@@ -15,6 +14,9 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react';
+import { Pencil } from '../../icons/Pencil';
+import { Save } from '../../icons/Save';
+import { Undo } from '../../icons/Undo';
 export const ValueReadonly = styled.div`
   ${valueCss};
   word-break: break-word;
@@ -171,7 +173,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
                 setEditing(true);
               }}
             >
-              <PencilIcon />
+              <Pencil />
             </Icon>
           )}
         </Right>
@@ -241,7 +243,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
               style={iconLeft}
               onClick={() => valueChange && onSubmit(value, false)}
             >
-              <SaveIcon />
+              <Save />
             </Icon>
           )}
           {(valueChange || editing !== !!defaultEditing) && (
@@ -252,7 +254,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
                 setValue(defaultValue);
               }}
             >
-              <UndoIcon />
+              <Undo />
             </Icon>
           )}
         </Right>

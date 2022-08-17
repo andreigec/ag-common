@@ -11,7 +11,6 @@ export * from './HeadersRaw';
 export * from './Icon';
 export * from './KebabDots';
 export * from './Loader';
-export * from './LoginButton';
 export * from './LogoutButton';
 export * from './Modal/Modal';
 export * from './Prompt';

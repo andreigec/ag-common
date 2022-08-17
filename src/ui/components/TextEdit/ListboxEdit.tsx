@@ -1,7 +1,8 @@
-import { SaveIcon, UndoIcon } from './images';
 import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
 import { noDrag } from '../../styles/common';
 import React, { useState, useEffect } from 'react';
+import { Save } from '../../icons/Save';
+import { Undo } from '../../icons/Undo';
 export const ListboxEdit = <T,>({
   defaultValue,
   onSubmit,
@@ -58,12 +59,12 @@ export const ListboxEdit = <T,>({
           style={iconLeft}
           onClick={() => value !== defaultValue && onSubmit(value)}
         >
-          <SaveIcon />
+          <Save />
         </Icon>
       )}
       {canEdit && value !== defaultValue && (
         <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
-          <UndoIcon />
+          <Undo />
         </Icon>
       )}
     </ValueBox>

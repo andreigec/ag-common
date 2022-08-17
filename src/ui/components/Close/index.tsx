@@ -2,7 +2,7 @@ import { filterDataProps } from '../../helpers/dom';
 import styled from 'styled-components';
 import React from 'react';
 
-const SClose = styled.div`
+const Base = styled.div`
   position: absolute;
   z-index: 1;
   width: 32px;
@@ -37,7 +37,7 @@ export const Close = (p: {
   className?: string;
 }) => {
   return (
-    <SClose
+    <Base
       {...filterDataProps(p)}
       className={p.className}
       onClick={(e) => p.onClick?.(e)}

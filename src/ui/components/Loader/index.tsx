@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 
-const SLoader = styled.div`
+const Base = styled.div`
   border: 16px solid #f3f3f3; /* Light grey */
   border-top: 16px solid #3498db; /* Blue */
   border-radius: 50%;
@@ -59,7 +59,7 @@ export const Loader = ({
 
   return (
     <LoadingBack data-loading={name} data-transparent={trans}>
-      <SLoader style={{ height: height as string, width: width as string }} />
+      <Base style={{ height: height as string, width: width as string }} />
     </LoadingBack>
   );
 };

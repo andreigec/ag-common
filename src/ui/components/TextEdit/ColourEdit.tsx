@@ -1,8 +1,9 @@
-import { SaveIcon, UndoIcon } from './images';
 import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
 import React, { useState, useEffect, useRef } from 'react';
+import { Save } from '../../icons/Save';
+import { Undo } from '../../icons/Undo';
 export const ColourEdit = ({
   defaultValue,
   onSubmit,
@@ -35,12 +36,12 @@ export const ColourEdit = ({
           style={iconLeft}
           onClick={() => valueChange && onSubmit(value.trim())}
         >
-          <SaveIcon />
+          <Save />
         </Icon>
       )}
       {valueChange && (
         <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
-          <UndoIcon />
+          <Undo />
         </Icon>
       )}
     </ValueBox>

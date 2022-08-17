@@ -1,10 +1,11 @@
 import { ISearchDialog, TSearchModalRes } from './types';
-import { CrossIcon } from './images';
+import { CrossIcon } from '../../icons/CrossIcon';
 import { debounce } from '../../helpers';
 import { IRefTextEdit, TextEdit } from '../TextEdit';
 import { smallScreen } from '../../styles';
 import styled from 'styled-components';
 import React, { createRef, useState } from 'react';
+import { Magnify } from '../../icons/Magnify';
 
 const Base = styled.div`
   display: flex;
@@ -29,18 +30,6 @@ const SearchBox = styled.div`
     width: 100%;
   }
 `;
-
-const MagnifyIconSvg = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 490">
-    <path
-      fill="none"
-      stroke="#000"
-      strokeWidth="36"
-      strokeLinecap="round"
-      d="M280 278a153 153 0 1 0-2 2l170 170m-91-117 110 110-26 26-110-110"
-    />
-  </svg>
-);
 
 const Icon = styled.div`
   width: 1.5rem;
@@ -122,7 +111,7 @@ export const SearchBase = <T,>({
           placeholder={placeholderText}
           defaultEditing={{ focus: true }}
           singleLine
-          leftContent={<Icon>{MagnifyIconSvg}</Icon>}
+          leftContent={<Icon>{Magnify}</Icon>}
           noGrow
           allowUndo={false}
           onEscape={() => resWrap(undefined)}

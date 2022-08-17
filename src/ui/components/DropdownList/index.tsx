@@ -6,7 +6,7 @@ import { colours } from '../../styles/colours';
 import { KebabDots } from '../KebabDots';
 import styled from 'styled-components';
 import React, { useEffect, useState, useRef } from 'react';
-const SBase = styled.div`
+const Base = styled.div`
   display: flex;
   flex-flow: row;
   position: relative;
@@ -167,7 +167,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   }, [bounced, open]);
 
   return (
-    <SBase
+    <Base
       className={className}
       ref={ref}
       title={placeholder}
@@ -190,6 +190,6 @@ export function DropdownList<T>(p: IDropdownList<T>) {
       </DropItems>
 
       {openDisplay}
-    </SBase>
+    </Base>
   );
 }

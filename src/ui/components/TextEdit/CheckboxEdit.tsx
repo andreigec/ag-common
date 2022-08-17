@@ -1,4 +1,3 @@
-import { SaveIcon, UndoIcon } from './images';
 import {
   IconD as Icon,
   iconLeft,
@@ -11,6 +10,8 @@ import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { FlexRow } from '../FlexRow';
 import styled from 'styled-components';
 import React, { useState, useEffect, useRef } from 'react';
+import { Save } from '../../icons/Save';
+import { Undo } from '../../icons/Undo';
 
 const Icons = styled(FlexRow)`
   position: absolute;
@@ -67,10 +68,10 @@ export const CheckboxEdit = ({
             style={iconLeft}
             onClick={() => value !== defaultValue && onSubmit(value)}
           >
-            <SaveIcon />
+            <Save />
           </Icon>
           <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
-            <UndoIcon />
+            <Undo />
           </Icon>
         </Icons>
       )}
