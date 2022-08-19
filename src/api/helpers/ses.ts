@@ -17,7 +17,7 @@ export const sendEmail = async ({
   subject,
   sourceArn,
   from,
-}: ISendEmail) => {
+}: ISendEmail): Promise<{ error?: string }> => {
   // Create sendEmail params
   const params: SES.SendEmailRequest = {
     Destination: {
@@ -41,7 +41,11 @@ export const sendEmail = async ({
     SourceArn: sourceArn,
   };
 
-  await ses.sendEmail(params).promise();
+  const res = await ses.sendEmail(params).promise();
+  if (res.$response.error) {
+    return { error: res.$response.error?.message };
+  }
+  return {};
 };
 
 export const sendEmails = async (emails: ISendEmail[]) =>

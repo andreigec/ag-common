@@ -12,7 +12,7 @@ export const setSqs = (region: string) => {
 export const sendMessages = async <T>(
   items: T[],
   queueUrl: string,
-): Promise<void> => {
+): Promise<{ error?: string }> => {
   const req: SendMessageBatchRequest = {
     QueueUrl: queueUrl,
     Entries: items.map((i) => ({
@@ -22,11 +22,8 @@ export const sendMessages = async <T>(
   };
 
   const put = await sqs.sendMessageBatch(req).promise();
-  if (
-    put.$response.error &&
-    put.$response.error.statusCode &&
-    put.$response.error.statusCode >= 400
-  ) {
-    throw new Error(put.$response.error.message);
+  if (put.$response.error && put.$response.error.statusCode) {
+    return { error: put.$response.error.message };
   }
+  return {};
 };

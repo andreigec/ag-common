@@ -34,12 +34,8 @@ export const putDynamo = async <T>(
   // write the todo to the database
   const put = await dynamoDb.put(params).promise();
 
-  if (
-    put.$response.error &&
-    put.$response.error.statusCode &&
-    put.$response.error.statusCode >= 400
-  ) {
-    throw new Error(put.$response.error.message);
+  if (put.$response.error && put.$response.error.statusCode) {
+    return { error: put.$response.error.message };
   }
   // put never returns into, so just use what we have already
   return { data: item };
@@ -56,6 +52,10 @@ let batchWriteRaw = async (req: DocumentClient.BatchWriteItemRequestMap) => {
           RequestItems: req,
         })
         .promise();
+
+      if (res.$response.error) {
+        throw new Error(res.$response.error.message);
+      }
 
       return res;
     } catch (e) {
@@ -88,7 +88,7 @@ export const batchWrite = async <T extends {}>(
   tableName: string,
   itemsIn: T[],
   breakOnError = false,
-) => {
+): Promise<{ error?: string }> => {
   let items: T[] = JSON.parse(JSON.stringify(itemsIn));
   info(`push to dynamo:${tableName} - count=${itemsIn.length}`);
   const error: AWSError[] = [];
@@ -190,11 +190,7 @@ export const scan = async <T>(tableName: string): Promise<T[]> => {
 
     ExclusiveStartKey = LastEvaluatedKey;
 
-    if (
-      $response.error &&
-      $response.error.statusCode &&
-      $response.error.statusCode >= 400
-    ) {
+    if ($response.error && $response.error.statusCode) {
       throw new Error($response.error.message);
     }
 
@@ -377,7 +373,7 @@ export const queryDynamo = async <T>({
 
     startKey = lek;
 
-    if ($response.error && ($response.error.statusCode ?? 0) >= 400) {
+    if ($response.error) {
       errorF('error. query params=', JSON.stringify(params));
       throw new Error($response.error.message);
     }

@@ -29,8 +29,8 @@ export const putS3Object = async ({
   Body: string | Blob;
   Bucket: string;
   Key: string;
-}) => {
-  await s3
+}): Promise<{ error?: string }> => {
+  const r = await s3
     .putObject({
       Body,
       Bucket,
@@ -38,6 +38,11 @@ export const putS3Object = async ({
       ContentType,
     } as S3.Types.PutObjectRequest)
     .promise();
+
+  if (r.$response.error) {
+    return { error: r.$response.error.message };
+  }
+  return {};
 };
 
 export const uploadFile = async ({
@@ -60,9 +65,10 @@ export const deleteFile = async ({
 }: {
   Bucket: string;
   Key: string;
-}) => {
+}): Promise<{ error?: string }> => {
   const res = await s3.deleteObject({ Bucket, Key }).promise();
   if (res.$response.error) {
-    throw res.$response.error;
+    return { error: res.$response.error.message };
   }
+  return {};
 };
