@@ -1,13 +1,12 @@
 import { hashCode } from '../../common';
-import AWS from 'aws-sdk';
-import {
+import SQS, {
   SendMessageBatchRequest,
   SendMessageBatchRequestEntryList,
 } from 'aws-sdk/clients/sqs';
 // eslint-disable-next-line import/no-mutable-exports
-export let sqs = new AWS.SQS();
+export let sqs = new SQS();
 export const setSqs = (region: string) => {
-  sqs = new AWS.SQS({ region });
+  sqs = new SQS({ region });
 };
 
 export const sendMessages = async <T>(

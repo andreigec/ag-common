@@ -1,9 +1,9 @@
 import { Blob } from 'aws-sdk/lib/dynamodb/document_client';
-import AWS from 'aws-sdk';
+import S3 from 'aws-sdk/clients/s3';
 
-let s3 = new AWS.S3();
+let s3 = new S3();
 export const setS3 = (region: string) => {
-  s3 = new AWS.S3({ region });
+  s3 = new S3({ region });
 };
 
 export const getS3Object = async ({
@@ -36,7 +36,7 @@ export const putS3Object = async ({
       Bucket,
       Key,
       ContentType,
-    } as AWS.S3.Types.PutObjectRequest)
+    } as S3.Types.PutObjectRequest)
     .promise();
 };
 

@@ -1,8 +1,8 @@
-import AWS from 'aws-sdk';
+import SES from 'aws-sdk/clients/ses';
 
-export let ses = new AWS.SES();
+export let ses = new SES();
 export const setSes = (region: string) => {
-  ses = new AWS.SES({ region });
+  ses = new SES({ region });
 };
 export interface ISendEmail {
   to: string;
@@ -19,7 +19,7 @@ export const sendEmail = async ({
   from,
 }: ISendEmail) => {
   // Create sendEmail params
-  const params: AWS.SES.SendEmailRequest = {
+  const params: SES.SendEmailRequest = {
     Destination: {
       CcAddresses: [],
       ToAddresses: [to],

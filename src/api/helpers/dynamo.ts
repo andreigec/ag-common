@@ -7,18 +7,16 @@ import { info, error as errorF, debug, warn } from '../../common/helpers/log';
 import { chunk, notEmpty, take } from '../../common/helpers/array';
 import { sleep } from '../../common/helpers/sleep';
 import { asyncForEach } from '../../common/helpers/async';
-import AWS, { AWSError, Response } from 'aws-sdk';
-import {
+import DynamoDB, {
   DocumentClient,
   PutItemInput,
   QueryInput,
-  QueryOutput,
 } from 'aws-sdk/clients/dynamodb';
-
+import { AWSError } from 'aws-sdk/lib/error';
 // eslint-disable-next-line import/no-mutable-exports
-export let dynamoDb = new AWS.DynamoDB.DocumentClient();
+export let dynamoDb = new DynamoDB.DocumentClient();
 export const setDynamo = (region: string) => {
-  dynamoDb = new AWS.DynamoDB.DocumentClient({ region });
+  dynamoDb = new DynamoDB.DocumentClient({ region });
 };
 
 export const putDynamo = async <T>(
@@ -93,7 +91,7 @@ export const batchWrite = async <T extends {}>(
 ) => {
   let items: T[] = JSON.parse(JSON.stringify(itemsIn));
   info(`push to dynamo:${tableName} - count=${itemsIn.length}`);
-  const error: AWS.AWSError[] = [];
+  const error: AWSError[] = [];
   while (items.length > 0) {
     const { part, rest } = take(items, 25);
     // eslint-disable-next-line no-param-reassign
@@ -139,7 +137,7 @@ export const batchDelete = async ({
   rangeKeys?: string[];
 }) => {
   info(`wipe keys dynamo:${tableName} - count=${keys.length}`);
-  const error: AWS.AWSError[] = [];
+  const error: AWSError[] = [];
   let breakV = false;
   await asyncForEach(keys, async (key, i) => {
     if (breakV) {
@@ -246,7 +244,7 @@ export const getItemsDynamo = async <T>({
   }[];
   tableName: string;
 }): Promise<T[]> => {
-  const params: AWS.DynamoDB.BatchGetItemInput = {
+  const params: DynamoDB.BatchGetItemInput = {
     RequestItems: {
       [tableName]: {
         Keys: items.map(({ pkName, pkValue }) => ({
@@ -256,14 +254,14 @@ export const getItemsDynamo = async <T>({
     },
   };
 
-  const dbRaw = new AWS.DynamoDB({ apiVersion: '2012-10-08' });
+  const dbRaw = new DynamoDB({ apiVersion: '2012-10-08' });
 
   try {
     const res = await dbRaw.batchGetItem(params).promise();
     debug(`got dynamo getitems=${JSON.stringify(res, null, 2)}`);
     let ret =
       res.Responses?.[tableName]?.map(
-        (s) => AWS.DynamoDB.Converter.unmarshall(s) as T,
+        (s) => DynamoDB.Converter.unmarshall(s) as T,
       ) || [];
 
     return ret;
@@ -364,7 +362,7 @@ export const queryDynamo = async <T>({
 
     let newitems: DocumentClient.ItemList | undefined;
     let lek: Key | undefined;
-    let $response: Response<QueryOutput, AWSError> | undefined;
+    let $response: { error?: AWSError | void };
     try {
       ({
         Items: newitems,
@@ -409,7 +407,7 @@ export const getDynamoTtl = (days: number) =>
 export const wipeTable = async (
   tableName: string,
 ): Promise<{ errors?: string[] }> => {
-  const dbRaw = new AWS.DynamoDB({ apiVersion: '2012-10-08' });
+  const dbRaw = new DynamoDB({ apiVersion: '2012-10-08' });
   let infoV = await dbRaw
     .describeTable({
       TableName: tableName,
