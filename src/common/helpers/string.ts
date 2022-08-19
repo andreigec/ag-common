@@ -244,3 +244,15 @@ export const indexOfNumber = (str: string, char: string, num = 0) => {
   }
   return ret;
 };
+
+export function isValidUrl(raw: string) {
+  let url: URL | undefined;
+
+  try {
+    url = new URL(raw);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === 'http:' || url.protocol === 'https:';
+}

@@ -1,3 +1,5 @@
+import { toFixedDown } from './math';
+
 export const getTimeSeconds = () => Math.ceil(new Date().getTime() / 1000);
 
 export const addHours = (d: number, h: number) => {
@@ -16,17 +18,25 @@ export const addMinutes = (date: Date, minutes: number) =>
 export const lastDayInMonth = (date: Date) =>
   new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
-export const dateDiffDays = (date1: Date, date2: Date) => {
-  const dt1 = new Date(date1);
-  const dt2 = new Date(date2);
+/**
+ * breaks ticks into time diffs
+ * @param lowDate
+ * @param highDate defaults to Date.Now
+ * @returns
+ */
+export const dateDiff = (lowDate: Date, highDate?: Date) => {
+  const ticksSince = (highDate ?? new Date()).getTime() - lowDate.getTime();
+  const totalMinutes = toFixedDown(ticksSince / 1000 / 60, 0);
+  const totalHours = toFixedDown(totalMinutes / 60, 0);
+  const totalDays = toFixedDown(totalHours / 24, 0);
+  const totalYears = toFixedDown(totalDays / 365, 0);
 
-  return Math.floor(
-    (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
-      Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
-      1000,
-  );
+  return { totalMinutes, totalHours, totalDays, totalYears };
 };
 
+/**
+ * convert csharp datetime to js datetime
+ */
 export const CSharpToJs = (charpTicks: number) => {
   // ticks are in nanotime; convert to microtime
   const ticks = charpTicks / 10000;

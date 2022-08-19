@@ -1,21 +1,22 @@
 import { plural } from './plural';
-import { addDays } from '../../common/helpers/date';
-import { toFixedDown } from '../../common/helpers/math';
+import { addDays, dateDiff } from '../../common/helpers/date';
 
-export const daydiffstr = (dayticks: number) => {
-  const ticksSince = new Date().getTime() - dayticks;
-  const totalMinutes = toFixedDown(ticksSince / 1000 / 60, 0);
-  const totalHours = toFixedDown(totalMinutes / 60, 0);
-  const totalDays = toFixedDown(totalHours / 24, 0);
-  const totalYears = toFixedDown(totalDays / 365, 0);
-  let ts = `${totalYears} ${plural('yr', totalYears)} ago `;
+/**
+ * returns appropriate time diff string
+ * @param lowDate
+ * @param highDate defaults to Date.Now
+ * @returns
+ */
+export const dateDiffToString = (lowDate: Date, highDate?: Date) => {
+  const d = dateDiff(lowDate, highDate ?? new Date());
+  let ts = `${d.totalYears} ${plural('yr', d.totalYears)} ago `;
 
-  if (totalMinutes < 60) {
-    ts = `${totalMinutes} ${plural('min', totalMinutes)} ago `;
-  } else if (totalHours < 24) {
-    ts = `${totalHours} ${plural('hr', totalHours)} ago `;
-  } else if (totalDays < 365) {
-    ts = `${totalDays} ${plural('day', totalDays)} ago `;
+  if (d.totalMinutes < 60) {
+    ts = `${d.totalMinutes} ${plural('min', d.totalMinutes)} ago `;
+  } else if (d.totalHours < 24) {
+    ts = `${d.totalHours} ${plural('hr', d.totalHours)} ago `;
+  } else if (d.totalDays < 365) {
+    ts = `${d.totalDays} ${plural('day', d.totalDays)} ago `;
   }
 
   return ts;
