@@ -77,10 +77,12 @@ export async function validateOpenApi<T>({
 }: {
   getAndValidateTokenOverride?: TGetAndValidateToken;
   COGNITO_USER_POOL_ID: string;
+  /** pass in openapi schema. eg require('common/openapi.generated').default; */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: any;
   event: APIGatewayEvent;
   next: NextType<T>;
+  /** default false */
   authorized?: true | false | 'optional';
   /**
    * default ap-southeast-2

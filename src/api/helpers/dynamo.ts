@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable prefer-const */
-import { IQueryDynamo, Key } from '../types';
+import { DYNAMOKEYS, IQueryDynamo, Key } from '../types';
 import { info, error as errorF, debug, warn } from '../../common/helpers/log';
 import { chunk, notEmpty, take } from '../../common/helpers/array';
 import { sleep } from '../../common/helpers/sleep';
@@ -462,4 +462,27 @@ export const wipeTable = async (
 
   warn(`cleared table ${tableName}`);
   return {};
+};
+
+export const getDynamoUpdates = (items: DYNAMOKEYS) => {
+  const cleanedKeys = Object.keys(items).filter((r) => r !== 'PK');
+  let UpdateExpression = '';
+  const ExpressionAttributeNames: Record<string, string> = {};
+  const ExpressionAttributeValues: Record<string, string | number> = {};
+  cleanedKeys.forEach((key) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const v = (items as any)[key];
+    if (v) {
+      UpdateExpression += `${!UpdateExpression ? '' : ','} #${key} = :${key}`;
+      ExpressionAttributeNames[`#${key}`] = key;
+      ExpressionAttributeValues[`:${key}`] = v;
+    } else {
+      warn(`no value for key:${key}`);
+    }
+  });
+  return {
+    UpdateExpression,
+    ExpressionAttributeNames,
+    ExpressionAttributeValues,
+  };
 };
