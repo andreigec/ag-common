@@ -1,5 +1,5 @@
 /* eslint-disable no-alert */
-import { TextEdit, ITextEdit } from '../../src/ui/components/TextEdit';
+import { TextEdit } from '../../src/ui/components/TextEdit';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -15,8 +15,9 @@ const Template: ComponentStory<typeof TextEdit> = (args) => (
   </div>
 );
 
-export const Multi = Template.bind({});
-const args: ITextEdit = {
+export const Multi = Template.bind({}) as ComponentStory<typeof TextEdit>;
+
+Multi.args = {
   singleLine: false,
   maxLength: 20,
   defaultEditing: {
@@ -24,5 +25,3 @@ const args: ITextEdit = {
   },
   onSubmit: (s) => alert('ret=' + JSON.stringify(s, null, 2)),
 };
-
-Multi.args = args;

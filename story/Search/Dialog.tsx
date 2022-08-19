@@ -36,12 +36,13 @@ const TemplateModal: ComponentStory<typeof ActionWrapper> = (args) => (
   <ActionWrapper {...args} />
 );
 
-export const Dialog = TemplateModal.bind({});
-const args: ISearchDialog<string> = {
+export const Dialog = TemplateModal.bind({}) as ComponentStory<
+  typeof ActionWrapper
+>;
+
+Dialog.args = {
   displayItems: searchLongList,
   renderItem: (st, i) => i as string,
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
 };
-
-Dialog.args = args;

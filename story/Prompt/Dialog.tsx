@@ -38,10 +38,11 @@ const TemplateModal: ComponentStory<typeof ActionWrapper> = (args) => (
   <ActionWrapper {...args} />
 );
 
-export const Dialog = TemplateModal.bind({});
-const args: IPromptDialog = {
+export const Dialog = TemplateModal.bind({}) as ComponentStory<
+  typeof ActionWrapper
+>;
+
+Dialog.args = {
   bottomText: 'bottom',
   topText: 'top',
 };
-
-Dialog.args = args;

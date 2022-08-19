@@ -1,4 +1,4 @@
-import { ISparkLine, SparkLine } from '../src/ui/components/SparkLine';
+import { SparkLine } from '../src/ui/components/SparkLine';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -14,8 +14,9 @@ const Template: ComponentStory<typeof SparkLine> = (args) => (
   </div>
 );
 
-export const Primary = Template.bind({});
-const args: ISparkLine = {
+export const Primary = Template.bind({}) as ComponentStory<typeof SparkLine>;
+
+Primary.args = {
   data: [
     { x: 1, y: 0 },
     { x: 5, y: 5 },
@@ -24,5 +25,3 @@ const args: ISparkLine = {
   pointTitleF: (v) => JSON.stringify(v),
   pointColour: 'red',
 };
-
-Primary.args = args;

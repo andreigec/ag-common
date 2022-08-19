@@ -1,4 +1,4 @@
-import { ILoader, Loader } from '../src/ui/components/Loader';
+import { Loader } from '../src/ui/components/Loader';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -10,9 +10,8 @@ export default {
 
 const Template: ComponentStory<typeof Loader> = (args) => <Loader {...args} />;
 
-export const Primary = Template.bind({});
-const args: ILoader = {
+export const Primary = Template.bind({}) as ComponentStory<typeof Loader>;
+
+Primary.args = {
   name: 'test loader',
 };
-
-Primary.args = args;

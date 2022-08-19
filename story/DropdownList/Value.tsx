@@ -1,6 +1,5 @@
 /* eslint-disable no-alert */
 import { DropdownList } from '../../src/ui/components/DropdownList';
-import { IDropdownList } from '../../src/ui/components/DropdownList/types';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -16,13 +15,12 @@ const Template: ComponentStory<typeof DropdownList> = (args) => (
   </div>
 );
 
-export const Value = Template.bind({});
-const args: IDropdownList<string> = {
+export const Value = Template.bind({}) as ComponentStory<typeof DropdownList>;
+
+Value.args = {
   options: ['LONG VALUEEEE', '1', '3'],
   renderF: (v) => v as string,
   value: 'LONG VALUEEEE',
   placeholder: 'test ph',
   onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
 };
-
-Value.args = args;

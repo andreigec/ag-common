@@ -1,4 +1,4 @@
-import { Close, IClose } from '../src/ui/components/Close';
+import { Close } from '../src/ui/components/Close';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -10,6 +10,5 @@ export default {
 
 const Template: ComponentStory<typeof Close> = (args) => <Close {...args} />;
 
-export const Primary = Template.bind({});
-const args: IClose = {};
-Primary.args = args;
+export const Primary = Template.bind({}) as ComponentStory<typeof Close>;
+Primary.args = {};

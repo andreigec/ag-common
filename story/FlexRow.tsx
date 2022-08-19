@@ -1,5 +1,4 @@
 import { FlexRow } from '../src/ui/components/FlexRow';
-import { IFlexRow } from '../src/ui/components/RowOrColumn';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -13,8 +12,9 @@ const Template: ComponentStory<typeof FlexRow> = (args) => (
   <FlexRow {...args} />
 );
 
-export const Primary = Template.bind({});
-const args: IFlexRow = {
+export const Primary = Template.bind({}) as ComponentStory<typeof FlexRow>;
+
+Primary.args = {
   children: (
     <>
       <div>1</div>
@@ -23,5 +23,3 @@ const args: IFlexRow = {
     </>
   ),
 };
-
-Primary.args = args;

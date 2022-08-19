@@ -1,4 +1,4 @@
-import { Button, IButton } from '../src/ui/components/Button';
+import { Button } from '../src/ui/components/Button';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -10,10 +10,9 @@ export default {
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-export const Primary = Template.bind({});
-const args: IButton = {
+export const Primary = Template.bind({}) as ComponentStory<typeof Button>;
+
+Primary.args = {
   invert: false,
   children: 'hello world',
 };
-
-Primary.args = args;
