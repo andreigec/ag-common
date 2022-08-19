@@ -1,4 +1,4 @@
-import { Icon, IIconProps } from '../src/ui/components/Icon';
+import { Icon, IIcon } from '../src/ui/components/Icon';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -20,8 +20,10 @@ const Template: ComponentStory<typeof Icon> = (args) => (
 );
 
 export const Primary = Template.bind({});
-Primary.args = {
+const args: IIcon = {
   width: '2rem',
   height: '2rem',
   fill: 'red',
-} as IIconProps;
+};
+
+Primary.args = args;

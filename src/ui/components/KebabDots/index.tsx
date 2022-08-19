@@ -6,7 +6,10 @@ const IconStyled = styled(Icon)`
   position: absolute;
 `;
 
-export const KebabDots = ({ onClick }: { onClick?: () => Promise<void> }) => (
+export interface IKebabDots {
+  onClick?: () => Promise<void>;
+}
+export const KebabDots = ({ onClick }: IKebabDots) => (
   <IconStyled width="2rem" height="2rem" onClick={() => onClick?.()}>
     {HorizontalDots}
   </IconStyled>

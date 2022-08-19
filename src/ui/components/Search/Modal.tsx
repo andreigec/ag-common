@@ -1,4 +1,4 @@
-import { ISearchDialog, TSearchModalRes } from './types';
+import { ISearchModal, TSearchModalRes } from './types';
 import { SearchBase } from './Base';
 import { bigScreen, smallScreen } from '../../styles';
 import { Modal } from '../Modal/Modal';
@@ -20,7 +20,7 @@ const ModalStyled = styled(Modal)`
 `;
 
 export const SearchModal = <T,>(
-  p: ISearchDialog<T> & {
+  p: ISearchModal<T> & {
     onSelectItem: (v: TSearchModalRes<T>) => void;
   },
 ) => (

@@ -1,12 +1,9 @@
-import {
-  ConfirmDialog,
-  IConfirmAction,
-} from '../../src/ui/components/Confirm/Dialog';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ConfirmDialog, IConfirmDialog } from '../../src/ui/components/Confirm';
 
-const ActionWrapper = (args: IConfirmAction) => (
+const ActionWrapper = (args: IConfirmDialog) => (
   <div
     style={{
       color: 'white',
@@ -39,7 +36,9 @@ const TemplateModal: ComponentStory<typeof ActionWrapper> = (args) => (
 );
 
 export const Dialog = TemplateModal.bind({});
-Dialog.args = {
+const args: IConfirmDialog = {
   bottomText: 'bottom',
   topText: 'top',
 };
+
+Dialog.args = args;

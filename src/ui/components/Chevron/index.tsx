@@ -15,14 +15,7 @@ const IconStyled = styled(Icon)`
   margin: 0;
   padding: 0;
 `;
-
-export const Chevron = ({
-  width = '1.2rem',
-  className,
-  colour = 'black',
-  onToggle,
-  point = 'right',
-}: {
+export interface IChevron {
   /**
    * default right
    */
@@ -31,7 +24,15 @@ export const Chevron = ({
   className?: string;
   width?: string;
   onToggle?: () => void;
-}) => {
+}
+
+export const Chevron = ({
+  width = '1.2rem',
+  className,
+  colour = 'black',
+  onToggle,
+  point = 'right',
+}: IChevron) => {
   let rotate = 0;
   switch (point) {
     case 'down': {

@@ -1,4 +1,5 @@
-import { ConfirmModal } from '../../src/ui/components/Confirm/Modal';
+/* eslint-disable no-alert */
+import { IConfirmModal, ConfirmModal } from '../../src/ui/components/Confirm';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -13,4 +14,11 @@ const TemplateModal: ComponentStory<typeof ConfirmModal> = (args) => (
 );
 
 export const Modal = TemplateModal.bind({});
-Modal.args = {};
+const args: IConfirmModal = {
+  bottomText: 'bottom',
+  onSubmit: (e) => {
+    alert('res=' + e);
+  },
+};
+
+Modal.args = args;

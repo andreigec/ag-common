@@ -1,4 +1,4 @@
-import { IRowOrColumn } from '../RowOrColumn';
+import { IFlexColumn } from '../RowOrColumn';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -21,7 +21,7 @@ const Base = styled.div`
   }
 `;
 
-export const FlexColumn = (props: IRowOrColumn) => (
+export const FlexColumn = (props: IFlexColumn) => (
   <Base
     title={props.title}
     data-nogrow={props.noGrow ?? false}

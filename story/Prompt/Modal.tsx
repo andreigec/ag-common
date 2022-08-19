@@ -1,4 +1,8 @@
-import { PromptModal } from '../../src/ui/components/Prompt/Modal';
+/* eslint-disable no-alert */
+import {
+  IPromptModal,
+  PromptModal,
+} from '../../src/ui/components/Prompt/Modal';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -13,7 +17,10 @@ const TemplateModal: ComponentStory<typeof PromptModal> = (args) => (
 );
 
 export const Modal = TemplateModal.bind({});
-Modal.args = {
+const args: IPromptModal = {
   bottomText: 'bottom',
   topText: 'top',
+  res: (v) => alert('res=' + v),
 };
+
+Modal.args = args;

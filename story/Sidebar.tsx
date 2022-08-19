@@ -1,4 +1,4 @@
-import { Sidebar } from '../src/ui/components/Sidebar';
+import { ISidebar, Sidebar } from '../src/ui/components/Sidebar';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -9,11 +9,17 @@ export default {
 } as ComponentMeta<typeof Sidebar>;
 
 const Template: ComponentStory<typeof Sidebar> = (args) => (
-  <Sidebar {...args}>
-    <div>sidebar item</div>
-    <div>sidebar item2</div>
-  </Sidebar>
+  <Sidebar {...args} />
 );
 
 export const Primary = Template.bind({});
-Primary.args = {};
+const args: ISidebar = {
+  children: (
+    <>
+      <div>sidebar item</div>
+      <div>sidebar item2</div>
+    </>
+  ),
+};
+
+Primary.args = args;

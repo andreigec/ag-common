@@ -3,6 +3,7 @@ import { SearchModal } from '../../src/ui/components/Search/Modal';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ISearchModal } from '../../src/ui/components/Search/types';
 
 export default {
   title: 'UI/Search',
@@ -14,9 +15,11 @@ const Template: ComponentStory<typeof SearchModal> = (args) => (
 );
 
 export const Modal = Template.bind({});
-Modal.args = {
+const args: ISearchModal<string> = {
   displayItems: searchLongList,
   renderItem: (st, i) => i as string,
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
 };
+
+Modal.args = args;

@@ -89,13 +89,7 @@ const ChevronStyled = styled(Chevron)`
   }
 `;
 
-export const Sidebar = ({
-  children,
-  className,
-  key = 'sidebar',
-  cookieDocument,
-  width = '15rem',
-}: {
+export interface ISidebar {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
   className?: string;
@@ -111,7 +105,14 @@ export const Sidebar = ({
    * default 15rem
    */
   width?: string;
-}) => {
+}
+export const Sidebar = ({
+  children,
+  className,
+  key = 'sidebar',
+  cookieDocument,
+  width = '15rem',
+}: ISidebar) => {
   const [open, setOpen] = useCookieBoolean({
     name: key,
     defaultValue: false,

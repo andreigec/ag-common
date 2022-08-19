@@ -39,7 +39,18 @@ const Bottom = styled(FlexRow)`
     margin-right: 1rem;
   }
 `;
-
+export interface IPromptModal {
+  defaultValue?: string;
+  placeholder?: string;
+  res: (v: string | undefined) => void;
+  wrapper?: HTMLDivElement;
+  topText?: string;
+  bottomText: string;
+  /** default 'OK' */
+  okText?: string;
+  /** default "cancel" */
+  cancelText?: string;
+}
 export const PromptModal = ({
   wrapper,
   res,
@@ -49,23 +60,16 @@ export const PromptModal = ({
   cancelText = 'Cancel',
   defaultValue,
   placeholder,
-}: {
-  defaultValue?: string;
-  placeholder?: string;
-  res: (v: string | undefined) => void;
-  wrapper: HTMLDivElement;
-  topText?: string;
-  bottomText: string;
-  okText?: string;
-  cancelText?: string;
-}) => {
+}: IPromptModal) => {
   const [text, setText] = useState(defaultValue || '');
   const ret = (v: string | undefined) => {
     try {
       res(v);
     } finally {
-      ReactDOM.unmountComponentAtNode(wrapper);
-      wrapper.remove();
+      if (wrapper) {
+        ReactDOM.unmountComponentAtNode(wrapper);
+        wrapper.remove();
+      }
     }
   };
 

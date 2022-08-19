@@ -31,3 +31,6 @@ export interface ISearchDialog<T> {
 export type TSearchModalRes<T> =
   | undefined
   | { foundItem: T; searchText: string };
+export type ISearchModal<T> = ISearchDialog<T>;
+
+export type ISearchInline<T> = ISearchDialog<T>;

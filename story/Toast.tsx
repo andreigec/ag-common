@@ -41,4 +41,5 @@ const TemplateModal: ComponentStory<typeof ActionWrapper> = (args) => (
 );
 
 export const Dialog = TemplateModal.bind({});
-Dialog.args = ['toast', { appearance: 'success' }];
+const args: IToastOptions = { appearance: 'success' };
+Dialog.args = ['toast', args];

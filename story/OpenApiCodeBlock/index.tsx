@@ -11,12 +11,6 @@ export default {
   component: OpenApiCodeBlock,
 } as ComponentMeta<typeof OpenApiCodeBlock>;
 
-const Template: ComponentStory<typeof OpenApiCodeBlock> = (args) => (
-  <div style={{ backgroundColor: 'white', padding: '1rem' }}>
-    <OpenApiCodeBlock {...args} />
-  </div>
-);
-
 const schema: IOpenApi = {
   servers: [{ url: 'https://test.com' }],
 
@@ -33,10 +27,22 @@ const schema: IOpenApi = {
     },
   },
 };
+
+const Template: ComponentStory<typeof OpenApiCodeBlock> = (args) => (
+  <div style={{ backgroundColor: 'white', padding: '1rem', whiteSpace: 'pre' }}>
+    <OpenApiCodeBlock {...args} />
+    ...
+    <div>schema:{JSON.stringify(schema, null, 2)}</div>
+  </div>
+);
 export const Primary = Template.bind({});
-Primary.args = {
+const args: IOpenApiCodeBlock<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  testop: ({ testparam1: string }) => Promise<any>;
+}> = {
   schema,
   funcF: (f) => f.testop({ testparam1: '2' }),
   apiKey: 'test api key',
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} as IOpenApiCodeBlock<any>;
+};
+
+Primary.args = args;

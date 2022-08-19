@@ -23,15 +23,17 @@ const images = {
   domains: ['platform-lookaside.fbsbx.com', 'lh3.googleusercontent.com'],
 };
 
+export interface IUserImage {
+  image?: string;
+  className?: string;
+  /** default "user image" */
+  title?: string;
+}
 export const UserImage = ({
   image,
   className,
   title = 'user image',
-}: {
-  image?: string;
-  className?: string;
-  title?: string;
-}) => {
+}: IUserImage) => {
   const [fallback, setFallback] = useState(false);
 
   return (
@@ -44,13 +46,11 @@ export const UserImage = ({
   );
 };
 
-export const UserProfileImage = ({
-  className,
-  user,
-}: {
+export interface IUserProfileImage {
   className?: string;
-  user?: User;
-}) => {
+  user?: Pick<User, 'picture' | 'fullname' | 'userId'>;
+}
+export const UserProfileImage = ({ className, user }: IUserProfileImage) => {
   const image = user?.picture;
 
   if (image) {

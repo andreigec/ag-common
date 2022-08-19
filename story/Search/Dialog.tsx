@@ -37,9 +37,11 @@ const TemplateModal: ComponentStory<typeof ActionWrapper> = (args) => (
 );
 
 export const Dialog = TemplateModal.bind({});
-Dialog.args = {
+const args: ISearchDialog<string> = {
   displayItems: searchLongList,
   renderItem: (st, i) => i as string,
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
 };
+
+Dialog.args = args;

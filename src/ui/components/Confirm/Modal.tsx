@@ -4,6 +4,7 @@ import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal/Modal';
 import styled from 'styled-components';
 import React from 'react';
+import { IConfirmModal } from './types';
 
 const Base = styled.div`
   width: 95vw;
@@ -44,13 +45,7 @@ export const ConfirmModal = ({
   topText,
   okText = 'OK',
   cancelText = 'Cancel',
-}: {
-  onSubmit: (v: boolean) => void;
-  topText?: string;
-  bottomText: string;
-  okText?: string;
-  cancelText?: string;
-}) => {
+}: IConfirmModal) => {
   return (
     <Modal
       position="center"

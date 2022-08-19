@@ -37,11 +37,7 @@ const LoadingBack = styled.div`
   transition: opacity 5s;
 `;
 
-export const Loader = ({
-  name,
-  height = '2rem',
-  width = '2rem',
-}: {
+export interface ILoader {
   /**
    * default 2rem
    */
@@ -51,7 +47,8 @@ export const Loader = ({
    */
   height?: string | null;
   name: string;
-}) => {
+}
+export const Loader = ({ name, height = '2rem', width = '2rem' }: ILoader) => {
   const [trans, setTrans] = useState(true);
   useEffect(() => {
     setTrans(false);

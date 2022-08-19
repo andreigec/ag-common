@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import { DropdownList } from '../../src/ui/components/DropdownList';
 import { IDropdownList } from '../../src/ui/components/DropdownList/types';
 import React from 'react';
@@ -23,8 +24,11 @@ const Template: ComponentStory<typeof DropdownList> = (args) => (
 );
 
 export const NoValue = Template.bind({});
-NoValue.args = {
+const args: IDropdownList<string> = {
   options: ['1', 'LONG VALUEEEE', '3'],
   renderF: (v) => v as string,
   placeholder: 'test ph',
-} as IDropdownList<string>;
+  onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
+};
+
+NoValue.args = args;

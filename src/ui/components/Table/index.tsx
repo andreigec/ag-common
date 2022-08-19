@@ -39,15 +39,12 @@ export interface TableItem {
   groupTitle: string;
 }
 
-export const Table = ({
-  children,
-  className,
-  headerRow,
-}: {
+export interface ITable {
   children: TableItem[];
   className?: string;
   headerRow?: JSX.Element;
-}) => {
+}
+export const Table = ({ children, className, headerRow }: ITable) => {
   const grouped = groupByList(children, (s) => s.groupTitle);
 
   return (

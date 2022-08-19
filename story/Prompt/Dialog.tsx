@@ -1,12 +1,12 @@
 import {
   PromptDialog,
-  IPromptAction,
+  IPromptDialog,
 } from '../../src/ui/components/Prompt/Dialog';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-const ActionWrapper = (args: IPromptAction) => (
+const ActionWrapper = (args: IPromptDialog) => (
   <div
     style={{
       color: 'white',
@@ -39,7 +39,9 @@ const TemplateModal: ComponentStory<typeof ActionWrapper> = (args) => (
 );
 
 export const Dialog = TemplateModal.bind({});
-Dialog.args = {
+const args: IPromptDialog = {
   bottomText: 'bottom',
   topText: 'top',
 };
+
+Dialog.args = args;

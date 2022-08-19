@@ -3,7 +3,7 @@ import { removeUndefValuesFromObject } from '../../../common/helpers/object';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
-export interface IIconProps {
+export interface IIcon {
   disabled?: boolean;
   fill?: string;
   outline?: string;
@@ -65,7 +65,7 @@ export const IconF = styled.span`
   }
 `;
 
-export const Icon = (pr: IIconProps) => {
+export const Icon = (pr: IIcon) => {
   const { className, children, disabled, onClick } = pr;
   const CHND = pr.canHover && !pr.disabled;
   const style: Record<string, string | null> = removeUndefValuesFromObject({

@@ -1,4 +1,7 @@
-import { BorderGradient } from '../src/ui/components/BorderGradient';
+import {
+  BorderGradient,
+  IBorderGradient,
+} from '../src/ui/components/BorderGradient';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -9,12 +12,13 @@ export default {
 } as ComponentMeta<typeof BorderGradient>;
 
 const Template: ComponentStory<typeof BorderGradient> = (args) => (
-  <BorderGradient {...args}>
-    <div>child</div>
-  </BorderGradient>
+  <BorderGradient {...args} />
 );
 
 export const Primary = Template.bind({});
-Primary.args = {
+const args: IBorderGradient = {
   disabled: false,
+  children: <div>test child</div>,
 };
+
+Primary.args = args;

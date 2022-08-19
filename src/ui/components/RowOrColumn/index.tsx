@@ -39,6 +39,8 @@ export interface IRowOrColumn {
   title?: string;
   enableOverflow?: boolean;
 }
+export type IFlexColumn = IRowOrColumn;
+export type IFlexRow = IRowOrColumn;
 export const RowOrColumn = (props: IRowOrColumn) => (
   <Base
     title={props.title}

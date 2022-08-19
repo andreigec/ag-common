@@ -31,11 +31,11 @@ const Base = styled.div`
     transform: rotate(-45deg);
   }
 `;
-
-export const Close = (p: {
+export interface IClose {
   onClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   className?: string;
-}) => {
+}
+export const Close = (p: IClose) => {
   return (
     <Base
       {...filterDataProps(p)}

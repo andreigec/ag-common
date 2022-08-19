@@ -2,6 +2,7 @@ import { FlexColumn } from '../src/ui/components/FlexColumn';
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { IFlexColumn } from '../src/ui/components/RowOrColumn';
 
 export default {
   title: 'UI/FlexColumn',
@@ -9,12 +10,18 @@ export default {
 } as ComponentMeta<typeof FlexColumn>;
 
 const Template: ComponentStory<typeof FlexColumn> = (args) => (
-  <FlexColumn {...args}>
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>
-  </FlexColumn>
+  <FlexColumn {...args} />
 );
 
 export const Primary = Template.bind({});
-Primary.args = {};
+const args: IFlexColumn = {
+  children: (
+    <>
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+    </>
+  ),
+};
+
+Primary.args = args;
