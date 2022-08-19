@@ -9,9 +9,3 @@ export interface IModal {
   className?: string;
   closeOnClickOutside?: boolean;
 }
-export interface IPromptAction {
-  topText?: string;
-  bottomText: string;
-  defaultValue?: string;
-  placeholder?: string;
-}
