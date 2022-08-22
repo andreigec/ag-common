@@ -8,6 +8,10 @@ import { addDays, dateDiff } from '../../common/helpers/date';
  * @returns
  */
 export const dateDiffToString = (lowDate: Date, highDate?: Date) => {
+  if (!lowDate) {
+    return '';
+  }
+
   const d = dateDiff(lowDate, highDate ?? new Date());
   let ts = `${d.totalYears} ${plural('yr', d.totalYears)} ago `;
 
