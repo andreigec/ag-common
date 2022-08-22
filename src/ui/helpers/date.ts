@@ -13,6 +13,10 @@ export const dateDiffToString = (lowDate: Date, highDate?: Date) => {
   }
 
   const d = dateDiff(lowDate, highDate ?? new Date());
+  if (isNaN(d.totalYears)) {
+    return '';
+  }
+
   let ts = `${d.totalYears} ${plural('yr', d.totalYears)} ago `;
 
   if (d.totalMinutes < 60) {
