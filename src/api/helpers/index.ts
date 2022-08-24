@@ -7,5 +7,6 @@ export * from './openApiHelpers';
 export * from './s3';
 export * from './ses';
 export * from './sqs';
+export * from './ssm';
 export * from './validateOpenApi';
 export * from './validations';
