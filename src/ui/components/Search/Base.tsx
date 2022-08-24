@@ -2,7 +2,7 @@ import { ISearchDialog, TSearchModalRes } from './types';
 import { CrossIcon } from '../../icons/CrossIcon';
 import { debounce } from '../../helpers';
 import { IRefTextEdit, TextEdit } from '../TextEdit';
-import { smallScreen } from '../../styles';
+import { bigScreen, smallScreen } from '../../styles';
 import styled from 'styled-components';
 import React, { createRef, useState } from 'react';
 import { Magnify } from '../../icons/Magnify';
@@ -67,6 +67,9 @@ const Row = styled.div`
 const CrossIconStyled = styled(CrossIcon)`
   position: absolute;
   right: 1rem;
+  @media ${bigScreen} {
+    right: 2rem;
+  }
 `;
 
 export const SearchBase = <T,>({
