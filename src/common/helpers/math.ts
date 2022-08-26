@@ -41,7 +41,7 @@ export function clamp({
 }
 
 export function sumArray(array: number[]) {
-  return array.reduce((a, b) => a + b);
+  return array.reduce((a, b) => a + b, 0);
 }
 
 export const getRandomInt = (max: number) => {
