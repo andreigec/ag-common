@@ -5,6 +5,7 @@ import { notEmpty } from '../../../common/helpers/array';
 import { AxiosWrapperLite, User } from '../jwt';
 import { getLocalStorageItem } from '../useLocalStorage';
 import { AxiosError } from 'axios';
+import { retryHttpCodes, retryHttpMs } from '../../../common/const';
 
 /**
  * get the id_token from provided value, or cookie, or LS
@@ -92,7 +93,7 @@ export const callOpenApi = async <T, TDefaultApi>(
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const ae = e as AxiosError<unknown, any>;
-      const status = ae.response?.status;
+      const status = ae.response?.status ?? 500;
       const errorMessage = [
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (ae.response?.data as any)?.toString() ?? '',
@@ -112,13 +113,12 @@ export const callOpenApi = async <T, TDefaultApi>(
         };
       }
 
-      if (status !== 500 || errorCount === errorMax) {
+      if (!retryHttpCodes.includes(status) || errorCount === errorMax) {
         error = { ...ae, message: errorMessage };
         break;
       }
     }
-    // eslint-disable-next-line no-await-in-loop
-    await sleep(2000);
+    await sleep(retryHttpMs);
   }
 
   return {

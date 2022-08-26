@@ -1,6 +1,6 @@
 import { debug } from '../../common/helpers/log';
 import { isJson } from '../../common/helpers/object';
-import { sleep } from '../../common';
+import { retryHttpCodes, retryHttpMs, sleep } from '../../common';
 import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 
 /**
@@ -81,21 +81,22 @@ export const axiosHelper = async <TOut>({
       return ret;
     } catch (e) {
       const em = e as AxiosError;
+      const c = Number(em.code ?? '500');
 
       // jwt expired or bad response
       // 403 returned for old token - will be refreshed
-      if (em.code === '401' || em.code === '403') {
+      if (c === 401 || c === 403) {
         debug('auth expired');
         onStaleAuth?.();
         retry = retryMax;
       }
 
-      if (retry >= retryMax) {
+      if (!retryHttpCodes.includes(c) || retry >= retryMax) {
         throw em;
       }
     }
     retry += 1;
-    await sleep(1000);
+    await sleep(retryHttpMs);
   } while (retry <= retryMax);
   throw new Error('unexpected');
 };
