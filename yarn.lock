@@ -3445,10 +3445,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:18.7.13":
-  version: 18.7.13
-  resolution: "@types/node@npm:18.7.13"
-  checksum: 45431e7e89ecaf85c7d2c180d801c132a7c59e2f8ad578726b6d71cc74e3267c18f9ccdcad738bc0479790c078f0c79efb0e58da2c6be535c15995dbb19050c9
+"@types/node@npm:*, @types/node@npm:18.7.14":
+  version: 18.7.14
+  resolution: "@types/node@npm:18.7.14"
+  checksum: 99cf28ff854100158de875cca23c7acc3cc01dfee526a52b90b7f36767c821bcbaf2be0a98a70f06f3b78f3c60639168ff949d725b61e2e124f9f71f1fb8043d
   languageName: node
   linkType: hard
 
@@ -3524,14 +3524,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.0.17":
-  version: 18.0.17
-  resolution: "@types/react@npm:18.0.17"
+"@types/react@npm:*, @types/react@npm:18.0.18":
+  version: 18.0.18
+  resolution: "@types/react@npm:18.0.18"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 18cae64f5bfd6bb58fbd8ee2ba52ec82de844f114254e26de7b513e4b86621f643f9b71d7066958cd571b0d78cb86cbceda449c5289f9349ca573df29ab69252
+  checksum: 6d72d35ab3eecf382a5e0f225923f5a2c753045fce02e4e29713f36c99a24f0f770666a49dde96167f37c86271f93339d1b7e2b8969d011b137a9ebd24ee6806
   languageName: node
   linkType: hard
 
@@ -4203,8 +4203,8 @@ __metadata:
     "@storybook/react": 6.5.10
     "@storybook/theming": 6.5.10
     "@types/jsonwebtoken": 8.5.9
-    "@types/node": 18.7.13
-    "@types/react": 18.0.17
+    "@types/node": 18.7.14
+    "@types/react": 18.0.18
     "@types/react-dom": 18.0.6
     "@types/styled-components": 5.1.26
     aws-cdk-lib: 2.x
@@ -4216,7 +4216,7 @@ __metadata:
     jsonwebtoken: 8.x
     jwks-rsa: 2.x
     node-cache: 5.x
-    openapi-request-validator: 12.0.0
+    openapi-request-validator: 12.0.2
     react: 18.2.0
     react-dom: 18.2.0
     react-hot-toast: 2.x
@@ -11109,33 +11109,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-jsonschema-parameters@npm:^12.0.0":
-  version: 12.0.0
-  resolution: "openapi-jsonschema-parameters@npm:12.0.0"
+"openapi-jsonschema-parameters@npm:^12.0.2":
+  version: 12.0.2
+  resolution: "openapi-jsonschema-parameters@npm:12.0.2"
   dependencies:
-    openapi-types: ^12.0.0
-  checksum: 4065543bd0173e308fbd3aefa3db5cf8b44c3bbd157fc5e6ab7ec7a9825423934620718a42459a091c0867fc762cd48402cafd020ce7cd512fc57704df165d20
+    openapi-types: ^12.0.2
+  checksum: f04b3d0bb3bbb5af42874dfc06f267d77f0603eaecc0c000d841bd452c73770c84cb02336f39e2eb7097006ecd70d27437763a69c07e63e21126829e4f80fb4a
   languageName: node
   linkType: hard
 
-"openapi-request-validator@npm:12.0.0":
-  version: 12.0.0
-  resolution: "openapi-request-validator@npm:12.0.0"
+"openapi-request-validator@npm:12.0.2":
+  version: 12.0.2
+  resolution: "openapi-request-validator@npm:12.0.2"
   dependencies:
     ajv: ^8.3.0
     ajv-formats: ^2.1.0
     content-type: ^1.0.4
-    openapi-jsonschema-parameters: ^12.0.0
-    openapi-types: ^12.0.0
+    openapi-jsonschema-parameters: ^12.0.2
+    openapi-types: ^12.0.2
     ts-log: ^2.1.4
-  checksum: 9586d04aafacd6eb9780a5dab2552c957ca5c165a5a8d3933da04f043d8a0e1fa9471c29bedcf377d3d29aad2eb6523ebbdc18a8b038131f5fe7ccdafd5850f3
+  checksum: 7e3624955df4dfcab7804586b079c58628e44dd21731e2b9156a621204953c50a4bdaadf094b50a7f95a9cd78fbd72c23980f3dbce2a950981ac553bb4d74a28
   languageName: node
   linkType: hard
 
-"openapi-types@npm:^12.0.0":
-  version: 12.0.0
-  resolution: "openapi-types@npm:12.0.0"
-  checksum: 8d22cb3727e892ad8f9782210360627f6cde92a53c229407d897f0252543a937aed59bfd7a4bee291b50547d7a4e836290ee35eaebc3978c873c601de9ace5b6
+"openapi-types@npm:^12.0.2":
+  version: 12.0.2
+  resolution: "openapi-types@npm:12.0.2"
+  checksum: 097edc46adb5a8fc2a3419e2e0adbb5516737fd83b4041ec62ee28427e85d9f18c6ead9231b9d1c8f718d86eeccf3c0997437414011d8bb1597387a047493fea
   languageName: node
   linkType: hard
 
