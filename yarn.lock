@@ -3445,10 +3445,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:18.8.0":
-  version: 18.8.0
-  resolution: "@types/node@npm:18.8.0"
-  checksum: 3433cbc22e90fafb047f93b3ef05ba01a07f780a24ff1af393f435f807537b533fe9e8a816586825f4c5fd5336c3e80225571f44ec3b6479c463408c072773e7
+"@types/node@npm:*, @types/node@npm:18.8.3":
+  version: 18.8.3
+  resolution: "@types/node@npm:18.8.3"
+  checksum: 9201adc6dc389644c9f478f950ef8926a93e5827865dcd80d7d12fefacab665c96879c87cd6ec74d5eccdd998c4603d02e1e07a35d71a63fe4c20670a381f6ef
   languageName: node
   linkType: hard
 
@@ -4203,7 +4203,7 @@ __metadata:
     "@storybook/react": 6.5.12
     "@storybook/theming": 6.5.12
     "@types/jsonwebtoken": 8.5.9
-    "@types/node": 18.8.0
+    "@types/node": 18.8.3
     "@types/react": 18.0.21
     "@types/react-dom": 18.0.6
     "@types/styled-components": 5.1.26
@@ -14013,7 +14013,7 @@ __metadata:
 
 "typescript@patch:typescript@4.x#~builtin<compat/typescript>, typescript@patch:typescript@>= 4#~builtin<compat/typescript>":
   version: 4.7.4
-  resolution: "typescript@patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=a1c5e5"
+  resolution: "typescript@patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=701156"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
