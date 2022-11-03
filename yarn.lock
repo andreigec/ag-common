@@ -2017,13 +2017,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@panva/asn1.js@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@panva/asn1.js@npm:1.0.0"
-  checksum: cb6bcc1918a7f08e81e7d7f5bde83c20a66b30248ddc3ef10b1612e0e0b9f722c2b07ca6b586a089a49c1b6cfb29d63fdd23d4bc00c8cc40538b5595bec66d7d
-  languageName: node
-  linkType: hard
-
 "@pmmmwh/react-refresh-webpack-plugin@npm:^0.5.3":
   version: 0.5.7
   resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.7"
@@ -3293,15 +3286,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:^4.17.13":
-  version: 4.17.13
-  resolution: "@types/express@npm:4.17.13"
+"@types/express@npm:^4.17.14":
+  version: 4.17.14
+  resolution: "@types/express@npm:4.17.14"
   dependencies:
     "@types/body-parser": "*"
     "@types/express-serve-static-core": ^4.17.18
     "@types/qs": "*"
     "@types/serve-static": "*"
-  checksum: 12a2a0e6c4b993fc0854bec665906788aea0d8ee4392389d7a98a5de1eefdd33c9e1e40a91f3afd274011119c506f7b4126acb97fae62ae20b654974d44cba12
+  checksum: 15c1af46d02de834e4a225eccaa9d85c0370fdbb3ed4e1bc2d323d24872309961542b993ae236335aeb3e278630224a6ea002078d39e651d78a3b0356b1eaa79
   languageName: node
   linkType: hard
 
@@ -3396,7 +3389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:8.5.9, @types/jsonwebtoken@npm:^8.5.8":
+"@types/jsonwebtoken@npm:8.5.9, @types/jsonwebtoken@npm:^8.5.9":
   version: 8.5.9
   resolution: "@types/jsonwebtoken@npm:8.5.9"
   dependencies:
@@ -4214,7 +4207,7 @@ __metadata:
     cross-env: 7.0.3
     eslint-config-e7npm: 0.0.5
     jsonwebtoken: 8.x
-    jwks-rsa: 2.x
+    jwks-rsa: 3.x
     node-cache: 5.x
     openapi-request-validator: 12.0.2
     react: 18.2.0
@@ -9549,12 +9542,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "jose@npm:2.0.5"
-  dependencies:
-    "@panva/asn1.js": ^1.0.0
-  checksum: 80a3447b51f794f8f2c7e21395dd880b55d374a055564595c69ff17722fb07aeb2dff722b5da9030651f67fafc7494e9ec5f5b56f5e1836d1ac94e604e6096ea
+"jose@npm:^4.10.3":
+  version: 4.10.4
+  resolution: "jose@npm:4.10.4"
+  checksum: 0e6caaae0b0303534c0ac23711d45eadfbdbff63d9aeed80965c668b5532c254ab25b48afddc3e1ecfcfd36b4275dee41174a097c5a47a25ce04268c78f3c130
   languageName: node
   linkType: hard
 
@@ -9734,17 +9725,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jwks-rsa@npm:2.x":
-  version: 2.1.4
-  resolution: "jwks-rsa@npm:2.1.4"
+"jwks-rsa@npm:3.x":
+  version: 3.0.0
+  resolution: "jwks-rsa@npm:3.0.0"
   dependencies:
-    "@types/express": ^4.17.13
-    "@types/jsonwebtoken": ^8.5.8
+    "@types/express": ^4.17.14
+    "@types/jsonwebtoken": ^8.5.9
     debug: ^4.3.4
-    jose: ^2.0.5
+    jose: ^4.10.3
     limiter: ^1.1.5
     lru-memoizer: ^2.1.4
-  checksum: 20de148da46e1dfafeb9068b733d69dbc0bed4e44104bbf4adf991de6a325010eaa1a32487bd2c97931d96da12faeaf3b9f8fbbec9a0ddfcd487f82f719fd438
+  checksum: 1697f9599b723be8853041c643af6ec6457e8ab65ca0c086b80fdb642396d37ad9d4c69984b619bd8e5cf668bbe073f3a4b5d2335306615951afb7e54dc2721a
   languageName: node
   linkType: hard
 

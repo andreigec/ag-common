@@ -20,7 +20,7 @@
     "axios": "1.x",
     "constructs": "10.x",
     "jsonwebtoken": "8.x",
-    "jwks-rsa": "2.x",
+    "jwks-rsa": "3.x",
     "node-cache": "5.x",
     "openapi-request-validator": "12.0.2",
     "react": "18.2.0",
