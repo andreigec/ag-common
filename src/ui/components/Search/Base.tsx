@@ -139,9 +139,9 @@ export const SearchBase = <T,>({
         )}
       </SearchBox>
       <Content data-hasitems={!!filteredItems.length} data-type="content">
-        {filteredItems.map((i, index) => (
-          <Row key={getKeyF(i)} onClick={() => resWrap(i)}>
-            {renderItem(searchText, i, index)}
+        {filteredItems.map((item, index) => (
+          <Row key={getKeyF(item)} onClick={() => resWrap(item)}>
+            {renderItem({ searchText, item, index })}
           </Row>
         ))}
         {searchText && <Row>{showText}</Row>}
