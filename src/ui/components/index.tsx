@@ -20,5 +20,6 @@ export * from './Sidebar';
 export * from './SparkLine';
 export * from './Table';
 export * from './TextEdit';
+export * from './TextWithButton';
 export * from './Toast';
 export * from './UserImage';
