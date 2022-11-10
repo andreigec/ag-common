@@ -13,6 +13,7 @@ import DynamoDB, {
   QueryInput,
 } from 'aws-sdk/clients/dynamodb';
 import { AWSError } from 'aws-sdk/lib/error';
+import { PromiseResult } from 'aws-sdk/lib/request';
 // eslint-disable-next-line import/no-mutable-exports
 export let dynamoDb = new DynamoDB.DocumentClient();
 export const setDynamo = (region: string) => {
@@ -416,17 +417,24 @@ export const wipeTable = async (
     (k) => k.KeyType === 'HASH',
   ).AttributeName;
 
-  let all = await dbRaw
-    .scan({
-      TableName: tableName,
-    })
-    .promise();
+  const params: DynamoDB.ScanInput = {
+    TableName: tableName,
+    ExclusiveStartKey: undefined,
+  };
 
-  warn(`will delete ${all?.Items?.length} items from ${tableName}`);
+  let all: DynamoDB.AttributeMap[] = [];
+  let working: PromiseResult<DynamoDB.ScanOutput, AWSError>;
+  do {
+    working = await dbRaw.scan(params).promise();
+    working.Items?.forEach((item) => all.push(item));
+    params.ExclusiveStartKey = working.LastEvaluatedKey;
+  } while (typeof working.LastEvaluatedKey !== 'undefined');
+
+  warn(`will delete ${all?.length} items from ${tableName}`);
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const datagr = chunk(all.Items, 25);
+  const datagr = chunk(all, 25);
   let res = await Promise.all(
     datagr.map((group) =>
       dbRaw
