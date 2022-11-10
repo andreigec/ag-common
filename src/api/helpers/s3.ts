@@ -1,5 +1,9 @@
 import { Blob } from 'aws-sdk/lib/dynamodb/document_client';
 import S3 from 'aws-sdk/clients/s3';
+import { PromiseResult } from 'aws-sdk/lib/request';
+import { AWSError } from 'aws-sdk/lib/core';
+import { error } from '../../common/helpers/log';
+import { distinct, take } from '../../common/helpers/array';
 
 let s3 = new S3();
 export const setS3 = (region: string) => {
@@ -13,11 +17,40 @@ export const getS3Object = async ({
     Bucket: string;
     Key: string;
   };
-}) => {
-  const content = await s3.getObject(fileurl).promise();
+}) => s3.getObject(fileurl).promise();
 
-  return content;
-};
+export interface IS3Object {
+  bucket: string;
+  key: string;
+  content: S3.Body | undefined;
+}
+/** function generator to get s3 files */
+export async function* getS3Objects({
+  bucket,
+  keys,
+}: {
+  bucket: string;
+  keys: string[];
+}) {
+  let toProcess = keys.map((Key) => ({
+    Bucket: bucket,
+    Key,
+  }));
+
+  while (toProcess.length > 0) {
+    const { part, rest } = take(toProcess, 1);
+    toProcess = rest;
+    const fileurl = part[0];
+    const content = await getS3Object({ fileurl });
+    const ret1: IS3Object = {
+      bucket: fileurl.Bucket,
+      key: fileurl.Key,
+      content: content.Body,
+    };
+
+    yield ret1;
+  }
+}
 
 export const putS3Object = async ({
   Body,
@@ -72,3 +105,57 @@ export const deleteFile = async ({
   }
   return {};
 };
+
+export const deleteFiles = async ({
+  Bucket,
+  Keys,
+}: {
+  Bucket: string;
+  Keys: string[];
+}): Promise<{ error?: string }> => {
+  let toDelete = Keys.map((Key) => ({ Key }));
+
+  while (toDelete.length > 0) {
+    const { part, rest } = take(toDelete, 900);
+    toDelete = rest;
+    const res = await s3
+      .deleteObjects({
+        Bucket,
+        Delete: { Objects: part },
+      })
+      .promise();
+
+    if (res.$response.error) {
+      return { error: res.$response.error.message };
+    }
+  }
+
+  return {};
+};
+
+export async function listFiles(bucketName: string) {
+  try {
+    const ret: string[] = [];
+    let response: PromiseResult<S3.ListObjectsV2Output, AWSError> = {
+      IsTruncated: true,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any;
+
+    while (response.IsTruncated) {
+      response = await s3
+        .listObjectsV2({
+          Bucket: bucketName,
+          ContinuationToken: response.NextContinuationToken,
+        })
+        .promise();
+
+      response.Contents?.filter((r) => r.Key)?.map((c) => {
+        ret.push(c.Key as string);
+      });
+    }
+    return distinct(ret.filter((r) => r));
+  } catch (err) {
+    error('Error', err);
+    return [];
+  }
+}

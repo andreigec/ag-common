@@ -90,7 +90,7 @@ export const batchWrite = async <T extends {}>(
   breakOnError = false,
 ): Promise<{ error?: string }> => {
   let items: T[] = JSON.parse(JSON.stringify(itemsIn));
-  info(`push to dynamo:${tableName} - count=${itemsIn.length}`);
+  debug(`push to dynamo:${tableName} - count=${itemsIn.length}`);
   const error: AWSError[] = [];
   while (items.length > 0) {
     const { part, rest } = take(items, 25);
