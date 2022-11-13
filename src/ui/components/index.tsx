@@ -8,6 +8,7 @@ export * from './FlexColumn';
 export * from './FlexRow';
 export * from './HeadersRaw';
 export * from './Icon';
+export * from './Image';
 export * from './KebabDots';
 export * from './Loader';
 export * from './Modal';

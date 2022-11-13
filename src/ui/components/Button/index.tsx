@@ -24,8 +24,8 @@ export const ButtonBase = css`
   color: white;
 
   &[data-disabled='true'] {
-    cursor: default;
-    background-color: #888;
+    cursor: default !important;
+    background-color: #888 !important;
   }
 
   &[data-theme='green'] {
