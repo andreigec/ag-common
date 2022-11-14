@@ -1,17 +1,19 @@
 import STS from 'aws-sdk/clients/sts';
 import { info } from '../../common/helpers/log';
 
-export let sts = new STS();
-export const setSts = (region: string) => {
-  sts = new STS({ region });
-};
-
 /**
  * @param {assumeRoleArn} assume this role arn
  * @returns {string} assumed accountId
  */
-export async function assumeRole({ assumeRoleArn }: { assumeRoleArn: string }) {
-  info(`assuming:${assumeRoleArn}`);
+export async function assumeRole({
+  assumeRoleArn,
+  region,
+}: {
+  assumeRoleArn: string;
+  region: string;
+}) {
+  const sts = new STS({ region });
+  info(`assuming:${assumeRoleArn} in region:${region}`);
   const data = await sts
     .assumeRole({
       RoleArn: assumeRoleArn,
