@@ -65,14 +65,31 @@ export const callOpenApi = async <T, TDefaultApi>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let error: AxiosError<unknown, any> | undefined;
   let data: T | undefined = undefined;
-  const config = {
+  const config: {
+    basePath: string;
+    baseOptions: Record<string, Record<string, string>>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    middleware: { pre: (a: any) => any }[];
+  } = {
     basePath: apiUrl,
     baseOptions: { headers: { authorization: '', ...(headers || {}) } },
+    middleware: [],
   };
 
   const idToken = await getIdTokenAuthHeader(p);
   if (idToken) {
     config.baseOptions.headers.authorization = `Bearer ${idToken}`;
+    config.middleware = [
+      {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        pre: (oldFetchParams: any) => {
+          oldFetchParams.init.headers = {
+            authorization: `Bearer ${idToken}`,
+            ...oldFetchParams.init.headers,
+          };
+        },
+      },
+    ];
   }
 
   const cl = newDefaultApi(config);
@@ -89,12 +106,13 @@ export const callOpenApi = async <T, TDefaultApi>(
         break;
       }
 
-      throw new Error(JSON.stringify(resp.data) || resp.statusText);
+      throw new AxiosError(resp.statusText, resp.status?.toString() || '500');
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const ae = e as AxiosError<unknown, any>;
-      const status = ae.response?.status ?? 500;
+      const status = Number(ae.code ?? ae.response?.status ?? 500);
       const errorMessage = [
+        ae.status ?? '',
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (ae.response?.data as any)?.toString() ?? '',
         ae.response?.statusText?.toString() ?? '',

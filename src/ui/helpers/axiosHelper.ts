@@ -59,7 +59,8 @@ export const axiosHelper = async <TOut>({
       } else if (verb === 'patch') {
         axios = Axios.patch;
       } else if (verb === 'delete') {
-        axios = Axios.delete;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        axios = Axios.delete as any;
         noBody = true;
       }
 
