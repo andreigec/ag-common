@@ -16,3 +16,8 @@ export interface ICallOpenApi<T, TDefaultApi> {
   disabled?: boolean;
   headers?: Record<string, string | number>;
 }
+
+export interface ApiResponse<T> {
+  raw: Response;
+  value(): Promise<T>;
+}
