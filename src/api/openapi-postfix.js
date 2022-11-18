@@ -12,16 +12,29 @@ function run() {
     .filter((r) => r.endsWith('.js'))
     .map((s) => `./dist/api/${s}`);
 
-  files.forEach((f) => {
-    if (fs.existsSync(f)) {
+  var found = false;
+  files.filter(fs.existsSync).forEach((f) => {
+    var c = fs.readFileSync(f).toString();
+    if (c.includes('url_1')) {
       console.log('removing url_1 from ' + f);
-      var c = fs.readFileSync(f).toString();
-      c = c.replace(/url_1\./gi, '');
-      fs.writeFileSync(f, c);
+      c = c.replace(/url_1\./gim, '');
+      found = true;
     }
+
+    if (c.includes('this.configuration.queryParamsStringify(')) {
+      console.log('fixing queryparams default from ' + f);
+      c = c.replace(
+        /this.configuration.queryParamsStringify\(/gim,
+        '(this.configuration.queryParamsStringify||querystring)(',
+      );
+
+      found = true;
+    }
+
+    fs.writeFileSync(f, c);
   });
-  if (!files.length) {
-    console.log('error: no files to url fix');
+  if (!found) {
+    console.log('error: no files were fixed');
   }
 }
 
