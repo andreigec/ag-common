@@ -176,18 +176,42 @@ export const batchDelete = async ({
   return {};
 };
 
-export const scan = async <T>(tableName: string): Promise<T[]> => {
+export const scan = async <T>(
+  tableName: string,
+  opt?: {
+    filter?: {
+      filterExpression: string;
+      attrNames: Record<string, string>;
+      attrValues: Record<string, string>;
+    };
+    /** ProjectionExpression. will csv values */
+    requiredAttributeList?: string[];
+  },
+): Promise<T[]> => {
   const Items: T[] = [];
   let ExclusiveStartKey: Key | undefined;
   do {
+    let params: DynamoDB.DocumentClient.ScanInput = {
+      TableName: tableName,
+      ExclusiveStartKey,
+    };
+
+    if (opt?.filter) {
+      params.FilterExpression = opt.filter.filterExpression;
+      params.ExpressionAttributeNames = opt.filter.attrNames;
+      params.ExpressionAttributeValues = opt.filter.attrValues;
+    }
+
+    if (opt?.requiredAttributeList) {
+      params.ProjectionExpression = opt.requiredAttributeList.join(', ');
+    }
+
     const {
       Items: newitems,
       LastEvaluatedKey,
       $response,
       // eslint-disable-next-line no-await-in-loop
-    } = await dynamoDb
-      .scan({ TableName: tableName, ExclusiveStartKey })
-      .promise();
+    } = await dynamoDb.scan(params).promise();
 
     ExclusiveStartKey = LastEvaluatedKey;
 
