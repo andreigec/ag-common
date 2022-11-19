@@ -2,7 +2,7 @@ import { Blob } from 'aws-sdk/lib/dynamodb/document_client';
 import S3 from 'aws-sdk/clients/s3';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk/lib/core';
-import { error } from '../../common/helpers/log';
+import { error, info } from '../../common/helpers/log';
 import { distinct, take } from '../../common/helpers/array';
 
 let s3 = new S3();
@@ -114,6 +114,7 @@ export const deleteFiles = async ({
   Keys: string[];
 }): Promise<{ error?: string }> => {
   let toDelete = Keys.map((Key) => ({ Key }));
+  let deleted = 0;
 
   while (toDelete.length > 0) {
     const { part, rest } = take(toDelete, 900);
@@ -125,9 +126,17 @@ export const deleteFiles = async ({
       })
       .promise();
 
+    if (!res.Deleted?.length) {
+      throw new Error('no deleted files');
+    }
+
+    deleted += res.Deleted.length;
+
     if (res.$response.error) {
       return { error: res.$response.error.message };
     }
+
+    info(`deleted ${deleted} files`);
   }
 
   return {};
