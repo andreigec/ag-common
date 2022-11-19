@@ -135,7 +135,20 @@ export async function validateOpenApi<T>({
   } else {
     try {
       request.params = opm.pathParams;
-      info('req=', JSON.stringify(request, null, 2));
+      info(
+        'req=',
+        JSON.stringify(
+          {
+            ...request,
+            body:
+              (request.body?.length ?? 0) > 2000
+                ? '(truncating long body)'
+                : request.body,
+          },
+          null,
+          2,
+        ),
+      );
       const resp = new OpenAPIRequestValidator({
         ...opm.operation,
         schemas: schema.components.schemas,
