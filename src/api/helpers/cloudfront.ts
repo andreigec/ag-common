@@ -1,6 +1,10 @@
-import CF from 'aws-sdk/clients/cloudfront';
+import {
+  CloudFrontClient as CF,
+  CreateInvalidationCommand,
+  CreateInvalidationRequest,
+} from '@aws-sdk/client-cloudfront';
 
-let cf = new CF();
+let cf = new CF({});
 export const setCF = (region: string) => {
   cf = new CF({ region });
 };
@@ -12,7 +16,7 @@ export const invalidateCloudfrontPath = async ({
   path: string;
   distributionId: string;
 }) => {
-  const params: CF.CreateInvalidationRequest = {
+  const params: CreateInvalidationRequest = {
     DistributionId: distributionId,
     InvalidationBatch: {
       CallerReference: 'scraper',
@@ -23,5 +27,5 @@ export const invalidateCloudfrontPath = async ({
     },
   };
 
-  await cf.createInvalidation(params).promise();
+  await cf.send(new CreateInvalidationCommand(params));
 };

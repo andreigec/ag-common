@@ -1,13 +1,20 @@
-import { Blob } from 'aws-sdk/lib/dynamodb/document_client';
-import S3 from 'aws-sdk/clients/s3';
-import { PromiseResult } from 'aws-sdk/lib/request';
-import { AWSError } from 'aws-sdk/lib/core';
 import { error, info } from '../../common/helpers/log';
 import { distinct, take } from '../../common/helpers/array';
-
-let s3 = new S3();
+import {
+  S3Client,
+  GetObjectCommand,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
+  ListObjectsV2Command,
+  ListObjectsV2CommandOutput,
+} from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
+import { Readable } from 'stream';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+let s3 = new S3Client({});
 export const setS3 = (region: string) => {
-  s3 = new S3({ region });
+  s3 = new S3Client({ region });
 };
 
 export const getS3Object = async ({
@@ -17,12 +24,12 @@ export const getS3Object = async ({
     Bucket: string;
     Key: string;
   };
-}) => s3.getObject(fileurl).promise();
+}) => s3.send(new GetObjectCommand(fileurl));
 
 export interface IS3Object {
   bucket: string;
   key: string;
-  content: S3.Body | undefined;
+  content: Readable | ReadableStream | Blob;
 }
 /** function generator to get s3 files */
 export async function* getS3Objects({
@@ -42,6 +49,10 @@ export async function* getS3Objects({
     toProcess = rest;
     const fileurl = part[0];
     const content = await getS3Object({ fileurl });
+    if (!content.Body) {
+      throw new Error('no body for object:' + fileurl.Key);
+    }
+
     const ret1: IS3Object = {
       bucket: fileurl.Bucket,
       key: fileurl.Key,
@@ -63,33 +74,32 @@ export const putS3Object = async ({
   Bucket: string;
   Key: string;
 }): Promise<{ error?: string }> => {
-  const r = await s3
-    .putObject({
-      Body,
-      Bucket,
-      Key,
-      ContentType,
-    } as S3.Types.PutObjectRequest)
-    .promise();
+  try {
+    await s3.send(
+      new PutObjectCommand({
+        Body,
+        Bucket,
+        Key,
+        ContentType,
+      }),
+    );
 
-  if (r.$response.error) {
-    return { error: r.$response.error.message };
+    return {};
+  } catch (e) {
+    return { error: (e as any).toString() };
   }
-  return {};
 };
 
-export const uploadFile = async ({
-  Bucket,
-  Key,
-  Body,
-}: {
+export const uploadFile = async (p: {
   Bucket: string;
   Key: string;
   Body: Buffer | Uint8Array | Blob | string;
 }) => {
-  const res = await s3.upload({ Bucket, Key, Body }).promise();
+  const res = new Upload({ client: s3, params: p });
+  await res.done();
+  const location = `https://s3.${s3.config.region}.amazonaws.com/${p.Bucket}/${p.Key}`;
 
-  return res.Location;
+  return location;
 };
 
 export const deleteFile = async ({
@@ -99,11 +109,12 @@ export const deleteFile = async ({
   Bucket: string;
   Key: string;
 }): Promise<{ error?: string }> => {
-  const res = await s3.deleteObject({ Bucket, Key }).promise();
-  if (res.$response.error) {
-    return { error: res.$response.error.message };
+  try {
+    await s3.send(new DeleteObjectCommand({ Bucket, Key }));
+    return {};
+  } catch (e) {
+    return { error: (e as any).toString() };
   }
-  return {};
 };
 
 export const deleteFiles = async ({
@@ -115,28 +126,26 @@ export const deleteFiles = async ({
 }): Promise<{ error?: string }> => {
   let toDelete = Keys.map((Key) => ({ Key }));
   let deleted = 0;
+  try {
+    while (toDelete.length > 0) {
+      const { part, rest } = take(toDelete, 900);
+      toDelete = rest;
+      const res = await s3.send(
+        new DeleteObjectsCommand({
+          Bucket,
+          Delete: { Objects: part },
+        }),
+      );
 
-  while (toDelete.length > 0) {
-    const { part, rest } = take(toDelete, 900);
-    toDelete = rest;
-    const res = await s3
-      .deleteObjects({
-        Bucket,
-        Delete: { Objects: part },
-      })
-      .promise();
+      if (!res.Deleted?.length) {
+        throw new Error('no deleted files');
+      }
 
-    if (!res.Deleted?.length) {
-      throw new Error('no deleted files');
+      deleted += res.Deleted.length;
+      info(`deleted ${deleted} files`);
     }
-
-    deleted += res.Deleted.length;
-
-    if (res.$response.error) {
-      return { error: res.$response.error.message };
-    }
-
-    info(`deleted ${deleted} files`);
+  } catch (e) {
+    return { error: (e as any).toString() };
   }
 
   return {};
@@ -145,18 +154,18 @@ export const deleteFiles = async ({
 export async function listFiles(bucketName: string) {
   try {
     const ret: string[] = [];
-    let response: PromiseResult<S3.ListObjectsV2Output, AWSError> = {
+    let response: ListObjectsV2CommandOutput = {
       IsTruncated: true,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any;
+      $metadata: undefined as any,
+    };
 
     while (response.IsTruncated) {
-      response = await s3
-        .listObjectsV2({
+      response = await s3.send(
+        new ListObjectsV2Command({
           Bucket: bucketName,
           ContinuationToken: response.NextContinuationToken,
-        })
-        .promise();
+        }),
+      );
 
       response.Contents?.filter((r) => r.Key)?.map((c) => {
         ret.push(c.Key as string);
@@ -168,3 +177,13 @@ export async function listFiles(bucketName: string) {
     return [];
   }
 }
+
+export const generatePresignedUrl = async (p: {
+  bucket: string;
+  key: string;
+}) => {
+  const command = new GetObjectCommand({ Bucket: p.bucket, Key: p.key });
+  const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+  return url;
+};
