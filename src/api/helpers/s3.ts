@@ -168,3 +168,47 @@ export async function listFiles(bucketName: string) {
     return [];
   }
 }
+
+/**
+ * allow uploading of file directly to s3
+ * @param param0 
+ * 
+ * @returns url to POST to, and fields to send, eg
+ * formData.append('Content-Type', file.type);
+      Object.entries(fields).forEach(([k, v]) => {
+        formData.append(k, v);
+      });
+
+      formData.append('file', file);
+      fetch.POST(url,formData)
+ */
+export async function getPresignedPostURL({
+  bucket,
+  key,
+  maxMb = 5,
+}: {
+  bucket: string;
+  key: string;
+  /** max filesize. default 5 */
+  maxMb?: number;
+}): Promise<{ url: string; fields: Record<string, string> }> {
+  const ps = await s3.createPresignedPost({
+    Bucket: bucket,
+    Fields: {
+      Key: key,
+    },
+
+    Expires: 600,
+    Conditions: [
+      ['content-length-range', 0, maxMb * 1049000], // content length restrictions: 0-5MB
+      ['starts-with', '$Content-Type', 'image/'],
+    ],
+  });
+
+  const fields = JSON.parse(JSON.stringify(ps.fields)) as Record<
+    string,
+    string
+  >;
+
+  return { fields, url: ps.url };
+}
