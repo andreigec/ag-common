@@ -422,8 +422,11 @@ export const queryDynamo = async <T>({
   return { Items, startKey: undefined };
 };
 
-export const getDynamoTtl = (days: number) =>
+export const getDynamoTtlDays = (days: number) =>
   Math.ceil(new Date().getTime() / 1000) + days * 86400;
+
+export const getDynamoTtlMinutes = (mins: number) =>
+  Math.ceil(new Date().getTime() / 1000) + mins * 60;
 
 export const wipeTable = async (
   tableName: string,

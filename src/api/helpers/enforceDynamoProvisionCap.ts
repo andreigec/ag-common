@@ -11,6 +11,7 @@ const extractSum = ({ str, regex }: { str: string; regex: RegExp }) =>
       .map((r) => Number(r)) || [],
   );
 
+/** ensure that dynamo tables in stack dont exceed passed in provisioned limits */
 export const enforceDynamoProvisionCap = ({
   tables,
   readsMax = 25,
@@ -28,7 +29,7 @@ export const enforceDynamoProvisionCap = ({
    */
   writesMax?: number;
   /**
-   * default false. if true, will throw if cap isnt met
+   * default false. if true, will throw if cap isnt met. will still throw if exceeds.
    */
   mustEqual?: boolean;
 }) => {

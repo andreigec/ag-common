@@ -2,7 +2,7 @@ import { Blob } from 'aws-sdk/lib/dynamodb/document_client';
 import S3 from 'aws-sdk/clients/s3';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk/lib/core';
-import { error, info } from '../../common/helpers/log';
+import { debug, error, info } from '../../common/helpers/log';
 import { distinct, take } from '../../common/helpers/array';
 
 let s3 = new S3();
@@ -142,7 +142,44 @@ export const deleteFiles = async ({
   return {};
 };
 
-export async function listFiles(bucketName: string) {
+export const copyFile = async ({
+  Bucket,
+  fromKey,
+  toKey,
+  deleteSource = false,
+}: {
+  Bucket: string;
+  fromKey: string;
+  toKey: string;
+  /** if true, will delete original after copy. default false */
+  deleteSource?: boolean;
+}): Promise<{ error?: string }> => {
+  debug(`copying s3 file from ${Bucket}- ${fromKey} to ${toKey}`);
+  const res = await s3
+    .copyObject({
+      //incl bucket
+      CopySource: Bucket + '/' + fromKey,
+      //dest
+      Bucket,
+      Key: toKey,
+    })
+    .promise();
+
+  if (res.$response.error) {
+    return { error: res.$response.error.message };
+  }
+
+  if (deleteSource) {
+    const df = await deleteFile({ Bucket, Key: fromKey });
+    if (df.error) {
+      return { error: df.error };
+    }
+  }
+
+  return {};
+};
+
+export async function listFiles(bucketName: string, opt?: { prefix?: string }) {
   try {
     const ret: string[] = [];
     let response: PromiseResult<S3.ListObjectsV2Output, AWSError> = {
@@ -155,6 +192,7 @@ export async function listFiles(bucketName: string) {
         .listObjectsV2({
           Bucket: bucketName,
           ContinuationToken: response.NextContinuationToken,
+          Prefix: opt?.prefix,
         })
         .promise();
 
