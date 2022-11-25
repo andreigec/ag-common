@@ -12,7 +12,6 @@
 		},
 		"typescript.tsdk": "node_modules\\typescript\\lib",
 		"files.exclude": {
-			"yarn-error.log":true,
 			"dist": true,
 			"**/.git": true,
 			"**/.DS_Store": true,

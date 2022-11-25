@@ -1,15 +1,15 @@
 {
   "name": "ag-common",
-  "version": "0.0.359",
+  "version": "0.0.358",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "author": "Andrei Gec <@andreigec> (https://gec.dev/)",
   "repository": "github:andreigec/ag-common",
   "license": "ISC",
-  "packageManager": "yarn@3.3.0",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "format": "npx eslint --ext .ts,.tsx ./src --fix",
-    "build": "rimraf dist && yarn lint && tsc",
+    "build": "rimraf dist && npm run lint && tsc",
     "lint": "npx eslint --ext .ts,.tsx ./src",
     "start": "cross-env BROWSER=none start-storybook -p 6006",
     "build-storybook": "build-storybook -o docs --quiet"

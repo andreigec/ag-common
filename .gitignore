@@ -17,12 +17,4 @@ cdk.out/
 /packages/ui/public/feedback.js
 
 .build/
-
-.yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
 docs/
