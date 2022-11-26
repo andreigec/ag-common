@@ -1,7 +1,7 @@
 import { debug } from '../../common/helpers/log';
 import { isJson } from '../../common/helpers/object';
 import { retryHttpCodes, retryHttpMs, sleep } from '../../common';
-import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 
 /**
  *
@@ -35,7 +35,7 @@ export const axiosHelper = async <TOut>({
       };
 
       if (verb === 'get') {
-        ret = await Axios.get<TOut>(url, {
+        ret = await axios.get<TOut>(url, {
           headers: setHeaders,
           timeout,
           timeoutErrorMessage: `${url} timeout`,
@@ -46,26 +46,26 @@ export const axiosHelper = async <TOut>({
 
       let noBody = false;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let axios: <T = any, R = AxiosResponse<T, any>, D = any>(
+      let axiosV: <T = any, R = AxiosResponse<T, any>, D = any>(
         url: string,
         body?: D | undefined,
         config?: AxiosRequestConfig<D> | undefined,
-      ) => Promise<R> = Axios.post;
+      ) => Promise<R> = axios.post;
 
       if (verb === 'put') {
-        axios = Axios.put;
+        axiosV = axios.put;
       } else if (verb === 'post') {
-        axios = Axios.post;
+        axiosV = axios.post;
       } else if (verb === 'patch') {
-        axios = Axios.patch;
+        axiosV = axios.patch;
       } else if (verb === 'delete') {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        axios = Axios.delete as any;
+        axiosV = axios.delete as any;
         noBody = true;
       }
 
       if (noBody) {
-        ret = await axios<TOut>(url, {
+        ret = await axiosV<TOut>(url, {
           headers: setHeaders,
           timeout,
           timeoutErrorMessage: `${url} timeout`,
@@ -76,7 +76,7 @@ export const axiosHelper = async <TOut>({
             setHeaders['Content-Type'] || 'application/json';
         }
 
-        ret = await axios<TOut>(url, body, { headers: setHeaders });
+        ret = await axiosV<TOut>(url, body, { headers: setHeaders });
       }
 
       return ret;

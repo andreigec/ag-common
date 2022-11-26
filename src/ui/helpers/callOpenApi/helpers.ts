@@ -2,6 +2,12 @@ import { AxiosResponse } from 'axios';
 import { arrayToObject } from '../../../common/helpers/array';
 import { ApiResponse } from './types';
 
+/**
+ * shim to convert raw response to an axios style response.
+ * must convert all DefaultClass requests to the Raw equivalent
+ * @param p
+ * @returns
+ */
 export const apiResponseToAxiosResponse = async <T>(
   p: () => Promise<ApiResponse<T>>,
 ): Promise<AxiosResponse<T>> =>
