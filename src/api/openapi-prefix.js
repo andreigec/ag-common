@@ -61,7 +61,21 @@ function cleanSrc() {
 async function generateJs() {
   try {
     console.log('generating openapi ts');
-    const yml = load(fs.readFileSync(resolvePath('./openapi.yml'), 'utf8'));
+    var p = resolvePath('./openapi.yml');
+    if (!fs.existsSync(p)) {
+      p = resolvePath('./openapi/index.yml');
+      process.chdir(resolvePath('./openapi'));
+    }
+
+    if (!fs.existsSync(p)) {
+      console.error(
+        'cant generate swagger, expecting openapi.yml or openapi/index.yml',
+      );
+      return;
+    }
+
+    const yml = load(fs.readFileSync(p, 'utf8'));
+
     // eslint-disable-next-line
     const schema = await SwaggerParser.validate(yml);
     const content = `var ret=${JSON.stringify(
@@ -69,6 +83,7 @@ async function generateJs() {
     )};\nmodule.exports.default=ret`;
 
     fs.writeFileSync(resolvePath('./openapi.generated.js'), content);
+    console.log('generated');
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log('err=', e);

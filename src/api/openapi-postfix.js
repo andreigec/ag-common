@@ -7,6 +7,7 @@ const pathV = require('path');
 const cwd = process.cwd();
 const resolvePath = (p) => pathV.resolve(cwd, p);
 function run() {
+  console.log('running openapi postfixes');
   const files = fs
     .readdirSync(resolvePath('./dist/api'))
     .filter((r) => r.endsWith('.js') || r.endsWith('.d.ts'))
