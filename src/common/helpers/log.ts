@@ -8,6 +8,13 @@ export const GetLogLevel = (l: TLogType) =>
     (s) => s === l,
   );
 
+export type TLogShim = (...args: unknown[]) => void;
+let logShim: TLogShim | undefined;
+/** if passed in, will use this instead of console.xxx */
+export const SetLogShim = (ls: TLogShim) => {
+  logShim = ls;
+};
+
 let userLogLevel: TLogType = 'WARN';
 export const SetLogLevel = (l: TLogType) => {
   const lu = l?.toUpperCase() as TLogType;
@@ -32,6 +39,11 @@ function logprocess(type: TLogType, args: unknown[]) {
   ////////
   const datetime = new Date().toLocaleTimeString('en-GB');
   const log = [`[${datetime}]`, type, ...args.filter(notEmpty)];
+
+  if (logShim) {
+    logShim(...log);
+    return;
+  }
 
   switch (type) {
     case 'TRACE': {
