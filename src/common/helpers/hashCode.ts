@@ -1,5 +1,5 @@
 /* eslint-disable no-bitwise */
-export const hashCode = (str: string, seed = 0) => {
+export const hashCodeInt = (str: string, seed = 0) => {
   if (!str) {
     return '';
   }
@@ -21,6 +21,8 @@ export const hashCode = (str: string, seed = 0) => {
     Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   const ret = 4294967296 * (2097151 & h2) + (h1 >>> 0);
 
-  return ret.toString();
+  return ret;
 };
+export const hashCode = (str: string, seed = 0) =>
+  hashCodeInt(str, seed).toString();
 export const generateNewPK = () => hashCode(new Date().getTime().toString());
