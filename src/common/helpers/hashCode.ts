@@ -1,7 +1,7 @@
 /* eslint-disable no-bitwise */
 export const hashCodeInt = (str: string, seed = 0) => {
   if (!str) {
-    return '';
+    return 0;
   }
 
   let h1 = 0xdeadbeef ^ seed;
