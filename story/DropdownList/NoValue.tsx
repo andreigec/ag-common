@@ -26,7 +26,6 @@ export const NoValue = Template.bind({}) as ComponentStory<typeof DropdownList>;
 
 NoValue.args = {
   options: ['1', 'LONG VALUEEEE', '3'],
-  renderF: (v) => v as string,
   placeholder: 'test ph',
   onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
 };

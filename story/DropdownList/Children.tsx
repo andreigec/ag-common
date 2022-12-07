@@ -21,7 +21,6 @@ export const Children = Template.bind({}) as ComponentStory<
 
 Children.args = {
   options: ['LONG VALUEEEE', '1', '3'],
-  renderF: (v) => v as string,
   value: 'LONG VALUEEEE',
   placeholder: 'test ph',
   children: <>test children</>,

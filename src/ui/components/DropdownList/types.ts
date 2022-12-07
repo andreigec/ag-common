@@ -18,7 +18,7 @@ export interface IDropdownList<T> {
   /**
    * function to render value
    */
-  renderF: (v: T) => string;
+  renderF: (v: T) => JSX.Element;
   /**
    * colour of dropdown shadow. default #555
    */

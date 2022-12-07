@@ -44,6 +44,7 @@ export function sumArray(array: number[]) {
   return array.reduce((a, b) => a + b, 0);
 }
 
+/** returns number < max */
 export const getRandomInt = (max: number) => {
   return Math.floor(Math.random() * Math.floor(max));
 };

@@ -19,7 +19,6 @@ export const Value = Template.bind({}) as ComponentStory<typeof DropdownList>;
 
 Value.args = {
   options: ['LONG VALUEEEE', '1', '3'],
-  renderF: (v) => v as string,
   value: 'LONG VALUEEEE',
   placeholder: 'test ph',
   onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),

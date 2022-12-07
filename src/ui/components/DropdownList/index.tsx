@@ -119,7 +119,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
 
   const [style, setStyle] = useState<Record<string, string | number>>({});
   useEffect(() => {
-    const maxLen = Math.max(...options.map((s) => renderF(s).length));
+    const maxLen = 20;
     const newStyle: Record<string, string | number> = {
       minWidth: `calc(${maxLen}ch + 2rem)`,
     };
@@ -150,12 +150,11 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   }, [maxHeight, open, options, renderF, shadow, style]);
 
   const defaultRender = !p.value ? <KebabDots /> : <>{p.renderF(p.value)}</>;
-  const defaultKey = !p.value ? '(noval)' : p.renderF(p.value);
   const openDisplay = p.children || (
     <ListItem
       selected
       render={defaultRender}
-      key={defaultKey}
+      key={defaultRender.key}
       defaultV={!p.value}
     />
   );
@@ -181,7 +180,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
         {open &&
           options.map((s, i) => (
             <ListItem
-              key={p.renderF(s)}
+              key={p.renderF(s).key}
               render={p.renderF(s)}
               onChange={() => p.onChange(s, i)}
               selected={s === state}
