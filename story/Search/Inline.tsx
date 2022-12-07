@@ -16,7 +16,7 @@ export const Inline = Template.bind({}) as ComponentStory<typeof SearchInline>;
 
 Inline.args = {
   displayItems: searchLongList,
-  renderItem: (st, i) => i as string,
+  renderItem: (st) => st.index.toString(),
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
 };

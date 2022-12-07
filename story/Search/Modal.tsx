@@ -17,7 +17,7 @@ export const Modal = Template.bind({}) as ComponentStory<typeof SearchModal>;
 
 Modal.args = {
   displayItems: searchLongList,
-  renderItem: (st, i) => i as string,
+  renderItem: (st) => st.index.toString(),
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
 };

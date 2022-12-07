@@ -42,7 +42,7 @@ export const Dialog = TemplateModal.bind({}) as ComponentStory<
 
 Dialog.args = {
   displayItems: searchLongList,
-  renderItem: (st, i) => i as string,
+  renderItem: (st) => st.index.toString(),
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
 };

@@ -28,4 +28,5 @@ NoValue.args = {
   options: ['1', 'LONG VALUEEEE', '3'],
   placeholder: 'test ph',
   onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
+  renderF: (r) => <div>{r as string}</div>,
 };

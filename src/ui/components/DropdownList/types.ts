@@ -6,10 +6,10 @@ export interface IDropdownList<T> {
    */
   options: T[];
   /**
-   * selected item from options.
+   * selected item from options. closing will return undefined
    */
   value?: T;
-  onChange: (v: T, index: number) => void;
+  onChange: (v: T | undefined, index: number) => void;
   /**
    * placeholder title for list
    */
@@ -31,4 +31,6 @@ export interface IDropdownList<T> {
    * if not provided, will default display value, then kebab dots
    */
   children?: ReactNode;
+  /** default false */
+  open?: boolean;
 }

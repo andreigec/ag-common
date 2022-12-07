@@ -25,4 +25,5 @@ Children.args = {
   placeholder: 'test ph',
   children: <>test children</>,
   onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
+  renderF: (r) => <div>{r as string}</div>,
 };

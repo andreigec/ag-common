@@ -22,4 +22,5 @@ Value.args = {
   value: 'LONG VALUEEEE',
   placeholder: 'test ph',
   onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
+  renderF: (r) => <div>{r as string}</div>,
 };
