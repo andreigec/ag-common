@@ -20,6 +20,8 @@ export interface ISearchDialog<T> {
    * run to filter items by search text
    */
   willDisplayItem: (searchText: string, item: T) => boolean;
+  /** how many search items to return at most. default 20 */
+  maxDisplayItems?: number;
   /**
    * get unique render key
    */

@@ -6,6 +6,7 @@ import { bigScreen, smallScreen } from '../../styles';
 import styled from 'styled-components';
 import React, { createRef, useState } from 'react';
 import { Magnify } from '../../icons/Magnify';
+import { take } from '../../../common';
 
 const Base = styled.div`
   display: flex;
@@ -82,6 +83,7 @@ export const SearchBase = <T,>({
   getKeyF,
   className,
   texts,
+  maxDisplayItems = 20,
 }: ISearchDialog<T> & {
   onSearchTextChange?: (v: string) => void;
   onSelectItem?: (v: TSearchModalRes<T>) => void;
@@ -95,10 +97,11 @@ export const SearchBase = <T,>({
     }
   };
 
-  const filteredItems = displayItems.filter((i) =>
+  const filteredItemsRaw = displayItems.filter((i) =>
     willDisplayItem(searchText, i),
   );
 
+  const { part: filteredItems } = take(filteredItemsRaw, maxDisplayItems);
   const showText =
     texts?.totalItems?.(filteredItems.length, displayItems.length) ??
     `Showing ${filteredItems.length} out of ${displayItems.length} total
