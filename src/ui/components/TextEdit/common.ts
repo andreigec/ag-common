@@ -1,6 +1,8 @@
-import { colours } from '../../styles/colours';
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+
+import { colours } from '../../styles/colours';
+
 export const ValueBox = styled.div`
   padding: 0.5rem;
 

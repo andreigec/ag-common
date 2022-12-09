@@ -1,8 +1,10 @@
-import { colours } from '../../styles/colours';
-import { removeUndefValuesFromObject } from '../../../common/helpers/object';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import React from 'react';
-import { css } from '@emotion/react';
+
+import { removeUndefValuesFromObject } from '../../../common/helpers/object';
+import { colours } from '../../styles/colours';
+
 const BGcss = css`
   display: flex;
   border: 0;

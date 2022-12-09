@@ -1,10 +1,11 @@
-import { getCurlLines } from './helpers/getCurlLines';
-import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../types';
-import { Highlight } from '../helpers/common';
-import { notEmpty } from '../../../../common';
-import { joinJsxWithSlash } from '../helpers/joinJsx';
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
+
+import { notEmpty } from '../../../../common';
+import { Highlight } from '../helpers/common';
+import { joinJsxWithSlash } from '../helpers/joinJsx';
+import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../types';
+import { getCurlLines } from './helpers/getCurlLines';
 
 const Base = styled.div`
   white-space: pre;

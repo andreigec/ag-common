@@ -1,6 +1,7 @@
-import { filterDataProps } from '../../helpers/dom';
 import styled from '@emotion/styled';
 import React from 'react';
+
+import { filterDataProps } from '../../helpers/dom';
 
 const Base = styled.div`
   position: absolute;

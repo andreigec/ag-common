@@ -1,9 +1,11 @@
-import { IModal } from './types';
-import { Close } from '../Close';
+import styled from '@emotion/styled';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { bounce } from '../../styles';
-import React, { useEffect, useRef, useState } from 'react';
-import styled from '@emotion/styled';
+import { Close } from '../Close';
+import { IModal } from './types';
+
 const FixedBackground = styled.div`
   position: fixed;
   top: 0;

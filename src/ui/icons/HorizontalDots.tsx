@@ -1,4 +1,5 @@
 import React from 'react';
+
 export const HorizontalDots = (
   <svg
     viewBox="0 0 24 24"

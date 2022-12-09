@@ -1,10 +1,11 @@
 /* eslint-disable import/no-unresolved */
-import { returnCode } from './api';
+import { decode, verify } from 'jsonwebtoken';
+import JwksClient from 'jwks-rsa';
+
 import { debug, error, info } from '../../common/helpers/log';
 import { IdJwt, User } from '../../ui/helpers/jwt';
 import { APIGatewayProxyResult } from '../types';
-import { verify, decode } from 'jsonwebtoken';
-import JwksClient from 'jwks-rsa';
+import { returnCode } from './api';
 
 let jwksClient: JwksClient.JwksClient | undefined;
 const jwtVerify = async ({

@@ -1,6 +1,7 @@
-import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../../types';
-import { Highlight2, Highlight } from '../../helpers/common';
 import React from 'react';
+
+import { Highlight, Highlight2 } from '../../helpers/common';
+import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../../types';
 
 export const getFetchCall = <TDefaultApi,>(
   p: IOpenApiCodeBlock<TDefaultApi>,

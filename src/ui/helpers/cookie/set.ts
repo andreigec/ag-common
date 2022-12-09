@@ -1,7 +1,7 @@
-import { expireDate, maxCookieLen } from './const';
-import { getCookieRaw } from './get';
 import { warn } from '../../../common/helpers/log';
 import { chunkString, toBase64 } from '../../../common/helpers/string';
+import { expireDate, maxCookieLen } from './const';
+import { getCookieRaw } from './get';
 
 /**
  * expiryDays <0 will delete

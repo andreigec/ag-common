@@ -1,6 +1,8 @@
+import { aws_dynamodb as dynamodb, aws_ssm as ssm, Stack } from 'aws-cdk-lib';
+
 import { IGeneratedDynamoData } from '../types';
-import { Stack, aws_ssm as ssm, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
-import { loadSsmString, saveToSsm, loadSsmStringList } from './ssm';
+import { loadSsmString, loadSsmStringList, saveToSsm } from './ssm';
+
 export const generateTableRef = ({
   stack,
   baseKey,

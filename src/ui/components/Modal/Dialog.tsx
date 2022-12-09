@@ -1,6 +1,7 @@
-import { Modal } from './Modal';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+
+import { Modal } from './Modal';
 
 export const ModalDialog = async (
   content: JSX.Element,

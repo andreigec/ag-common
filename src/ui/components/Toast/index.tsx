@@ -1,5 +1,5 @@
-import toastx, { Toaster, ToastPosition } from 'react-hot-toast';
 import React from 'react';
+import toastx, { Toaster, ToastPosition } from 'react-hot-toast';
 
 export interface IToastOptions {
   appearance: 'error' | 'success';

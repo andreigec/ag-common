@@ -1,8 +1,9 @@
-import { ISearchDialog, TSearchModalRes } from './types';
-import { SearchModal } from './Modal';
-import { error } from '../../../common';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+
+import { error } from '../../../common';
+import { SearchModal } from './Modal';
+import { ISearchDialog, TSearchModalRes } from './types';
 /**
  * opens a searchmodal programatically, and resolves to either undefined, or the selected item
  * @param p

@@ -1,6 +1,7 @@
-import { groupByList } from '../../../common/helpers/groupBy';
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
+
+import { groupByList } from '../../../common/helpers/groupBy';
 
 const Base = styled.div`
   display: flex;

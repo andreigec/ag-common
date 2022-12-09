@@ -1,8 +1,9 @@
-import { getFetchLines } from './helpers/getFetchLines';
-import { getFetchCall } from './helpers/call';
-import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../types';
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
+
+import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../types';
+import { getFetchCall } from './helpers/call';
+import { getFetchLines } from './helpers/getFetchLines';
 
 const Base = styled.div`
   white-space: pre;

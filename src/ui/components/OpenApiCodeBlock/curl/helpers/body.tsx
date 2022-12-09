@@ -1,6 +1,7 @@
-import { IOpenApiCodeBlock } from '../../types';
-import { Highlight2, Highlight, getBodyJson } from '../../helpers/common';
 import React from 'react';
+
+import { getBodyJson, Highlight, Highlight2 } from '../../helpers/common';
+import { IOpenApiCodeBlock } from '../../types';
 
 export const getBody = <TDefaultApi,>(
   p: IOpenApiCodeBlock<TDefaultApi>,

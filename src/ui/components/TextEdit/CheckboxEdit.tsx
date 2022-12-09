@@ -1,3 +1,11 @@
+import styled from '@emotion/styled';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { useOnClickOutside } from '../../helpers/useOnClickOutside';
+import { Save } from '../../icons/Save';
+import { Undo } from '../../icons/Undo';
+import { noDrag } from '../../styles/common';
+import { FlexRow } from '../FlexRow';
 import {
   IconD as Icon,
   iconLeft,
@@ -5,13 +13,6 @@ import {
   ValueBox,
   ValueInputCB,
 } from './common';
-import { noDrag } from '../../styles/common';
-import { useOnClickOutside } from '../../helpers/useOnClickOutside';
-import { FlexRow } from '../FlexRow';
-import styled from '@emotion/styled';
-import React, { useState, useEffect, useRef } from 'react';
-import { Save } from '../../icons/Save';
-import { Undo } from '../../icons/Undo';
 
 const Icons = styled(FlexRow)`
   position: absolute;

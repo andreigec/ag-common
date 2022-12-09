@@ -1,6 +1,7 @@
-import { rangePercentage } from '../../../common/helpers/math';
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
+
+import { rangePercentage } from '../../../common/helpers/math';
 
 const Base = styled.div`
   width: calc(100% - 2px - 1rem);

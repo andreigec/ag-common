@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+
 import { arrayToObject } from '../../../common/helpers/array';
 import { ApiResponse } from './types';
 

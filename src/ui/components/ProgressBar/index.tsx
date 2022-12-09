@@ -1,5 +1,6 @@
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
+
 import { colours } from '../../styles';
 
 const Base = styled.div`

@@ -1,8 +1,10 @@
-import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
-import { noDrag } from '../../styles/common';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { Save } from '../../icons/Save';
 import { Undo } from '../../icons/Undo';
+import { noDrag } from '../../styles/common';
+import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
+
 export const ListboxEdit = <T,>({
   defaultValue,
   onSubmit,

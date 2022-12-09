@@ -2,6 +2,7 @@
 // eslint-disable-next-line
 import { notEmpty } from '../../common/helpers/array';
 import { APIGatewayProxyResult, DYNAMOKEYS } from '../types';
+
 export const returnCode = <T>(
   statusCode: number,
   body?: T,

@@ -1,9 +1,10 @@
-import { getRequestOptions } from './req';
 import {
   IFetchLines,
   IOpenApiCodeBlock,
   IOpenApiOperationBlock,
 } from '../../types';
+import { getRequestOptions } from './req';
+
 export const getFetchLines = <TDefaultApi,>(
   ops: IOpenApiOperationBlock,
   p: IOpenApiCodeBlock<TDefaultApi>,

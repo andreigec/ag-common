@@ -1,5 +1,5 @@
-import { plural } from './plural';
 import { addDays, dateDiff } from '../../common/helpers/date';
+import { plural } from './plural';
 
 /**
  * returns appropriate time diff string

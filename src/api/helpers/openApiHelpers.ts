@@ -1,19 +1,20 @@
 /* eslint-disable no-new */
-import { distinctBy, notEmpty } from '../../common/helpers/array';
-import { warn } from '../../common/helpers/log';
-import { ILambdaConfigs } from '../types';
-import { Construct } from 'constructs';
 import {
   aws_apigateway as apigw,
-  aws_logs as logs,
-  aws_lambda as lambda,
   aws_certificatemanager as certmgr,
+  aws_lambda as lambda,
+  aws_lambda_nodejs as nodejs,
+  aws_logs as logs,
   aws_route53 as route53,
   aws_route53_targets as targets,
-  aws_lambda_nodejs as nodejs,
   Duration,
 } from 'aws-cdk-lib';
 import { TokenAuthorizer } from 'aws-cdk-lib/aws-apigateway/lib/authorizers/lambda';
+import { Construct } from 'constructs';
+
+import { distinctBy, notEmpty } from '../../common/helpers/array';
+import { warn } from '../../common/helpers/log';
+import { ILambdaConfigs } from '../types';
 // eslint-disable-next-line
 const getPaths = (schema: any) =>
   Object.entries(

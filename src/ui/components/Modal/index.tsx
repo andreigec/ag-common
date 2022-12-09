@@ -1,3 +1,3 @@
-export * from './types';
-export * from './Modal';
 export * from './Dialog';
+export * from './Modal';
+export * from './types';

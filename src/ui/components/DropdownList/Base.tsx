@@ -1,11 +1,13 @@
-import { IDropdownList } from './types';
+import styled from '@emotion/styled';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { convertRemToPixels } from '../../helpers/dom';
-import { bounce } from '../../styles/common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { colours } from '../../styles/colours';
+import { bounce } from '../../styles/common';
 import { KebabDots } from '../KebabDots';
-import styled from '@emotion/styled';
-import React, { useEffect, useState, useRef } from 'react';
+import { IDropdownList } from './types';
+
 const Base = styled.div`
   display: flex;
   flex-flow: row;

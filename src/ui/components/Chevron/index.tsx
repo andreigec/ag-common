@@ -1,7 +1,8 @@
-import { Icon } from '../Icon';
 import styled from '@emotion/styled';
 import React from 'react';
+
 import { ChevronRight } from '../../icons/ChevronRight';
+import { Icon } from '../Icon';
 
 const Base = styled.span`
   font-size: 2rem;

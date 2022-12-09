@@ -1,6 +1,7 @@
-import { bigScreen, smallScreen } from '../../styles/media';
-import React, { ReactNode } from 'react';
 import styled from '@emotion/styled';
+import React, { ReactNode } from 'react';
+
+import { bigScreen, smallScreen } from '../../styles/media';
 
 const Base = styled.div`
   display: flex;

@@ -1,5 +1,7 @@
-import { notEmpty } from '../../../../common';
 import React from 'react';
+
+import { notEmpty } from '../../../../common';
+
 export const joinJsx = (
   items: (JSX.Element | undefined)[],
   sep: JSX.Element[],

@@ -1,8 +1,9 @@
-import { warn } from '../../../common/helpers/log';
-import { notEmpty } from '../../../common/helpers/array';
-import { User } from '../../helpers/jwt';
-import React, { useState } from 'react';
 import styled from '@emotion/styled';
+import React, { useState } from 'react';
+
+import { notEmpty } from '../../../common/helpers/array';
+import { warn } from '../../../common/helpers/log';
+import { User } from '../../helpers/jwt';
 import { UserOutline } from '../../icons/UserOutline';
 
 const Base = styled.div`

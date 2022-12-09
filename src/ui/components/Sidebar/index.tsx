@@ -1,8 +1,9 @@
+import styled from '@emotion/styled';
+import React from 'react';
+
 import { useCookieBoolean } from '../../helpers/cookie/use';
 import { NoTextSelect } from '../../styles/common';
 import { Chevron } from '../Chevron';
-import styled from '@emotion/styled';
-import React from 'react';
 
 const Base = styled.div`
   position: relative;

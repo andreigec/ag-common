@@ -1,23 +1,25 @@
 /* eslint-disable react/display-name */
-import { iconLeft, iconRight, ValueBox, valueCss } from './common';
-import { IRefTextEdit, ITextEdit } from './types';
-import { TextEditLengthBox } from './LengthBox';
-import { useOnClickOutside } from '../../helpers/useOnClickOutside';
-import { noDrag } from '../../styles/common';
-import { filterDataProps } from '../../helpers/dom';
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
   forwardRef,
+  useCallback,
+  useEffect,
   useImperativeHandle,
+  useRef,
+  useState,
 } from 'react';
+
+import { filterDataProps } from '../../helpers/dom';
+import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { Pencil } from '../../icons/Pencil';
 import { Save } from '../../icons/Save';
 import { Undo } from '../../icons/Undo';
+import { noDrag } from '../../styles/common';
+import { iconLeft, iconRight, ValueBox, valueCss } from './common';
+import { TextEditLengthBox } from './LengthBox';
+import { IRefTextEdit, ITextEdit } from './types';
+
 export const ValueReadonly = styled.div`
   ${valueCss};
   word-break: break-word;

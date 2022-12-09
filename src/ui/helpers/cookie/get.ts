@@ -1,7 +1,7 @@
-import { TParse } from './const';
-import { wipeCookies } from './set';
 import { warn } from '../../../common/helpers/log';
 import { fromBase64 } from '../../../common/helpers/string';
+import { TParse } from './const';
+import { wipeCookies } from './set';
 
 export function getCookieRaw({
   name,

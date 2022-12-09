@@ -1,7 +1,8 @@
-import { Chevron, IChevron } from '../src/ui/components/Chevron';
-import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
+import { Chevron, IChevron } from '../src/ui/components/Chevron';
 
 export default {
   title: 'UI/Chevron',

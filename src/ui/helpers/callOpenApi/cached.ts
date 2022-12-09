@@ -1,10 +1,11 @@
-import { ICallOpenApi, OverrideAuth } from './types';
-import { callOpenApi, getIdTokenAuthHeaderRaw } from './direct';
-import { CacheItems } from '../routes';
+import NodeCache from 'node-cache';
+
+import { hashCode } from '../../../common';
 import { toBase64 } from '../../../common/helpers/string';
 import { AxiosWrapperLite } from '../jwt';
-import { hashCode } from '../../../common';
-import NodeCache from 'node-cache';
+import { CacheItems } from '../routes';
+import { callOpenApi, getIdTokenAuthHeaderRaw } from './direct';
+import { ICallOpenApi, OverrideAuth } from './types';
 
 export type TCallOpenApiCached<T, TDefaultApi> = ICallOpenApi<
   T,

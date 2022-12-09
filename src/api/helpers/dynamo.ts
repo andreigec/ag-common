@@ -2,23 +2,24 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable prefer-const */
-import { DYNAMOKEYS, IQueryDynamo, Key } from '../types';
-import { info, error as errorF, debug, warn } from '../../common/helpers/log';
-import { chunk, notEmpty, take } from '../../common/helpers/array';
-import { sleep } from '../../common/helpers/sleep';
-import { asyncForEach } from '../../common/helpers/async';
 import DynamoDB, {
+  AttributeMap,
+  BatchGetItemInput,
+  Converter,
   DocumentClient,
   PutItemInput,
   QueryInput,
-  Converter,
-  AttributeMap,
-  BatchGetItemInput,
   ScanInput,
   ScanOutput,
 } from 'aws-sdk/clients/dynamodb';
 import { AWSError } from 'aws-sdk/lib/error';
 import { PromiseResult } from 'aws-sdk/lib/request';
+
+import { chunk, notEmpty, take } from '../../common/helpers/array';
+import { asyncForEach } from '../../common/helpers/async';
+import { debug, error as errorF, info, warn } from '../../common/helpers/log';
+import { sleep } from '../../common/helpers/sleep';
+import { DYNAMOKEYS, IQueryDynamo, Key } from '../types';
 // eslint-disable-next-line import/no-mutable-exports
 export let dynamoDb = new DocumentClient();
 export const setDynamo = (region: string) => {

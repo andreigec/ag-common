@@ -1,7 +1,8 @@
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+
+import { retryHttpCodes, retryHttpMs, sleep } from '../../common';
 import { debug } from '../../common/helpers/log';
 import { isJson } from '../../common/helpers/object';
-import { retryHttpCodes, retryHttpMs, sleep } from '../../common';
-import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 
 /**
  *

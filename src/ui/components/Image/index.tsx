@@ -1,5 +1,6 @@
-import React, { ImgHTMLAttributes } from 'react';
 import styled from '@emotion/styled';
+import React, { ImgHTMLAttributes } from 'react';
+
 import { bigScreen, smallScreen } from '../../styles/media';
 
 const Base = styled.img`

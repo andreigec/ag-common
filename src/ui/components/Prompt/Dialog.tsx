@@ -1,6 +1,8 @@
-import { PromptModal } from './Modal';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+
+import { PromptModal } from './Modal';
+
 export interface IPromptDialog {
   topText?: string;
   bottomText: string;

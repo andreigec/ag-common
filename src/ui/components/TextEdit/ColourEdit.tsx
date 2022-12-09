@@ -1,9 +1,11 @@
-import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
-import { noDrag } from '../../styles/common';
-import React, { useState, useEffect, useRef } from 'react';
 import { Save } from '../../icons/Save';
 import { Undo } from '../../icons/Undo';
+import { noDrag } from '../../styles/common';
+import { IconD as Icon, iconLeft, iconRight, ValueBox } from './common';
+
 export const ColourEdit = ({
   defaultValue,
   onSubmit,

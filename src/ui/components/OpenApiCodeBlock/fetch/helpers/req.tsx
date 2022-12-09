@@ -1,14 +1,16 @@
-import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../../types';
+import styled from '@emotion/styled';
+import React from 'react';
+
+import { toTitleCase } from '../../../../../common';
 import {
-  Highlight2,
-  Highlight,
   getBodyJson,
   getSecurity,
+  Highlight,
+  Highlight2,
 } from '../../helpers/common';
 import { joinJsxWithComma } from '../../helpers/joinJsx';
-import { toTitleCase } from '../../../../../common';
-import React from 'react';
-import styled from '@emotion/styled';
+import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../../types';
+
 const rb = <>&#125;</>;
 const lb = <>&#123;</>;
 const Lpad = styled.div`

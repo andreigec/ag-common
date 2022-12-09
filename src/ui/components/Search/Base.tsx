@@ -1,12 +1,13 @@
-import { ISearchDialog, TSearchModalRes } from './types';
-import { CrossIcon } from '../../icons/CrossIcon';
-import { debounce } from '../../helpers';
-import { IRefTextEdit, TextEdit } from '../TextEdit';
-import { bigScreen, smallScreen } from '../../styles';
 import styled from '@emotion/styled';
 import React, { createRef, useState } from 'react';
-import { Magnify } from '../../icons/Magnify';
+
 import { take } from '../../../common';
+import { debounce } from '../../helpers';
+import { CrossIcon } from '../../icons/CrossIcon';
+import { Magnify } from '../../icons/Magnify';
+import { bigScreen, smallScreen } from '../../styles';
+import { IRefTextEdit, TextEdit } from '../TextEdit';
+import { ISearchDialog, TSearchModalRes } from './types';
 
 const Base = styled.div`
   display: flex;

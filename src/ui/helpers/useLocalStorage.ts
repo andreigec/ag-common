@@ -1,7 +1,8 @@
+import { useState } from 'react';
+
+import { getTimeSeconds } from '../../common/helpers/date';
 import { error, warn } from '../../common/helpers/log';
 import { tryJsonParse } from '../../common/helpers/object';
-import { useState } from 'react';
-import { getTimeSeconds } from '../../common/helpers/date';
 
 interface ILS {
   expiry?: number;

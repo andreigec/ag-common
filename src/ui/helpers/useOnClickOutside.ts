@@ -1,5 +1,6 @@
+import { RefObject, useEffect } from 'react';
+
 import { isRightClick } from './dom';
-import { useEffect, RefObject } from 'react';
 
 type Event = MouseEvent | TouchEvent;
 export function useOnClickOutside<T extends HTMLElement = HTMLElement>(

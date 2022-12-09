@@ -1,3 +1,5 @@
+import styled from '@emotion/styled';
+
 import { indexOfNumber } from '../../../../common';
 import {
   IOpenApi,
@@ -5,7 +7,7 @@ import {
   IOpenApiOperation,
   IOpenApiOperationBlock,
 } from '../types';
-import styled from '@emotion/styled';
+
 export const Highlight = styled.span`
   color: green;
 `;

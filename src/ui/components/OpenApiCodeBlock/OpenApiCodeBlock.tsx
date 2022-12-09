@@ -1,10 +1,12 @@
-import { IOpenApiCodeBlock } from './types';
-import { getOperation } from './helpers/common';
+import styled from '@emotion/styled';
+import React from 'react';
+
+import { FlexRow } from '../FlexRow';
 import { Curl } from './curl';
 import { Fetch } from './fetch';
-import { FlexRow } from '../FlexRow';
-import React from 'react';
-import styled from '@emotion/styled';
+import { getOperation } from './helpers/common';
+import { IOpenApiCodeBlock } from './types';
+
 const Base = styled.div`
   display: flex;
   flex-flow: column;

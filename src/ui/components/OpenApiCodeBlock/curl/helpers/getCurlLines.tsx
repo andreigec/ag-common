@@ -1,10 +1,11 @@
-import { getBody } from './body';
-import { getSecurityLine } from './security';
 import {
   ICurlLines,
   IOpenApiCodeBlock,
   IOpenApiOperationBlock,
 } from '../../types';
+import { getBody } from './body';
+import { getSecurityLine } from './security';
+
 export const getCurlLines = <TDefaultApi,>(
   ops: IOpenApiOperationBlock,
   p: IOpenApiCodeBlock<TDefaultApi>,

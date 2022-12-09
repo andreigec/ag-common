@@ -1,4 +1,5 @@
 import STS from 'aws-sdk/clients/sts';
+
 import { info } from '../../common/helpers/log';
 
 /**

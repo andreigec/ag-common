@@ -1,9 +1,10 @@
+import { parse } from 'url';
+
+import { getValidatedLang, TLang } from '../../common/helpers/i18n';
+import { castStringlyObject } from '../../common/helpers/object';
+import { stringToObject } from '../../common/helpers/string';
 import { ICognitoAuth } from './cognito';
 import { AxiosWrapperLite } from './jwt';
-import { getValidatedLang, TLang } from '../../common/helpers/i18n';
-import { stringToObject } from '../../common/helpers/string';
-import { castStringlyObject } from '../../common/helpers/object';
-import { parse } from 'url';
 
 export type TProtocol = 'http:' | 'https:';
 export interface LocationSubset {

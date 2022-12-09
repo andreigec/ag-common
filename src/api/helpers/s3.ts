@@ -1,9 +1,10 @@
-import { Blob } from 'aws-sdk/lib/dynamodb/document_client';
 import S3 from 'aws-sdk/clients/s3';
-import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk/lib/core';
-import { debug, error, info } from '../../common/helpers/log';
+import { Blob } from 'aws-sdk/lib/dynamodb/document_client';
+import { PromiseResult } from 'aws-sdk/lib/request';
+
 import { distinct, take } from '../../common/helpers/array';
+import { debug, error, info } from '../../common/helpers/log';
 
 let s3 = new S3();
 export const setS3 = (region: string) => {

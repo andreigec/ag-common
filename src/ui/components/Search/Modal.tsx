@@ -1,9 +1,10 @@
-import { ISearchModal, TSearchModalRes } from './types';
-import { SearchBase } from './Base';
-import { bigScreen, smallScreen } from '../../styles';
-import { Modal } from '../Modal/Modal';
 import styled from '@emotion/styled';
 import React from 'react';
+
+import { bigScreen, smallScreen } from '../../styles';
+import { Modal } from '../Modal/Modal';
+import { SearchBase } from './Base';
+import { ISearchModal, TSearchModalRes } from './types';
 
 const ModalStyled = styled(Modal)`
   display: flex;

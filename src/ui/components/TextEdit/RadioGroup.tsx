@@ -1,8 +1,10 @@
-import { ValueBox } from './common';
-import { FlexColumn } from '../FlexColumn';
-import { noDrag } from '../../styles/common';
-import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
+import React, { useEffect, useState } from 'react';
+
+import { noDrag } from '../../styles/common';
+import { FlexColumn } from '../FlexColumn';
+import { ValueBox } from './common';
+
 const Label = styled.label``;
 
 export const RadioGroup = <T,>({

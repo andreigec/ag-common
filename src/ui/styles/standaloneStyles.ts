@@ -1,6 +1,7 @@
+import styled from '@emotion/styled';
+
 import { FullScreenPage } from './common';
 import { smallScreen } from './media';
-import styled from '@emotion/styled';
 
 export const SOBase = styled(FullScreenPage)`
   > h1,

@@ -1,11 +1,12 @@
+import styled from '@emotion/styled';
+import React, { useState } from 'react';
+import { Root } from 'react-dom/client';
+
 import { Button } from '../Button';
 import { FlexColumn } from '../FlexColumn';
 import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal/Modal';
 import { TextEdit } from '../TextEdit';
-import styled from '@emotion/styled';
-import React, { useState } from 'react';
-import { Root } from 'react-dom/client';
 
 const Base = styled.div`
   width: 95vw;

@@ -1,6 +1,7 @@
-import { IFlexRow } from '../RowOrColumn';
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
+
+import { IFlexRow } from '../RowOrColumn';
 
 const Base = styled.div`
   position: relative;

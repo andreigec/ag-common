@@ -1,6 +1,8 @@
-import { objectToString, paramsToObject } from '../../common/helpers/object';
-import { info } from '../../common';
 import { useEffect, useState } from 'react';
+
+import { info } from '../../common';
+import { objectToString, paramsToObject } from '../../common/helpers/object';
+
 export const isServer = typeof window === 'undefined';
 
 /**
