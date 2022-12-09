@@ -2,7 +2,7 @@ import { ISearchDialog, TSearchModalRes } from './types';
 import { SearchModal } from './Modal';
 import { error } from '../../../common';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 /**
  * opens a searchmodal programatically, and resolves to either undefined, or the selected item
  * @param p
@@ -32,7 +32,8 @@ export const SearchDialog = async <T,>(
       document.body.style.overflow = 'hidden';
     }
 
-    ReactDOM.render(
+    const root = createRoot(wrapper);
+    root.render(
       <SearchModal
         {...p}
         placeholderText={placeholderText}
@@ -41,12 +42,11 @@ export const SearchDialog = async <T,>(
             document.body.style.overflow = originalStyle || '';
             res(f);
           } finally {
-            ReactDOM.unmountComponentAtNode(wrapper);
+            root.unmount();
             wrapper.remove();
           }
         }}
       />,
-      wrapper,
     );
   });
 };

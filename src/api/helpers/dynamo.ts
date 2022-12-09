@@ -11,13 +11,18 @@ import DynamoDB, {
   DocumentClient,
   PutItemInput,
   QueryInput,
+  Converter,
+  AttributeMap,
+  BatchGetItemInput,
+  ScanInput,
+  ScanOutput,
 } from 'aws-sdk/clients/dynamodb';
 import { AWSError } from 'aws-sdk/lib/error';
 import { PromiseResult } from 'aws-sdk/lib/request';
 // eslint-disable-next-line import/no-mutable-exports
-export let dynamoDb = new DynamoDB.DocumentClient();
+export let dynamoDb = new DocumentClient();
 export const setDynamo = (region: string) => {
-  dynamoDb = new DynamoDB.DocumentClient({ region });
+  dynamoDb = new DocumentClient({ region });
 };
 
 export const putDynamo = async <T>(
@@ -191,7 +196,7 @@ export const scan = async <T>(
   const Items: T[] = [];
   let ExclusiveStartKey: Key | undefined;
   do {
-    let params: DynamoDB.DocumentClient.ScanInput = {
+    let params: DocumentClient.ScanInput = {
       TableName: tableName,
       ExclusiveStartKey,
     };
@@ -265,7 +270,7 @@ export const getItemsDynamo = async <T>({
   }[];
   tableName: string;
 }): Promise<T[]> => {
-  const params: DynamoDB.BatchGetItemInput = {
+  const params: BatchGetItemInput = {
     RequestItems: {
       [tableName]: {
         Keys: items.map(({ pkName, pkValue }) => ({
@@ -281,9 +286,8 @@ export const getItemsDynamo = async <T>({
     const res = await dbRaw.batchGetItem(params).promise();
     debug(`got dynamo getitems=${JSON.stringify(res, null, 2)}`);
     let ret =
-      res.Responses?.[tableName]?.map(
-        (s) => DynamoDB.Converter.unmarshall(s) as T,
-      ) || [];
+      res.Responses?.[tableName]?.map((s) => Converter.unmarshall(s) as T) ||
+      [];
 
     return ret;
   } catch (e) {
@@ -444,13 +448,13 @@ export const wipeTable = async (
     (k) => k.KeyType === 'HASH',
   ).AttributeName;
 
-  const params: DynamoDB.ScanInput = {
+  const params: ScanInput = {
     TableName: tableName,
     ExclusiveStartKey: undefined,
   };
 
-  let all: DynamoDB.AttributeMap[] = [];
-  let working: PromiseResult<DynamoDB.ScanOutput, AWSError>;
+  let all: AttributeMap[] = [];
+  let working: PromiseResult<ScanOutput, AWSError>;
   do {
     working = await dbRaw.scan(params).promise();
     working.Items?.forEach((item) => all.push(item));

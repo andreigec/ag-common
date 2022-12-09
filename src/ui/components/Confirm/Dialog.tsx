@@ -1,9 +1,8 @@
 import { ConfirmModal } from './Modal';
 import { error } from '../../../common/helpers/log';
-import ReactDOM from 'react-dom';
 import React from 'react';
 import { IConfirmDialog } from './types';
-
+import { createRoot } from 'react-dom/client';
 /**
  * opens a dialog programatically
  * @param param0
@@ -23,22 +22,22 @@ export const ConfirmDialog = async ({
 
     const wrapper = document.body.appendChild(document.createElement('div'));
     wrapper.id = idName;
+    const root = createRoot(wrapper);
     const onSubmit = (v: boolean) => {
       try {
         res(v);
       } finally {
-        ReactDOM.unmountComponentAtNode(wrapper);
+        root.unmount();
         wrapper.remove();
       }
     };
 
-    ReactDOM.render(
+    root.render(
       <ConfirmModal
         bottomText={bottomText}
         topText={topText}
         onSubmit={onSubmit}
       />,
-      wrapper,
     );
   });
 };

@@ -1,7 +1,7 @@
 import { DropdownList } from './index';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { IDropdownList } from './types';
+import { createRoot } from 'react-dom/client';
 
 export const DropdownListDialog = async <T,>(
   p: { position: { x: number; y: number } } & Omit<
@@ -21,19 +21,19 @@ export const DropdownListDialog = async <T,>(
     wrapper.style.position = 'absolute';
     wrapper.style.top = `${p.position.y}px`;
     wrapper.style.left = `${p.position.x}px`;
-    ReactDOM.render(
+    const root = createRoot(wrapper);
+    root.render(
       <DropdownList
         {...p}
         open
         onChange={(v, i) => {
-          ReactDOM.unmountComponentAtNode(wrapper);
+          root.unmount();
           wrapper.remove();
           res(!v ? undefined : [v, i]);
         }}
       >
         &nbsp;
       </DropdownList>,
-      wrapper,
     );
   });
 };

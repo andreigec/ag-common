@@ -4,8 +4,8 @@ import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal/Modal';
 import { TextEdit } from '../TextEdit';
 import styled from 'styled-components';
-import ReactDOM from 'react-dom';
 import React, { useState } from 'react';
+import { Root } from 'react-dom/client';
 
 const Base = styled.div`
   width: 95vw;
@@ -43,6 +43,7 @@ export interface IPromptModal {
   defaultValue?: string;
   placeholder?: string;
   res: (v: string | undefined) => void;
+  root?: Root;
   wrapper?: HTMLDivElement;
   topText?: string;
   bottomText: string;
@@ -52,6 +53,7 @@ export interface IPromptModal {
   cancelText?: string;
 }
 export const PromptModal = ({
+  root,
   wrapper,
   res,
   bottomText,
@@ -66,10 +68,8 @@ export const PromptModal = ({
     try {
       res(v);
     } finally {
-      if (wrapper) {
-        ReactDOM.unmountComponentAtNode(wrapper);
-        wrapper.remove();
-      }
+      root?.unmount();
+      wrapper?.remove();
     }
   };
 
