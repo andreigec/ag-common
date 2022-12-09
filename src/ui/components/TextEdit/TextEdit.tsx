@@ -141,10 +141,6 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
   );
 
   useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
-
-  useEffect(() => {
     if (defaultEditing?.focus && taref.current) {
       taref.current.focus();
     }
