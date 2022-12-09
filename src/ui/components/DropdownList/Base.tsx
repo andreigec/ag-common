@@ -4,7 +4,7 @@ import { bounce } from '../../styles/common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { colours } from '../../styles/colours';
 import { KebabDots } from '../KebabDots';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import React, { useEffect, useState, useRef } from 'react';
 const Base = styled.div`
   display: flex;

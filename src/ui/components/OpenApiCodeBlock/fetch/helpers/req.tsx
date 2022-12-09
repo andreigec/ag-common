@@ -8,7 +8,7 @@ import {
 import { joinJsxWithComma } from '../../helpers/joinJsx';
 import { toTitleCase } from '../../../../../common';
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 const rb = <>&#125;</>;
 const lb = <>&#123;</>;
 const Lpad = styled.div`

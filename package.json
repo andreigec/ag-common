@@ -30,7 +30,8 @@
     "eslint-import-resolver-typescript": "3.x"
   },
   "peerDependencies": {
-    "styled-components": ">=5"
+    "@emotion/react": ">11",
+    "@emotion/styled": ">11"
   },
   "devDependencies": {
     "@babel/core": "7.20.5",
@@ -46,11 +47,11 @@
     "@types/node": "18.11.11",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.9",
-    "@types/styled-components": "5.1.26",
+    "@emotion/react": "11.10.5",
+    "@emotion/styled": "11.10.5",
     "cross-env": "7.0.3",
     "eslint-config-e7npm": "0.0.6",
-    "rimraf": "3.0.2",
-    "styled-components": "5.3.6"
+    "rimraf": "3.0.2"
   },
   "files": [
     "dist/**/*",

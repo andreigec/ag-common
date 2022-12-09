@@ -1,6 +1,6 @@
 import { colours } from './colours';
-import styled, { css } from 'styled-components';
-
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 export const HardOutline = css`
   filter: drop-shadow(1px 1px 0px var(--outlinecolour))
     drop-shadow(-1px 1px 0px var(--outlinecolour))

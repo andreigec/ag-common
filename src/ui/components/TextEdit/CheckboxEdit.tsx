@@ -8,7 +8,7 @@ import {
 import { noDrag } from '../../styles/common';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { FlexRow } from '../FlexRow';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import React, { useState, useEffect, useRef } from 'react';
 import { Save } from '../../icons/Save';
 import { Undo } from '../../icons/Undo';

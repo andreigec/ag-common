@@ -5,7 +5,8 @@ import { TextEditLengthBox } from './LengthBox';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { noDrag } from '../../styles/common';
 import { filterDataProps } from '../../helpers/dom';
-import styled, { css, StyledComponent } from 'styled-components';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 import React, {
   useState,
   useEffect,
@@ -95,7 +96,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
   } = p;
 
   const divRef = useRef<HTMLDivElement>(null);
-  const taref = useRef<HTMLTextAreaElement>(null);
+  const taref = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
   const [value, setValue] = useState(defaultValue);
   const [editing, setEditingRaw] = useState(!!defaultEditing);
   const valueChange = value !== defaultValue;
@@ -182,10 +183,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const Comp: StyledComponent<'textarea', any> = singleLine
-    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (ValueTextBox as any)
-    : ValueTextArea;
+  const Comp = !singleLine ? ValueTextArea : ValueTextBox;
 
   return (
     <ValueBoxEdit
@@ -203,7 +201,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
         tabIndex={editing ? 0 : undefined}
         data-editing="true"
         data-valuechange={valueChange.toString()}
-        ref={taref}
+        ref={taref as any}
         data-type="text"
         value={value}
         onChange={(v) => {
@@ -215,7 +213,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
         placeholder={placeholder}
         rows={singleLine ? 1 : undefined}
         maxLength={maxLength}
-        onKeyDown={(e) => {
+        onKeyDown={(e: any) => {
           if (onKeyDown?.(e) === false) {
             e.preventDefault();
             return;

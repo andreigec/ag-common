@@ -3,7 +3,7 @@ import { Close } from '../Close';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { bounce } from '../../styles';
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 const FixedBackground = styled.div`
   position: fixed;
   top: 0;

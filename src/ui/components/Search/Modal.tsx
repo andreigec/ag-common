@@ -2,7 +2,7 @@ import { ISearchModal, TSearchModalRes } from './types';
 import { SearchBase } from './Base';
 import { bigScreen, smallScreen } from '../../styles';
 import { Modal } from '../Modal/Modal';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import React from 'react';
 
 const ModalStyled = styled(Modal)`

@@ -3,7 +3,7 @@ import { FlexColumn } from '../FlexColumn';
 import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal/Modal';
 import { TextEdit } from '../TextEdit';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import { Root } from 'react-dom/client';
 

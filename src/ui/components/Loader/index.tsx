@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react';
 
 const Base = styled.div`

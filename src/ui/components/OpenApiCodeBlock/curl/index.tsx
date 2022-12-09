@@ -4,7 +4,7 @@ import { Highlight } from '../helpers/common';
 import { notEmpty } from '../../../../common';
 import { joinJsxWithSlash } from '../helpers/joinJsx';
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const Base = styled.div`
   white-space: pre;

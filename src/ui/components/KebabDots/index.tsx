@@ -1,6 +1,6 @@
 import { Icon } from '../Icon';
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { HorizontalDots } from '../../icons/HorizontalDots';
 const IconStyled = styled(Icon)`
   position: absolute;

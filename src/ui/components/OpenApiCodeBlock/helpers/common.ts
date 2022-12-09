@@ -5,7 +5,7 @@ import {
   IOpenApiOperation,
   IOpenApiOperationBlock,
 } from '../types';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 export const Highlight = styled.span`
   color: green;
 `;

@@ -2,7 +2,7 @@ import { Button } from '../Button';
 import { FlexColumn } from '../FlexColumn';
 import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal/Modal';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import React from 'react';
 import { IConfirmModal } from './types';
 

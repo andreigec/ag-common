@@ -1,7 +1,7 @@
 import { HardOutline } from '../../styles/common';
 import { removeUndefValuesFromObject } from '../../../common/helpers/object';
 import React, { ReactNode } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 export interface IIcon {
   disabled?: boolean;

@@ -2,7 +2,7 @@ import { ValueBox } from './common';
 import { FlexColumn } from '../FlexColumn';
 import { noDrag } from '../../styles/common';
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 const Label = styled.label``;
 
 export const RadioGroup = <T,>({

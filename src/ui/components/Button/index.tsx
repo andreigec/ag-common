@@ -1,8 +1,8 @@
 /* eslint-disable react/destructuring-assignment */
 import { colours } from '../../styles/colours';
 import React, { KeyboardEventHandler, MouseEventHandler } from 'react';
-import styled, { css, StyledComponent } from 'styled-components';
-
+import styled, { StyledComponent } from '@emotion/styled';
+import { css } from '@emotion/react';
 export const ButtonBase = css`
   text-decoration: none;
   display: flex;
