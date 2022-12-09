@@ -1,4 +1,5 @@
 export interface ISearchDialog<T> {
+  defaultValue?: string;
   placeholderText?: string;
   /**
    * method run to render each filtered item

@@ -84,11 +84,12 @@ export const SearchBase = <T,>({
   className,
   texts,
   maxDisplayItems = 20,
+  defaultValue,
 }: ISearchDialog<T> & {
   onSearchTextChange?: (v: string) => void;
   onSelectItem?: (v: TSearchModalRes<T>) => void;
 }) => {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState(defaultValue ?? '');
   const resWrap = (foundItem: T | undefined) => {
     if (!foundItem) {
       onSelectItem?.(undefined);
@@ -131,12 +132,14 @@ export const SearchBase = <T,>({
               { key: 'pagesearch', time: 200 },
             )
           }
+          defaultValue={defaultValue}
         />
         {searchText && (
           <CrossIconStyled
             onClick={() => {
               textEditRef.current?.setValue('');
               setSearchText('');
+              onSearchTextChange?.('');
             }}
           />
         )}
