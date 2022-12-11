@@ -1,8 +1,9 @@
 /* eslint-disable no-alert */
-import { PromptModal } from '../../src/ui/components/Prompt/Modal';
-import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
+import { PromptModal } from '../../src/ui/components/Prompt/Modal';
 
 export default {
   title: 'UI/Prompt',

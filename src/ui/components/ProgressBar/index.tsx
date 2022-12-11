@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { colours } from '../../styles';
 
@@ -17,7 +17,6 @@ const Bar = styled.div`
   top: 0;
   bottom: 0;
   left: 0;
-  transition: width 0.2s ease;
 `;
 
 const Dot = styled.div`
@@ -42,36 +41,56 @@ export interface IProgressBar {
   backColour?: string;
   /** default 25,50,75 */
   dotPercentages?: number[] | null;
+  className?: string;
+  /** if true, will transition to the end in X ms */
+  transitionToMs?: number;
 }
+
 export const ProgressBar = (p: IProgressBar) => {
   const {
-    min,
-    max,
+    transitionToMs = 200,
     frontColour = colours.notificationBlue,
     backColour = '#eee',
     dotPercentages = [25, 50, 75],
   } = p;
 
-  const barWidth = (min / max) * 100;
+  const [barWidth, setBarWidth] = useState((p.min / p.max) * 100);
+  useEffect(() => {
+    const newbw = (p.min / p.max) * 100;
+    if (barWidth !== newbw) {
+      setBarWidth(newbw);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [p.min, p.max]);
+
+  useEffect(() => {
+    if (transitionToMs) {
+      setBarWidth(p.max);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <Base style={{ backgroundColor: backColour }}>
+    <Base
+      style={{
+        backgroundColor: backColour,
+      }}
+      className={p.className}
+    >
       <Bar
         style={{
           width: `${barWidth}%`,
           backgroundColor: frontColour,
+          transition: `width ${transitionToMs}ms linear`,
         }}
       />
-      {dotPercentages?.map &&
-        dotPercentages.map((v) => {
-          return (
-            <Dot
-              key={v}
-              style={{ left: `calc(${v}% - 0.25rem)` }}
-              data-invert={v > barWidth}
-            />
-          );
-        })}
+      {dotPercentages?.map((v) => (
+        <Dot
+          key={v}
+          style={{ left: `calc(${v}% - 0.25rem)` }}
+          data-invert={v > barWidth}
+        />
+      ))}
     </Base>
   );
 };

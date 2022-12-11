@@ -1,7 +1,8 @@
-import { FlexRow } from '../src/ui/components/FlexRow';
-import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
+import { FlexRow } from '../src/ui/components/FlexRow';
 
 export default {
   title: 'UI/FlexRow',

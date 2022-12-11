@@ -1,11 +1,13 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
 import { OpenApiCodeBlock } from '../../src/ui/components/OpenApiCodeBlock/OpenApiCodeBlock';
 import {
   IOpenApi,
   IOpenApiCodeBlock,
 } from '../../src/ui/components/OpenApiCodeBlock/types';
-import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+
 export default {
   title: 'UI/OpenApiCodeBlock',
   component: OpenApiCodeBlock,

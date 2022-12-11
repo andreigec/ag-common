@@ -1,6 +1,7 @@
-import { TextWithButton } from '../src/ui/components/TextWithButton';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import { TextWithButton } from '../src/ui/components/TextWithButton';
 
 export default {
   title: 'UI/TextWithButton',

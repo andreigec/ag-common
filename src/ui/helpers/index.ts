@@ -20,3 +20,4 @@ export * from './useOnScroll';
 export * from './useOverloadPageSearch';
 export * from './useQueryString';
 export * from './useResize';
+export * from './useTimeout';

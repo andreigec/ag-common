@@ -1,7 +1,8 @@
-import { Button } from '../src/ui/components/Button';
-import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
+import { Button } from '../src/ui/components/Button';
 
 export default {
   title: 'UI/Button',

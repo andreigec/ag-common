@@ -1,8 +1,9 @@
 /* eslint-disable no-alert */
-import { TextEdit } from '../../src/ui/components/TextEdit';
-import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
+import { TextEdit } from '../../src/ui/components/TextEdit';
 
 export default {
   title: 'UI/TextEdit',

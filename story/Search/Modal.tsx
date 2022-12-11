@@ -1,8 +1,9 @@
-import { searchLongList } from './common';
-import { SearchModal } from '../../src/ui/components/Search/Modal';
-import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
+import { SearchModal } from '../../src/ui/components/Search/Modal';
+import { searchLongList } from './common';
 
 export default {
   title: 'UI/Search',

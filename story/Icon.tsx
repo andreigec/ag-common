@@ -1,7 +1,8 @@
-import { Icon } from '../src/ui/components/Icon';
-import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
+import { Icon } from '../src/ui/components/Icon';
 
 const TestSvg = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 118">

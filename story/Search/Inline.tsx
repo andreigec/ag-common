@@ -1,8 +1,10 @@
-import { searchLongList } from './common';
-import { SearchInline } from '../../src/ui/components/Search/Inline';
-import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
+import { SearchInline } from '../../src/ui/components/Search/Inline';
+import { searchLongList } from './common';
+
 export default {
   title: 'UI/Search',
   component: SearchInline,

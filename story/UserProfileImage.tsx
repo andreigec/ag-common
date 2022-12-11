@@ -1,12 +1,13 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
+
 import {
   IUserImage,
   IUserProfileImage,
   UserImage,
   UserProfileImage,
 } from '../src/ui/components/UserImage';
-import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 export default {
   title: 'UI/UserProfileImage',
