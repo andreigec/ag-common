@@ -159,19 +159,16 @@ export const ToastProvider = ({
   return (
     <ToastContext.Provider value={contextValue}>
       {children}
-      {createPortal(
-        <ToastContainerStyle>
-          {toasts.map((toast) => (
-            <Toast
-              key={toast.id}
-              toast={toast}
-              close={close}
-              providerOptions={providerOptions || {}}
-            />
-          ))}
-        </ToastContainerStyle>,
-        document.body,
-      )}
+      <ToastContainerStyle>
+        {toasts.map((toast) => (
+          <Toast
+            key={toast.id}
+            toast={toast}
+            close={close}
+            providerOptions={providerOptions || {}}
+          />
+        ))}
+      </ToastContainerStyle>
     </ToastContext.Provider>
   );
 };
