@@ -2,16 +2,15 @@ import { useEffect, useRef } from 'react';
 
 export function useTimeout(
   callback: () => void | Promise<void>,
+  /** if null wont trigger */
   delay: number | null,
 ) {
   const savedCallback = useRef(callback);
 
-  // Remember the latest callback.
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
-  // Set up the timeout loop.
   useEffect(() => {
     let id: NodeJS.Timeout;
     function tick() {
