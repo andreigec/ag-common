@@ -36,21 +36,22 @@ const CrossIconStyled = styled(CrossIcon)`
     right: 2rem;
   }
 `;
-
-export const SearchBox = (p: {
+export interface ISearchBox {
   placeholderText?: string;
   onClear?: () => void;
   searchText: string;
   setSearchText: (s: string) => void;
   onSearchTextChange?: (v: string) => void;
   defaultValue?: string;
-}) => {
+  className?: string;
+}
+export const SearchBox = (p: ISearchBox) => {
   const textEditRef = createRef<IRefTextEdit>();
   useEffect(() => {
     textEditRef.current?.setValue(p.searchText);
   }, [p.searchText, textEditRef]);
   return (
-    <Base data-type="search">
+    <Base data-type="search" className={p.className}>
       <TextEdit
         ref={textEditRef}
         placeholder={p.placeholderText}
@@ -63,7 +64,6 @@ export const SearchBox = (p: {
         }
         noGrow
         allowUndo={false}
-        onEscape={() => p.onClear?.()}
         onClickOutsideWithNoValue={null}
         onSubmit={(v) =>
           debounce(

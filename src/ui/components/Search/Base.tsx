@@ -67,12 +67,7 @@ export const SearchBase = <T,>(p: ISearchBase<T>) => {
 
   return (
     <Base className={p.className}>
-      <SearchBox
-        {...p}
-        searchText={searchText}
-        setSearchText={setSearchText}
-        onClear={() => resWrap(undefined)}
-      />
+      <SearchBox {...p} searchText={searchText} setSearchText={setSearchText} />
       <Content data-hasitems={!!filteredItems.length} data-type="content">
         {filteredItems.map((item, index) => (
           <Row key={p.getKeyF(item)} onClick={() => resWrap(item)}>

@@ -55,10 +55,7 @@ export interface ITextEdit {
    * if true, will add undo button after changes. if false, will submit after every keypress. default true
    */
   allowUndo?: boolean;
-  /**
-   * will call on user pressed escape
-   */
-  onEscape?: () => void;
+
   maxLength?: number;
   /**
    * if provided and return false, will cancel keydown

@@ -92,7 +92,6 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
     onClickOutsideWithNoValue,
     onClickNotEditing,
     allowUndo = true,
-    onEscape,
     maxLength,
     onKeyDown,
   } = p;
@@ -226,10 +225,6 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
 
           if (singleLine && e.code.endsWith('Enter')) {
             onSubmit(value, true);
-          }
-
-          if (onEscape && e.code.endsWith('Escape')) {
-            onEscape();
           }
         }}
       />
