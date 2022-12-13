@@ -63,7 +63,7 @@ export interface IButton {
   disabled?: boolean;
   className?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  onKeyPress?: KeyboardEventHandler<HTMLButtonElement>;
+  onKeyDown?: KeyboardEventHandler<HTMLButtonElement>;
   children: string | JSX.Element;
   href?: string;
   colourTheme?: 'green' | 'red';

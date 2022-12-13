@@ -61,7 +61,7 @@ export const Chevron = ({
       className={className}
       onClick={() => onToggle?.()}
       onTouchStart={() => onToggle?.()}
-      onKeyPress={(e) => e.key === 'Enter' && onToggle?.()}
+      onKeyDown={(e) => e.key === 'Enter' && onToggle?.()}
     >
       <IconStyled rotate={rotate} fill={colour} width={width} height={width}>
         {ChevronRight}

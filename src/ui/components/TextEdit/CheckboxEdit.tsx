@@ -59,7 +59,7 @@ export const CheckboxEdit = ({
             onSubmit(!value);
           }
         }}
-        onKeyPress={(e) =>
+        onKeyDown={(e) =>
           e.key === 'Enter' && value !== defaultValue && onSubmit(value)
         }
       />

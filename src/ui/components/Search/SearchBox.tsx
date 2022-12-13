@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { createRef, useEffect, useImperativeHandle } from 'react';
+import React, { createRef, useEffect } from 'react';
 
 import { debounce, filterDataProps } from '../../helpers';
 import { CrossIcon, Magnify } from '../../icons';
@@ -58,7 +58,11 @@ export const SearchBox = (p: ISearchBox) => {
         defaultEditing={{ focus: true }}
         singleLine
         leftContent={
-          <Icon>
+          <Icon
+            onClick={() =>
+              p.setSearchText(textEditRef.current?.getValue() || '', true)
+            }
+          >
             <Magnify />
           </Icon>
         }
@@ -79,7 +83,7 @@ export const SearchBox = (p: ISearchBox) => {
         <CrossIconStyled
           onClick={() => {
             textEditRef.current?.setValue('');
-            p.setSearchText('', false);
+            p.setSearchText('', true);
           }}
         />
       )}

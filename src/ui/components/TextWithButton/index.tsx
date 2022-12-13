@@ -66,7 +66,7 @@ export const TextWithButton = ({
         placeholder={placeholder}
         value={value}
         onChange={(s) => setValue(s.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && valid && onSubmit(value)}
+        onKeyDown={(e) => e.key === 'Enter' && valid && onSubmit(value)}
       />
       <Button
         data-type="button"

@@ -17,6 +17,7 @@ export const SearchBoxB = Template.bind({}) as ComponentStory<typeof SearchBox>;
 
 const args: ISearchBox = {
   searchText: '',
-  setSearchText: (st) => console.log('st=', st),
+  // eslint-disable-next-line no-alert
+  setSearchText: (st, enter) => alert(`st=${st} enter=${enter}`),
 };
 SearchBoxB.args = args;
