@@ -14,7 +14,7 @@ const LoadMore = styled.div`
   cursor: pointer;
   text-decoration: underline;
 `;
-export interface IInfiniteScrollList {
+export interface IInfiniteScroll {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any[];
   className?: string;
@@ -22,9 +22,11 @@ export interface IInfiniteScrollList {
   onScroll?: (e: { scrollTop: number; isDown: boolean }) => void;
   /** how many to initially show, and to add per scroll. default 10 */
   incrementNumber?: number;
+  /** if true, can only scroll by button press. default false */
+  scrollDisabled?: boolean;
 }
-export const InfiniteScrollList = (p: IInfiniteScrollList) => {
-  const { incrementNumber = 10 } = p;
+export const InfiniteScroll = (p: IInfiniteScroll) => {
+  const { incrementNumber = 10, scrollDisabled = false } = p;
   const ref = createRef<HTMLDivElement>();
   const [startIndex] = useState(p.startIndex ?? 0);
   const [endIndex, setEndIndex] = useState<number>(
@@ -53,6 +55,9 @@ export const InfiniteScrollList = (p: IInfiniteScrollList) => {
       ref={ref}
       className={p.className}
       onScroll={(e) => {
+        if (scrollDisabled) {
+          return;
+        }
         const { scrollTop } = e.currentTarget;
         handleScrollTop(e);
         //
