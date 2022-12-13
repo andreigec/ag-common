@@ -1,5 +1,10 @@
 import styled from '@emotion/styled';
-import React, { createRef, useEffect } from 'react';
+import React, {
+  createRef,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+} from 'react';
 
 import { debounce, filterDataProps } from '../../helpers';
 import { CrossIcon, Magnify } from '../../icons';
@@ -24,10 +29,11 @@ const Base = styled.div`
   }
 `;
 
-const Icon = styled.div`
+const MagnifyIcon = styled.div`
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.5rem;
+  cursor: pointer;
 `;
 
 const CrossIconStyled = styled(CrossIcon)`
@@ -44,10 +50,21 @@ export interface ISearchBox {
   defaultValue?: string;
   className?: string;
 }
-export const SearchBox = (p: ISearchBox) => {
+export const SearchBox = forwardRef<IRefTextEdit, ISearchBox>((p, ref) => {
   const textEditRef = createRef<IRefTextEdit>();
+  useImperativeHandle(ref, () => ({
+    setValue: (v) => {
+      const value = textEditRef.current?.getValue();
+      if (v === value) {
+        return;
+      }
+      textEditRef.current?.setValue(v);
+    },
+    focus: () => textEditRef.current?.focus(),
+    getValue: () => textEditRef.current?.getValue(),
+  }));
   useEffect(() => {
-    textEditRef.current?.setValue(p.searchText);
+    textEditRef?.current?.setValue(p.searchText);
   }, [p.searchText, textEditRef]);
 
   return (
@@ -58,13 +75,13 @@ export const SearchBox = (p: ISearchBox) => {
         defaultEditing={{ focus: true }}
         singleLine
         leftContent={
-          <Icon
+          <MagnifyIcon
             onClick={() =>
-              p.setSearchText(textEditRef.current?.getValue() || '', true)
+              p.setSearchText(textEditRef?.current?.getValue() || '', true)
             }
           >
             <Magnify />
-          </Icon>
+          </MagnifyIcon>
         }
         noGrow
         allowUndo={false}
@@ -89,4 +106,4 @@ export const SearchBox = (p: ISearchBox) => {
       )}
     </Base>
   );
-};
+});

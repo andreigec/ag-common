@@ -98,9 +98,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
       }
       setValue(v);
     },
-    focus: () => {
-      taref.current?.focus?.();
-    },
+    focus: () => taref.current?.focus(),
     getValue: () => taref.current?.value,
   }));
 
