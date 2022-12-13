@@ -24,6 +24,8 @@ export interface IInfiniteScroll {
   incrementNumber?: number;
   /** if true, can only scroll by button press. default false */
   scrollDisabled?: boolean;
+  /** eg 'showing x of y results' */
+  renderResultsLine?: (min: number, max: number) => React.ReactNode;
 }
 export const InfiniteScroll = (p: IInfiniteScroll) => {
   const { incrementNumber = 10, scrollDisabled = false } = p;
@@ -49,6 +51,10 @@ export const InfiniteScroll = (p: IInfiniteScroll) => {
   const sliced = p.children.slice(0, endIndex);
 
   const lastDisplayIndex = Math.min(p.children.length, endIndex);
+  const renderResultsLine = p.renderResultsLine?.(
+    lastDisplayIndex,
+    p.children.length,
+  );
 
   return (
     <Base
@@ -75,7 +81,7 @@ export const InfiniteScroll = (p: IInfiniteScroll) => {
       {...filterDataProps(p)}
     >
       {sliced}
-      {`Showing ${lastDisplayIndex} of ${p.children.length} results`}
+      {renderResultsLine}
       {lastDisplayIndex < p.children.length && (
         <LoadMore onClick={() => setEndIndex(endIndex + incrementNumber)}>
           Load More?
