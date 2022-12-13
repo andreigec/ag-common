@@ -8,6 +8,7 @@ export * from './DropdownList';
 export * from './FlexColumn';
 export * from './FlexRow';
 export * from './HeadersRaw';
+export * from './HorizontalScrollBar';
 export * from './Icon';
 export * from './Image';
 export * from './KebabDots';

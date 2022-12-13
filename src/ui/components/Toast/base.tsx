@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import React, { createContext, useEffect, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
 
 import { getRandomInt } from '../../../common';
 import { ProgressBar } from '../ProgressBar';
