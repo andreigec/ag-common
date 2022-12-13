@@ -81,19 +81,9 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
     defaultValue = '',
     defaultEditing,
     disableEdit = false,
-    placeholder,
-    className,
     singleLine = false,
     noGrow = false,
-    leftContent,
-
-    onSubmit,
-    onEditingChange,
-    onClickOutsideWithNoValue,
-    onClickNotEditing,
     allowUndo = true,
-    maxLength,
-    onKeyDown,
   } = p;
 
   const divRef = useRef<HTMLDivElement>(null);
@@ -108,22 +98,25 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
       }
       setValue(v);
     },
+    focus: () => {
+      taref.current?.focus?.();
+    },
   }));
 
   useOnClickOutside(
     {
-      disabled: onClickOutsideWithNoValue === null || disableEdit,
+      disabled: p.onClickOutsideWithNoValue === null || disableEdit,
       ref: divRef,
       moveMouseOutside: false,
     },
     () => {
       if (valueChange) {
-        onSubmit(value, false);
+        p.onSubmit(value, false);
         return;
       }
 
-      if (!disableEdit && onClickOutsideWithNoValue) {
-        onClickOutsideWithNoValue();
+      if (!disableEdit && p.onClickOutsideWithNoValue) {
+        p.onClickOutsideWithNoValue();
       }
 
       if (!disableEdit && editing && defaultEditing) {
@@ -139,11 +132,11 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
   const setEditing = useCallback(
     (b: boolean) => {
       setEditingRaw(b);
-      if (onEditingChange) {
-        onEditingChange(b);
+      if (p.onEditingChange) {
+        p.onEditingChange(b);
       }
     },
-    [onEditingChange],
+    [p],
   );
 
   useEffect(() => {
@@ -156,16 +149,16 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
     return (
       <ValueBox
         {...noDrag}
-        className={className}
+        className={p.className}
         data-editing="false"
-        onClick={() => onClickNotEditing?.()}
-        data-pointer={onClickNotEditing ? 'true' : 'false'}
+        onClick={() => p.onClickNotEditing?.()}
+        data-pointer={p.onClickNotEditing ? 'true' : 'false'}
         data-nogrow={noGrow}
         {...filterDataProps(p)}
       >
-        {leftContent || null}
+        {p.leftContent || null}
         <ValueReadonly data-type="text">
-          {value || <span style={{ color: '#ccc' }}>{placeholder}</span>}
+          {value || <span style={{ color: '#ccc' }}>{p.placeholder}</span>}
         </ValueReadonly>
         <Right>
           {!disableEdit && (
@@ -190,7 +183,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
   return (
     <ValueBoxEdit
       {...noDrag}
-      className={className}
+      className={p.className}
       data-editing="true"
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={ref as any}
@@ -198,7 +191,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
       data-nogrow={noGrow}
       {...filterDataProps(p)}
     >
-      {leftContent || null}
+      {p.leftContent || null}
       <Comp
         tabIndex={editing ? 0 : undefined}
         data-editing="true"
@@ -210,28 +203,28 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
         onChange={(v) => {
           setValue(v.currentTarget.value);
           if (!allowUndo) {
-            onSubmit(v.currentTarget.value, false);
+            p.onSubmit(v.currentTarget.value, false);
           }
         }}
-        placeholder={placeholder}
+        placeholder={p.placeholder}
         rows={singleLine ? 1 : undefined}
-        maxLength={maxLength}
+        maxLength={p.maxLength}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onKeyDown={(e: any) => {
-          if (onKeyDown?.(e) === false) {
+          if (p.onKeyDown?.(e) === false) {
             e.preventDefault();
             return;
           }
 
           if (singleLine && e.code.endsWith('Enter')) {
-            onSubmit(value, true);
+            p.onSubmit(value, true);
           }
         }}
       />
 
-      {maxLength && (
+      {p.maxLength && (
         <Right data-singleline={singleLine}>
-          <TextEditLengthBox min={value.length} max={maxLength} />
+          <TextEditLengthBox min={value.length} max={p.maxLength} />
         </Right>
       )}
       {allowUndo && (
@@ -239,7 +232,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
           {valueChange && (
             <Icon
               style={iconLeft}
-              onClick={() => valueChange && onSubmit(value, false)}
+              onClick={() => valueChange && p.onSubmit(value, false)}
             >
               <Save />
             </Icon>

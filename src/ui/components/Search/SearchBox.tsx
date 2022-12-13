@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import React, { createRef, useEffect } from 'react';
+import React, { createRef, useEffect, useImperativeHandle } from 'react';
 
-import { debounce } from '../../helpers';
+import { debounce, filterDataProps } from '../../helpers';
 import { CrossIcon, Magnify } from '../../icons';
 import { bigScreen, smallScreen } from '../../styles';
 import { IRefTextEdit, TextEdit } from '../TextEdit';
@@ -14,6 +14,7 @@ const Base = styled.div`
   align-items: center;
   width: calc(100% - 2rem);
   margin: auto;
+  position: relative;
 
   @media ${smallScreen} {
     margin: 0;
@@ -38,10 +39,8 @@ const CrossIconStyled = styled(CrossIcon)`
 `;
 export interface ISearchBox {
   placeholderText?: string;
-  onClear?: () => void;
   searchText: string;
-  setSearchText: (s: string) => void;
-  onSearchTextChange?: (v: string) => void;
+  setSearchText: (val: string, enterPressed: boolean) => void;
   defaultValue?: string;
   className?: string;
 }
@@ -50,8 +49,9 @@ export const SearchBox = (p: ISearchBox) => {
   useEffect(() => {
     textEditRef.current?.setValue(p.searchText);
   }, [p.searchText, textEditRef]);
+
   return (
-    <Base data-type="search" className={p.className}>
+    <Base data-type="search" className={p.className} {...filterDataProps(p)}>
       <TextEdit
         ref={textEditRef}
         placeholder={p.placeholderText}
@@ -65,11 +65,10 @@ export const SearchBox = (p: ISearchBox) => {
         noGrow
         allowUndo={false}
         onClickOutsideWithNoValue={null}
-        onSubmit={(v) =>
+        onSubmit={(v, enterPressed) =>
           debounce(
             () => {
-              p.setSearchText(v);
-              p.onSearchTextChange?.(v);
+              p.setSearchText(v, enterPressed);
             },
             { key: 'pagesearch', time: 200 },
           )
@@ -80,8 +79,7 @@ export const SearchBox = (p: ISearchBox) => {
         <CrossIconStyled
           onClick={() => {
             textEditRef.current?.setValue('');
-            p.setSearchText('');
-            p.onSearchTextChange?.('');
+            p.setSearchText('', false);
           }}
         />
       )}
