@@ -103,7 +103,12 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
   const [editing, setEditingRaw] = useState(!!defaultEditing);
   const valueChange = value !== defaultValue;
   useImperativeHandle(ref, () => ({
-    setValue,
+    setValue: (v) => {
+      if (v === value) {
+        return;
+      }
+      setValue(v);
+    },
   }));
 
   useOnClickOutside(
@@ -199,6 +204,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
         tabIndex={editing ? 0 : undefined}
         data-editing="true"
         data-valuechange={valueChange.toString()}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ref={taref as any}
         data-type="text"
         value={value}
@@ -211,6 +217,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
         placeholder={placeholder}
         rows={singleLine ? 1 : undefined}
         maxLength={maxLength}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onKeyDown={(e: any) => {
           if (onKeyDown?.(e) === false) {
             e.preventDefault();

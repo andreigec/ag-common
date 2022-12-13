@@ -1,12 +1,9 @@
 import styled from '@emotion/styled';
-import React, { createRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import { take } from '../../../common';
-import { debounce } from '../../helpers';
-import { CrossIcon } from '../../icons/CrossIcon';
-import { Magnify } from '../../icons/Magnify';
-import { bigScreen, smallScreen } from '../../styles';
-import { IRefTextEdit, TextEdit } from '../TextEdit';
+import { smallScreen } from '../../styles';
+import { SearchBox } from './SearchBox';
 import { ISearchDialog, TSearchModalRes } from './types';
 
 const Base = styled.div`
@@ -14,29 +11,6 @@ const Base = styled.div`
   flex-flow: column;
   flex-grow: 1;
   width: 100%;
-`;
-
-const SearchBox = styled.div`
-  padding: 1rem;
-  display: flex;
-  flex-flow: row;
-  justify-content: center;
-  align-items: center;
-  width: calc(100% - 2rem);
-  margin: auto;
-
-  @media ${smallScreen} {
-    margin: 0;
-    padding: 0;
-    padding-top: 0.5rem;
-    width: 100%;
-  }
-`;
-
-const Icon = styled.div`
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-right: 0.5rem;
 `;
 
 const Content = styled.div`
@@ -66,89 +40,43 @@ const Row = styled.div`
   cursor: pointer;
 `;
 
-const CrossIconStyled = styled(CrossIcon)`
-  position: absolute;
-  right: 1rem;
-  @media ${bigScreen} {
-    right: 2rem;
-  }
-`;
-
-export const SearchBase = <T,>({
-  onSelectItem,
-  onSearchTextChange,
-  placeholderText,
-  renderItem,
-  displayItems,
-  willDisplayItem,
-  getKeyF,
-  className,
-  texts,
-  maxDisplayItems = 20,
-  defaultValue,
-}: ISearchDialog<T> & {
+type ISearchBase<T> = ISearchDialog<T> & {
   onSearchTextChange?: (v: string) => void;
   onSelectItem?: (v: TSearchModalRes<T>) => void;
-}) => {
-  const [searchText, setSearchText] = useState(defaultValue ?? '');
+};
+export const SearchBase = <T,>(p: ISearchBase<T>) => {
+  const { maxDisplayItems = 20 } = p;
+  const [searchText, setSearchText] = useState(p.defaultValue ?? '');
   const resWrap = (foundItem: T | undefined) => {
     if (!foundItem) {
-      onSelectItem?.(undefined);
+      p.onSelectItem?.(undefined);
     } else {
-      onSelectItem?.({ foundItem, searchText });
+      p.onSelectItem?.({ foundItem, searchText });
     }
   };
 
-  const filteredItemsRaw = displayItems.filter((i) =>
-    willDisplayItem(searchText, i),
+  const filteredItemsRaw = p.displayItems.filter((i) =>
+    p.willDisplayItem(searchText, i),
   );
 
   const { part: filteredItems } = take(filteredItemsRaw, maxDisplayItems);
   const showText =
-    texts?.totalItems?.(filteredItems.length, displayItems.length) ??
-    `Showing ${filteredItems.length} out of ${displayItems.length} total
+    p.texts?.totalItems?.(filteredItems.length, p.displayItems.length) ??
+    `Showing ${filteredItems.length} out of ${p.displayItems.length} total
   items`;
 
-  const textEditRef = createRef<IRefTextEdit>();
-
   return (
-    <Base className={className}>
-      <SearchBox data-type="search">
-        <TextEdit
-          ref={textEditRef}
-          placeholder={placeholderText}
-          defaultEditing={{ focus: true }}
-          singleLine
-          leftContent={<Icon>{Magnify}</Icon>}
-          noGrow
-          allowUndo={false}
-          onEscape={() => resWrap(undefined)}
-          onClickOutsideWithNoValue={null}
-          onSubmit={(v) =>
-            debounce(
-              () => {
-                setSearchText(v);
-                onSearchTextChange?.(v);
-              },
-              { key: 'pagesearch', time: 200 },
-            )
-          }
-          defaultValue={defaultValue}
-        />
-        {searchText && (
-          <CrossIconStyled
-            onClick={() => {
-              textEditRef.current?.setValue('');
-              setSearchText('');
-              onSearchTextChange?.('');
-            }}
-          />
-        )}
-      </SearchBox>
+    <Base className={p.className}>
+      <SearchBox
+        {...p}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        onClear={() => resWrap(undefined)}
+      />
       <Content data-hasitems={!!filteredItems.length} data-type="content">
         {filteredItems.map((item, index) => (
-          <Row key={getKeyF(item)} onClick={() => resWrap(item)}>
-            {renderItem({ searchText, item, index })}
+          <Row key={p.getKeyF(item)} onClick={() => resWrap(item)}>
+            {p.renderItem({ searchText, item, index })}
           </Row>
         ))}
         {searchText && <Row>{showText}</Row>}

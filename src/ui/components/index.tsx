@@ -11,6 +11,7 @@ export * from './HeadersRaw';
 export * from './HorizontalScrollBar';
 export * from './Icon';
 export * from './Image';
+export * from './InfiniteScroll';
 export * from './KebabDots';
 export * from './Loader';
 export * from './Modal';
