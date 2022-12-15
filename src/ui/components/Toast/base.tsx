@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 
-import { getRandomInt } from '../../../common';
+import { random } from '../../../common';
 import { ProgressBar } from '../ProgressBar';
 import { Cross } from './Cross';
 import { Tick } from './Tick';
@@ -147,7 +147,7 @@ export const ToastProvider = ({
   const addToast: TAddToast = (message, options) =>
     setToasts((currentToasts) => [
       ...currentToasts,
-      { id: getRandomInt(10000).toString(), message, options },
+      { id: random(10000).toString(), message, options },
     ]);
   const close = (id: string) =>
     setToasts((currentToasts) =>
