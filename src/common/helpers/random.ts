@@ -1,3 +1,4 @@
+/** random number up to max. seed defaults to now.getTime() */
 export function random(max: number, seed?: number) {
   seed = seed || new Date().getTime();
   const ret = (seed * 9301 + 49297) % 233280;

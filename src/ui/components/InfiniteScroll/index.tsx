@@ -8,6 +8,9 @@ const Base = styled.div`
   overflow-y: auto;
   height: 100%;
   width: 100%;
+  &[data-no-scroll='true'] {
+    overflow-y: initial;
+  }
 `;
 //if we see this, then we havent shown user enough items - allow click to load more
 const LoadMore = styled.div`
@@ -58,6 +61,7 @@ export const InfiniteScroll = (p: IInfiniteScroll) => {
 
   return (
     <Base
+      data-no-scroll={scrollDisabled}
       ref={ref}
       className={p.className}
       onScroll={(e) => {
