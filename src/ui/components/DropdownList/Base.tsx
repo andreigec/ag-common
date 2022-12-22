@@ -58,10 +58,10 @@ const ListItemStyle = styled.div`
     }
   }
 
-  &:nth-child(even) {
+  &:nth-of-type(even) {
     background-color: rgba(0, 0, 0, 0.1);
   }
-  &:nth-child(odd) {
+  &:nth-of-type(odd) {
     background-color: rgba(0, 0, 0, 0.2);
   }
 `;

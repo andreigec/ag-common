@@ -17,7 +17,9 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
 ) {
   useEffect(() => {
     if (p.disabled || typeof window === 'undefined') {
-      return () => {};
+      return () => {
+        //
+      };
     }
 
     const listener = (event: Event) => {

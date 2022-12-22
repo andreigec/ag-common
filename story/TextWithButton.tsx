@@ -16,6 +16,7 @@ export const Primary = Template.bind({}) as ComponentStory<
 >;
 
 Primary.args = {
+  // eslint-disable-next-line no-console
   onSubmit: (c) => console.log('c=' + c),
   placeholder: 'placeholder',
   submitText: 'submit text',
