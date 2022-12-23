@@ -42,7 +42,7 @@ export const HeadersRaw = ({
     <meta key="14" itemProp="url" content={FullSiteUrl} />,
     <meta key="15" name="twitter:url" content={FullSiteUrl} />,
     <meta key="16" property="og:type" content="website" />,
-    <meta key="17" name="twitter:card" content="summary" />,
+    <meta key="17" name="twitter:card" content="summary_large_image" />,
     <meta key="18" name="robots" content="index, follow" />,
     ...imagearr,
   ];

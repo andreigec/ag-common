@@ -1,63 +1,6 @@
-import { warn } from '../../../common/helpers/log';
 import { chunkString, toBase64 } from '../../../common/helpers/string';
-import { expireDate, maxCookieLen } from './const';
-import { getCookieRaw } from './get';
-
-/**
- * expiryDays <0 will delete
- * @param param0
- * @returns
- */
-function setCookieRaw({
-  name,
-  value,
-  expiryDays = 1,
-}: {
-  name: string;
-  value: string;
-  /**
-   * defaults to 1
-   */
-  expiryDays?: number;
-}) {
-  if (typeof window === undefined) {
-    return;
-  }
-
-  const d = new Date();
-  d.setTime(d.getTime() + expiryDays * 24 * 60 * 60 * 1000);
-  const expires = `expires=${
-    !value || expiryDays < 0 ? expireDate : d.toUTCString()
-  }`;
-
-  document.cookie = `${name}=${
-    !value ? '' : value
-  };${expires};path=/; SameSite=Strict; Secure`;
-}
-
-export function wipeCookies(name: string) {
-  if (typeof window === 'undefined') {
-    warn('cant wipe cookies on server');
-    return;
-  }
-
-  let currentCount = 0;
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    if (
-      getCookieRaw({
-        name: name + currentCount,
-        cookieDocument: '',
-      })
-    ) {
-      setCookieRaw({ name: name + currentCount, value: '', expiryDays: -1 });
-      currentCount += 1;
-    } else {
-      return;
-    }
-  }
-}
-
+import { maxCookieLen } from './const';
+import { setCookie, wipeCookies } from './raw';
 /**
  * json+b64 incoming. chunk. write chunks
  * @param p
@@ -90,7 +33,7 @@ export function setCookieRawWrapper<T>(p: {
 
   for (const index1 in chunks) {
     const chunk = chunks[index1];
-    setCookieRaw({ ...p, name: p.name + index1, value: chunk });
+    setCookie({ ...p, name: p.name + index1, value: chunk });
   }
 }
 

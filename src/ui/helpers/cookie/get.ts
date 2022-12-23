@@ -1,33 +1,7 @@
 import { warn } from '../../../common/helpers/log';
 import { fromBase64 } from '../../../common/helpers/string';
 import { TParse } from './const';
-import { wipeCookies } from './set';
-
-export function getCookieRaw({
-  name,
-  cookieDocument,
-}: {
-  name: string;
-  cookieDocument?: string;
-}) {
-  const nameeq = `${name}=`;
-  const ca1 =
-    cookieDocument || (typeof window !== 'undefined' && document.cookie);
-
-  if (!ca1 || !ca1?.trim()) {
-    return undefined;
-  }
-
-  const ca = ca1.split(';').map((t) => t.trim());
-  const c = ca.find((c2) => c2.startsWith(nameeq));
-  if (c) {
-    const raw = c.substr(nameeq.length, c.length);
-
-    return raw;
-  }
-
-  return undefined;
-}
+import { getCookie, wipeCookies } from './raw';
 
 /**
  * read chunks. json parse+unb64
@@ -66,7 +40,7 @@ export function getCookieRawWrapper<T>({
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const newv = getCookieRaw({
+    const newv = getCookie({
       name: name + currentCount,
       cookieDocument,
     });
