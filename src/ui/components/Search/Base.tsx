@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
 
-import { take } from '../../../common';
+import { take } from '../../../common/helpers/array';
 import { smallScreen } from '../../styles';
 import { SearchBox } from './SearchBox';
 import { ISearchDialog, TSearchModalRes } from './types';

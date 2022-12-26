@@ -6,7 +6,8 @@ import React, {
   useImperativeHandle,
 } from 'react';
 
-import { debounce, filterDataProps } from '../../helpers';
+import { debounce } from '../../helpers/debounce';
+import { filterDataProps } from '../../helpers/dom';
 import { CrossIcon, Magnify } from '../../icons';
 import { bigScreen, smallScreen } from '../../styles';
 import { IRefTextEdit, TextEdit } from '../TextEdit';

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { toTitleCase } from '../../../../../common';
 import {
   getBodyJson,
   getSecurity,
@@ -40,7 +39,7 @@ export const getRequestOptions = <TDefaultApi,>(
     h2 = (
       <>
         {' '}
-        <Highlight>&apos;{toTitleCase(sec.name)}&apos;</Highlight>:{' '}
+        <Highlight>&apos;{sec.name}&apos;</Highlight>:{' '}
         <Highlight>&apos;{p.apiKey || '(API KEY)'}&apos;</Highlight>
       </>
     );

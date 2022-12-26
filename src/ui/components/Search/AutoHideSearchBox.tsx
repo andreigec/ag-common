@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React, { createRef, useState } from 'react';
 
-import { useGranularEffect } from '../../helpers';
+import { useGranularEffect } from '../../helpers/useGranularHook';
 import { CrossIcon, Magnify } from '../../icons';
 import { bigScreen, smallScreen } from '../../styles';
 import { IRefTextEdit } from '../TextEdit';

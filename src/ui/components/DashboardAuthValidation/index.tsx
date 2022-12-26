@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { error } from '../../../common/helpers/log';
-import { fromBase64 } from '../../../common/helpers/string';
+import { fromBase64 } from '../../../common/helpers/string/base64';
 import { AuthedUserContext } from '../../helpers/jwt';
 import { IRequestCommon } from '../../helpers/routes';
 import { useGranularEffect } from '../../helpers/useGranularHook';

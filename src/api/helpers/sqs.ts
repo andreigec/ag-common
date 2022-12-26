@@ -3,7 +3,7 @@ import SQS, {
   SendMessageBatchRequestEntryList,
 } from 'aws-sdk/clients/sqs';
 
-import { hashCode } from '../../common';
+import { hashCode } from '../../common/helpers/hashCode';
 // eslint-disable-next-line import/no-mutable-exports
 export let sqs = new SQS();
 export const setSqs = (region: string) => {

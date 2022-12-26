@@ -1,6 +1,7 @@
 import { warn } from '../../common/helpers/log';
 import { sumArray } from '../../common/helpers/math';
-import { safeStringify, trim } from '../../common/helpers/string';
+import { safeStringify } from '../../common/helpers/string/json';
+import { trim } from '../../common/helpers/string/trim';
 
 const extractSum = ({ str, regex }: { str: string; regex: RegExp }) =>
   sumArray(

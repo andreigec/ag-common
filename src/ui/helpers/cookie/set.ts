@@ -1,4 +1,5 @@
-import { chunkString, toBase64 } from '../../../common/helpers/string';
+import { toBase64 } from '../../../common/helpers/string/base64';
+import { chunkString } from '../../../common/helpers/string/chunk';
 import { maxCookieLen } from './const';
 import { setCookie, wipeCookies } from './raw';
 /**

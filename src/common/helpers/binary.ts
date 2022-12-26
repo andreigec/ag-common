@@ -1,4 +1,4 @@
-import { fromBase64, toBase64 } from './string';
+import { fromBase64, toBase64 } from './string/base64';
 
 function toBuffer(ab: ArrayBuffer) {
   const buffer = new Buffer(ab.byteLength);

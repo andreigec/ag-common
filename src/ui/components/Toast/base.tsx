@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 
-import { random } from '../../../common';
+import { random } from '../../../common/helpers/random';
 import { ProgressBar } from '../ProgressBar';
 import { Cross } from './Cross';
 import { Tick } from './Tick';

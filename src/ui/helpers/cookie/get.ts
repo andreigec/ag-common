@@ -1,5 +1,5 @@
 import { warn } from '../../../common/helpers/log';
-import { fromBase64 } from '../../../common/helpers/string';
+import { fromBase64 } from '../../../common/helpers/string/base64';
 import { TParse } from './const';
 import { getCookie, wipeCookies } from './raw';
 

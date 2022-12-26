@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { toTitleCase } from '../../../../../common/helpers/string';
 import { getSecurity, Highlight, Highlight2 } from '../../helpers/common';
 import { IOpenApi, IOpenApiOperation } from '../../types';
 
@@ -22,8 +21,8 @@ export const getSecurityLine = (
       <>
         <span>--header </span>
         <Highlight>
-          &apos;{toTitleCase(sec.name)}:{' '}
-          <Highlight2>{p.apiKey || '(API KEY)'}</Highlight2>&apos;
+          &apos;{sec.name}: <Highlight2>{p.apiKey || '(API KEY)'}</Highlight2>
+          &apos;
         </Highlight>
       </>
     ),

@@ -1,7 +1,7 @@
 import NodeCache from 'node-cache';
 
-import { hashCode } from '../../../common';
-import { toBase64 } from '../../../common/helpers/string';
+import { hashCode } from '../../../common/helpers/hashCode';
+import { toBase64 } from '../../../common/helpers/string/base64';
 import { AxiosWrapperLite } from '../jwt';
 import { CacheItems } from '../routes';
 import { callOpenApi, getIdTokenAuthHeaderRaw } from './direct';

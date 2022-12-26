@@ -1,6 +1,6 @@
 import { aws_ssm as ssm, Fn, Stack } from 'aws-cdk-lib';
 
-import { toBase64 } from '../../common';
+import { toBase64 } from '../../common/helpers/string/base64';
 
 /**
  * save a value to ssm

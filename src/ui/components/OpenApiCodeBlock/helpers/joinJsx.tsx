@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { notEmpty } from '../../../../common';
+import { notEmpty } from '../../../../common/helpers/array';
 
 export const joinJsx = (
   items: (JSX.Element | undefined)[],

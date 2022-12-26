@@ -35,7 +35,7 @@ const BottomText = styled.div`
 const Bottom = styled(FlexRow)`
   margin-top: auto;
   justify-content: flex-end;
-  > button:first-child {
+  > button:first-of-type {
     margin-right: 1rem;
   }
 `;
