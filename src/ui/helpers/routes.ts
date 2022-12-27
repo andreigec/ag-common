@@ -3,7 +3,6 @@ import { parse } from 'url';
 import { getValidatedLang, TLang } from '../../common/helpers/i18n';
 import { castStringlyObject } from '../../common/helpers/object';
 import { stringToObject } from '../../common/helpers/string/object';
-import { ICognitoAuth } from './cognito';
 import { AxiosWrapperLite } from './jwt';
 
 export type TProtocol = 'http:' | 'https:';
@@ -61,7 +60,6 @@ export interface IRequestCommon {
 export interface IStateCommon<TRequest extends IRequestCommon>
   extends IInitialStateCommon {
   request: TRequest;
-  auth: ICognitoAuth;
   pushPath: (path: string) => Promise<void>;
   /**
    * set for ssr

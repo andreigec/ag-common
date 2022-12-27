@@ -68,19 +68,3 @@ export interface AxiosWrapperLite<T> {
   data: T | undefined;
   error?: AxiosError;
 }
-
-export interface AuthedUserContext {
-  loading: boolean;
-  isAuthenticated: boolean;
-  /**
-   * @param stateqs: must be base64'd
-   */
-  loginWithRedirect: (stateqs?: string) => Promise<void>;
-  logout: () => Promise<void>;
-  user?: User;
-  error: Error | undefined;
-  refreshToken: () => Promise<User | undefined>;
-}
-
-export const getBearerToken = (jwt?: { id_token?: string }) =>
-  !jwt?.id_token ? undefined : `Bearer ${jwt.id_token}`;
