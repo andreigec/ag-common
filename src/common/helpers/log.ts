@@ -15,7 +15,7 @@ export const SetLogShim = (ls: TLogShim) => {
   logShim = ls;
 };
 
-let userLogLevel: TLogType = 'WARN';
+let userLogLevel: TLogType | undefined;
 export const SetLogLevel = (l: TLogType) => {
   const lu = l?.toUpperCase() as TLogType;
   if (GetLogLevel(lu) === -1) {
@@ -25,10 +25,12 @@ export const SetLogLevel = (l: TLogType) => {
   userLogLevel = lu;
 };
 
-SetLogLevel(process.env.LOG_LEVEL as TLogType);
-
 function logprocess(type: TLogType, args: unknown[]) {
-  const min = GetLogLevel(userLogLevel);
+  if (!userLogLevel) {
+    SetLogLevel(process.env.LOG_LEVEL as TLogType);
+  }
+
+  const min = GetLogLevel(userLogLevel || 'WARN');
   const typesLogLevel = GetLogLevel(type);
 
   // env ignores it
