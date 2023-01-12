@@ -14,6 +14,7 @@ export * from './serviceWorker';
 export * from './useContextMenu';
 export * from './useElementAttribute';
 export * from './useGranularHook';
+export * from './useInterval';
 export * from './useLocalStorage';
 export * from './useLockBodyScroll';
 export * from './useOnClickOutside';
