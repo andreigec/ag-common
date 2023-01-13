@@ -12,14 +12,10 @@ export const getAllCookies = (cookieString?: string) => {
     return cookieKeyValuePairs;
   }
 
-  // Split the cookie string into an array of strings
   const cookieArr = cookieString.split(';');
 
-  // Loop through the array of strings
   for (let i = 0; i < cookieArr.length; i++) {
-    // Split each string into an array of key and value
     const cookieKeyValue = cookieArr[i].split('=');
-    // Add the key value pair to the object
     cookieKeyValuePairs[cookieKeyValue[0].trim()] = cookieKeyValue[1].trim();
   }
   return cookieKeyValuePairs;

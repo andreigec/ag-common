@@ -68,24 +68,31 @@ export const callOpenApi = async <T, TDefaultApi>(
   let data: T | undefined = undefined;
   const config: {
     basePath: string;
-    baseOptions: Record<string, Record<string, string>>;
+    baseOptions: Record<string, Record<string, string | number>>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     middleware: { pre: (a: any) => any }[];
   } = {
     basePath: apiUrl,
-    baseOptions: { headers: { authorization: '', ...(headers || {}) } },
+    baseOptions: { headers: headers || {} },
     middleware: [],
   };
 
+  //comes from either id_token cookie OR auth override param
   const idToken = await getIdTokenAuthHeader(p);
-  if (idToken) {
+
+  if (headers?.authorization) {
+    config.baseOptions.headers.authorization = headers.authorization.toString();
+  } else if (headers?.authorization === undefined && idToken) {
     config.baseOptions.headers.authorization = `Bearer ${idToken}`;
+  }
+
+  if (config.baseOptions.headers.authorization) {
     config.middleware = [
       {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         pre: (oldFetchParams: any) => {
           oldFetchParams.init.headers = {
-            authorization: `Bearer ${idToken}`,
+            authorization: config.baseOptions.headers.authorization,
             ...oldFetchParams.init.headers,
           };
         },

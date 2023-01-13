@@ -40,7 +40,7 @@ const Template: ComponentStory<typeof OpenApiCodeBlock> = (args) => (
 export const Primary = Template.bind({});
 const args: IOpenApiCodeBlock<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  testop: ({ testparam1: string }) => Promise<any>;
+  testop: ({ testparam1 }) => Promise<any>;
 }> = {
   schema,
   funcF: (f) => f.testop({ testparam1: '2' }),
