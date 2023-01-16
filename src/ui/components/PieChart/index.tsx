@@ -67,7 +67,7 @@ export const PieChart: React.FC<IPieChart> = ({ data, className }) => {
                 textAnchor="middle"
                 alignmentBaseline="middle"
                 stroke="white"
-                strokeWidth={'3px'}
+                strokeWidth="6px"
               >
                 {label}
               </text>
