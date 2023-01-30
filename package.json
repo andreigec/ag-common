@@ -51,7 +51,7 @@
     "@emotion/styled": "11.10.5",
     "cross-env": "7.0.3",
     "eslint-config-e7npm": "0.0.8",
-    "rimraf": "3.0.2"
+    "rimraf": "4.1.2"
   },
   "files": [
     "dist/**/*",
