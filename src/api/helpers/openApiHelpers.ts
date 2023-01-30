@@ -31,22 +31,22 @@ const setUpApiGw = ({
   stack,
   NODE_ENV,
   certificate,
-  hostedZone,
   shortStackName,
-  apiUrl,
+  r53,
   cors = {
     allowOrigins: apigw.Cors.ALL_ORIGINS,
     allowHeaders: apigw.Cors.DEFAULT_HEADERS,
   },
 }: {
-  apiUrl?: string;
   stack: Construct;
   NODE_ENV: string;
   certificate: certmgr.ICertificate;
-  hostedZone: route53.IHostedZone;
   shortStackName: string;
-
   cors?: { allowOrigins: string[]; allowHeaders: string[] };
+  r53?: {
+    hostedZone: route53.IHostedZone;
+    apiUrl: string;
+  };
 }) => {
   const api = new apigw.RestApi(stack, `${shortStackName}-api-${NODE_ENV}`, {
     defaultCorsPreflightOptions: {
@@ -54,9 +54,9 @@ const setUpApiGw = ({
     },
   });
 
-  if (apiUrl) {
+  if (r53) {
     const dn = new apigw.DomainName(stack, 'domain', {
-      domainName: apiUrl,
+      domainName: r53.apiUrl,
       certificate,
       endpointType: apigw.EndpointType.EDGE,
       securityPolicy: apigw.SecurityPolicy.TLS_1_2,
@@ -65,8 +65,8 @@ const setUpApiGw = ({
 
     new route53.ARecord(stack, 'ARecord', {
       comment: '(cdk)',
-      recordName: apiUrl.substring(0, apiUrl.indexOf('.')),
-      zone: hostedZone,
+      recordName: r53.apiUrl.substring(0, r53.apiUrl.indexOf('.')),
+      zone: r53.hostedZone,
       target: route53.RecordTarget.fromAlias(new targets.ApiGatewayDomain(dn)),
     });
   }
@@ -217,12 +217,16 @@ export const openApiImpl = (p: {
    * dictionary of named authorizer functions. these names are to be used in the lambdaConfig param
    */
   authorizers?: Record<string, TokenAuthorizer>;
-  hostedZone: route53.IHostedZone;
+
   /**
    * A record will be created in hosted zone for the apigw on this path. if undefined, record wont be created
-   * eg api.mydomain.com
    */
-  apiUrl?: string;
+  r53?: {
+    hostedZone: route53.IHostedZone;
+
+    /** eg api.mydomain.com */
+    apiUrl: string;
+  };
 }) => {
   if (!p.schema) {
     throw new Error('no openapi schema found');
