@@ -44,7 +44,7 @@ const setUpApiGw = ({
   shortStackName: string;
   cors?: { allowOrigins: string[]; allowHeaders: string[] };
   r53?: {
-    hostedZone: route53.IHostedZone;
+    hostedZone?: route53.IHostedZone;
     apiUrl: string;
   };
 }) => {
@@ -63,12 +63,16 @@ const setUpApiGw = ({
       mapping: api,
     });
 
-    new route53.ARecord(stack, 'ARecord', {
-      comment: '(cdk)',
-      recordName: r53.apiUrl.substring(0, r53.apiUrl.indexOf('.')),
-      zone: r53.hostedZone,
-      target: route53.RecordTarget.fromAlias(new targets.ApiGatewayDomain(dn)),
-    });
+    if (r53.hostedZone) {
+      new route53.ARecord(stack, 'ARecord', {
+        comment: '(cdk)',
+        recordName: r53.apiUrl.substring(0, r53.apiUrl.indexOf('.')),
+        zone: r53.hostedZone,
+        target: route53.RecordTarget.fromAlias(
+          new targets.ApiGatewayDomain(dn),
+        ),
+      });
+    }
   }
 
   return api;
@@ -222,10 +226,11 @@ export const openApiImpl = (p: {
    * A record will be created in hosted zone for the apigw on this path. if undefined, record wont be created
    */
   r53?: {
-    hostedZone: route53.IHostedZone;
-
-    /** eg api.mydomain.com */
+    /** will create apigw domainname
+     * eg api.mydomain.com */
     apiUrl: string;
+    /** if provided will add r53 record to apigw domainame  */
+    hostedZone?: route53.IHostedZone;
   };
 }) => {
   if (!p.schema) {
