@@ -21,6 +21,7 @@ export function roundToHalf(converted: number) {
   return parseInt(converted.toString(), 10) + 0.5;
 }
 
+/** restricts value between two numbers */
 export function clamp({
   value,
   min,
@@ -71,6 +72,7 @@ export function toFixedDown(num: number, scale: number) {
 
 /**
  * get percentage of value within supplied range
+ * eg value of 5 between 0-10 = 0.5. value of 5 between 5-10 = 0
  * @param param0
  * @returns
  */
@@ -88,3 +90,14 @@ export function rangePercentage({
 
   return r;
 }
+
+/** will interpolate value of percent inside range. 0.5 between 100 and 200 = 150 */
+export const interpolatePercentInRange = ({
+  percent,
+  min,
+  max,
+}: {
+  percent: number;
+  min: number;
+  max: number;
+}) => (max - min) * percent + min;
