@@ -29,11 +29,18 @@ export const setDynamo = (region: string) => {
 export const putDynamo = async <T>(
   item: T,
   tableName: string,
+  opt?: {
+    /** if provided, will assert this PK value doesnt already exist */
+    pkName?: string;
+  },
 ): Promise<{ error?: string; data?: T }> => {
   const params: PutItemInput = {
     TableName: tableName,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Item: item as any,
+    ...(opt?.pkName && {
+      ConditionExpression: `attribute_not_exists(${opt.pkName})`,
+    }),
   };
 
   info(`running dynamo put=${JSON.stringify(params, null, 2)}`);
