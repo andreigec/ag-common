@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { AxiosWrapper } from '../jwt';
 import { CacheItems } from '../routes';
@@ -69,22 +69,22 @@ export const useCallOpenApi = <T, TDefaultApi>(
     }
   }, [data, pIn]);
 
-  useEffect(() => {
-    async function run() {
-      const resp = await callOpenApi(data[0]);
-      setData((d) => [
-        d[0],
-        {
-          ...resp,
-          loaded: true,
-          loading: false,
-          loadcount: d[1].loadcount + 1,
-          url: '',
-          datetime: new Date().getTime(),
-        },
-      ]);
-    }
+  const run = useCallback(async () => {
+    const resp = await callOpenApi(data[0]);
+    setData((d) => [
+      d[0],
+      {
+        ...resp,
+        loaded: true,
+        loading: false,
+        loadcount: d[1].loadcount + 1,
+        url: '',
+        datetime: new Date().getTime(),
+      },
+    ]);
+  }, [data]);
 
+  useEffect(() => {
     const { error, loaded, loading, loadcount } = data[1];
     const ng =
       data[0].disabled || loaded || loading || (error && loadcount > 2);
@@ -95,11 +95,11 @@ export const useCallOpenApi = <T, TDefaultApi>(
 
     setData((d) => [d[0], { ...d[1], loading: true }]);
     void run();
-  }, [data, setData]);
+  }, [data, run, setData]);
 
   const ret: TUseCallOpenApi<T> = {
     ...data[1],
-    reFetch: async () => setData([data[0], defaultState(data[0], true)]),
+    reFetch: async () => run,
     setData: (d) => {
       setData([
         data[0],
