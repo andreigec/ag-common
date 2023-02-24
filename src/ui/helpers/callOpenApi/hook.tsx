@@ -69,7 +69,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
     }
   }, [data, pIn]);
 
-  const run = useCallback(async () => {
+  const reFetch = useCallback(async () => {
     const resp = await callOpenApi(data[0]);
     setData((d) => [
       d[0],
@@ -82,7 +82,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
         datetime: new Date().getTime(),
       },
     ]);
-  }, [data]);
+  }, [data, setData]);
 
   useEffect(() => {
     const { error, loaded, loading, loadcount } = data[1];
@@ -94,12 +94,12 @@ export const useCallOpenApi = <T, TDefaultApi>(
     }
 
     setData((d) => [d[0], { ...d[1], loading: true }]);
-    void run();
-  }, [data, run, setData]);
+    void reFetch();
+  }, [data, reFetch, setData]);
 
   const ret: TUseCallOpenApi<T> = {
     ...data[1],
-    reFetch: async () => run,
+    reFetch,
     setData: (d) => {
       setData([
         data[0],
