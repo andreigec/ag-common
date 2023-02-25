@@ -2,16 +2,18 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { AxiosWrapper } from '../jwt';
 import { CacheItems } from '../routes';
-import { callOpenApiCachedRaw } from './cached';
+import { useGranularEffect } from '../useGranularHook';
+import { callOpenApiCachedRaw, setOpenApiCacheRaw } from './cached';
 import { callOpenApi } from './direct';
 import { ICallOpenApi } from './types';
-
-export type TUseCallOpenApiDispatch<A> = (value: A) => A;
 
 export type TUseCallOpenApi<T> = AxiosWrapper<T> & {
   loaded: boolean;
   loadcount: number;
-  setData: (d: TUseCallOpenApiDispatch<T | undefined>) => void;
+  /** internally mutate state, but do not refetch. will automatically bump datetime */
+  setData: React.Dispatch<
+    React.SetStateAction<Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData'>>
+  >;
 };
 
 type TUseCallOpenApiInt<T, TDefaultApi> = ICallOpenApi<T, TDefaultApi> & {
@@ -39,7 +41,6 @@ const defaultState = <T, TDefaultApi>(
 
   return {
     data: undefined,
-    url: '',
     datetime: 0,
     loadcount: 0,
     loading: false,
@@ -54,59 +55,75 @@ const defaultState = <T, TDefaultApi>(
  * @returns
  */
 export const useCallOpenApi = <T, TDefaultApi>(
-  pIn: TUseCallOpenApiInt<T, TDefaultApi>,
+  inConfig: TUseCallOpenApiInt<T, TDefaultApi>,
 ): TUseCallOpenApi<T> => {
-  const [data, setData] = useState<
-    [
-      TUseCallOpenApiInt<T, TDefaultApi>,
-      Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData'>,
-    ]
-  >([pIn, defaultState(pIn)]);
+  /** response from hook */
+  const [resp, setResp] = useState<
+    Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData'>
+  >(defaultState(inConfig));
+  /** config about hook*/
+  const [config, setConfig] =
+    useState<TUseCallOpenApiInt<T, TDefaultApi>>(inConfig);
 
-  useEffect(() => {
-    if (JSON.stringify(data[0]) !== JSON.stringify(pIn)) {
-      setData([pIn, defaultState(pIn, true)]);
-    }
-  }, [data, pIn]);
+  useGranularEffect(
+    () => {
+      if (JSON.stringify(config) !== JSON.stringify(inConfig)) {
+        setConfig(inConfig);
+        setResp(defaultState(inConfig, true));
+      }
+    },
+    [inConfig],
+    [resp, setResp, config, setConfig],
+  );
 
   const reFetch = useCallback(async () => {
-    const resp = await callOpenApi(data[0]);
-    setData((d) => [
-      d[0],
-      {
-        ...resp,
+    const newdate = new Date().getTime();
+
+    const newresp = await callOpenApi(config);
+    setResp((d) => {
+      let newState: typeof d = {
+        ...d,
         loaded: true,
         loading: false,
-        loadcount: d[1].loadcount + 1,
-        url: '',
-        datetime: new Date().getTime(),
-      },
-    ]);
-  }, [data, setData]);
+      };
+      if (newdate > d.datetime) {
+        newState = {
+          ...newresp,
+          loaded: true,
+          loading: false,
+          loadcount: d.loadcount + 1,
+          datetime: newdate,
+        };
+      }
+      if (JSON.stringify(d) !== JSON.stringify(newState)) {
+        return newState;
+      } else {
+        return d;
+      }
+    });
+  }, [config]);
 
   useEffect(() => {
-    const { error, loaded, loading, loadcount } = data[1];
-    const ng =
-      data[0].disabled || loaded || loading || (error && loadcount > 2);
+    const { error, loaded, loading, loadcount } = resp;
+    const ng = config.disabled || loaded || loading || (error && loadcount > 2);
 
     if (ng) {
       return;
     }
 
-    setData((d) => [d[0], { ...d[1], loading: true }]);
+    setResp((d) => ({ ...d, loading: true }));
     void reFetch();
-  }, [data, reFetch, setData]);
+  }, [config.disabled, reFetch, resp]);
 
-  const ret: TUseCallOpenApi<T> = {
-    ...data[1],
+  return {
+    ...resp,
     reFetch,
-    setData: (d) => {
-      setData([
-        data[0],
-        { ...data[1], data: d(data[1].data), datetime: new Date().getTime() },
-      ]);
+    setData: async (p) => {
+      //wipe cache, or might revert
+      await setOpenApiCacheRaw(config, undefined);
+      setResp(p);
+      //ensure datetime is changed, or might get overwritten
+      setResp((x) => ({ ...x, datetime: new Date().getTime() }));
     },
   };
-
-  return ret;
 };

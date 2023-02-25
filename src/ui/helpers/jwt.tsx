@@ -60,7 +60,6 @@ export interface AxiosWrapper<T> {
   loading: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reFetch: () => Promise<any>;
-  url: string;
   datetime: number;
 }
 
