@@ -11,9 +11,7 @@ export type TUseCallOpenApi<T> = AxiosWrapper<T> & {
   loaded: boolean;
   loadcount: number;
   /** internally mutate state, but do not refetch. will automatically bump datetime */
-  setData: React.Dispatch<
-    React.SetStateAction<Omit<TUseCallOpenApi<T>, 'reFetch' | 'setData'>>
-  >;
+  setData: React.Dispatch<React.SetStateAction<T>>;
 };
 
 type TUseCallOpenApiInt<T, TDefaultApi> = ICallOpenApi<T, TDefaultApi> & {
@@ -121,9 +119,15 @@ export const useCallOpenApi = <T, TDefaultApi>(
     setData: async (p) => {
       //wipe cache, or might revert
       await setOpenApiCacheRaw(config, undefined);
-      setResp(p);
       //ensure datetime is changed, or might get overwritten
-      setResp((x) => ({ ...x, datetime: new Date().getTime() }));
+      setResp((x) => ({
+        ...x,
+        datetime: new Date().getTime(),
+        data:
+          typeof p === 'function'
+            ? (p as (prevState: T | undefined) => T)(x.data)
+            : p,
+      }));
     },
   };
 };
