@@ -34,7 +34,7 @@
     "@emotion/styled": ">=11"
   },
   "devDependencies": {
-    "@babel/core": "7.20.12",
+    "@babel/core": "7.21.0",
     "@storybook/addon-actions": "6.5.16",
     "@storybook/addon-docs": "6.5.16",
     "@storybook/addon-essentials": "6.5.16",
@@ -44,14 +44,14 @@
     "@storybook/react": "6.5.16",
     "@storybook/theming": "6.5.16",
     "@types/jsonwebtoken": "9.0.1",
-    "@types/node": "18.13.0",
-    "@types/react": "18.0.27",
-    "@types/react-dom": "18.0.10",
-    "@emotion/react": "11.10.5",
-    "@emotion/styled": "11.10.5",
+    "@types/node": "18.14.6",
+    "@types/react": "18.0.28",
+    "@types/react-dom": "18.0.11",
+    "@emotion/react": "11.10.6",
+    "@emotion/styled": "11.10.6",
     "cross-env": "7.0.3",
     "eslint-config-e7npm": "0.0.8",
-    "rimraf": "4.1.2"
+    "rimraf": "4.4.0"
   },
   "files": [
     "dist/**/*",
