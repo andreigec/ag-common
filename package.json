@@ -11,21 +11,21 @@
     "format": "npx eslint --ext .ts,.tsx ./src --fix && npx eslint --ext .ts,.tsx ./story --fix",
     "build": "rimraf dist && npm run lint && tsc",
     "lint": "npx eslint --ext .ts,.tsx ./src",
-    "start": "cross-env BROWSER=none start-storybook -p 6006",
-    "build-storybook": "build-storybook -o docs --quiet"
+    "start": "cross-env BROWSER=none cross-env NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
+    "build-storybook": "cross-env NODE_OPTIONS=--openssl-legacy-provider build-storybook -o docs --quiet"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.x",
-    "aws-sdk": "2.x",
-    "axios": "1.x",
-    "constructs": "10.x",
-    "jsonwebtoken": "9.x",
-    "jwks-rsa": "3.x",
-    "node-cache": "5.x",
-    "openapi-request-validator": "12.x",
-    "react": "18.x",
-    "react-dom": "18.x",
-    "typescript": "5.x"
+    "aws-cdk-lib": ">=2",
+    "aws-sdk": ">=2",
+    "axios": ">=1",
+    "constructs": ">=10",
+    "jsonwebtoken": ">=9",
+    "jwks-rsa": ">=3",
+    "node-cache": ">=5",
+    "openapi-request-validator": ">=12",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "typescript": ">=5"
   },
   "peerDependencies": {
     "@emotion/react": ">=11",
@@ -50,6 +50,10 @@
     "cross-env": "7.0.3",
     "eslint-config-e7npm": "0.0.9",
     "rimraf": "4.4.0"
+    
+  },
+  "resolutions": {
+    "@storybook/react-docgen-typescript-plugin": "1.0.6--canary.9.cd77847.0"
   },
   "files": [
     "dist/**/*",

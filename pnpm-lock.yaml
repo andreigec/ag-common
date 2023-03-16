@@ -1,5 +1,8 @@
 lockfileVersion: 5.4
 
+overrides:
+  '@storybook/react-docgen-typescript-plugin': 1.0.6--canary.9.cd77847.0
+
 importers:
 
   .:
@@ -19,20 +22,20 @@ importers:
       '@types/node': 18.15.3
       '@types/react': 18.0.28
       '@types/react-dom': 18.0.11
-      aws-cdk-lib: 2.x
-      aws-sdk: 2.x
-      axios: 1.x
-      constructs: 10.x
+      aws-cdk-lib: '>=2'
+      aws-sdk: '>=2'
+      axios: '>=1'
+      constructs: '>=10'
       cross-env: 7.0.3
       eslint-config-e7npm: 0.0.9
-      jsonwebtoken: 9.x
-      jwks-rsa: 3.x
-      node-cache: 5.x
-      openapi-request-validator: 12.x
-      react: 18.x
-      react-dom: 18.x
+      jsonwebtoken: '>=9'
+      jwks-rsa: '>=3'
+      node-cache: '>=5'
+      openapi-request-validator: '>=12'
+      react: '>=18'
+      react-dom: '>=18'
       rimraf: 4.4.0
-      typescript: 5.x
+      typescript: '>=5'
     dependencies:
       aws-cdk-lib: 2.64.0_constructs@10.1.248
       aws-sdk: 2.1313.0
@@ -3085,10 +3088,10 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
-  /@storybook/react-docgen-typescript-plugin/1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0_uwemawexpmcwp4gcune73namy4:
-    resolution: {integrity: sha512-eVg3BxlOm2P+chijHBTByr90IZVUtgRW56qEOLX7xlww2NBuKrcavBlcmn+HH7GIUktquWkMPtvy6e0W0NgA5w==}
+  /@storybook/react-docgen-typescript-plugin/1.0.6--canary.9.cd77847.0_uwemawexpmcwp4gcune73namy4:
+    resolution: {integrity: sha512-I4oBYmnUCX5IsrZhg+ST72dubSIV4wdwY+SfqJiJ3NHvDpdb240ZjdHAmjIy/yJh5rh42Fl4jbG8Tr4SzwV53Q==}
     peerDependencies:
-      typescript: '>= 3.x'
+      typescript: '>= 4.x'
       webpack: '>= 4'
     dependencies:
       debug: 4.3.4
@@ -3143,7 +3146,7 @@ packages:
       '@storybook/csf': 0.0.2--canary.4566f4d.1
       '@storybook/docs-tools': 6.5.16_biqbaboplfbrettd7655fr4n2y
       '@storybook/node-logger': 6.5.16
-      '@storybook/react-docgen-typescript-plugin': 1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0_uwemawexpmcwp4gcune73namy4
+      '@storybook/react-docgen-typescript-plugin': 1.0.6--canary.9.cd77847.0_uwemawexpmcwp4gcune73namy4
       '@storybook/semver': 7.3.2
       '@storybook/store': 6.5.16_biqbaboplfbrettd7655fr4n2y
       '@types/estree': 0.0.51
@@ -8888,7 +8891,7 @@ packages:
       os-browserify: 0.3.0
       path-browserify: 0.0.1
       process: 0.11.10
-      punycode: 1.4.1
+      punycode: 1.3.2
       querystring-es3: 0.2.1
       readable-stream: 2.3.7
       stream-browserify: 2.0.2
@@ -9764,10 +9767,6 @@ packages:
 
   /punycode/1.3.2:
     resolution: {integrity: sha512-RofWgt/7fL5wP1Y7fxE7/EmTLzQVnB0ycyibJ0OOHIlJqTNzglYFxVwETOcIoJqJmpDXJ9xImDv+Fq34F/d4Dw==}
-
-  /punycode/1.4.1:
-    resolution: {integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==}
-    dev: true
 
   /punycode/2.3.0:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}

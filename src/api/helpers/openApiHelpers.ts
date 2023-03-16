@@ -9,7 +9,6 @@ import {
   aws_route53_targets as targets,
   Duration,
 } from 'aws-cdk-lib';
-import { TokenAuthorizer } from 'aws-cdk-lib/aws-apigateway/lib/authorizers/lambda';
 import { Construct } from 'constructs';
 
 import { distinctBy, notEmpty } from '../../common/helpers/array';
@@ -89,7 +88,7 @@ const setupLambda = ({
   verb: string;
   lambdaConfig: ILambdaConfigs;
   seenPermissions: { [a: string]: boolean };
-  authorizers?: Record<string, TokenAuthorizer>;
+  authorizers?: Record<string, apigw.TokenAuthorizer>;
 }) => {
   const pathCompute = pathV + '/' + verb;
   const lp = lambdaConfig?.[pathCompute];
@@ -220,7 +219,7 @@ export const openApiImpl = (p: {
   /**
    * dictionary of named authorizer functions. these names are to be used in the lambdaConfig param
    */
-  authorizers?: Record<string, TokenAuthorizer>;
+  authorizers?: Record<string, apigw.TokenAuthorizer>;
 
   /**
    * A record will be created in hosted zone for the apigw on this path. if undefined, record wont be created
