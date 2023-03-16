@@ -1,6 +1,6 @@
 {
   "name": "ag-common",
-  "version": "0.0.418",
+  "version": "0.0.419",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "author": "Andrei Gec <@andreigec> (https://gec.dev/)",
@@ -50,7 +50,6 @@
     "cross-env": "7.0.3",
     "eslint-config-e7npm": "0.0.9",
     "rimraf": "4.4.0"
-    
   },
   "resolutions": {
     "@storybook/react-docgen-typescript-plugin": "1.0.6--canary.9.cd77847.0"
