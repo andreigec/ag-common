@@ -19,15 +19,13 @@
     "aws-sdk": "2.x",
     "axios": "1.x",
     "constructs": "10.x",
-    "eslint-import-resolver-typescript": ">=3",
-    "eslint-plugin-simple-import-sort": ">=10",
     "jsonwebtoken": "9.x",
     "jwks-rsa": "3.x",
     "node-cache": "5.x",
     "openapi-request-validator": "12.x",
     "react": "18.x",
     "react-dom": "18.x",
-    "typescript": "4.x"
+    "typescript": "5.x"
   },
   "peerDependencies": {
     "@emotion/react": ">=11",
@@ -50,7 +48,7 @@
     "@emotion/react": "11.10.6",
     "@emotion/styled": "11.10.6",
     "cross-env": "7.0.3",
-    "eslint-config-e7npm": "0.0.8",
+    "eslint-config-e7npm": "0.0.9",
     "rimraf": "4.4.0"
   },
   "files": [
