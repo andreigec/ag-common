@@ -10,20 +10,20 @@ export interface Dimensions {
   vBigScreen: boolean;
 }
 function getWindowDimensions(): Dimensions | undefined {
-  if (typeof window !== 'undefined') {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    return {
-      width,
-      height,
-      smallScreen: width <= smallScreenPx,
-      bigScreen: width > smallScreenPx,
-      vBigScreen: width > bigScreenPx,
-    } as Dimensions;
-  } else {
+  if (typeof window === 'undefined') {
     return undefined;
   }
+
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  return {
+    width,
+    height,
+    smallScreen: width <= smallScreenPx,
+    bigScreen: width > smallScreenPx,
+    vBigScreen: width > bigScreenPx,
+  } as Dimensions;
 }
 
 export function useResize() {
