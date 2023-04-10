@@ -49,7 +49,7 @@
     "@emotion/styled": "11.10.6",
     "cross-env": "7.0.3",
     "eslint-config-e7npm": "0.0.9",
-    "rimraf": "4.4.1"
+    "rimraf": "5.0.0"
   },
   "resolutions": {
     "@storybook/react-docgen-typescript-plugin": "1.0.6--canary.9.f9c48c0.0"
