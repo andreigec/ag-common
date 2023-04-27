@@ -1,6 +1,6 @@
 {
-  "name": "ag-common",
   "version": "0.0.425",
+  "name": "ag-common",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "author": "Andrei Gec <@andreigec> (https://gec.dev/)",
@@ -8,11 +8,11 @@
   "license": "ISC",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "format": "npx eslint --ext .ts,.tsx ./src --fix && npx eslint --ext .ts,.tsx ./story --fix",
+    "format": "npx eslint --ext .ts,.tsx ./src --fix && npx eslint --ext .ts,.tsx ./stories --fix",
     "build": "rimraf dist && npm run lint && tsc",
     "lint": "npx eslint --ext .ts,.tsx ./src",
-    "start": "cross-env BROWSER=none cross-env NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
-    "build-storybook": "cross-env NODE_OPTIONS=--openssl-legacy-provider build-storybook -o docs --quiet"
+    "start": "cross-env BROWSER=none cross-env storybook dev -p 6006",
+    "build-storybook": "cross-env storybook build -o docs --quiet"
   },
   "dependencies": {
     "aws-cdk-lib": ">=2",
@@ -27,32 +27,29 @@
     "react-dom": ">=18",
     "typescript": ">=5"
   },
-  "peerDependencies": {
-    "@emotion/react": ">=11",
-    "@emotion/styled": ">=11"
-  },
   "devDependencies": {
     "@babel/core": "7.21.4",
-    "@storybook/addon-actions": "7.0.2",
-    "@storybook/addon-docs": "7.0.2",
-    "@storybook/addon-essentials": "7.0.2",
-    "@storybook/addon-interactions": "7.0.2",
-    "@storybook/addon-links": "7.0.2",
-    "@storybook/addons": "7.0.2",
-    "@storybook/react": "7.0.2",
-    "@storybook/theming": "7.0.2",
-    "@types/jsonwebtoken": "9.0.1",
-    "@types/node": "18.15.11",
-    "@types/react": "18.0.34",
-    "@types/react-dom": "18.0.11",
+    "@babel/preset-typescript": "^7.21.4",
+    "@babel/types": "^7.21.4",
     "@emotion/react": "11.10.6",
     "@emotion/styled": "11.10.6",
+    "@storybook/addon-actions": "7.0.7",
+    "@storybook/addon-docs": "7.0.7",
+    "@storybook/addon-essentials": "7.0.7",
+    "@storybook/addon-interactions": "7.0.7",
+    "@storybook/addon-links": "7.0.7",
+    "@storybook/addons": "7.0.7",
+    "@storybook/react": "7.0.7",
+    "@storybook/react-webpack5": "7.0.7",
+    "@storybook/theming": "7.0.7",
+    "@types/jsonwebtoken": "9.0.2",
+    "@types/node": "18.16.1",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.1",
     "cross-env": "7.0.3",
     "eslint-config-e7npm": "0.0.9",
-    "rimraf": "5.0.0"
-  },
-  "resolutions": {
-    "@storybook/react-docgen-typescript-plugin": "1.0.6--canary.9.f9c48c0.0"
+    "rimraf": "5.0.0",
+    "storybook": "7.0.7"
   },
   "files": [
     "dist/**/*",

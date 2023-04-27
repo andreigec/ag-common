@@ -7,7 +7,7 @@ on:
     paths:
       - '!src/ui/**'
       - '!package.json'
-      - 'src/story/**'
+      - 'src/stories/**'
       - '.github/workflows/main-storybook.yml'
 
 jobs:
