@@ -18,7 +18,9 @@ const ActionWrapper = <T,>(args: ISearchDialog<T>) => (
     }}
     role="button"
     tabIndex={-1}
-    onKeyDown={() => {}}
+    onKeyDown={() => {
+      //
+    }}
     onClick={async () => {
       const res = await SearchDialog(args);
       // eslint-disable-next-line no-alert

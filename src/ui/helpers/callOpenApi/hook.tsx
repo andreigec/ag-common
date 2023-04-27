@@ -67,7 +67,14 @@ export const useCallOpenApi = <T, TDefaultApi>(
     () => {
       if (JSON.stringify(config) !== JSON.stringify(inConfig)) {
         setConfig(inConfig);
-        setResp(defaultState(inConfig, true));
+        setResp({ ...defaultState(inConfig, true), loading: true });
+        void callOpenApi(inConfig).then((r) =>
+          setResp((r2) => ({
+            ...r2,
+            ...r,
+            loading: false,
+          })),
+        );
       }
     },
     [inConfig],
@@ -113,7 +120,7 @@ export const useCallOpenApi = <T, TDefaultApi>(
     void reFetch();
   }, [config.disabled, reFetch, resp]);
 
-  return {
+  const ret: TUseCallOpenApi<T> = {
     ...resp,
     reFetch,
     setData: async (p) => {
@@ -130,4 +137,5 @@ export const useCallOpenApi = <T, TDefaultApi>(
       }));
     },
   };
+  return ret;
 };
