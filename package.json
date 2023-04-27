@@ -12,7 +12,7 @@
     "build": "rimraf dist && npm run lint && tsc",
     "lint": "npx eslint --ext .ts,.tsx ./src",
     "start": "cross-env BROWSER=none cross-env storybook dev -p 6006",
-    "build-storybook": "cross-env storybook build -o docs --quiet"
+    "build-storybook": "storybook build -o docs --quiet"
   },
   "dependencies": {
     "aws-cdk-lib": ">=2",

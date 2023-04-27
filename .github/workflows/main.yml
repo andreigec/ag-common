@@ -53,7 +53,7 @@ jobs:
       env:
         CI: false
       run: |
-        npx build-storybook -o docs --quiet
+        pnpm run build-storybook
 
     - uses:  'phips28/gh-action-bump-version@master'
       name:  'Automated Version Bump'

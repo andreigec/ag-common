@@ -51,7 +51,7 @@ jobs:
       env:
         CI: false
       run: |
-        npx build-storybook -o docs --quiet
+        pnpm run build-storybook
 
     - name: Deploy storybook gh-pages
       uses: peaceiris/actions-gh-pages@v3
