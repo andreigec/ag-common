@@ -1,4 +1,7 @@
-import { containsInsensitiveIndex } from './contains';
+import {
+  containsInsensitiveIndex,
+  containsInsensitiveIndexes,
+} from './contains';
 
 export interface IGetExtendedStringSegment {
   /** based on original full text */
@@ -18,51 +21,61 @@ export interface IGetExtendedStringSegment {
  * @param needle
  * @returns
  */
-export const getExtendedStringSegment = (
-  hay: string,
-  needle: string,
-  blocksOnEitherSide = 5,
-  /** can override this if space bounded words are required */
-  gapChars = ['\n', '\r\n'],
-): undefined | IGetExtendedStringSegment => {
-  const fi = containsInsensitiveIndex({ str: hay }, needle);
-  if (fi === -1) {
-    return undefined;
-  }
-
-  let start = fi;
-  //we want to extend the partial content back to -(gap) gapChars
-  for (let a = 0; a <= blocksOnEitherSide; a += 1) {
-    const newstartI = containsInsensitiveIndex(
-      { str: hay.substring(0, start), fromLast: true },
-      ...gapChars,
-    );
-
-    if (newstartI !== -1) {
-      start = newstartI;
+export const getExtendedStringSegments = (p: {
+  /** all text */
+  hay: string;
+  /** search term */
+  needle: string;
+  /** add this much content on either side of found item. default 5 */
+  blocksOnEitherSide?: number;
+  /** can override this if space bounded words are required. default newline */
+  gapChars?: string[];
+}): undefined | IGetExtendedStringSegment[] => {
+  const { blocksOnEitherSide = 5, gapChars = ['\n', '\r\n'], hay, needle } = p;
+  const fis = containsInsensitiveIndexes({ haystack: hay, needle });
+  const founds: IGetExtendedStringSegment[] = [];
+  fis.forEach((fi) => {
+    if (fi === -1) {
+      return;
     }
-  }
 
-  //and forward
-  let end = fi + needle.length;
-  for (let a = 0; a <= blocksOnEitherSide; a += 1) {
-    const newEndI = containsInsensitiveIndex(
-      { str: hay.substring(end) },
-      ...gapChars,
-    );
+    let start = fi;
+    //we want to extend the partial content back to -(gap) gapChars
+    for (let a = 0; a <= blocksOnEitherSide; a += 1) {
+      const newstartI = containsInsensitiveIndex(
+        { str: hay.substring(0, start), fromLast: true },
+        ...gapChars,
+      );
 
-    if (newEndI !== -1) {
-      end += newEndI + 1;
+      if (newstartI !== -1) {
+        start = newstartI;
+      }
     }
-  }
-  const outerText = hay.substring(start, end);
-  const innerStart = outerText.toLowerCase().indexOf(needle.toLowerCase());
 
-  return {
-    outerStart: start,
-    outerEnd: end,
-    outerText,
-    innerStart,
-    innerEnd: innerStart + needle.length,
-  };
+    //and forward
+    let end = fi + needle.length;
+    for (let a = 0; a <= blocksOnEitherSide; a += 1) {
+      const newEndI = containsInsensitiveIndex(
+        { str: hay.substring(end) },
+        ...gapChars,
+      );
+
+      if (newEndI !== -1) {
+        end += newEndI + 1;
+      }
+    }
+
+    const outerText = hay.substring(start, end);
+    const innerStart = outerText.toLowerCase().indexOf(needle.toLowerCase());
+
+    const found: IGetExtendedStringSegment = {
+      outerStart: start,
+      outerEnd: end,
+      outerText,
+      innerStart,
+      innerEnd: innerStart + needle.length,
+    };
+    founds.push(found);
+  });
+  return founds;
 };
