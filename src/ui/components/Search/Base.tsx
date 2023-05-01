@@ -47,11 +47,11 @@ type ISearchBase<T> = ISearchDialog<T> & {
 export const SearchBase = <T,>(p: ISearchBase<T>) => {
   const { maxDisplayItems = 20 } = p;
   const [searchText, setSearchText] = useState(p.defaultValue ?? '');
-  const resWrap = (foundItem: T | undefined) => {
+  const resWrap = (foundItem: T | undefined, target: EventTarget) => {
     if (!foundItem) {
       p.onSelectItem?.(undefined);
     } else {
-      p.onSelectItem?.({ foundItem, searchText });
+      p.onSelectItem?.({ foundItem, searchText, target });
     }
   };
 
@@ -70,7 +70,7 @@ export const SearchBase = <T,>(p: ISearchBase<T>) => {
       <SearchBox {...p} searchText={searchText} setSearchText={setSearchText} />
       <Content data-hasitems={!!filteredItems.length} data-type="content">
         {filteredItems.map((item, index) => (
-          <Row key={p.getKeyF(item)} onClick={() => resWrap(item)}>
+          <Row key={p.getKeyF(item)} onClick={(e) => resWrap(item, e.target)}>
             {p.renderItem({ searchText, item, index })}
           </Row>
         ))}

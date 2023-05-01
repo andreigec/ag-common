@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "@babel/core": "7.21.4",
-    "@babel/preset-typescript": "^7.21.4",
-    "@babel/types": "^7.21.4",
+    "@babel/preset-typescript": "^7.21.5",
+    "@babel/types": "^7.21.5",
     "@emotion/react": "11.10.6",
     "@emotion/styled": "11.10.6",
     "@storybook/addon-actions": "7.0.7",
