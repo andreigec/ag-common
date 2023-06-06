@@ -3,6 +3,7 @@ import React from 'react';
 export interface IHeadersRaw {
   title?: string;
   image?: string;
+  description?: string;
   SiteShort: string;
   FullSiteUrl: string;
   siteDesc: string;
