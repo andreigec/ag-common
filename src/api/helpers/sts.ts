@@ -26,6 +26,6 @@ export async function assumeRole({
     throw new Error(JSON.stringify(data.$response.error, null, 2));
   }
 
-  info(`resp:${data}`);
+  info(`resp:${JSON.stringify(data, null, 2)}`);
   return data.Credentials;
 }
