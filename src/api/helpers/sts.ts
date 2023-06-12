@@ -1,9 +1,9 @@
 import STS from 'aws-sdk/clients/sts';
 
-import { info } from '../../common/helpers/log';
+import { error, info } from '../../common/helpers/log';
 
 /**
- * @param {assumeRoleArn} assume this role arn
+ * @param {assumeRoleArn} assume this role arn. remember to use the credentials returned in subsequent calls
  * @returns {string} assumed accountId
  */
 export async function assumeRole({
@@ -22,10 +22,15 @@ export async function assumeRole({
     })
     .promise();
 
-  if (data.$response.error) {
+  if (data.$response.error || !data.Credentials) {
+    error('aws assume role error');
     throw new Error(JSON.stringify(data.$response.error, null, 2));
   }
 
-  info(`resp:${JSON.stringify(data, null, 2)}`);
-  return data.Credentials;
+  return {
+    accessKeyId: data.Credentials.AccessKeyId,
+    secretAccessKey: data.Credentials.SecretAccessKey,
+    sessionToken: data.Credentials.SessionToken,
+    expiration: data.Credentials.Expiration,
+  };
 }
