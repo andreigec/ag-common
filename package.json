@@ -44,7 +44,7 @@
     "@storybook/theming": "7.0.23",
     "@types/jsonwebtoken": "9.0.2",
     "@types/node": "20.3.1",
-    "@types/react": "18.2.13",
+    "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "cross-env": "7.0.3",
     "eslint-config-e7npm": "0.0.9",
