@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { retryHttpCodes, retryHttpMs } from '../../../common/const';
 import { notEmpty } from '../../../common/helpers/array';
@@ -106,15 +106,16 @@ export const callOpenApi = async <T, TDefaultApi>(
 
   while (errorCount <= errorMax) {
     errorCount += 1;
+
     try {
       // eslint-disable-next-line no-await-in-loop
-      const resp = await func(cl);
-      if (resp.status < 400) {
-        data = resp.data;
+      const response = await func(cl);
+      if (response.status < 400) {
+        data = response.data;
         break;
       }
 
-      throw new AxiosError(resp.statusText, resp.status?.toString() || '500');
+      throw { response };
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const ae = e as AxiosError<unknown, any>;
@@ -131,6 +132,7 @@ export const callOpenApi = async <T, TDefaultApi>(
         .sort((a, b) => (a.length < b.length ? -1 : 1))
         .join('\n');
 
+      //if auth fail, then quick exit
       if (status === 403 || status === 401) {
         logout();
         return {
@@ -139,6 +141,7 @@ export const callOpenApi = async <T, TDefaultApi>(
         };
       }
 
+      //if not a potential retriable error, or have retried enough, then exit
       if (!retryHttpCodes.includes(status) || errorCount === errorMax) {
         error = { ...ae, message: errorMessage };
         break;

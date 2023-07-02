@@ -55,7 +55,7 @@ const TemplateModal: StoryFn<typeof ActionWrapper> = (args) => (
 export const Dialog = TemplateModal.bind({}) as StoryFn<typeof ActionWrapper>;
 Dialog.args = {
   toast: {
-    message: 'hey guys, long test hereeeee',
+    message: 'hey guys, long toasttt hereeeee',
     options: {
       appearance: 'success',
       autoClose: 2000,

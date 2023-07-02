@@ -1,35 +1,9 @@
-import { AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 
 import { arrayToObject } from '../../../common/helpers/array';
+import { getStringFromStream } from '../../../common/helpers/stream';
 import { ApiResponse } from './types';
 
-async function getStringFromStream(
-  stream: ReadableStream<Uint8Array>,
-): Promise<string> {
-  const decoder = new TextDecoder();
-
-  const reader = stream.getReader();
-  let result = '';
-
-  try {
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const { done, value } = await reader.read();
-
-      if (done) break;
-
-      // Convert the Uint8Array chunk to a string
-      const chunkString = decoder.decode(value);
-
-      // Append the chunk to the final result
-      result += chunkString;
-    }
-  } finally {
-    reader.releaseLock();
-  }
-
-  return result;
-}
 /**
  * shim to convert raw response to an axios style response.
  * must convert all DefaultClass requests to the Raw equivalent
@@ -64,7 +38,8 @@ export const apiResponseToAxiosResponse = async <T>(
 
       if (er.body) {
         try {
-          statusText = await getStringFromStream(er.body);
+          const st = await getStringFromStream(er.body);
+          statusText = st;
         } catch (e) {
           //
         }
