@@ -13,7 +13,7 @@ on:
       - '.github/workflows/main.yml'
 
 jobs:
-  build:
+  main:
     runs-on: ubuntu-latest
     name: lint
     steps:
@@ -78,3 +78,9 @@ jobs:
       with:
         github_token: ${{ secrets.GH_TOKEN }}
         publish_dir: ./docs
+
+    - name: notify analytica of build
+      uses: andreigecanalytica/analytica.click.gh@1
+      with:
+        analyticaToken: '${{ secrets.ANALYTICATOKEN }}'
+        eventName: '${{ github.repository }}/GH/${{ github.job }}/${{ github.event_name }}'
