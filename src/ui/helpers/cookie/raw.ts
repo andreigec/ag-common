@@ -75,7 +75,7 @@ export function wipeCookies(name: string) {
     if (
       getCookie({
         name: name + currentCount,
-        cookieDocument: '',
+        cookieDocument: document.cookie,
       })
     ) {
       setCookie({ name: name + currentCount, value: '', expiryDays: -1 });
