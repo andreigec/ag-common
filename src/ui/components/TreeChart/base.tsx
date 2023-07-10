@@ -11,6 +11,10 @@ const Base = styled.div`
   border: solid 1px #ccc;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  flex-grow: 1;
 `;
 
 const Node = styled.div`
@@ -23,13 +27,16 @@ const Node = styled.div`
 const NodeChildren = styled.div`
   display: flex;
   flex-flow: row;
-  justify-content: center;
+  align-items: flex-start;
 `;
-const Title = styled.div`
+const Title = styled.span`
   color: white;
   word-break: break-all;
   ${HardOutline('black')};
-  ${TextOverflowEllipsis(1)}
+  ${TextOverflowEllipsis(1)};
+  min-height: 1rem;
+  line-height: 1rem;
+  overflow: hidden;
 `;
 const render = ({
   n,
@@ -42,17 +49,11 @@ const render = ({
   n: TreeNodeOut;
   depth: number;
   head: TreeNodeOut;
-  headDim: { x: number; y: number };
+  headDim: { width: number; height: number };
 }) => {
-  let width = 0;
-  let height = 0;
-
   const sizeMult = n.size / head.size;
-  width = Math.floor(headDim.x * sizeMult) - 6; //6 = padding+margins
-  if (n.children.length === 0) {
-    height = Math.floor(headDim.y * sizeMult);
-  }
-
+  const width = Math.floor(headDim.width * sizeMult) - 2;
+  const height = Math.floor(headDim.height * sizeMult);
   const title =
     tnd.titleFn?.({
       path: n.name,
@@ -60,24 +61,42 @@ const render = ({
       fullCount: head.size,
     }) || `${n.name} (${n.size}/${head.size})`;
 
+  const leaf = n.children.length === 0;
+
+  const titleStyles: React.CSSProperties = {
+    //width: `${width}px`,
+    ...(leaf && {
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }),
+  };
+
+  const nodeStyles: React.CSSProperties = {
+    backgroundColor: getColourWheel(depth),
+    ...(leaf && {
+      width: `${width}px`,
+      height: `calc(${height}px + 0rem)`,
+    }),
+  };
+
   return (
     <Node
-      style={{
-        backgroundColor: getColourWheel(depth),
-        width: width ? width + 'px' : '100%',
-        height: height ? height + 'px' : '100%',
-      }}
+      style={nodeStyles}
       key={n.name}
       data-ch={n.children.length}
       data-size={n.size}
       title={title}
     >
-      <Title>{n.name}</Title>
-      <NodeChildren>
-        {n.children.map((c) =>
-          render({ n: c, depth: depth + 1, head, headDim, tnd }),
-        )}
-      </NodeChildren>
+      <Title style={titleStyles}>{n.name}</Title>
+      {n.children.length > 0 && (
+        <NodeChildren style={{ maxHeight: headDim.height }}>
+          {n.children
+            .sort((a, b) => (a.size < b.size ? 1 : -1))
+            .map((c) => render({ n: c, depth: depth + 1, head, headDim, tnd }))}
+        </NodeChildren>
+      )}
     </Node>
   );
 };
@@ -88,7 +107,7 @@ export const TreeChart = (tnd: TreeNodeData) => {
   const pd = useResize();
 
   const [headDim, setHeadDim] = useState<
-    { x: number; y: number } | undefined
+    { width: number; height: number } | undefined
   >();
 
   const r = useRef<HTMLDivElement>(null);
@@ -97,15 +116,25 @@ export const TreeChart = (tnd: TreeNodeData) => {
     if (!r.current) {
       return;
     }
-    setHeadDim({ x: r.current.clientWidth, y: r.current.clientHeight });
+    setHeadDim({
+      width: r.current.clientWidth,
+      height: r.current.clientHeight || r.current.clientWidth * 0.5,
+    });
   }, [pd]);
 
   if (head.size === 0) {
     return <div />;
   }
 
+  const baseStyle: React.CSSProperties = {
+    ...(headDim && {
+      maxWidth: headDim.width,
+      maxHeight: headDim.height,
+    }),
+  };
+
   return (
-    <Base ref={r} style={{ width: '100%', height: '20rem' }}>
+    <Base ref={r} style={baseStyle}>
       {headDim && render({ tnd, n: head, depth: 0, head, headDim })}
     </Base>
   );

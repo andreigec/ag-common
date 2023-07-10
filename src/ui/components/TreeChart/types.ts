@@ -1,6 +1,7 @@
 export interface TreeNodeOut {
   name: string;
   size: number;
+  depth: number;
   children: TreeNodeOut[];
 }
 export interface TreeNodeData {
