@@ -57,7 +57,7 @@ export const IconF = styled.span`
   }
 
   &[data-hasoutline='true'] {
-    ${HardOutline}
+    ${HardOutline('var(--outlinecolour)')}
   }
 
   svg {

@@ -27,4 +27,5 @@ export * from './TextEdit';
 export * from './TextWithButton';
 export * from './TimelineChart';
 export * from './Toast';
+export * from './TreeChart';
 export * from './UserImage';

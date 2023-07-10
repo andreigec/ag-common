@@ -64,4 +64,3 @@ jobs:
       uses: andreigecanalytica/analytica.click.gh@2
       with:
         ANALYTICA_TOKEN: '${{ secrets.ANALYTICATOKEN }}'
-        

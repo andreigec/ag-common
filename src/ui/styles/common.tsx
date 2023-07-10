@@ -3,12 +3,20 @@ import styled from '@emotion/styled';
 
 import { colours } from './colours';
 
-export const HardOutline = css`
-  filter: drop-shadow(1px 1px 0px var(--outlinecolour))
-    drop-shadow(-1px 1px 0px var(--outlinecolour))
-    drop-shadow(1px -1px 0px var(--outlinecolour))
-    drop-shadow(-1px -1px 0px var(--outlinecolour));
-`;
+/** function that returns css that gives a text outline drop shadow.
+ * outlinecolour default='white'
+ * size default = 1px
+ */
+export const HardOutline = (outlineColour = 'white', size = 1) => {
+  const px = `${size}px`;
+
+  return css`
+    filter: drop-shadow(${px} ${px} 0px ${outlineColour})
+      drop-shadow(-${px} ${px} 0px ${outlineColour})
+      drop-shadow(${px} -${px} 0px ${outlineColour})
+      drop-shadow(-${px} -${px} 0px ${outlineColour});
+  `;
+};
 
 export const NoTextSelect = css`
   user-select: none; /* supported by Chrome and Opera */
@@ -18,7 +26,10 @@ export const NoTextSelect = css`
   -ms-user-select: none; /* Internet Explorer/Edge */
 `;
 
-export const TextOverflowEllipsis = css`
+export const TextOverflowEllipsis = (lines: number) => css`
+  display: -webkit-box;
+  -webkit-line-clamp: ${lines};
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
