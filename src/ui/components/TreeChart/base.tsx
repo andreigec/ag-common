@@ -18,17 +18,22 @@ const Base = styled.div`
 `;
 
 const Node = styled.div`
-  margin: 1px;
-  padding: 2px;
   display: flex;
   flex-flow: column;
+  margin: 1px;
+  padding: 2px;
+  max-height: 100%;
+  max-width: 100%;
 `;
 
 const NodeChildren = styled.div`
-  display: flex;
-  flex-flow: row;
-  align-items: flex-start;
+  display: grid;
+  width: 100%;
+  max-width: 100%;
+  height: min-content;
+  width: max-content;
 `;
+
 const Title = styled.span`
   color: white;
   word-break: break-all;
@@ -36,7 +41,6 @@ const Title = styled.span`
   ${TextOverflowEllipsis(1)};
   min-height: 1rem;
   line-height: 1rem;
-  overflow: hidden;
 `;
 const render = ({
   n,
@@ -51,9 +55,6 @@ const render = ({
   head: TreeNodeOut;
   headDim: { width: number; height: number };
 }) => {
-  const sizeMult = n.size / head.size;
-  const width = Math.floor(headDim.width * sizeMult) - 2;
-  const height = Math.floor(headDim.height * sizeMult);
   const title =
     tnd.titleFn?.({
       path: n.name,
@@ -63,35 +64,35 @@ const render = ({
 
   const leaf = n.children.length === 0;
 
-  const titleStyles: React.CSSProperties = {
-    //width: `${width}px`,
-    ...(leaf && {
-      height: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }),
+  const nodeChildrenStyles: React.CSSProperties = {
+    gridTemplateColumns: `repeat(${n.size}, 10px)`,
+    gridTemplateRows: `repeat(${n.size}, 10px)`,
+    maxHeight: `calc(100% - ${n.name ? '1rem' : '0rem'})`,
   };
 
   const nodeStyles: React.CSSProperties = {
     backgroundColor: getColourWheel(depth),
-    ...(leaf && {
-      width: `${width}px`,
-      height: `calc(${height}px + 0rem)`,
+    gridColumnEnd: `span ${n.size}`,
+    gridRowEnd: `span ${n.size}`,
+    ...(!leaf && {
+      gridRowEnd: '',
+      gridRow: '-1/1',
+      height: 'max-content',
     }),
   };
 
   return (
     <Node
+      data-treenode
       style={nodeStyles}
       key={n.name}
       data-ch={n.children.length}
       data-size={n.size}
       title={title}
     >
-      <Title style={titleStyles}>{n.name}</Title>
+      {n.name && <Title>{n.name}</Title>}
       {n.children.length > 0 && (
-        <NodeChildren style={{ maxHeight: headDim.height }}>
+        <NodeChildren style={nodeChildrenStyles} data-type="nc">
           {n.children
             .sort((a, b) => (a.size < b.size ? 1 : -1))
             .map((c) => render({ n: c, depth: depth + 1, head, headDim, tnd }))}
@@ -128,14 +129,24 @@ export const TreeChart = (tnd: TreeNodeData) => {
 
   const baseStyle: React.CSSProperties = {
     ...(headDim && {
+      ...headDim,
       maxWidth: headDim.width,
       maxHeight: headDim.height,
+      display: 'flex',
     }),
   };
 
   return (
     <Base ref={r} style={baseStyle}>
-      {headDim && render({ tnd, n: head, depth: 0, head, headDim })}
+      <NodeChildren
+        data-type="nc"
+        style={{
+          gridTemplateColumns: `repeat(${head.size}, minmax(0,10px))`,
+          gridTemplateRows: `repeat(${head.size}, minmax(0, 10px))`,
+        }}
+      >
+        {headDim && render({ tnd, n: head, depth: 0, head, headDim })}
+      </NodeChildren>
     </Base>
   );
 };

@@ -5,12 +5,16 @@ export const useIsomorphicLayoutEffect =
 
 export default useIsomorphicLayoutEffect;
 
-export function useInterval(
-  callback: () => void,
+export function useInterval<T>(
+  callback: () => T,
   /** ms delay */
   delay: number | null,
-  /** optionally called on return of useEffect */
-  clear?: () => void,
+  opt?: {
+    /** called when cleaning up useEffect */
+    onEnd?: () => void;
+    /** will be passed result of callback, and can cancel interval if passed */
+    determineEnd?: (v: T) => boolean;
+  },
 ) {
   const savedCallback = useRef(callback);
 
@@ -23,11 +27,17 @@ export function useInterval(
       return;
     }
 
-    const id = setInterval(() => savedCallback.current(), delay);
+    const id = setInterval(() => {
+      const res = savedCallback.current();
+      if (opt?.determineEnd?.(res)) {
+        clearInterval(id);
+        opt?.onEnd?.();
+      }
+    }, delay);
 
     return () => {
       clearInterval(id);
-      clear?.();
+      opt?.onEnd?.();
     };
-  }, [clear, delay]);
+  }, [opt, delay]);
 }

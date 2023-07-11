@@ -1,8 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import { TreeChart, TreeNodeData } from '../../src/ui/components/TreeChart';
-import { treeData } from './data';
+import { TreeChart } from '../../src/ui/components/TreeChart';
+import { treeData, treeData1 } from './data';
 
 export default {
   title: 'UI/TreeChart',
@@ -11,7 +11,8 @@ export default {
 
 const Template: StoryFn<typeof TreeChart> = (args) => (
   <div style={{ backgroundColor: 'white', padding: '0.5rem' }}>
-    <TreeChart {...args} />
+    <TreeChart data={treeData} />
+    <TreeChart data={treeData1} />
   </div>
 );
 
