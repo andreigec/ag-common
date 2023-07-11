@@ -4,18 +4,23 @@ export interface IHeadersRaw {
   title?: string;
   image?: string;
   description?: string;
-  SiteShort: string;
-  FullSiteUrl: string;
-  siteDesc: string;
+  /** eg https://abc.def */
+  siteUrl: string;
+  /** eg 'a site to remember' */
+  tagline: string;
+  /** csv or separate keyword strings */
+  keywords: string | string[];
 }
+
 export const HeadersRaw = ({
   title,
   image,
-  SiteShort,
-  FullSiteUrl,
-  siteDesc,
+  siteUrl,
+  tagline,
+  keywords,
 }: IHeadersRaw) => {
-  const fullTitle = `${title ? `${title} | ` : ''}${SiteShort} | ${siteDesc}`;
+  const { origin, hostname } = new URL(siteUrl);
+  const fullTitle = `${title ? `${title} | ` : ''}${hostname} | ${tagline}`;
   const titleFallback = title || fullTitle;
   const titleBlock = [
     <title key="1">{fullTitle}</title>,
@@ -38,13 +43,50 @@ export const HeadersRaw = ({
   return [
     <meta key="11" charSet="utf-8" />,
     ...titleBlock,
-    <meta key="12" property="og:site_name" content={SiteShort} />,
-    <meta key="13" property="og:url" content={FullSiteUrl} />,
-    <meta key="14" itemProp="url" content={FullSiteUrl} />,
-    <meta key="15" name="twitter:url" content={FullSiteUrl} />,
+    <meta key="12" property="og:site_name" content={hostname} />,
+    <meta key="13" property="og:url" content={origin} />,
+    <meta key="14" itemProp="url" content={origin} />,
+    <meta key="15" name="twitter:url" content={origin} />,
     <meta key="16" property="og:type" content="website" />,
     <meta key="17" name="twitter:card" content="summary_large_image" />,
     <meta key="18" name="robots" content="index, follow" />,
+    <meta
+      key="19"
+      name="keywords"
+      content={Array.isArray(keywords) ? keywords.join(', ') : keywords}
+    />,
     ...imagearr,
   ];
+};
+
+export const HeadersRawNext = ({
+  title,
+  image,
+  siteUrl,
+  tagline,
+  description,
+  keywords,
+}: IHeadersRaw) => {
+  const { origin, hostname } = new URL(siteUrl);
+  const fullTitle = `${title ? `${title} | ` : ''}${hostname} | ${tagline}`;
+
+  return {
+    title: fullTitle,
+    description: description || fullTitle,
+    keywords,
+
+    openGraph: {
+      title: fullTitle,
+      description: description || fullTitle,
+      siteName: hostname,
+      url: origin,
+      images: image,
+    },
+    twitter: {
+      title: fullTitle,
+      description: description || fullTitle,
+      card: 'summary_large_image',
+      images: image,
+    },
+  };
 };
