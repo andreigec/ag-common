@@ -1,15 +1,16 @@
 import React from 'react';
 
+/** full page title = title | hostname | tagline */
 export interface IHeadersRaw {
+  /** eg https://abc.def */
+  siteUrl: string;
   title?: string;
   image?: string;
   description?: string;
-  /** eg https://abc.def */
-  siteUrl: string;
   /** eg 'a site to remember' */
-  tagline: string;
+  tagline?: string;
   /** csv or separate keyword strings */
-  keywords: string | string[];
+  keywords?: string | string[];
 }
 
 export const HeadersRaw = ({
@@ -20,7 +21,8 @@ export const HeadersRaw = ({
   keywords,
 }: IHeadersRaw) => {
   const { origin, hostname } = new URL(siteUrl);
-  const fullTitle = `${title ? `${title} | ` : ''}${hostname} | ${tagline}`;
+  const fullTitle = [title, hostname, tagline].filter((r) => r).join(' | ');
+
   const titleFallback = title || fullTitle;
   const titleBlock = [
     <title key="1">{fullTitle}</title>,
@@ -68,7 +70,7 @@ export const HeadersRawNext = ({
   keywords,
 }: IHeadersRaw) => {
   const { origin, hostname } = new URL(siteUrl);
-  const fullTitle = `${title ? `${title} | ` : ''}${hostname} | ${tagline}`;
+  const fullTitle = [title, hostname, tagline].filter((r) => r).join(' | ');
 
   return {
     title: fullTitle,
