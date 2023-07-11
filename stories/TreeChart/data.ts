@@ -146,7 +146,7 @@ export const treeData1 = [
   { path: 'a/c/d/e', size: 1 },
   { path: 'a/2', size: 1 },
   { path: 'a/3', size: 1 },
-  { path: 'a/5', size: 1 },
+  { path: 'a/5', size: 10 },
   { path: 'a/6', size: 1 },
   { path: 'a/7', size: 1 },
   { path: 'a/8', size: 1 },

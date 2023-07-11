@@ -9,7 +9,7 @@ export default {
   component: TreeChart,
 } as Meta<typeof TreeChart>;
 
-const Template: StoryFn<typeof TreeChart> = (args) => (
+const Template: StoryFn<typeof TreeChart> = () => (
   <div style={{ backgroundColor: 'white', padding: '0.5rem' }}>
     <TreeChart data={treeData} />
     <TreeChart data={treeData1} />
