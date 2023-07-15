@@ -1,10 +1,6 @@
-export function truncate(
-  str: string | null | undefined,
-  n: number,
-  ellip: string,
-) {
+export function truncate(str: string, n: number, ellip: string) {
   if (!str) {
-    return undefined;
+    return str;
   }
   return str.length > n ? str.substr(0, n - 1) + ellip : str;
 }
