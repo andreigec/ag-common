@@ -1,13 +1,6 @@
 import { fromBase64, toBase64 } from './string/base64';
 
-function toBuffer(ab: ArrayBuffer) {
-  const buffer = new Buffer(ab.byteLength);
-  const view = new Uint8Array(ab);
-  for (let i = 0; i < buffer.length; ++i) {
-    buffer[i] = view[i];
-  }
-  return buffer;
-}
+export const toBuffer = (ab: ArrayBuffer) => Buffer.from(ab);
 
 function toArrayBuffer(base64: string) {
   const binary_string = fromBase64(base64);
