@@ -108,7 +108,8 @@ export const FullScreenPage = styled.div`
 `;
 
 export const bounce = (bounceattr: string) => css`
-  transition: opacity 0.2s ease,
+  transition:
+    opacity 0.2s ease,
     transform 0.2s cubic-bezier(0.02, 1.5, 0.74, 1.23);
   transform-origin: 50% 50%;
   transform: translateY(-5px);

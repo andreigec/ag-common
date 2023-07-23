@@ -47,7 +47,7 @@ export function setCookie({
    */
   expiryDays?: number;
 }) {
-  if (typeof window === undefined) {
+  if (typeof window === 'undefined') {
     return;
   }
 

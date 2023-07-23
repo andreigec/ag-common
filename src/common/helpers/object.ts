@@ -31,18 +31,21 @@ export const objectKeysToLowerCase = <T>(origObj: {
   if (!origObj || Object.keys(origObj).length === 0) {
     return {} as { [a: string]: T };
   }
-  return Object.keys(origObj).reduce((newObj, key) => {
-    const val = origObj[key];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const newVal: any =
-      typeof val === 'object'
-        ? objectKeysToLowerCase(val as unknown as { [a: string]: T })
-        : val;
+  return Object.keys(origObj).reduce(
+    (newObj, key) => {
+      const val = origObj[key];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const newVal: any =
+        typeof val === 'object'
+          ? objectKeysToLowerCase(val as unknown as { [a: string]: T })
+          : val;
 
-    // eslint-disable-next-line no-param-reassign
-    newObj[key.toLowerCase()] = newVal;
-    return newObj;
-  }, {} as { [a: string]: T });
+      // eslint-disable-next-line no-param-reassign
+      newObj[key.toLowerCase()] = newVal;
+      return newObj;
+    },
+    {} as { [a: string]: T },
+  );
 };
 
 export const getObjectKeysAsNumber = (o: { [a: number]: unknown }) =>

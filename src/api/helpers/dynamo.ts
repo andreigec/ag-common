@@ -416,9 +416,9 @@ export const queryDynamo = async <T>({
     }
 
     debug(
-      `dynamo query against ${params?.TableName} ok, count=${
-        newitems?.length
-      } ${JSON.stringify(params)}`,
+      `dynamo query against ${params?.TableName} ok, count=${newitems?.length} ${JSON.stringify(
+        params,
+      )}`,
       ` next startkey=${startKey}`,
     );
 

@@ -34,10 +34,11 @@
     "rootDir": "./src",
     "outDir": "dist"
   },
+  "include": [
+    "src",
+  ],
   "exclude": [
     "node_modules",
-  ],
-  "include": [
-    "src"
+    "stories"
   ],
 }
