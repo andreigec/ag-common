@@ -266,9 +266,6 @@ export const openApiImpl = (p: {
         timeout: lc.timeout,
         description: '(cdk)',
         entry: entry,
-        bundling: {
-          externalModules: ['aws-sdk', 'aws-lambda'],
-        },
         reservedConcurrentExecutions: lc.reservedConcurrentExecutions,
         logRetention: logs.RetentionDays.FIVE_DAYS,
         layers: lc.layers,
