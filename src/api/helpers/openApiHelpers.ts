@@ -106,12 +106,12 @@ const setupLambda = ({
   //
   const readTables = distinctBy(
     [...(def?.dynamo?.reads || []), ...(lp?.dynamo?.reads || [])],
-    (s) => s.shortName,
+    (s) => s.tableName,
   );
 
   const writeTables = distinctBy(
     [...(def?.dynamo?.writes || []), ...(lp?.dynamo?.writes || [])],
-    (s) => s.shortName,
+    (s) => s.tableName,
   );
 
   const policies = [...(def.policies || []), ...(lp?.policies || [])].filter(
@@ -150,11 +150,7 @@ const setupLambda = ({
     : authorizers?.[authorizerName];
 
   const env = { ...(def.env || {}), ...(lp?.env || {}) };
-  const tables = [...readTables, ...writeTables];
   const environment: Record<string, string> = env;
-  Object.values(tables).forEach((v) => {
-    environment[v.shortName] = v.table.tableName;
-  });
   return {
     environment,
     readTables,
@@ -271,8 +267,8 @@ export const openApiImpl = (p: {
         layers: lc.layers,
       });
 
-      lc.readTables.forEach((t) => t.table.grantReadData(lambdaV));
-      lc.writeTables.forEach((t) => t.table.grantReadWriteData(lambdaV));
+      lc.readTables.forEach((t) => t.grantReadData(lambdaV));
+      lc.writeTables.forEach((t) => t.grantReadWriteData(lambdaV));
       lc.policies.forEach((p1) => lambdaV.addToRolePolicy(p1));
       //
       apiPath.addMethod(

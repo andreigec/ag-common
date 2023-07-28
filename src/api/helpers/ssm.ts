@@ -36,6 +36,16 @@ export const loadSsmString = ({
   path: string;
 }) => ssm.StringParameter.valueForStringParameter(stack, path);
 
+/** load a string from ssm at synth time*/
+export const loadSsmStringSynth = ({
+  stack,
+  path,
+}: {
+  stack: Stack;
+  /** eg `/${NODE_ENV}/${shortStackName}/service/key` */
+  path: string;
+}) => ssm.StringParameter.valueFromLookup(stack, path);
+
 /** load a csv from ssm */
 export const loadSsmStringList = ({
   stack,

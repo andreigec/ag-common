@@ -32,15 +32,16 @@
       "dom.iterable"
     ],
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "rootDir": "src"
   },
   "include": [
     "src",
-    "stories",
     "tsconfig.json"
   ],
   "exclude": [
     "node_modules",
-    "**/node_modules/**"
+    "**/node_modules/**",
+    "stories"
   ]
 }

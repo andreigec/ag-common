@@ -9,8 +9,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "format": "npx eslint --ext .ts,.tsx ./src --fix && npx eslint --ext .ts,.tsx ./stories --fix",
-    "build": "rimraf dist && npm run lint && tsc",
-    "lint": "npx eslint --ext .ts,.tsx ./src",
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "lint": "npx eslint --ext .ts,.tsx .",
     "start": "cross-env BROWSER=none cross-env storybook dev -p 6006",
     "build-storybook": "storybook build -o docs --quiet"
   },

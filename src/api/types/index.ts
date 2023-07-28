@@ -21,14 +21,10 @@ export interface DYNAMOKEYS {
   PK4?: string;
 }
 
-export interface IGeneratedDynamoData {
-  table: dynamodb.ITable;
-  shortName: string;
-}
 export interface ILambdaConfig {
   dynamo?: {
-    reads?: IGeneratedDynamoData[];
-    writes?: IGeneratedDynamoData[];
+    reads?: dynamodb.ITable[];
+    writes?: dynamodb.ITable[];
   };
   policies?: iam.PolicyStatement[];
   env?: Record<string, string>;
