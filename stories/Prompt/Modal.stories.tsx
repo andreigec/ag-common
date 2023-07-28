@@ -5,19 +5,20 @@ import React from 'react';
 
 import { PromptModal } from '../../src/ui/components/Prompt/Modal';
 
-export default {
+const base: Meta<typeof PromptModal> = {
   title: 'UI/Prompt',
   component: PromptModal,
-} as Meta<typeof PromptModal>;
+};
 
 const TemplateModal: StoryFn<typeof PromptModal> = (args) => (
   <PromptModal {...args} />
 );
 
-export const Modal = TemplateModal.bind({}) as StoryFn<typeof PromptModal>;
+export const Modal: StoryFn<typeof PromptModal> = TemplateModal.bind({});
 
 Modal.args = {
   bottomText: 'bottom',
   topText: 'top',
   res: (v) => alert('res=' + v),
 };
+export default base;

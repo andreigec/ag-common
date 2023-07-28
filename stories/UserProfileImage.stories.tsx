@@ -9,10 +9,10 @@ import {
   UserProfileImage,
 } from '../src/ui/components/UserImage';
 
-export default {
+const base: Meta<typeof UserImage> = {
   title: 'UI/UserProfileImage',
   component: UserImage,
-} as Meta<typeof UserImage>;
+};
 
 const TemplateUserImage: StoryFn<typeof UserImage> = (args) => (
   <UserImage {...args} />
@@ -22,21 +22,24 @@ const TemplateUserProfileImage: StoryFn<typeof UserProfileImage> = (args) => (
   <UserProfileImage {...args} />
 );
 
-export const WorkingUserImage = TemplateUserImage.bind({});
+export const WorkingUserImage: StoryFn<typeof UserProfileImage> =
+  TemplateUserImage.bind({});
 const wui: IUserImage = {
   image: 'https://avatars.githubusercontent.com/u/1860848?s=40&v=4',
 };
 
 WorkingUserImage.args = wui;
 
-export const BrokenUserImage = TemplateUserImage.bind({});
+export const BrokenUserImage: StoryFn<typeof UserProfileImage> =
+  TemplateUserImage.bind({});
 const bui: IUserImage = {
   image: 'https://xxx',
 };
 
 BrokenUserImage.args = bui;
 
-export const WorkingUserProfileImage = TemplateUserProfileImage.bind({});
+export const WorkingUserProfileImage: StoryFn<typeof UserProfileImage> =
+  TemplateUserProfileImage.bind({});
 const wupi: IUserProfileImage = {
   user: {
     picture: 'https://avatars.githubusercontent.com/u/1860848?s=40&v=4',
@@ -47,9 +50,11 @@ const wupi: IUserProfileImage = {
 
 WorkingUserProfileImage.args = wupi;
 
-export const BrokenUserProfileImage = TemplateUserProfileImage.bind({});
+export const BrokenUserProfileImage: StoryFn<typeof UserProfileImage> =
+  TemplateUserProfileImage.bind({});
 const bupi: IUserProfileImage = {
   user: { picture: 'https://xxx', fullname: 'full name', userId: 'my id' },
 };
 
 BrokenUserProfileImage.args = bupi;
+export default base;

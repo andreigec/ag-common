@@ -4,18 +4,19 @@ import React from 'react';
 
 import { BorderGradient } from '../src/ui/components/BorderGradient';
 
-export default {
+const base: Meta<typeof BorderGradient> = {
   title: 'UI/BorderGradient',
   component: BorderGradient,
-} as Meta<typeof BorderGradient>;
+};
 
 const Template: StoryFn<typeof BorderGradient> = (args) => (
   <BorderGradient {...args} />
 );
 
-export const Primary = Template.bind({}) as StoryFn<typeof BorderGradient>;
+export const Primary: StoryFn<typeof BorderGradient> = Template.bind({});
 
 Primary.args = {
   disabled: false,
   children: <div>test child</div>,
 };
+export default base;

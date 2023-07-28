@@ -5,16 +5,16 @@ import React from 'react';
 
 import { ConfirmModal } from '../../src/ui/components/Confirm';
 
-export default {
+const base: Meta<typeof ConfirmModal> = {
   title: 'UI/Confirm',
   component: ConfirmModal,
-} as Meta<typeof ConfirmModal>;
+};
 
 const TemplateModal: StoryFn<typeof ConfirmModal> = (args) => (
   <ConfirmModal {...args} />
 );
 
-export const Modal = TemplateModal.bind({}) as StoryFn<typeof ConfirmModal>;
+export const Modal: StoryFn<typeof ConfirmModal> = TemplateModal.bind({});
 
 Modal.args = {
   bottomText: 'bottom',
@@ -22,3 +22,4 @@ Modal.args = {
     alert('res=' + e);
   },
 };
+export default base;

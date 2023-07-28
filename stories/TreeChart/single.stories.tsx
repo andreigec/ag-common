@@ -4,10 +4,10 @@ import React from 'react';
 import { TreeChart } from '../../src/ui/components/TreeChart';
 import { treeData, treeData1 } from './data';
 
-export default {
+const base: Meta<typeof TreeChart> = {
   title: 'UI/TreeChart',
   component: TreeChart,
-} as Meta<typeof TreeChart>;
+};
 
 const Template: StoryFn<typeof TreeChart> = () => (
   <div style={{ backgroundColor: 'white', padding: '0.5rem' }}>
@@ -16,8 +16,9 @@ const Template: StoryFn<typeof TreeChart> = () => (
   </div>
 );
 
-export const Single = Template.bind({}) as StoryFn<typeof TreeChart>;
+export const Single: StoryFn<typeof TreeChart> = Template.bind({});
 
 Single.args = {
   data: treeData,
 };
+export default base;

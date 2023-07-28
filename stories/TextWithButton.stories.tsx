@@ -3,14 +3,14 @@ import { Meta, StoryFn } from '@storybook/react';
 
 import { TextWithButton } from '../src/ui/components/TextWithButton';
 
-export default {
+const base: Meta<typeof TextWithButton> = {
   title: 'UI/TextWithButton',
   component: TextWithButton,
-} as Meta<typeof TextWithButton>;
+};
 
 const Template: StoryFn<typeof TextWithButton> = (args) => TextWithButton(args);
 
-export const Primary = Template.bind({}) as StoryFn<typeof TextWithButton>;
+export const Primary: StoryFn<typeof TextWithButton> = Template.bind({});
 
 Primary.args = {
   // eslint-disable-next-line no-console
@@ -19,3 +19,4 @@ Primary.args = {
   submitText: 'submit text',
   validateF: (v) => v.length > 3,
 };
+export default base;

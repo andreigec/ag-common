@@ -4,14 +4,15 @@ import React from 'react';
 
 import { ProgressBar } from '../src/ui/components/ProgressBar';
 
-export default {
+const base: Meta<typeof ProgressBar> = {
   title: 'UI/ProgressBar',
   component: ProgressBar,
-} as Meta<typeof ProgressBar>;
+};
 
 const Template: StoryFn<typeof ProgressBar> = (args) => (
   <ProgressBar {...args} />
 );
 
-export const Primary = Template.bind({}) as StoryFn<typeof ProgressBar>;
+export const Primary: StoryFn<typeof ProgressBar> = Template.bind({});
 Primary.args = { min: 1, max: 5 };
+export default base;

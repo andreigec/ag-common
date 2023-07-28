@@ -11,19 +11,20 @@ const TestSvg = (
   </svg>
 );
 
-export default {
+const base: Meta<typeof Icon> = {
   title: 'UI/Icon',
   component: Icon,
-} as Meta<typeof Icon>;
+};
 
 const Template: StoryFn<typeof Icon> = (args) => (
   <Icon {...args}>{TestSvg}</Icon>
 );
 
-export const Primary = Template.bind({}) as StoryFn<typeof Icon>;
+export const Primary: StoryFn<typeof Icon> = Template.bind({});
 
 Primary.args = {
   width: '2rem',
   height: '2rem',
   fill: 'red',
 };
+export default base;

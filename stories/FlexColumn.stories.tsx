@@ -4,14 +4,14 @@ import React from 'react';
 
 import { FlexColumn } from '../src/ui/components/FlexColumn';
 
-export default {
+const base: Meta<typeof FlexColumn> = {
   title: 'UI/FlexColumn',
   component: FlexColumn,
-} as Meta<typeof FlexColumn>;
+};
 
 const Template: StoryFn<typeof FlexColumn> = (args) => <FlexColumn {...args} />;
 
-export const Primary = Template.bind({}) as StoryFn<typeof FlexColumn>;
+export const Primary: StoryFn<typeof FlexColumn> = Template.bind({});
 
 Primary.args = {
   children: (
@@ -22,3 +22,4 @@ Primary.args = {
     </>
   ),
 };
+export default base;

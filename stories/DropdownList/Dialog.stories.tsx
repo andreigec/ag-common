@@ -1,10 +1,19 @@
+/* eslint-disable no-alert */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import { DropdownListDialog } from '../../src/ui/components/DropdownList';
+import {
+  DropdownList,
+  DropdownListDialog,
+} from '../../src/ui/components/DropdownList';
 
-const ActionWrapper = () => (
+const base: Meta<typeof DropdownList> = {
+  title: 'UI/DropdownList',
+  component: DropdownList,
+};
+
+const Template: StoryFn<typeof DropdownList> = () => (
   <div
     style={{
       color: 'white',
@@ -35,12 +44,14 @@ const ActionWrapper = () => (
   </div>
 );
 
-export default {
-  title: 'UI/DropdownList',
-  component: ActionWrapper,
-} as Meta<typeof ActionWrapper>;
+export const Dialog: StoryFn<typeof DropdownList> = Template.bind({});
 
-const TemplateModal: StoryFn<typeof ActionWrapper> = () => <ActionWrapper />;
-
-export const Dialog = TemplateModal.bind({});
-Dialog.args = {};
+Dialog.args = {
+  options: ['LONG VALUEEEE', '1', '3'],
+  value: 'LONG VALUEEEE',
+  placeholder: 'test ph',
+  children: <>test children</>,
+  onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
+  renderF: (r) => <div>{r as string}</div>,
+};
+export default base;

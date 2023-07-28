@@ -4,10 +4,10 @@ import React from 'react';
 
 import { SparkLine } from '../src/ui/components/SparkLine';
 
-export default {
+const base: Meta<typeof SparkLine> = {
   title: 'UI/SparkLine',
   component: SparkLine,
-} as Meta<typeof SparkLine>;
+};
 
 const Template: StoryFn<typeof SparkLine> = (args) => (
   <div style={{ width: '20rem', height: '4rem' }}>
@@ -15,7 +15,7 @@ const Template: StoryFn<typeof SparkLine> = (args) => (
   </div>
 );
 
-export const Primary = Template.bind({}) as StoryFn<typeof SparkLine>;
+export const Primary: StoryFn<typeof SparkLine> = Template.bind({});
 
 Primary.args = {
   data: [
@@ -26,3 +26,4 @@ Primary.args = {
   pointTitleF: (v) => JSON.stringify(v),
   pointColour: 'red',
 };
+export default base;

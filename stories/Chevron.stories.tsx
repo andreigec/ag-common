@@ -4,37 +4,38 @@ import React from 'react';
 
 import { Chevron, IChevron } from '../src/ui/components/Chevron';
 
-export default {
+const base: Meta<typeof Chevron> = {
   title: 'UI/Chevron',
   component: Chevron,
-} as Meta<typeof Chevron>;
+};
 
 const Template: StoryFn<typeof Chevron> = (args) => <Chevron {...args} />;
 
-export const Up = Template.bind({});
+export const Up: StoryFn<typeof Chevron> = Template.bind({});
 const upArgs: IChevron = {
   point: 'up',
 };
 
 Up.args = upArgs;
 
-export const Left = Template.bind({});
+export const Left: StoryFn<typeof Chevron> = Template.bind({});
 const leftArgs: IChevron = {
   point: 'left',
 };
 
 Left.args = leftArgs;
 
-export const Right = Template.bind({});
+export const Right: StoryFn<typeof Chevron> = Template.bind({});
 const rightArgs: IChevron = {
   point: 'right',
 };
 
 Right.args = rightArgs;
 
-export const Down = Template.bind({});
+export const Down: StoryFn<typeof Chevron> = Template.bind({});
 const downArgs: IChevron = {
   point: 'down',
 };
 
 Down.args = downArgs;
+export default base;

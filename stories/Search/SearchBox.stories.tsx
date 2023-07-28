@@ -4,14 +4,14 @@ import React from 'react';
 
 import { ISearchBox, SearchBox } from '../../src/ui/components/Search';
 
-export default {
+const base: Meta<typeof SearchBox> = {
   title: 'UI/Search',
   component: SearchBox,
-} as Meta<typeof SearchBox>;
+};
 
 const Template: StoryFn<typeof SearchBox> = (args) => <SearchBox {...args} />;
 
-export const SearchBoxB = Template.bind({}) as StoryFn<typeof SearchBox>;
+export const SearchBoxB: StoryFn<typeof SearchBox> = Template.bind({});
 
 const args: ISearchBox = {
   searchText: '',
@@ -19,3 +19,4 @@ const args: ISearchBox = {
   setSearchText: (st, enter) => alert(`st=${st} enter=${enter}`),
 };
 SearchBoxB.args = args;
+export default base;

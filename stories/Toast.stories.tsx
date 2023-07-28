@@ -39,10 +39,10 @@ const ActionWrapper = (a: IToastTest) => {
   );
 };
 
-export default {
+const base: Meta<typeof ActionWrapper> = {
   title: 'UI/Toast',
   component: ActionWrapper,
-} as Meta<typeof ActionWrapper>;
+};
 
 const TemplateModal: StoryFn<typeof ActionWrapper> = (args) => (
   <div>
@@ -52,7 +52,7 @@ const TemplateModal: StoryFn<typeof ActionWrapper> = (args) => (
   </div>
 );
 
-export const Dialog = TemplateModal.bind({}) as StoryFn<typeof ActionWrapper>;
+export const Dialog: StoryFn<typeof ActionWrapper> = TemplateModal.bind({});
 Dialog.args = {
   toast: {
     message: 'hey guys, long toasttt hereeeee',
@@ -63,3 +63,4 @@ Dialog.args = {
   },
   container: { darkMode: false },
 };
+export default base;

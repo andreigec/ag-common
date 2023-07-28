@@ -4,14 +4,14 @@ import React from 'react';
 
 import { Table } from '../src/ui/components/Table';
 
-export default {
+const base: Meta<typeof Table> = {
   title: 'UI/Table',
   component: Table,
-} as Meta<typeof Table>;
+};
 
 const Template: StoryFn<typeof Table> = (args) => Table(args);
 
-export const Primary = Template.bind({}) as StoryFn<typeof Table>;
+export const Primary: StoryFn<typeof Table> = Template.bind({});
 
 Primary.args = {
   children: [
@@ -20,3 +20,4 @@ Primary.args = {
     { content: <div>content2</div>, groupTitle: 'group1' },
   ],
 };
+export default base;

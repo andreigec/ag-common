@@ -8,10 +8,10 @@ import {
   IOpenApiCodeBlock,
 } from '../../src/ui/components/OpenApiCodeBlock/types';
 
-export default {
+const base: Meta<typeof OpenApiCodeBlock> = {
   title: 'UI/OpenApiCodeBlock',
   component: OpenApiCodeBlock,
-} as Meta<typeof OpenApiCodeBlock>;
+};
 
 const schema: IOpenApi = {
   servers: [{ url: 'https://test.com' }],
@@ -37,14 +37,16 @@ const Template: StoryFn<typeof OpenApiCodeBlock> = (args) => (
     <div>schema:{JSON.stringify(schema, null, 2)}</div>
   </div>
 );
-export const Primary = Template.bind({});
+export const Primary: StoryFn<typeof OpenApiCodeBlock> = Template.bind({});
 const args: IOpenApiCodeBlock<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  testop: ({ testparam1 }) => Promise<any>;
+  testop: ({ testparam1 }: { testparam1: string }) => Promise<any>;
 }> = {
   schema,
   funcF: (f) => f.testop({ testparam1: '2' }),
   apiKey: 'test api key',
 };
 
+//@ts-ignore
 Primary.args = args;
+export default base;

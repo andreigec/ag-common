@@ -5,10 +5,10 @@ import React from 'react';
 
 import { DropdownList } from '../../src/ui/components/DropdownList';
 
-export default {
+const base: Meta<typeof DropdownList> = {
   title: 'UI/DropdownList',
   component: DropdownList,
-} as Meta<typeof DropdownList>;
+};
 
 const Template: StoryFn<typeof DropdownList> = (args) => (
   <div
@@ -23,7 +23,7 @@ const Template: StoryFn<typeof DropdownList> = (args) => (
   </div>
 );
 
-export const NoValue = Template.bind({}) as StoryFn<typeof DropdownList>;
+export const NoValue: StoryFn<typeof DropdownList> = Template.bind({});
 
 NoValue.args = {
   options: ['1', 'LONG VALUEEEE', '3'],
@@ -31,3 +31,4 @@ NoValue.args = {
   onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
   renderF: (r) => <div>{r as string}</div>,
 };
+export default base;

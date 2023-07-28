@@ -7,14 +7,14 @@ import {
   IAutoHideSearchBox,
 } from '../../src/ui/components/Search';
 
-export default {
+const base: Meta<typeof Component> = {
   title: 'UI/Search',
   component: Component,
-} as Meta<typeof Component>;
+};
 
 const Template: StoryFn<typeof Component> = (args) => <Component {...args} />;
 
-export const AutoHideSearchBox = Template.bind({}) as StoryFn<typeof Component>;
+export const AutoHideSearchBox: StoryFn<typeof Component> = Template.bind({});
 
 const args: IAutoHideSearchBox = {
   searchText: '',
@@ -22,3 +22,4 @@ const args: IAutoHideSearchBox = {
   setSearchText: (st, enter) => alert(`st=${st} enter=${enter}`),
 };
 AutoHideSearchBox.args = args;
+export default base;

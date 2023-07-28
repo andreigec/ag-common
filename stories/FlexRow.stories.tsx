@@ -4,14 +4,14 @@ import React from 'react';
 
 import { FlexRow } from '../src/ui/components/FlexRow';
 
-export default {
+const base: Meta<typeof FlexRow> = {
   title: 'UI/FlexRow',
   component: FlexRow,
-} as Meta<typeof FlexRow>;
+};
 
 const Template: StoryFn<typeof FlexRow> = (args) => <FlexRow {...args} />;
 
-export const Primary = Template.bind({}) as StoryFn<typeof FlexRow>;
+export const Primary: StoryFn<typeof FlexRow> = Template.bind({});
 
 Primary.args = {
   children: (
@@ -22,3 +22,4 @@ Primary.args = {
     </>
   ),
 };
+export default base;

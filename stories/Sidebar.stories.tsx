@@ -4,14 +4,14 @@ import React from 'react';
 
 import { Sidebar } from '../src/ui/components/Sidebar';
 
-export default {
+const app: Meta<typeof Sidebar> = {
   title: 'UI/Sidebar',
   component: Sidebar,
-} as Meta<typeof Sidebar>;
+};
 
 const Template: StoryFn<typeof Sidebar> = (args) => <Sidebar {...args} />;
 
-export const Primary = Template.bind({}) as StoryFn<typeof Sidebar>;
+export const Primary: StoryFn<typeof Sidebar> = Template.bind({});
 
 Primary.args = {
   children: (
@@ -21,3 +21,4 @@ Primary.args = {
     </>
   ),
 };
+export default app;

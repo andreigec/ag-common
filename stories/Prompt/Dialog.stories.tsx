@@ -32,18 +32,19 @@ const ActionWrapper = (args: IPromptDialog) => (
   </div>
 );
 
-export default {
+const base: Meta<typeof ActionWrapper> = {
   title: 'UI/Prompt',
   component: ActionWrapper,
-} as Meta<typeof ActionWrapper>;
+};
 
 const TemplateModal: StoryFn<typeof ActionWrapper> = (args) => (
   <ActionWrapper {...args} />
 );
 
-export const Dialog = TemplateModal.bind({}) as StoryFn<typeof ActionWrapper>;
+export const Dialog: StoryFn<typeof ActionWrapper> = TemplateModal.bind({});
 
 Dialog.args = {
   bottomText: 'bottom',
   topText: 'top',
 };
+export default base;

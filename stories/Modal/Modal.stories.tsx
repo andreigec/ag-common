@@ -4,14 +4,14 @@ import React from 'react';
 
 import { Modal } from '../../src/ui/components/Modal';
 
-export default {
+const base: Meta<typeof Modal> = {
   title: 'UI/Modal',
   component: Modal,
-} as Meta<typeof Modal>;
+};
 
 const Template: StoryFn<typeof Modal> = (args) => <Modal {...args} />;
 
-export const Primary = Template.bind({}) as StoryFn<typeof Modal>;
+export const Primary: StoryFn<typeof Modal> = Template.bind({});
 
 Primary.args = {
   open: true,
@@ -22,3 +22,4 @@ Primary.args = {
   },
   children: <div style={{ width: '5rem', height: '5rem' }}>test</div>,
 };
+export default base;

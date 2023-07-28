@@ -4,15 +4,16 @@ import React from 'react';
 
 import { Loader } from '../src/ui/components/Loader';
 
-export default {
+const base: Meta<typeof Loader> = {
   title: 'UI/Loader',
   component: Loader,
-} as Meta<typeof Loader>;
+};
 
 const Template: StoryFn<typeof Loader> = (args) => <Loader {...args} />;
 
-export const Primary = Template.bind({}) as StoryFn<typeof Loader>;
+export const Primary: StoryFn<typeof Loader> = Template.bind({});
 
 Primary.args = {
   name: 'test loader',
 };
+export default base;

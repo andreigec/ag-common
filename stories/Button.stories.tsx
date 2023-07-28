@@ -4,16 +4,17 @@ import React from 'react';
 
 import { Button } from '../src/ui/components/Button';
 
-export default {
+const base: Meta<typeof Button> = {
   title: 'UI/Button',
   component: Button,
-} as Meta<typeof Button>;
+};
 
 const Template: StoryFn<typeof Button> = (args) => <Button {...args} />;
 
-export const Primary = Template.bind({}) as StoryFn<typeof Button>;
+export const Primary: StoryFn<typeof Button> = Template.bind({});
 
 Primary.args = {
   invert: false,
   children: 'hello world',
 };
+export default base;

@@ -31,16 +31,16 @@ const ActionWrapper = <T,>(args: ISearchDialog<T>) => (
   </div>
 );
 
-export default {
+const base: Meta<typeof ActionWrapper> = {
   title: 'UI/Search',
   component: ActionWrapper,
-} as Meta<typeof ActionWrapper>;
+};
 
 const TemplateModal: StoryFn<typeof ActionWrapper> = (args) => (
   <ActionWrapper {...args} />
 );
 
-export const Dialog = TemplateModal.bind({}) as StoryFn<typeof ActionWrapper>;
+export const Dialog: StoryFn<typeof ActionWrapper> = TemplateModal.bind({});
 
 Dialog.args = {
   displayItems: searchLongList,
@@ -48,3 +48,4 @@ Dialog.args = {
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
 };
+export default base;

@@ -5,10 +5,10 @@ import React from 'react';
 
 import { TextEdit } from '../../src/ui/components/TextEdit';
 
-export default {
+const base: Meta<typeof TextEdit> = {
   title: 'UI/TextEdit',
   component: TextEdit,
-} as Meta<typeof TextEdit>;
+};
 
 const Template: StoryFn<typeof TextEdit> = (args) => (
   <div style={{ backgroundColor: 'white', padding: '0.5rem' }}>
@@ -16,7 +16,7 @@ const Template: StoryFn<typeof TextEdit> = (args) => (
   </div>
 );
 
-export const Single = Template.bind({}) as StoryFn<typeof TextEdit>;
+export const Single: StoryFn<typeof TextEdit> = Template.bind({});
 
 Single.args = {
   singleLine: true,
@@ -26,3 +26,4 @@ Single.args = {
   },
   onSubmit: (s) => alert('ret=' + JSON.stringify(s, null, 2)),
 };
+export default base;

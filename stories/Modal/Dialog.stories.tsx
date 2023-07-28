@@ -32,12 +32,13 @@ const ActionWrapper = () => (
   </div>
 );
 
-export default {
+const base: Meta<typeof ActionWrapper> = {
   title: 'UI/Modal',
   component: ActionWrapper,
-} as Meta<typeof ActionWrapper>;
+};
 
 const TemplateModal: StoryFn<typeof ActionWrapper> = () => <ActionWrapper />;
 
-export const Dialog = TemplateModal.bind({});
+export const Dialog: StoryFn<typeof ActionWrapper> = TemplateModal.bind({});
 Dialog.args = {};
+export default base;
