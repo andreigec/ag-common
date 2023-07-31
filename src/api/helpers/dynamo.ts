@@ -16,7 +16,7 @@ import {
 // ES6 import
 import { chunk } from '../../common/helpers/array';
 import { asyncForEach } from '../../common/helpers/async';
-import { debug, warn } from '../../common/helpers/log';
+import { debug, trace, warn } from '../../common/helpers/log';
 import { sleep } from '../../common/helpers/sleep';
 import { DYNAMOKEYS, IQueryDynamo, Key } from '../types';
 
@@ -177,20 +177,53 @@ export const batchDelete = async ({
 
 export const scan = async <T>(
   tableName: string,
+  opt?: {
+    filter?: {
+      filterExpression: string;
+      attrNames: Record<string, string>;
+      attrValues: Record<string, string>;
+    };
+    /** ProjectionExpression. will csv values */
+    requiredAttributeList?: string[];
+  },
 ): Promise<{ data?: T[]; error?: string }> => {
-  let params = new ScanCommand({
-    TableName: tableName,
-  });
-
-  debug(`running dynamo scan=${JSON.stringify(params, null, 2)}`);
-
   try {
-    let ret = await dynamoDb.send(params);
+    let ExclusiveStartKey: Key | undefined;
+    const Items: T[] = [];
+    do {
+      let params = new ScanCommand({
+        TableName: tableName,
+        ...(opt?.filter && {
+          FilterExpression: opt.filter.filterExpression,
+          ExpressionAttributeNames: opt.filter.attrNames,
+          ExpressionAttributeValues: opt.filter.attrValues,
+        }),
+        ...(opt?.requiredAttributeList && {
+          ProjectionExpression: opt.requiredAttributeList.join(', '),
+        }),
+        ExclusiveStartKey,
+      });
 
-    let items = (ret.Items ?? []).map((r) => r as T);
-    return { data: items };
+      trace(`running dynamo scan=${JSON.stringify(params, null, 2)}`);
+
+      const {
+        Items: newitems,
+        LastEvaluatedKey,
+        // eslint-disable-next-line no-await-in-loop
+      } = await dynamoDb.send(params);
+
+      ExclusiveStartKey = LastEvaluatedKey;
+
+      if (newitems) {
+        Items.push(...newitems.map((r) => r as T));
+      }
+    } while (ExclusiveStartKey);
+
+    trace(`dynamo scan against ${tableName} ok, count=${Items?.length}`);
+
+    return { data: Items };
   } catch (e) {
-    warn('scan error', e);
+    warn('scan error:', e);
     return { error: (e as Error).toString() };
   }
 };

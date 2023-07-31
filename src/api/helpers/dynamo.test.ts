@@ -57,7 +57,7 @@ async function run() {
     throw q.error;
   }
 
-  if (q?.Items?.[0]?.PK !== PK) {
+  if (q?.data?.[0]?.PK !== PK) {
     throw new Error('query not found:' + PK);
   }
 
