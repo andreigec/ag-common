@@ -37,7 +37,8 @@
   "include": [
     "src",
     "stories",
-    "tsconfig.json"
+    "tsconfig.json",
+    "*.config.js"
   ],
   "exclude": [
     "node_modules",

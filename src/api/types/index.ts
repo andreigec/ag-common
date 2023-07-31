@@ -5,8 +5,6 @@ import {
   aws_lambda as lambda,
 } from 'aws-cdk-lib';
 
-import { Key } from './aws';
-
 export interface DYNAMOKEYS {
   type: string;
   L1: string;
@@ -78,7 +76,7 @@ export interface IQueryDynamo {
   indexName?: string;
   /** default 1000 */
   count?: number;
-  startKey?: Key;
+  startKeyPk?: string;
   filterName?: string;
   filterValue?: string | number | boolean;
   /** default, = */

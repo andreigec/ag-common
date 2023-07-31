@@ -1,3 +1,5 @@
+import { AttributeValue } from '@aws-sdk/client-dynamodb/dist-types/models/models_0';
+
 export interface APIGatewayProxyResult {
   statusCode: number;
   headers?:
@@ -34,19 +36,6 @@ export interface APIGatewayEvent {
     };
     httpMethod: string;
   };
-}
-
-interface AttributeValue {
-  B?: string | undefined;
-  BS?: string[] | undefined;
-  BOOL?: boolean | undefined;
-  L?: AttributeValue[] | undefined;
-  M?: { [id: string]: AttributeValue } | undefined;
-  N?: string | undefined;
-  NS?: string[] | undefined;
-  NULL?: boolean | undefined;
-  S?: string | undefined;
-  SS?: string[] | undefined;
 }
 
 export interface AppSyncResolverEvent<
