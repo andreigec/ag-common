@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { info, SetLogLevel, warn } from '../../common';
 import {
   getItemDynamo,

@@ -48,12 +48,11 @@ export const putDynamo = async <T extends Record<string, any>>(
   debug(`running dynamo put=${JSON.stringify(params, null, 2)}`);
 
   try {
-    let r1 = await dynamoDb.send(params);
-    console.log('r1=', r1);
+    await dynamoDb.send(params);
 
     return {};
   } catch (e) {
-    warn('put error', e);
+    warn('putDynamo error', e);
     return { error: (e as Error).toString() };
   }
 };
@@ -66,48 +65,53 @@ export const batchWrite = async <T extends Record<string, any>>(
   //batch up to 20, so we can retry.
   let chunked = chunk(itemsIn, 20);
 
-  await asyncForEach(chunked, async (items) => {
-    let retryCount = 0;
-    let retryMax = 3;
-    let params = new BatchWriteCommand({
-      RequestItems: {
-        [`${tableName}`]: items.map((Item) => ({
-          PutRequest: { Item: Item },
-        })),
-      },
+  try {
+    await asyncForEach(chunked, async (items) => {
+      let retryCount = 0;
+      let retryMax = 3;
+      let params = new BatchWriteCommand({
+        RequestItems: {
+          [`${tableName}`]: items.map((Item) => ({
+            PutRequest: { Item: Item },
+          })),
+        },
+      });
+
+      debug(`running dynamo batchWrite=${JSON.stringify(params, null, 2)}`);
+
+      try {
+        await dynamoDb.send(params);
+
+        return {};
+      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let es = (e as any).toString();
+        let msg = es;
+        warn('dynamo write error', msg);
+
+        if (
+          es.indexOf('429') !== -1 ||
+          es.indexOf('ProvisionedThroughputExceeded') !== -1
+        ) {
+          retryCount += 1;
+          msg = `batch write throttled. retry ${retryCount}/${retryMax}`;
+        } else {
+          throw e;
+        }
+
+        if (retryCount >= retryMax) {
+          throw e;
+        }
+
+        warn(`dynamo retry ${retryCount}/${retryMax}`);
+        await sleep(2000);
+      }
     });
-
-    debug(`running dynamo batchWrite=${JSON.stringify(params, null, 2)}`);
-
-    try {
-      await dynamoDb.send(params);
-
-      return {};
-    } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let es = (e as any).toString();
-      let msg = es;
-      warn('dynamo write error', msg);
-
-      if (
-        es.indexOf('429') !== -1 ||
-        es.indexOf('ProvisionedThroughputExceeded') !== -1
-      ) {
-        retryCount += 1;
-        msg = `batch write throttled. retry ${retryCount}/${retryMax}`;
-      } else {
-        throw e;
-      }
-
-      if (retryCount >= retryMax) {
-        throw e;
-      }
-
-      warn(`dynamo retry ${retryCount}/${retryMax}`);
-      await sleep(2000);
-    }
-  });
-  return {};
+    return {};
+  } catch (e) {
+    warn('batchWrite error', e);
+    return { error: (e as Error).toString() };
+  }
 };
 
 export const batchDelete = async ({
@@ -118,52 +122,57 @@ export const batchDelete = async ({
   tableName: string;
   keys: string[];
   pkName: string;
-}) => {
+}): Promise<{ error?: string }> => {
   //batch up to 20, so we can retry.
   let chunked = chunk(keys, 20);
 
-  await asyncForEach(chunked, async (items) => {
-    let retryCount = 0;
-    let retryMax = 3;
-    let params = new BatchWriteCommand({
-      RequestItems: {
-        [`${tableName}`]: items.map((key) => ({
-          DeleteRequest: { Key: { [`${pkName}`]: key } },
-        })),
-      },
+  try {
+    await asyncForEach(chunked, async (items) => {
+      let retryCount = 0;
+      let retryMax = 3;
+      let params = new BatchWriteCommand({
+        RequestItems: {
+          [`${tableName}`]: items.map((key) => ({
+            DeleteRequest: { Key: { [`${pkName}`]: key } },
+          })),
+        },
+      });
+
+      debug(`running dynamo batch delete=${JSON.stringify(params, null, 2)}`);
+
+      try {
+        await dynamoDb.send(params);
+
+        return {};
+      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let es = (e as any).toString();
+        let msg = es;
+        warn('dynamo write error', msg);
+
+        if (
+          es.indexOf('429') !== -1 ||
+          es.indexOf('ProvisionedThroughputExceeded') !== -1
+        ) {
+          retryCount += 1;
+          msg = `batch delete write throttled. retry ${retryCount}/${retryMax}`;
+        } else {
+          throw e;
+        }
+
+        if (retryCount >= retryMax) {
+          throw e;
+        }
+
+        warn(`dynamo retry ${retryCount}/${retryMax}`);
+        await sleep(2000);
+      }
     });
-
-    debug(`running dynamo batch delete=${JSON.stringify(params, null, 2)}`);
-
-    try {
-      await dynamoDb.send(params);
-
-      return {};
-    } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let es = (e as any).toString();
-      let msg = es;
-      warn('dynamo write error', msg);
-
-      if (
-        es.indexOf('429') !== -1 ||
-        es.indexOf('ProvisionedThroughputExceeded') !== -1
-      ) {
-        retryCount += 1;
-        msg = `batch delete write throttled. retry ${retryCount}/${retryMax}`;
-      } else {
-        throw e;
-      }
-
-      if (retryCount >= retryMax) {
-        throw e;
-      }
-
-      warn(`dynamo retry ${retryCount}/${retryMax}`);
-      await sleep(2000);
-    }
-  });
-  return {};
+    return {};
+  } catch (e) {
+    warn('batchDelete error', e);
+    return { error: (e as Error).toString() };
+  }
 };
 
 export const scan = async <T>(
@@ -181,6 +190,7 @@ export const scan = async <T>(
     let items = (ret.Items ?? []).map((r) => r as T);
     return { data: items };
   } catch (e) {
+    warn('scan error', e);
     return { error: (e as Error).toString() };
   }
 };
@@ -210,7 +220,7 @@ export const getItemsDynamo = async <T>({
     let data = res.Responses?.[tableName].map((r) => r as T) ?? [];
     return { data };
   } catch (e) {
-    warn('get error:', e);
+    warn('getItemsDynamo error:', e);
     return { error: (e as Error).toString() };
     //
   }
@@ -244,7 +254,7 @@ export const queryDynamo = async <T>({
   filterOperator = '=',
   sortAscending = true,
 }: IQueryDynamo): Promise<{
-  Items?: T[];
+  data?: T[];
   startKey?: Key;
   error?: string;
 }> => {
@@ -337,11 +347,11 @@ export const queryDynamo = async <T>({
     );
 
     if (count > 0 && (newItems?.length ?? 0) >= count) {
-      return { Items, startKey };
+      return { data: Items, startKey };
     }
   } while (startKey && Object.keys(startKey).length > 0);
 
-  return { Items, startKey: undefined };
+  return { data: Items, startKey: undefined };
 };
 
 export const getDynamoTtlDays = (days: number) =>
@@ -352,32 +362,37 @@ export const getDynamoTtlMinutes = (mins: number) =>
 
 export const wipeTable = async (
   tableName: string,
-): Promise<{ errors?: string[] }> => {
-  let infoV = await dynamoDb.send(
-    new DescribeTableCommand({ TableName: tableName }),
-  );
+): Promise<{ error?: string }> => {
+  try {
+    let infoV = await dynamoDb.send(
+      new DescribeTableCommand({ TableName: tableName }),
+    );
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  let keyHash = infoV.Table.KeySchema.find(
-    (k) => k.KeyType === 'HASH',
-  ).AttributeName;
-  if (!keyHash) {
-    throw new Error('couldnt find keyHash');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    let keyHash = infoV.Table.KeySchema.find(
+      (k) => k.KeyType === 'HASH',
+    ).AttributeName;
+    if (!keyHash) {
+      throw new Error('couldnt find keyHash');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let all = (await scan(tableName))?.data?.map((d) => d as any) || [];
+
+    warn(`will delete ${all?.length} items from ${tableName}`);
+
+    await batchDelete({
+      tableName,
+      keys: all.map((s) => s[keyHash as string]),
+      pkName: 'PK',
+    });
+    warn(`cleared table ${tableName}`);
+    return {};
+  } catch (e) {
+    warn('wipeTable error:', e);
+    return { error: (e as Error).toString() };
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let all = (await scan(tableName))?.data?.map((d) => d as any) || [];
-
-  warn(`will delete ${all?.length} items from ${tableName}`);
-
-  await batchDelete({
-    tableName,
-    keys: all.map((s) => s[keyHash as string]),
-    pkName: 'PK',
-  });
-  warn(`cleared table ${tableName}`);
-  return {};
 };
 
 export const getDynamoUpdates = (items: DYNAMOKEYS) => {
