@@ -186,7 +186,7 @@ export const scan = async <T>(
     /** ProjectionExpression. will csv values */
     requiredAttributeList?: string[];
   },
-): Promise<{ data?: T[]; error?: string }> => {
+): Promise<{ data: T[] } | { error: string }> => {
   try {
     let ExclusiveStartKey: Key | undefined;
     const Items: T[] = [];
@@ -237,7 +237,7 @@ export const getItemsDynamo = async <T>({
     pkValue: string;
   }[];
   tableName: string;
-}): Promise<{ data?: T[]; error?: string }> => {
+}): Promise<{ data: T[] } | { error: string }> => {
   const params = new BatchGetCommand({
     RequestItems: {
       [tableName]: {
@@ -267,9 +267,13 @@ export const getItemDynamo = async <T>({
   pkName: string;
   pkValue: string;
   tableName: string;
-}): Promise<{ data?: T; error?: string }> => {
+}): Promise<{ data: T } | { error: string }> => {
   let r = await getItemsDynamo<T>({ tableName, items: [{ pkName, pkValue }] });
-  return { data: r.data?.[0], error: r.error };
+  if ('error' in r) {
+    return { error: r.error };
+  }
+
+  return { data: r.data[0] };
 };
 export const queryDynamo = async <T>({
   tableName,
@@ -286,11 +290,15 @@ export const queryDynamo = async <T>({
   filterValue,
   filterOperator = '=',
   sortAscending = true,
-}: IQueryDynamo): Promise<{
-  data?: T[];
-  startKey?: Key;
-  error?: string;
-}> => {
+}: IQueryDynamo): Promise<
+  | {
+      data: T[];
+      startKey?: Key;
+    }
+  | {
+      error: string;
+    }
+> => {
   let kce = `#${pkName.toLowerCase()} ${pkOperator} :${pkName.toLowerCase()}`;
   const ean = { [`#${pkName.toLowerCase()}`]: pkName };
   const eav = {
@@ -384,7 +392,7 @@ export const queryDynamo = async <T>({
     }
   } while (startKey && Object.keys(startKey).length > 0);
 
-  return { data: Items, startKey: undefined };
+  return { data: Items };
 };
 
 export const getDynamoTtlDays = (days: number) =>
@@ -410,8 +418,12 @@ export const wipeTable = async (
       throw new Error('couldnt find keyHash');
     }
 
+    let allraw = await scan(tableName);
+    if ('error' in allraw) {
+      throw allraw.error;
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let all = (await scan(tableName))?.data?.map((d) => d as any) || [];
+    let all = allraw?.data?.map((d) => d as any) || [];
 
     warn(`will delete ${all?.length} items from ${tableName}`);
 
