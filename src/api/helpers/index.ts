@@ -1,6 +1,5 @@
 export * from './api';
 export * from './aws';
-export * from './cloudfront';
 export * from './dynamo';
 export * from './enforceDynamoProvisionCap';
 export * from './openApiHelpers';

@@ -1,9 +1,12 @@
-import SES from 'aws-sdk/clients/ses';
+import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses';
 
-export let ses = new SES();
 export const setSes = (region: string) => {
-  ses = new SES({ region });
+  const raw = new SESClient({ region });
+  return raw;
 };
+
+export const ses = setSes('ap-southeast-2');
+
 export interface ISendEmail {
   to: string;
   message: string;
@@ -11,6 +14,7 @@ export interface ISendEmail {
   sourceArn: string;
   from: string;
 }
+
 export const sendEmail = async ({
   to,
   message,
@@ -18,34 +22,35 @@ export const sendEmail = async ({
   sourceArn,
   from,
 }: ISendEmail): Promise<{ error?: string }> => {
-  // Create sendEmail params
-  const params: SES.SendEmailRequest = {
-    Destination: {
-      CcAddresses: [],
-      ToAddresses: [to],
-    },
-    Message: {
-      Body: {
-        Text: {
-          Charset: 'UTF-8',
-          Data: message,
+  try {
+    await ses.send(
+      new SendEmailCommand({
+        Destination: {
+          CcAddresses: [],
+          ToAddresses: [to],
         },
-      },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: subject,
-      },
-    },
-    Source: from,
-    ReplyToAddresses: [from],
-    SourceArn: sourceArn,
-  };
+        Message: {
+          Body: {
+            Text: {
+              Charset: 'UTF-8',
+              Data: message,
+            },
+          },
+          Subject: {
+            Charset: 'UTF-8',
+            Data: subject,
+          },
+        },
+        Source: from,
+        ReplyToAddresses: [from],
+        SourceArn: sourceArn,
+      }),
+    );
 
-  const res = await ses.sendEmail(params).promise();
-  if (res.$response.error) {
-    return { error: res.$response.error?.message };
+    return {};
+  } catch (e) {
+    return { error: (e as Error).toString() };
   }
-  return {};
 };
 
 export const sendEmails = async (emails: ISendEmail[]) =>

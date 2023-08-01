@@ -21,6 +21,9 @@ async function run() {
   }
 
   let scanr = await scan<{ PK: string }>(tableName);
+  if ('error' in scanr) {
+    throw scanr.error;
+  }
   let sd = scanr.data ?? [];
   if (sd.length === 0) {
     throw new Error('no scan');
@@ -36,7 +39,7 @@ async function run() {
     pkName: 'PK',
     pkValue: PK,
   });
-  if (ge.error) {
+  if ('error' in ge) {
     throw ge.error;
   }
 
@@ -53,7 +56,7 @@ async function run() {
     count: 1,
     sortAscending: true,
   });
-  if (q.error) {
+  if ('error' in q) {
     throw q.error;
   }
 
@@ -67,6 +70,9 @@ async function run() {
   await wipeTable(tableName);
 
   scanr = await scan<{ PK: string }>(tableName);
+  if ('error' in scanr) {
+    throw scanr.error;
+  }
   sd = scanr.data ?? [];
   if (sd.length !== 0) {
     throw new Error('bad wipe');

@@ -1,29 +1,56 @@
-import S3 from 'aws-sdk/clients/s3';
-import { AWSError } from 'aws-sdk/lib/core';
-import { Blob } from 'aws-sdk/lib/dynamodb/document_client';
-import { PromiseResult } from 'aws-sdk/lib/request';
+import {
+  CopyObjectCommand,
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  ListObjectsV2Command,
+  ListObjectsV2CommandOutput,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
+import type { StreamingBlobPayloadOutputTypes } from '@smithy/types';
 
 import { distinct, take } from '../../common/helpers/array';
-import { debug, error, info } from '../../common/helpers/log';
+import { debug, error } from '../../common/helpers/log';
 
-let s3 = new S3();
 export const setS3 = (region: string) => {
-  s3 = new S3({ region });
+  const raw = new S3Client({ region });
+  return raw;
 };
 
+export const s3 = setS3('ap-southeast-2');
+
 export const getS3Object = async ({
-  fileurl,
+  fileurl: { Bucket, Key },
 }: {
   fileurl: {
     Bucket: string;
     Key: string;
   };
-}) => s3.getObject(fileurl).promise();
+}): Promise<{ error: string } | { data: IS3Object }> => {
+  try {
+    const r = await s3.send(new GetObjectCommand({ Bucket, Key }));
+    if (!r.Body) {
+      throw new Error('no body returned');
+    }
+
+    const data: IS3Object = {
+      bucket: Bucket,
+      key: Key,
+      content: r.Body,
+    };
+
+    return { data };
+  } catch (e) {
+    return { error: (e as Error).toString() };
+  }
+};
 
 export interface IS3Object {
   bucket: string;
   key: string;
-  content: S3.Body | undefined;
+  content: StreamingBlobPayloadOutputTypes;
 }
 /** function generator to get s3 files */
 export async function* getS3Objects({
@@ -42,14 +69,12 @@ export async function* getS3Objects({
     const { part, rest } = take(toProcess, 1);
     toProcess = rest;
     const fileurl = part[0];
-    const content = await getS3Object({ fileurl });
-    const ret1: IS3Object = {
-      bucket: fileurl.Bucket,
-      key: fileurl.Key,
-      content: content.Body,
-    };
-
-    yield ret1;
+    const g = await getS3Object({ fileurl });
+    if ('error' in g) {
+      yield { error: g.error };
+    } else {
+      yield { data: g.data };
+    }
   }
 }
 
@@ -64,33 +89,13 @@ export const putS3Object = async ({
   Bucket: string;
   Key: string;
 }): Promise<{ error?: string }> => {
-  const r = await s3
-    .putObject({
-      Body,
-      Bucket,
-      Key,
-      ContentType,
-    } as S3.Types.PutObjectRequest)
-    .promise();
+  try {
+    await s3.send(new PutObjectCommand({ Body, Bucket, Key, ContentType }));
 
-  if (r.$response.error) {
-    return { error: r.$response.error.message };
+    return {};
+  } catch (e) {
+    return { error: (e as Error).toString() };
   }
-  return {};
-};
-
-export const uploadFile = async ({
-  Bucket,
-  Key,
-  Body,
-}: {
-  Bucket: string;
-  Key: string;
-  Body: Buffer | Uint8Array | Blob | string;
-}) => {
-  const res = await s3.upload({ Bucket, Key, Body }).promise();
-
-  return res.Location;
 };
 
 export const deleteFile = async ({
@@ -100,11 +105,12 @@ export const deleteFile = async ({
   Bucket: string;
   Key: string;
 }): Promise<{ error?: string }> => {
-  const res = await s3.deleteObject({ Bucket, Key }).promise();
-  if (res.$response.error) {
-    return { error: res.$response.error.message };
+  try {
+    await s3.send(new DeleteObjectCommand({ Bucket, Key }));
+    return {};
+  } catch (e) {
+    return { error: (e as Error).toString() };
   }
-  return {};
 };
 
 export const deleteFiles = async ({
@@ -114,33 +120,33 @@ export const deleteFiles = async ({
   Bucket: string;
   Keys: string[];
 }): Promise<{ error?: string }> => {
-  let toDelete = Keys.map((Key) => ({ Key }));
-  let deleted = 0;
+  try {
+    let toDelete = Keys.map((Key) => ({ Key }));
+    let deleted = 0;
 
-  while (toDelete.length > 0) {
-    const { part, rest } = take(toDelete, 900);
-    toDelete = rest;
-    const res = await s3
-      .deleteObjects({
-        Bucket,
-        Delete: { Objects: part },
-      })
-      .promise();
+    while (toDelete.length > 0) {
+      const { part, rest } = take(toDelete, 900);
+      toDelete = rest;
+      const res = await s3.send(
+        new DeleteObjectsCommand({
+          Bucket,
+          Delete: { Objects: part },
+        }),
+      );
 
-    if (!res.Deleted?.length) {
-      throw new Error('no deleted files');
+      if (!res.Deleted?.length) {
+        throw new Error('no deleted files');
+      }
+
+      deleted += res.Deleted.length;
+
+      debug(`deleted ${deleted} files`);
     }
 
-    deleted += res.Deleted.length;
-
-    if (res.$response.error) {
-      return { error: res.$response.error.message };
-    }
-
-    info(`deleted ${deleted} files`);
+    return {};
+  } catch (e) {
+    return { error: (e as Error).toString() };
   }
-
-  return {};
 };
 
 export const copyFile = async ({
@@ -155,56 +161,56 @@ export const copyFile = async ({
   /** if true, will delete original after copy. default false */
   deleteSource?: boolean;
 }): Promise<{ error?: string }> => {
-  debug(`copying s3 file from ${Bucket}- ${fromKey} to ${toKey}`);
-  const res = await s3
-    .copyObject({
-      //incl bucket
-      CopySource: Bucket + '/' + fromKey,
-      //dest
-      Bucket,
-      Key: toKey,
-    })
-    .promise();
+  try {
+    debug(`copying s3 file from ${Bucket}- ${fromKey} to ${toKey}`);
+    await s3.send(
+      new CopyObjectCommand({
+        //incl bucket
+        CopySource: Bucket + '/' + fromKey,
+        //dest
+        Bucket,
+        Key: toKey,
+      }),
+    );
 
-  if (res.$response.error) {
-    return { error: res.$response.error.message };
-  }
-
-  if (deleteSource) {
-    const df = await deleteFile({ Bucket, Key: fromKey });
-    if (df.error) {
-      return { error: df.error };
+    if (deleteSource) {
+      const df = await deleteFile({ Bucket, Key: fromKey });
+      if (df.error) {
+        return { error: df.error };
+      }
     }
-  }
 
-  return {};
+    return {};
+  } catch (e) {
+    return { error: (e as Error).toString() };
+  }
 };
 
-export async function listFiles(bucketName: string, opt?: { prefix?: string }) {
+export async function listFiles(
+  bucketName: string,
+  opt?: { prefix?: string },
+): Promise<{ error: string } | { data: string[] }> {
   try {
     const ret: string[] = [];
-    let response: PromiseResult<S3.ListObjectsV2Output, AWSError> = {
-      IsTruncated: true,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any;
+    let response: ListObjectsV2CommandOutput | undefined;
 
-    while (response.IsTruncated) {
-      response = await s3
-        .listObjectsV2({
+    do {
+      response = await s3.send(
+        new ListObjectsV2Command({
           Bucket: bucketName,
-          ContinuationToken: response.NextContinuationToken,
+          ContinuationToken: response?.NextContinuationToken,
           Prefix: opt?.prefix,
-        })
-        .promise();
+        }),
+      );
 
       response.Contents?.filter((r) => r.Key)?.map((c) => {
         ret.push(c.Key as string);
       });
-    }
-    return distinct(ret.filter((r) => r));
+    } while (response.IsTruncated);
+    return { data: distinct(ret.filter((r) => r)) };
   } catch (err) {
     error('Error', err);
-    return [];
+    return { error: (err as Error).toString() };
   }
 }
 
@@ -230,24 +236,27 @@ export async function getPresignedPostURL({
   key: string;
   /** max filesize. default 5 */
   maxMb?: number;
-}): Promise<{ url: string; fields: Record<string, string> }> {
-  const ps = await s3.createPresignedPost({
-    Bucket: bucket,
-    Fields: {
+}): Promise<
+  { error: string } | { data: { url: string; fields: Record<string, string> } }
+> {
+  try {
+    const ps = await createPresignedPost(s3, {
+      Bucket: bucket,
       Key: key,
-    },
+      Expires: 600,
+      Conditions: [
+        ['content-length-range', 0, maxMb * 1049000], // content length restrictions: 0-5MB
+        ['starts-with', '$Content-Type', 'image/'],
+      ],
+    });
 
-    Expires: 600,
-    Conditions: [
-      ['content-length-range', 0, maxMb * 1049000], // content length restrictions: 0-5MB
-      ['starts-with', '$Content-Type', 'image/'],
-    ],
-  });
+    const fields = JSON.parse(JSON.stringify(ps.fields)) as Record<
+      string,
+      string
+    >;
 
-  const fields = JSON.parse(JSON.stringify(ps.fields)) as Record<
-    string,
-    string
-  >;
-
-  return { fields, url: ps.url };
+    return { data: { fields, url: ps.url } };
+  } catch (e) {
+    return { error: (e as Error).toString() };
+  }
 }

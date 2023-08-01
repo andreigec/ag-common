@@ -1,6 +1,14 @@
-import STS from 'aws-sdk/clients/sts';
+import { AssumeRoleCommand } from '@aws-sdk/client-sts';
+import { STSClient } from '@aws-sdk/client-sts/dist-types/STSClient';
 
-import { error, info } from '../../common/helpers/log';
+import { info } from '../../common/helpers/log';
+
+export const setSts = (region: string) => {
+  const raw = new STSClient({ region });
+  return raw;
+};
+
+export const sts = setSts('ap-southeast-2');
 
 /**
  * @param {assumeRoleArn} assume this role arn. remember to use the credentials returned in subsequent calls
@@ -13,24 +21,28 @@ export async function assumeRole({
   assumeRoleArn: string;
   region: string;
 }) {
-  const sts = new STS({ region });
-  info(`assuming:${assumeRoleArn} in region:${region}`);
-  const data = await sts
-    .assumeRole({
-      RoleArn: assumeRoleArn,
-      RoleSessionName: 'stssession',
-    })
-    .promise();
+  try {
+    info(`assuming:${assumeRoleArn} in region:${region}`);
+    const data = await sts.send(
+      new AssumeRoleCommand({
+        RoleArn: assumeRoleArn,
+        RoleSessionName: 'stssession',
+      }),
+    );
 
-  if (data.$response.error || !data.Credentials) {
-    error('aws assume role error');
-    throw new Error(JSON.stringify(data.$response.error, null, 2));
+    if (!data.Credentials) {
+      return { error: 'aws assume role error' };
+    }
+
+    return {
+      data: {
+        accessKeyId: data.Credentials.AccessKeyId,
+        secretAccessKey: data.Credentials.SecretAccessKey,
+        sessionToken: data.Credentials.SessionToken,
+        expiration: data.Credentials.Expiration,
+      },
+    };
+  } catch (e) {
+    return { error: (e as Error).toString() };
   }
-
-  return {
-    accessKeyId: data.Credentials.AccessKeyId,
-    secretAccessKey: data.Credentials.SecretAccessKey,
-    sessionToken: data.Credentials.SessionToken,
-    expiration: data.Credentials.Expiration,
-  };
 }
