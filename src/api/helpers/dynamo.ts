@@ -285,7 +285,7 @@ export const queryDynamo = async <T>({
   skOperator = '=',
   indexName,
   count = 1000,
-  startKeyPk,
+  startKey,
   filterName,
   filterValue,
   filterOperator = '=',
@@ -343,22 +343,20 @@ export const queryDynamo = async <T>({
   }
 
   const Items: T[] = [];
-  let startKey: Key | undefined = startKeyPk
-    ? { [`${pkName}`]: { S: startKeyPk } }
-    : undefined;
+
   do {
     const params = new QueryCommand({
       TableName: tableName,
       KeyConditionExpression: kce,
       ExpressionAttributeNames: ean,
       ExpressionAttributeValues: eav,
+      ScanIndexForward: sortAscending,
+      Limit: count > 0 ? count : 1000,
+      ...(indexName && { IndexName: indexName }),
       ...(startKey && {
         ExclusiveStartKey: startKey,
       }),
       ...(FilterExpression && { FilterExpression }),
-      ScanIndexForward: sortAscending,
-      Limit: count > 0 ? count : 1000,
-      ...(indexName && { IndexName: indexName }),
     });
 
     let lek: Key | undefined;
