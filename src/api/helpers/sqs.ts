@@ -1,5 +1,4 @@
-import { SendMessageBatchCommand } from '@aws-sdk/client-sqs';
-import { SQSClient } from '@aws-sdk/client-sqs/dist-types/SQSClient';
+import { SendMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs';
 
 import { hashCode } from '../../common/helpers/hashCode';
 

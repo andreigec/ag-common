@@ -1,5 +1,4 @@
-import { AssumeRoleCommand } from '@aws-sdk/client-sts';
-import { STSClient } from '@aws-sdk/client-sts/dist-types/STSClient';
+import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
 
 import { info } from '../../common/helpers/log';
 
@@ -11,7 +10,7 @@ export const setSts = (region: string) => {
 export const sts = setSts('ap-southeast-2');
 
 /**
- * @param {assumeRoleArn} assume this role arn. remember to use the credentials returned in subsequent calls
+ * assume sts role
  * @returns {string} assumed accountId
  */
 export async function assumeRole({
@@ -19,6 +18,7 @@ export async function assumeRole({
   region,
 }: {
   assumeRoleArn: string;
+  /** assume this role arn. remember to use the credentials returned in subsequent calls */
   region: string;
 }) {
   try {
