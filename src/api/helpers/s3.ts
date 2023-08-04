@@ -85,7 +85,7 @@ export const putS3Object = async ({
   ContentType,
 }: {
   ContentType?: string;
-  Body: string | Blob;
+  Body: string | Blob | Buffer;
   Bucket: string;
   Key: string;
 }): Promise<{ error?: string }> => {
