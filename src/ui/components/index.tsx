@@ -1,3 +1,4 @@
+export * from './Accordion';
 export * from './BorderGradient';
 export * from './Button';
 export * from './Chevron';
