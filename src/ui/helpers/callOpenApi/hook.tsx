@@ -65,7 +65,18 @@ export const useCallOpenApi = <T, TDefaultApi>(
 
   useGranularEffect(
     () => {
-      if (JSON.stringify(config) !== JSON.stringify(inConfig)) {
+      if (
+        JSON.stringify({
+          ...config,
+          headers: undefined,
+          ssrCacheItems: undefined,
+        }) !==
+        JSON.stringify({
+          ...inConfig,
+          headers: undefined,
+          ssrCacheItems: undefined,
+        })
+      ) {
         setConfig(inConfig);
         setResp({ ...defaultState(inConfig, true), loading: true });
         void callOpenApi(inConfig).then((r) =>
