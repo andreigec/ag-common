@@ -5,7 +5,7 @@ import { Button } from '../Button';
 import { FlexColumn } from '../FlexColumn';
 import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal/Modal';
-import { IConfirmModal } from './types';
+import type { IConfirmModal } from './types';
 
 const Base = styled.div`
   width: 95vw;

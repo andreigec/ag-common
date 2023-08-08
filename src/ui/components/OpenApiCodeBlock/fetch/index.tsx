@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../types';
+import type { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../types';
 import { getFetchCall } from './helpers/call';
 import { getFetchLines } from './helpers/getFetchLines';
 

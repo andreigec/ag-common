@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { take } from '../../../common/helpers/array';
 import { smallScreen } from '../../styles';
 import { SearchBox } from './SearchBox';
-import { ISearchDialog, TSearchModalRes } from './types';
+import type { ISearchDialog, TSearchModalRes } from './types';
 
 const Base = styled.div`
   display: flex;

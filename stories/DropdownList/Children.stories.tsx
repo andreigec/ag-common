@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 import { DropdownList } from '../../src/ui/components/DropdownList';

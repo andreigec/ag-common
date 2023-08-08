@@ -1,4 +1,5 @@
-import { aws_dynamodb as dynamodb, Stack } from 'aws-cdk-lib';
+import type { Stack } from 'aws-cdk-lib';
+import { aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 
 import { loadSsmString, loadSsmStringList, saveToSsm } from '../ssm';
 

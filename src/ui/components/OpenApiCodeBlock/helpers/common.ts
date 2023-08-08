@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import {
+import type {
   IOpenApi,
   IOpenApiCodeBlock,
   IOpenApiOperation,

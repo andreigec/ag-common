@@ -4,7 +4,7 @@ import React from 'react';
 import { bigScreen, smallScreen } from '../../styles';
 import { Modal } from '../Modal/Modal';
 import { SearchBase } from './Base';
-import { ISearchModal, TSearchModalRes } from './types';
+import type { ISearchModal, TSearchModalRes } from './types';
 
 const ModalStyled = styled(Modal)`
   display: flex;

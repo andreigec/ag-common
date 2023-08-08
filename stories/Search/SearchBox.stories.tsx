@@ -1,8 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import { ISearchBox, SearchBox } from '../../src/ui/components/Search';
+import type { ISearchBox } from '../../src/ui/components/Search';
+import { SearchBox } from '../../src/ui/components/Search';
 
 const base: Meta<typeof SearchBox> = {
   title: 'UI/Search',

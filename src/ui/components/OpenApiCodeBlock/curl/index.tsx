@@ -4,7 +4,7 @@ import React from 'react';
 import { notEmpty } from '../../../../common/helpers/array';
 import { Highlight } from '../helpers/common';
 import { joinJsxWithSlash } from '../helpers/joinJsx';
-import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../types';
+import type { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../types';
 import { getCurlLines } from './helpers/getCurlLines';
 
 const Base = styled.div`

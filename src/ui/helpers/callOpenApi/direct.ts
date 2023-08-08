@@ -4,9 +4,9 @@ import { retryHttpCodes, retryHttpMs } from '../../../common/const';
 import { notEmpty } from '../../../common/helpers/array';
 import { sleep } from '../../../common/helpers/sleep';
 import { getCookieString } from '../cookie';
-import { AxiosWrapperLite, User } from '../jwt';
+import type { AxiosWrapperLite, User } from '../jwt';
 import { getLocalStorageItem } from '../useLocalStorage';
-import { ICallOpenApi, OverrideAuth } from './types';
+import type { ICallOpenApi, OverrideAuth } from './types';
 
 /**
  * get the id_token from provided value, or cookie, or LS

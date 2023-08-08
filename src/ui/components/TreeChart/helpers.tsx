@@ -1,4 +1,4 @@
-import { TreeNodeData, TreeNodeOut } from './types';
+import type { TreeNodeData, TreeNodeOut } from './types';
 
 interface TreeNodeRaw {
   name: string;

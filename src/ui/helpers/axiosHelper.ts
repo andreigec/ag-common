@@ -1,4 +1,5 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios';
 
 import { retryHttpCodes, retryHttpMs } from '../../common/const';
 import { debug } from '../../common/helpers/log';

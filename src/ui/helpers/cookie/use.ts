@@ -1,6 +1,7 @@
-import { SetStateAction, useState } from 'react';
+import type { SetStateAction } from 'react';
+import { useState } from 'react';
 
-import { ReturnType, TParse } from './const';
+import type { ReturnType, TParse } from './const';
 import { getCookieRawWrapper } from './get';
 import { setCookieRawWrapper } from './set';
 

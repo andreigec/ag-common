@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 import { error } from '../../../common/helpers/log';
 import { ConfirmModal } from './Modal';
-import { IConfirmDialog } from './types';
+import type { IConfirmDialog } from './types';
 /**
  * opens a dialog programatically
  * @param param0

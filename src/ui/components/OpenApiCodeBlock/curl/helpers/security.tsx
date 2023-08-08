@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { getSecurity, Highlight, Highlight2 } from '../../helpers/common';
-import { IOpenApi, IOpenApiOperation } from '../../types';
+import type { IOpenApi, IOpenApiOperation } from '../../types';
 
 export const getSecurityLine = (
   p: { apiKey?: string; schema: IOpenApi },

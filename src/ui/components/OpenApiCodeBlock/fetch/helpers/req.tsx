@@ -8,7 +8,7 @@ import {
   Highlight2,
 } from '../../helpers/common';
 import { joinJsxWithComma } from '../../helpers/joinJsx';
-import { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../../types';
+import type { IOpenApiCodeBlock, IOpenApiOperationBlock } from '../../types';
 
 const rb = <>&#125;</>;
 const lb = <>&#123;</>;

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
-import { Root } from 'react-dom/client';
+import type { Root } from 'react-dom/client';
 
 import { Button } from '../Button';
 import { FlexColumn } from '../FlexColumn';

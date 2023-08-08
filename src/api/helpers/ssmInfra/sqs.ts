@@ -1,4 +1,5 @@
-import { aws_sqs as sqs, Stack } from 'aws-cdk-lib';
+import type { Stack } from 'aws-cdk-lib';
+import { aws_sqs as sqs } from 'aws-cdk-lib';
 
 import { loadSsmString, saveToSsm } from '../ssm';
 

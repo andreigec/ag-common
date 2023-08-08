@@ -18,7 +18,7 @@ import { chunk } from '../../common/helpers/array';
 import { asyncForEach } from '../../common/helpers/async';
 import { debug, trace, warn } from '../../common/helpers/log';
 import { sleep } from '../../common/helpers/sleep';
-import { DYNAMOKEYS, IQueryDynamo, Key } from '../types';
+import type { DYNAMOKEYS, IQueryDynamo, Key } from '../types';
 
 export const setDynamo = (region: string) => {
   let raw = new DynamoDBClient({ region });

@@ -1,4 +1,5 @@
-import { aws_ssm as ssm, Fn, Stack } from 'aws-cdk-lib';
+import type { Stack } from 'aws-cdk-lib';
+import { aws_ssm as ssm, Fn } from 'aws-cdk-lib';
 
 import { toBase64 } from '../../common/helpers/string/base64';
 

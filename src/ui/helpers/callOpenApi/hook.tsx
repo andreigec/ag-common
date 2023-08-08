@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { AxiosWrapper } from '../jwt';
-import { CacheItems } from '../routes';
+import type { AxiosWrapper } from '../jwt';
+import type { CacheItems } from '../routes';
 import { useGranularEffect } from '../useGranularHook';
 import { callOpenApiCachedRaw, setOpenApiCacheRaw } from './cached';
 import { callOpenApi } from './direct';
-import { ICallOpenApi } from './types';
+import type { ICallOpenApi } from './types';
 
 export type TUseCallOpenApi<T> = AxiosWrapper<T> & {
   loaded: boolean;

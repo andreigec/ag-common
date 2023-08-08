@@ -5,7 +5,7 @@ import { random } from '../../../common/helpers/random';
 import { ProgressBar } from '../ProgressBar';
 import { Cross } from './Cross';
 import { Tick } from './Tick';
-import { IToastInt, IToastProviderOptions, TAddToast } from './types';
+import type { IToastInt, IToastProviderOptions, TAddToast } from './types';
 import { Warning } from './Warning';
 
 export const ToastContext = createContext<{

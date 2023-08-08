@@ -5,7 +5,7 @@ import { FlexRow } from '../FlexRow';
 import { Curl } from './curl';
 import { Fetch } from './fetch';
 import { getOperation } from './helpers/common';
-import { IOpenApiCodeBlock } from './types';
+import type { IOpenApiCodeBlock } from './types';
 
 const Base = styled.div`
   display: flex;

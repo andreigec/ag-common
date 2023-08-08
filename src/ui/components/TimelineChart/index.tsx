@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import React, { FC } from 'react';
+import type { FC } from 'react';
+import React from 'react';
 
 const Base = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { IFlexColumn } from '../RowOrColumn';
+import type { IFlexColumn } from '../RowOrColumn';
 
 const Base = styled.div`
   position: relative;

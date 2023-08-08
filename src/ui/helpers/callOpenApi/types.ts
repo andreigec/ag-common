@@ -1,6 +1,6 @@
 import type { AxiosResponse } from 'axios';
 
-import { User } from '../jwt';
+import type { User } from '../jwt';
 
 export interface OverrideAuth {
   id_token?: string;

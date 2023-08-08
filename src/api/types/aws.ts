@@ -1,4 +1,4 @@
-import { AttributeValue } from '@aws-sdk/client-dynamodb/dist-types/models/models_0';
+import type { AttributeValue } from '@aws-sdk/client-dynamodb/dist-types/models/models_0';
 
 export interface APIGatewayProxyResult {
   statusCode: number;

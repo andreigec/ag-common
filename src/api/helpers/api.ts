@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // eslint-disable-next-line
 import { notEmpty } from '../../common/helpers/array';
-import { APIGatewayProxyResult, DYNAMOKEYS } from '../types';
+import type { APIGatewayProxyResult, DYNAMOKEYS } from '../types';
 
 export const returnCode = <T>(
   statusCode: number,

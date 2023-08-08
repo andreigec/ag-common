@@ -2,7 +2,7 @@ import type { AxiosResponse } from 'axios';
 
 import { arrayToObject } from '../../../common/helpers/array';
 import { getStringFromStream } from '../../../common/helpers/stream';
-import { ApiResponse } from './types';
+import type { ApiResponse } from './types';
 
 /**
  * shim to convert raw response to an axios style response.

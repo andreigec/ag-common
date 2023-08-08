@@ -1,7 +1,9 @@
 /* eslint-disable react/destructuring-assignment */
 import { css } from '@emotion/react';
-import styled, { StyledComponent } from '@emotion/styled';
-import React, { KeyboardEventHandler, MouseEventHandler } from 'react';
+import type { StyledComponent } from '@emotion/styled';
+import styled from '@emotion/styled';
+import type { KeyboardEventHandler, MouseEventHandler } from 'react';
+import React from 'react';
 
 import { colours } from '../../styles/colours';
 

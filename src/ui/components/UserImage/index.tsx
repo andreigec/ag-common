@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { notEmpty } from '../../../common/helpers/array';
 import { warn } from '../../../common/helpers/log';
-import { User } from '../../helpers/jwt';
+import type { User } from '../../helpers/jwt';
 import { UserOutline } from '../../icons/UserOutline';
 
 const Base = styled.div`

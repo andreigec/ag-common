@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { DropdownList } from './index';
-import { IDropdownList } from './types';
+import type { IDropdownList } from './types';
 
 export const DropdownListDialog = async <T,>(
   p: { position: { x: number; y: number } } & Omit<

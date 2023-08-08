@@ -6,7 +6,7 @@ import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { colours } from '../../styles/colours';
 import { bounce } from '../../styles/common';
 import { KebabDots } from '../KebabDots';
-import { IDropdownList } from './types';
+import type { IDropdownList } from './types';
 
 const Base = styled.div`
   display: flex;

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 
 import { removeUndefValuesFromObject } from '../../../common/helpers/object';
 import { HardOutline } from '../../styles/common';

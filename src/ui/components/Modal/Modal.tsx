@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { bounce } from '../../styles';
 import { Close } from '../Close';
-import { IModal } from './types';
+import type { IModal } from './types';
 
 const FixedBackground = styled.div`
   position: fixed;

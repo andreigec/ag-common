@@ -1,4 +1,5 @@
-import { aws_s3 as s3, Stack } from 'aws-cdk-lib';
+import type { Stack } from 'aws-cdk-lib';
+import { aws_s3 as s3 } from 'aws-cdk-lib';
 
 import { loadSsmString, saveToSsm } from '../ssm';
 

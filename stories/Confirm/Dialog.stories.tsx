@@ -1,8 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import { ConfirmDialog, IConfirmDialog } from '../../src/ui/components/Confirm';
+import type { IConfirmDialog } from '../../src/ui/components/Confirm';
+import { ConfirmDialog } from '../../src/ui/components/Confirm';
 
 const ActionWrapper = (args: IConfirmDialog) => (
   <div

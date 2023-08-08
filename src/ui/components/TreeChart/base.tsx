@@ -5,7 +5,7 @@ import { useResize } from '../../helpers/useResize';
 import { getColourWheel } from '../../styles';
 import { HardOutline, TextOverflowEllipsis } from '../../styles/common';
 import { convertToRaw, toArray } from './helpers';
-import { TreeNodeData, TreeNodeOut } from './types';
+import type { TreeNodeData, TreeNodeOut } from './types';
 
 const Base = styled.div`
   border: solid 1px #ccc;

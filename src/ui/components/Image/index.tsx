@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import React, { ImgHTMLAttributes } from 'react';
+import type { ImgHTMLAttributes } from 'react';
+import React from 'react';
 
 import { bigScreen, smallScreen } from '../../styles/media';
 

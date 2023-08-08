@@ -4,8 +4,8 @@ import { decode, verify } from 'jsonwebtoken';
 import JwksClient from 'jwks-rsa';
 
 import { debug, error, info } from '../../common/helpers/log';
-import { IdJwt, User } from '../../ui/helpers/jwt';
-import { APIGatewayProxyResult } from '../types';
+import type { IdJwt, User } from '../../ui/helpers/jwt';
+import type { APIGatewayProxyResult } from '../types';
 import { returnCode } from './api';
 
 let jwksClient: JwksClient.JwksClient | undefined;

@@ -1,8 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import { Chevron, IChevron } from '../src/ui/components/Chevron';
+import type { IChevron } from '../src/ui/components/Chevron';
+import { Chevron } from '../src/ui/components/Chevron';
 
 const base: Meta<typeof Chevron> = {
   title: 'UI/Chevron',

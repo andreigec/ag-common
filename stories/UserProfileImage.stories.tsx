@@ -1,13 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import {
+import type {
   IUserImage,
   IUserProfileImage,
-  UserImage,
-  UserProfileImage,
 } from '../src/ui/components/UserImage';
+import { UserImage, UserProfileImage } from '../src/ui/components/UserImage';
 
 const base: Meta<typeof UserImage> = {
   title: 'UI/UserProfileImage',

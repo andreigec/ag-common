@@ -1,9 +1,10 @@
 import { parse } from 'url';
 
-import { getValidatedLang, TLang } from '../../common/helpers/i18n';
+import type { TLang } from '../../common/helpers/i18n';
+import { getValidatedLang } from '../../common/helpers/i18n';
 import { castStringlyObject } from '../../common/helpers/object';
 import { stringToObject } from '../../common/helpers/string/object';
-import { AxiosWrapperLite } from './jwt';
+import type { AxiosWrapperLite } from './jwt';
 
 export type TProtocol = 'http:' | 'https:';
 export interface LocationSubset {

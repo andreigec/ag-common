@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { getBodyJson, Highlight, Highlight2 } from '../../helpers/common';
-import { IOpenApiCodeBlock } from '../../types';
+import type { IOpenApiCodeBlock } from '../../types';
 
 export const getBody = <TDefaultApi,>(
   p: IOpenApiCodeBlock<TDefaultApi>,

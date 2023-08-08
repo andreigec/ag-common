@@ -10,7 +10,8 @@ import { debounce } from '../../helpers/debounce';
 import { filterDataProps } from '../../helpers/dom';
 import { CrossIcon, Magnify } from '../../icons';
 import { bigScreen, smallScreen } from '../../styles';
-import { IRefTextEdit, TextEdit } from '../TextEdit';
+import type { IRefTextEdit } from '../TextEdit';
+import { TextEdit } from '../TextEdit';
 
 const Base = styled.div`
   padding: 1rem;

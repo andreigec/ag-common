@@ -1,7 +1,7 @@
 /* eslint-disable no-new */
+import type { aws_certificatemanager as certmgr } from 'aws-cdk-lib';
 import {
   aws_apigateway as apigw,
-  aws_certificatemanager as certmgr,
   aws_lambda as lambda,
   aws_lambda_nodejs as nodejs,
   aws_logs as logs,
@@ -9,11 +9,11 @@ import {
   aws_route53_targets as targets,
   Duration,
 } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import type { Construct } from 'constructs';
 
 import { distinctBy, notEmpty } from '../../common/helpers/array';
 import { warn } from '../../common/helpers/log';
-import { ILambdaConfigs } from '../types';
+import type { ILambdaConfigs } from '../types';
 // eslint-disable-next-line
 const getPaths = (schema: any) =>
   Object.entries(

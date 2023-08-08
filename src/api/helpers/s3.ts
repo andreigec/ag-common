@@ -1,10 +1,10 @@
+import type { ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
 import {
   CopyObjectCommand,
   DeleteObjectCommand,
   DeleteObjectsCommand,
   GetObjectCommand,
   ListObjectsV2Command,
-  ListObjectsV2CommandOutput,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';

@@ -18,7 +18,7 @@ import { Undo } from '../../icons/Undo';
 import { noDrag } from '../../styles/common';
 import { iconLeft, iconRight, ValueBox, valueCss } from './common';
 import { TextEditLengthBox } from './LengthBox';
-import { IRefTextEdit, ITextEdit } from './types';
+import type { IRefTextEdit, ITextEdit } from './types';
 
 export const ValueReadonly = styled.div`
   ${valueCss};

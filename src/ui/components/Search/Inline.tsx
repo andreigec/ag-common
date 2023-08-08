@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { SearchBase } from './Base';
-import { ISearchInline, TSearchModalRes } from './types';
+import type { ISearchInline, TSearchModalRes } from './types';
 
 export const SearchInline = <T,>(
   p: ISearchInline<T> & {

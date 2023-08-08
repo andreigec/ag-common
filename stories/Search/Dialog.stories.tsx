@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 import { SearchDialog } from '../../src/ui/components/Search/Dialog';
-import { ISearchDialog } from '../../src/ui/components/Search/types';
+import type { ISearchDialog } from '../../src/ui/components/Search/types';
 import { searchLongList } from './common';
 
 const ActionWrapper = <T,>(args: ISearchDialog<T>) => (

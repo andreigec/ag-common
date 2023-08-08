@@ -1,11 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import {
-  AutoHideSearchBox as Component,
-  IAutoHideSearchBox,
-} from '../../src/ui/components/Search';
+import type { IAutoHideSearchBox } from '../../src/ui/components/Search';
+import { AutoHideSearchBox as Component } from '../../src/ui/components/Search';
 
 const base: Meta<typeof Component> = {
   title: 'UI/Search',

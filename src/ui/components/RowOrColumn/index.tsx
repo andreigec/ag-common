@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 
 import { bigScreen, smallScreen } from '../../styles/media';
 

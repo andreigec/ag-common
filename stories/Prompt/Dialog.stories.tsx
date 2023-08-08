@@ -1,11 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import {
-  IPromptDialog,
-  PromptDialog,
-} from '../../src/ui/components/Prompt/Dialog';
+import type { IPromptDialog } from '../../src/ui/components/Prompt/Dialog';
+import { PromptDialog } from '../../src/ui/components/Prompt/Dialog';
 
 const ActionWrapper = (args: IPromptDialog) => (
   <div
