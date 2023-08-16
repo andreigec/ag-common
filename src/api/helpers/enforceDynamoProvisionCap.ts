@@ -9,7 +9,7 @@ const extractSum = ({ str, regex }: { str: string; regex: RegExp }) =>
       .match(regex)
       ?.map((s2) => trim(s2.substring(s2.indexOf(':') + 1), ':', ',', ' '))
       .filter((r) => r && Number(r))
-      .map((r) => Number(r)) || [],
+      .map((r) => Number(r)) ?? [],
   );
 
 /** ensure that dynamo tables in stack dont exceed passed in provisioned limits */

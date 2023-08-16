@@ -31,7 +31,7 @@ export const dateDiffToString = (lowDate: Date, highDate?: Date) => {
 };
 
 export const getDMY = (date: Date, dayOffset?: number) => {
-  const date1 = addDays(date, dayOffset || 0);
+  const date1 = addDays(date, dayOffset ?? 0);
   const d = String(date1.getDate()).padStart(2, '0');
   const m = String(date1.getMonth() + 1).padStart(2, '0'); // January is 0!
   const y = date1.getFullYear();

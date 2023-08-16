@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer';
+
 import { fromBase64, toBase64 } from './string/base64';
 
 export const toBuffer = (ab: ArrayBuffer) => Buffer.from(ab);

@@ -24,7 +24,7 @@ export const sendMessages = async <T>(
   );
 
   if ((p.Failed ?? []).length > 0) {
-    return { error: `failed: ${JSON.stringify(p.Failed || [], null, 2)}` };
+    return { error: `failed: ${JSON.stringify(p.Failed ?? [], null, 2)}` };
   }
 
   return {};

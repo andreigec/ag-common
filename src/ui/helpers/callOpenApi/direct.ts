@@ -73,7 +73,7 @@ export const callOpenApi = async <T, TDefaultApi>(
     middleware: { pre: (a: any) => any }[];
   } = {
     basePath: apiUrl,
-    baseOptions: { headers: headers || {} },
+    baseOptions: { headers: headers ?? {} },
     middleware: [],
   };
 

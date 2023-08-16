@@ -62,7 +62,7 @@ export function useOnScroll({
         );
       };
 
-      (element?.current || document).addEventListener(
+      (element?.current ?? document).addEventListener(
         `scroll`,
         listenDebounce,
         {
@@ -71,7 +71,7 @@ export function useOnScroll({
       );
 
       return () => {
-        (element?.current || document).removeEventListener(
+        (element?.current ?? document).removeEventListener(
           `scroll`,
           listenDebounce,
         );

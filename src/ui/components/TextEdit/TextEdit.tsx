@@ -155,7 +155,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
         data-nogrow={noGrow}
         {...filterDataProps(p)}
       >
-        {p.leftContent || null}
+        {p.leftContent ?? null}
         <ValueReadonly data-type="text">
           {value || <span style={{ color: '#ccc' }}>{p.placeholder}</span>}
         </ValueReadonly>
@@ -190,7 +190,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
       data-nogrow={noGrow}
       {...filterDataProps(p)}
     >
-      {p.leftContent || null}
+      {p.leftContent ?? null}
       <Comp
         tabIndex={editing ? 0 : undefined}
         data-editing="true"

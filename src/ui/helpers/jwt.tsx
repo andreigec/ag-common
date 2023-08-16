@@ -11,7 +11,7 @@ export interface Jwt {
 
 export interface Identity {
   dateCreated: string;
-  issuer?: string | Array<string>;
+  issuer?: string | string[];
   primary: string;
   providerName: string;
   providerType: string;
@@ -22,13 +22,13 @@ export interface IdJwt {
   at_hash: string;
   aud: string;
   auth_time: number;
-  'cognito:groups': Array<string>;
+  'cognito:groups': string[];
   'cognito:preferred_role': string;
   'cognito:username': string;
   email: string;
   exp: number;
   iat: number;
-  identities: Array<Identity>;
+  identities: Identity[];
   iss: string;
   name: string;
   nickname: string;

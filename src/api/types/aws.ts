@@ -9,7 +9,7 @@ export interface APIGatewayProxyResult {
     | undefined;
   multiValueHeaders?:
     | {
-        [header: string]: Array<boolean | number | string>;
+        [header: string]: (boolean | number | string)[];
       }
     | undefined;
   body: string;

@@ -25,7 +25,7 @@ export const Curl = <TDefaultApi,>({
     <>
       --url <Highlight>&apos;{fullApiUrl}&apos;</Highlight>
     </>,
-    ...(headerLines || []),
+    ...(headerLines ?? []),
     bodyLine,
   ].filter(notEmpty);
 

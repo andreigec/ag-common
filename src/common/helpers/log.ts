@@ -30,7 +30,7 @@ function logprocess(type: TLogType, args: unknown[]) {
     SetLogLevel(process.env.LOG_LEVEL as TLogType);
   }
 
-  const min = GetLogLevel(userLogLevel || 'WARN');
+  const min = GetLogLevel(userLogLevel ?? 'WARN');
   const typesLogLevel = GetLogLevel(type);
 
   // env ignores it

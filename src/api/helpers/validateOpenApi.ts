@@ -111,9 +111,9 @@ export async function validateOpenApi<T>({
   };
 
   const method = event.requestContext.httpMethod.toLowerCase();
-  const pathParameters = event.pathParameters || ({} as Record<string, string>);
+  const pathParameters = event.pathParameters ?? ({} as Record<string, string>);
   const queryStringParameters =
-    event.queryStringParameters || ({} as Record<string, string>);
+    event.queryStringParameters ?? ({} as Record<string, string>);
 
   //
   const opm = getOperation({

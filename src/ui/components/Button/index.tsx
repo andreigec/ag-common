@@ -84,7 +84,7 @@ export const Button = (props: IButton) => {
       data-disabled={props.disabled ?? false}
       role="button"
       title={props.title || undefined}
-      data-theme={props.colourTheme || 'green'}
+      data-theme={props.colourTheme ?? 'green'}
       {...props}
     >
       {props.children}

@@ -105,24 +105,24 @@ const setupLambda = ({
 
   //
   const readTables = distinctBy(
-    [...(def?.dynamo?.reads || []), ...(lp?.dynamo?.reads || [])],
+    [...(def?.dynamo?.reads ?? []), ...(lp?.dynamo?.reads ?? [])],
     (s) => s.tableName,
   );
 
   const writeTables = distinctBy(
-    [...(def?.dynamo?.writes || []), ...(lp?.dynamo?.writes || [])],
+    [...(def?.dynamo?.writes ?? []), ...(lp?.dynamo?.writes ?? [])],
     (s) => s.tableName,
   );
 
-  const policies = [...(def.policies || []), ...(lp?.policies || [])].filter(
+  const policies = [...(def.policies ?? []), ...(lp?.policies ?? [])].filter(
     notEmpty,
   );
 
-  const layers = [...(def.layers || []), ...(lp?.layers || [])].filter(
+  const layers = [...(def.layers ?? []), ...(lp?.layers ?? [])].filter(
     notEmpty,
   );
 
-  const memory = lp?.memory || def?.memory || 128;
+  const memory = lp?.memory ?? def?.memory ?? 128;
   // null forces undefined, undefined forces 5
   let reservedConcurrentExecutions = lp?.reservedConcurrentExecutions;
   if (reservedConcurrentExecutions === undefined) {
@@ -135,7 +135,7 @@ const setupLambda = ({
 
   reservedConcurrentExecutions = reservedConcurrentExecutions ?? undefined;
   //
-  const timeout = Duration.seconds(lp?.timeoutS || def?.timeoutS || 30);
+  const timeout = Duration.seconds(lp?.timeoutS ?? def?.timeoutS ?? 30);
   let authorizerName = lp?.authorizerName;
   if (authorizerName === undefined) {
     authorizerName = def.authorizerName;
@@ -149,7 +149,7 @@ const setupLambda = ({
     ? undefined
     : authorizers?.[authorizerName];
 
-  const env = { ...(def.env || {}), ...(lp?.env || {}) };
+  const env = { ...(def.env ?? {}), ...(lp?.env ?? {}) };
   const environment: Record<string, string> = env;
   return {
     environment,

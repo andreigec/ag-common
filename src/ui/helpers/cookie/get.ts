@@ -2,7 +2,6 @@ import { warn } from '../../../common/helpers/log';
 import { fromBase64 } from '../../../common/helpers/string/base64';
 import type { TParse } from './const';
 import { getCookie, wipeCookies } from './raw';
-
 /**
  * read chunks. json parse+unb64
  * parse defaults to JSON.parse. must change if want if type is not an object!

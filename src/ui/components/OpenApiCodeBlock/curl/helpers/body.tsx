@@ -6,7 +6,7 @@ import type { IOpenApiCodeBlock } from '../../types';
 export const getBody = <TDefaultApi,>(
   p: IOpenApiCodeBlock<TDefaultApi>,
 ): { content: JSX.Element | undefined; header: JSX.Element | undefined } => {
-  const { nice } = getBodyJson(p) || {};
+  const { nice } = getBodyJson(p) ?? {};
   if (!nice) {
     return { content: undefined, header: undefined };
   }

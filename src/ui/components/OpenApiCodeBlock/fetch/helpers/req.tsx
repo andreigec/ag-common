@@ -20,7 +20,7 @@ export const getRequestOptions = <TDefaultApi,>(
   p: IOpenApiCodeBlock<TDefaultApi>,
   ops: IOpenApiOperationBlock,
 ): JSX.Element | undefined => {
-  const { nice } = getBodyJson(p) || {};
+  const { nice } = getBodyJson(p) ?? {};
   if (!nice) {
     return undefined;
   }

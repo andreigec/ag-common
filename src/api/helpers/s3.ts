@@ -10,6 +10,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import type { StreamingBlobPayloadOutputTypes } from '@smithy/types';
+import type { Buffer } from 'buffer';
 
 import { distinct, take } from '../../common/helpers/array';
 import { debug, error } from '../../common/helpers/log';

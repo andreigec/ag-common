@@ -1,6 +1,6 @@
 /** random number up to max. seed defaults to now.getTime() */
 export function random(max: number, seed?: number) {
-  seed = seed || new Date().getTime();
+  seed = seed ?? new Date().getTime();
   const ret = (seed * 9301 + 49297) % 233280;
   const rnd = ret / 233280;
 
@@ -9,7 +9,7 @@ export function random(max: number, seed?: number) {
 
 /** between 0 and 1. seed defaults to now.getTime() */
 export const randomDecimal = function (seed?: number) {
-  seed = seed || new Date().getTime();
+  seed = seed ?? new Date().getTime();
   const x = Math.sin((seed += 1)) * 10000;
 
   return x - Math.floor(x);

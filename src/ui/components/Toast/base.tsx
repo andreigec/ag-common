@@ -164,7 +164,7 @@ export const ToastProvider = ({
             key={toast.id}
             toast={toast}
             close={close}
-            providerOptions={providerOptions || {}}
+            providerOptions={providerOptions ?? {}}
           />
         ))}
       </ToastContainerStyle>
