@@ -22,7 +22,9 @@ import type { DYNAMOKEYS, IQueryDynamo, Key } from '../types';
 
 export const setDynamo = (region: string) => {
   let raw = new DynamoDBClient({ region });
-  const ddbDocClient = DynamoDBDocument.from(raw);
+  const ddbDocClient = DynamoDBDocument.from(raw, {
+    marshallOptions: { removeUndefinedValues: true },
+  });
   return ddbDocClient;
 };
 
