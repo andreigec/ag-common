@@ -24,7 +24,13 @@ const Node = styled.div`
   display: flex;
   flex-flow: column;
   height: min-content;
+  overflow: hidden;
+  &[data-leaf='true'] {
+    min-height: 1rem;
+    min-width: 1rem;
+  }
 `;
+
 const Title = styled.div`
   color: white;
   word-break: break-all;
@@ -50,10 +56,8 @@ const render = ({
   let height = 0;
   const leaf = n.children.length === 0;
   const sizeMult = n.size / head.size;
-  width = Math.floor(headDim.width * sizeMult) - 6; //6 = padding+margins
-  if (n.children.length === 0) {
-    height = Math.floor(headDim.height * sizeMult);
-  }
+  width = Math.floor(headDim.width * sizeMult);
+  height = Math.floor(headDim.height * sizeMult);
 
   const title =
     tnd.titleFn?.({
@@ -65,9 +69,9 @@ const render = ({
   return (
     <Node
       data-treenode
+      data-leaf={leaf.toString()}
       style={{
         backgroundColor: getColourWheel(depth),
-
         ...(leaf && {
           width: width ? width + 'px' : '100%',
           height: height ? height + 'px' : '100%',
@@ -79,11 +83,13 @@ const render = ({
       title={title}
     >
       {n.name && <Title>{n.name}</Title>}
-      <NodeChildren data-type="nc">
-        {n.children.map((c) =>
-          render({ n: c, depth: depth + 1, head, headDim, tnd }),
-        )}
-      </NodeChildren>
+      {n.children.length > 0 && (
+        <NodeChildren data-type="nc">
+          {n.children.map((c) =>
+            render({ n: c, depth: depth + 1, head, headDim, tnd }),
+          )}
+        </NodeChildren>
+      )}
     </Node>
   );
 };
