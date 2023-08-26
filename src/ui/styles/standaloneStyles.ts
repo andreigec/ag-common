@@ -1,9 +1,16 @@
 import styled from '@emotion/styled';
 
-import { FullScreenPage } from './common';
 import { smallScreen } from './media';
 
-export const SOBase = styled(FullScreenPage)`
+export const SOBase = styled.div`
+  display: flex;
+  width: 100%;
+  flex-grow: 1;
+  flex-flow: column;
+  overflow: hidden;
+  align-content: flex-start;
+  align-items: flex-start;
+
   > h1,
   h2,
   > p {

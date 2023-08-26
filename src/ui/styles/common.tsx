@@ -1,14 +1,11 @@
 import { css } from '@emotion/react';
-import styled from '@emotion/styled';
-
-import { colours } from './colours';
 
 /** function that returns css that gives a text outline drop shadow.
- * outlinecolour default='white'
- * size default = 1px
+ * @param outlineColour default='white'
+ * @param sizePx default = 1px
  */
-export const HardOutline = (outlineColour = 'white', size = 1) => {
-  const px = `${size}px`;
+export const HardOutline = (outlineColour = 'white', sizePx = 1) => {
+  const px = `${sizePx}px`;
 
   return css`
     filter: drop-shadow(${px} ${px} 0px ${outlineColour})
@@ -18,6 +15,7 @@ export const HardOutline = (outlineColour = 'white', size = 1) => {
   `;
 };
 
+/** disable user text selection */
 export const NoTextSelect = css`
   user-select: none; /* supported by Chrome and Opera */
   -webkit-user-select: none; /* Safari */
@@ -26,6 +24,9 @@ export const NoTextSelect = css`
   -ms-user-select: none; /* Internet Explorer/Edge */
 `;
 
+/** enable text overflow
+ * @param lines number of lines before overflow
+ */
 export const TextOverflowEllipsis = (lines: number) => css`
   display: -webkit-box;
   -webkit-line-clamp: ${lines};
@@ -34,53 +35,7 @@ export const TextOverflowEllipsis = (lines: number) => css`
   text-overflow: ellipsis;
 `;
 
-export const CssTransparentBlock = css`
-  background-color: rgba(150, 150, 150, 0.5);
-  border-radius: 3px;
-  font-weight: 600;
-  color: ${colours.mainLight};
-`;
-
-export const FadeBottom = ({ height }: { height: string }) => css`
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: ${height};
-    background: -webkit-linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 1) 100%
-    );
-    background-image: -moz-linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 1) 100%
-    );
-    background-image: -o-linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 1) 100%
-    );
-    background-image: linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 1) 100%
-    );
-    background-image: -ms-linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 1) 100%
-    );
-  }
-`;
-export const Card = styled.div`
-  background-color: white;
-  margin: 0.5rem;
-
-  position: relative;
-  border-radius: 0.5rem;
-  max-width: 40rem;
-  padding: 1rem;
-  border: solid 2px ${colours.lighter};
-`;
-
+/** stop dragging of element */
 export const noDrag: {
   draggable: boolean;
   onDragStart: React.DragEventHandler<HTMLDivElement>;
@@ -97,16 +52,7 @@ export const noDrag: {
   },
 };
 
-export const FullScreenPage = styled.div`
-  display: flex;
-  width: 100%;
-  flex-grow: 1;
-  flex-flow: column;
-  overflow: hidden;
-  align-content: flex-start;
-  align-items: flex-start;
-`;
-
+/** apply bounce effect given a condition */
 export const bounce = (bounceattr: string) => css`
   transition:
     opacity 0.2s ease,

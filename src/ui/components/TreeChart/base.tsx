@@ -26,6 +26,8 @@ const Node = styled.div`
   height: min-content;
   overflow: hidden;
   &[data-leaf='true'] {
+    width: 100%;
+    height: 100%;
     min-height: 1rem;
     min-width: 1rem;
   }
@@ -52,12 +54,11 @@ const render = ({
   head: TreeNodeOut;
   headDim: { width: number; height: number };
 }) => {
-  let width = 0;
-  let height = 0;
   const leaf = n.children.length === 0;
   const sizeMult = n.size / head.size;
-  width = Math.floor(headDim.width * sizeMult);
-  height = Math.floor(headDim.height * sizeMult);
+
+  const biggerDim = Math.max(headDim.width, headDim.height);
+  const nodeSize = Math.floor(biggerDim * sizeMult).toString();
 
   const title =
     tnd.titleFn?.({
@@ -72,10 +73,11 @@ const render = ({
       data-leaf={leaf.toString()}
       style={{
         backgroundColor: getColourWheel(depth),
-        ...(leaf && {
-          width: width ? width + 'px' : '100%',
-          height: height ? height + 'px' : '100%',
-        }),
+        ...(leaf &&
+          nodeSize && {
+            width: nodeSize + 'px',
+            height: nodeSize + 'px',
+          }),
       }}
       key={n.name}
       data-ch={n.children.length}

@@ -1,4 +1,4 @@
-import { chunk, take } from './array';
+import { take } from './array';
 
 /**
  * run async forEach over all array items
