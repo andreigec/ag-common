@@ -1,4 +1,7 @@
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+
+import { colours } from './colours';
 
 /** function that returns css that gives a text outline drop shadow.
  * @param outlineColour default='white'
@@ -62,4 +65,15 @@ export const bounce = (bounceattr: string) => css`
   &[${bounceattr}='true'] {
     transform: translateY(0);
   }
+`;
+
+export const Card = styled.div`
+  background-color: white;
+  margin: 0.5rem;
+
+  position: relative;
+  border-radius: 0.5rem;
+  max-width: 40rem;
+  padding: 1rem;
+  border: solid 2px ${colours.lighter};
 `;
