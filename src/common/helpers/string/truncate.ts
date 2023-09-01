@@ -1,4 +1,12 @@
-export function truncate(str: string, n: number, ellip: string) {
+/** truncate text */
+export function truncate(
+  /** string to truncate */
+  str: string,
+  /** max length */
+  n: number,
+  /** default '...' */
+  ellip = '...',
+) {
   if (!str) {
     return str;
   }

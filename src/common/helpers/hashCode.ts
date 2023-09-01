@@ -1,4 +1,8 @@
 /* eslint-disable no-bitwise */
+
+/** generate int hashcode of string
+ * @param seed default 0
+ */
 export const hashCodeInt = (str: string, seed = 0) => {
   if (!str) {
     return 0;
@@ -23,6 +27,10 @@ export const hashCodeInt = (str: string, seed = 0) => {
 
   return ret;
 };
+
+/** generate hashcode of string */
 export const hashCode = (str: string, seed = 0) =>
   hashCodeInt(str, seed).toString();
+
+/** generate a new random string based on the current ms */
 export const generateNewPK = () => hashCode(new Date().getTime().toString());

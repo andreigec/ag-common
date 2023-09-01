@@ -56,7 +56,6 @@ export interface IRequestCommon {
   url: LocationSubset;
   lang: TLang;
   userAgent: string;
-  defaultHost: string;
 }
 export interface IStateCommon<TRequest extends IRequestCommon>
   extends IInitialStateCommon {
@@ -91,15 +90,9 @@ const calculateServerHref = ({
   return decodeURIComponent(href);
 };
 
-const getRenderLanguage = ({
-  defaultHost,
-  url,
-}: {
-  defaultHost: string;
-  url: LocationSubset;
-}): TLang => {
+const getRenderLanguage = ({ url }: { url: LocationSubset }): TLang => {
   const prefixReg = new RegExp(
-    `(.*?).(local|${defaultHost.toLowerCase()})`,
+    `(.*?).(local|${url.host.toLowerCase()})`,
     'gim',
   );
 
@@ -122,7 +115,6 @@ export const getClientOrServerReqHref = ({
   forceServer = false,
   userAgent,
   darkMode,
-  defaultHost,
 }: {
   url: {
     /**
@@ -143,7 +135,6 @@ export const getClientOrServerReqHref = ({
   userAgent?: string;
   /** will use window.matchMedia  */
   darkMode?: boolean;
-  defaultHost: string;
 }) => {
   if (typeof window !== 'undefined') {
     if (!forceServer) {
@@ -180,8 +171,7 @@ export const getClientOrServerReqHref = ({
     url,
     userAgent: userAgent ?? '?',
     darkMode: darkMode ?? false,
-    lang: getRenderLanguage({ url, defaultHost }),
-    defaultHost,
+    lang: getRenderLanguage({ url }),
   };
 };
 
@@ -190,7 +180,6 @@ export const getClientOrServerReqHref = ({
  * @param param0 * @returns
  */
 export const getServerReq = ({
-  defaultHost,
   pathname,
   query,
   headers,
@@ -205,8 +194,6 @@ export const getServerReq = ({
     'x-forwarded-proto'?: 'http' | 'https';
   };
 
-  /** what to use if host is not available on headers */
-  defaultHost: string;
   /**
    * eg ctx.asPath || '/'
    */
@@ -221,7 +208,7 @@ export const getServerReq = ({
   encrypted: boolean;
 }) => {
   const href = calculateServerHref({
-    host: headers.host || defaultHost,
+    host: headers.host || '?',
     pathname,
   });
 
@@ -243,18 +230,7 @@ export const getServerReq = ({
     },
     forceServer: true,
     userAgent: headers['user-agent']?.toLowerCase(),
-    defaultHost,
   });
 
   return ret;
 };
-
-export interface INextCtx {
-  req?: {
-    headers?: {
-      host?: string;
-    };
-  };
-  asPath?: string;
-  query: Record<string, string | string[] | undefined>;
-}
