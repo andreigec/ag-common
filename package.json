@@ -37,9 +37,9 @@
     "typescript": "^5"
   },
   "devDependencies": {
-    "@babel/core": "7.22.11",
-    "@babel/preset-typescript": "7.22.11",
-    "@babel/types": "7.22.11",
+    "@babel/core": "7.22.15",
+    "@babel/preset-typescript": "7.22.15",
+    "@babel/types": "7.22.15",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@smithy/types": "2.2.2",
@@ -54,7 +54,7 @@
     "@storybook/theming": "7.4.0",
     "@types/jest": "29.5.4",
     "@types/jsonwebtoken": "9.0.2",
-    "@types/node": "20.5.7",
+    "@types/node": "20.5.9",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "cross-env": "7.0.3",
