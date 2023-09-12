@@ -1,5 +1,3 @@
-import { parse } from 'url';
-
 import type { TLang } from '../../common/helpers/i18n';
 import { getValidatedLang } from '../../common/helpers/i18n';
 import { castStringlyObject } from '../../common/helpers/object';
@@ -29,7 +27,6 @@ export interface LocationSubset {
    */
   host: string;
 
-  protocol: TProtocol;
   /**
    * full url
    */
@@ -52,8 +49,8 @@ export interface IInitialStateCommon {
 }
 
 export interface IRequestCommon {
-  darkMode: boolean;
-  url: LocationSubset;
+  url: URL;
+  query: Record<string, string>;
   lang: TLang;
   userAgent: string;
 }
@@ -90,14 +87,14 @@ const calculateServerHref = ({
   return decodeURIComponent(href);
 };
 
-const getRenderLanguage = ({ url }: { url: LocationSubset }): TLang => {
-  const prefixReg = new RegExp(
-    `(.*?).(local|${url.host.toLowerCase()})`,
-    'gim',
-  );
+export const getRenderLanguage = (host?: string | null): TLang => {
+  if (!host) {
+    return 'en';
+  }
+  const prefixReg = new RegExp(`(.*?).(local|${host.toLowerCase()})`, 'gim');
 
-  const host = url.host?.toLowerCase()?.trim() ?? '';
-  const prefix = host.trim().length !== 0 && prefixReg.exec(host)?.[1];
+  const host1 = host?.toLowerCase()?.trim() ?? '';
+  const prefix = host.trim().length !== 0 && prefixReg.exec(host1)?.[1];
 
   if (!prefix) {
     return 'en';
@@ -111,67 +108,39 @@ const getRenderLanguage = ({ url }: { url: LocationSubset }): TLang => {
  * @returns
  */
 export const getClientOrServerReqHref = ({
-  url: { href, query, protocol },
+  url,
+  query,
   forceServer = false,
   userAgent,
-  darkMode,
 }: {
-  url: {
-    /**
-     * parse querystring keyvalues
-     */
-    query?: Record<string, string>;
-    /**
-     * full url
-     */
-    href?: string;
-    protocol: TProtocol;
-  };
+  url?: URL;
+  query?: Record<string, string>;
   /**
    * if true, wont use window location. default false
    */
   forceServer?: boolean;
   /** will use navigator if possible */
   userAgent?: string;
-  /** will use window.matchMedia  */
-  darkMode?: boolean;
 }) => {
   if (typeof window !== 'undefined') {
     if (!forceServer) {
-      href = window.location.href;
-      protocol = window.location.protocol as TProtocol;
+      url = new URL(window.location.href);
     }
-
-    darkMode =
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
   if (typeof navigator !== 'undefined') {
     userAgent = navigator.userAgent;
   }
 
-  if (!href) {
+  if (!url) {
     throw new Error('no href');
   }
 
-  const parsed = parse(href);
-  const url: LocationSubset = {
-    hash: parsed.hash || '',
-    host: parsed.host || '',
-    origin: `${protocol}//${parsed.host}`,
-    href: `${protocol}//${parsed.host}${parsed.path}${parsed.hash || ''}`,
-    path: `${parsed.path}${parsed.hash || ''}`,
-    pathname: parsed.pathname || '',
-    protocol: protocol || '',
-    query: { ...query, ...stringToObject(parsed.query || '', '=', '&') },
-  };
-
   return {
     url,
+    query: { ...query, ...stringToObject(url.search || '', '=', '&') },
     userAgent: userAgent ?? '?',
-    darkMode: darkMode ?? false,
-    lang: getRenderLanguage({ url }),
+    lang: getRenderLanguage(url.host),
   };
 };
 
@@ -183,7 +152,6 @@ export const getServerReq = ({
   pathname,
   query,
   headers,
-  encrypted,
 }: {
   /**
    * eg ctx?.req?.headers || {}
@@ -202,32 +170,18 @@ export const getServerReq = ({
    * eg ctx.query
    */
   query: Record<string, string | string[] | undefined>;
-  /**
-   * eg (ctx?.req?.socket as any)?.encrypted)
-   */
-  encrypted: boolean;
 }) => {
   const href = calculateServerHref({
     host: headers.host || '?',
     pathname,
   });
 
-  let protocol: TProtocol = 'http:';
-  if (headers['x-forwarded-proto']?.includes('https') || encrypted) {
-    protocol = 'https:';
-  }
-
   const parsedQuery =
-    !query || Object.keys(query).length === 0
-      ? undefined
-      : castStringlyObject(query);
+    !query || Object.keys(query).length === 0 ? {} : castStringlyObject(query);
 
   const ret = getClientOrServerReqHref({
-    url: {
-      href,
-      query: parsedQuery,
-      protocol,
-    },
+    url: !href ? undefined : new URL(href),
+    query: parsedQuery,
     forceServer: true,
     userAgent: headers['user-agent']?.toLowerCase(),
   });
