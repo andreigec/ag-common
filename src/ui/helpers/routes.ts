@@ -1,5 +1,5 @@
 import type { TLang } from '../../common/helpers/i18n';
-import { getValidatedLang } from '../../common/helpers/i18n';
+import { AllLang } from '../../common/helpers/i18n';
 import { castStringlyObject } from '../../common/helpers/object';
 import { stringToObject } from '../../common/helpers/string/object';
 import type { AxiosWrapperLite } from './jwt';
@@ -91,15 +91,12 @@ export const getRenderLanguage = (host?: string | null): TLang => {
   if (!host) {
     return 'en';
   }
-  const prefixReg = new RegExp(`(.*?).(local|${host.toLowerCase()})`, 'gim');
 
-  const host1 = host?.toLowerCase()?.trim() ?? '';
-  const prefix = host.trim().length !== 0 && prefixReg.exec(host1)?.[1];
-
-  if (!prefix) {
-    return 'en';
+  const l = AllLang.find((l) => host.startsWith(l + '.'));
+  if (l) {
+    return l;
   }
-  return getValidatedLang(prefix);
+  return 'en';
 };
 
 /**
