@@ -24,13 +24,10 @@ export const niceUrl = (siteUrl: string) => {
 };
 
 export function isValidUrl(raw: string) {
-  let url: URL | undefined;
-
   try {
-    url = new URL(raw);
+    const url = new URL(raw);
+    return url.protocol === 'http:' || url.protocol === 'https:';
   } catch (_) {
     return false;
   }
-
-  return url.protocol === 'http:' || url.protocol === 'https:';
 }

@@ -5,37 +5,21 @@ import { stringToObject } from '../../common/helpers/string/object';
 import type { AxiosWrapperLite } from './jwt';
 
 export type TProtocol = 'http:' | 'https:';
-export interface LocationSubset {
-  /**
-   * slash only path eg /aaa/bbb
-   */
-  pathname: string;
-  /**
-   * eg #aaa
-   */
+export interface URLLite {
   hash: string;
-  /**
-   * up to first slash eg http://aaa.com:1111
-   */
-  origin: string;
-  /**
-   * parse querystring keyvalues
-   */
-  query: Record<string, string>;
-  /**
-   * protocol less up to first slash eg aaa.com:1111
-   */
   host: string;
-
-  /**
-   * full url
-   */
+  hostname: string;
   href: string;
-  /**
-   * url from first slash eg /aaa/bbb?q=a#111
-   */
-  path: string;
+  origin: string;
+  password: string;
+  pathname: string;
+  port: string;
+  protocol: string;
+  search: string;
+  //searchParams: Record<string, string>;
+  username: string;
 }
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CacheItems = CacheItem<any>[];
 export interface CacheItem<T> {
@@ -49,7 +33,7 @@ export interface IInitialStateCommon {
 }
 
 export interface IRequestCommon {
-  url: URL;
+  url: URLLite;
   query: Record<string, string>;
   lang: TLang;
   userAgent: string;
@@ -110,7 +94,7 @@ export const getClientOrServerReqHref = ({
   forceServer = false,
   userAgent,
 }: {
-  url?: URL;
+  url?: URLLite;
   query?: Record<string, string>;
   /**
    * if true, wont use window location. default false

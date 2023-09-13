@@ -8,9 +8,9 @@ export const getNextAppRequest = ({
   /** use next/headers() */
   headers: { get: (s: string) => string | null };
 }) => {
-  let searchParams: Record<string, string> = {};
+  let query: Record<string, string> = {};
   if (headers.get('x-invoke-query')) {
-    searchParams = JSON.parse(
+    query = JSON.parse(
       decodeURIComponent(headers.get('x-invoke-query') ?? '{}'),
     );
   }
@@ -22,15 +22,18 @@ export const getNextAppRequest = ({
     host.includes(':443') || !host.includes(':') ? 'https:' : 'http:';
 
   let url = `${protocol}${host}${pathname}`;
-  if (Object.keys(searchParams).length > 0) {
-    const qs = '?' + objectToString(searchParams, '=', '&');
+  if (Object.keys(query).length > 0) {
+    const qs = '?' + objectToString(query, '=', '&');
     url += qs;
   }
 
+  const cookieDocument = headers.get('cookie');
+
   return {
     url: new URL(url),
-    query: searchParams,
+    query,
     userAgent,
     lang: getRenderLanguage(host),
+    cookieDocument,
   };
 };
