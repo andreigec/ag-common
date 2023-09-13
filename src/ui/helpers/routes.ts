@@ -105,7 +105,20 @@ export const getClientOrServerReqHref = ({
 }) => {
   if (typeof window !== 'undefined') {
     if (!forceServer) {
-      url = new URL(window.location.href);
+      const nu = new URL(window.location.href);
+      url = {
+        hash: nu.hash,
+        host: nu.host,
+        hostname: nu.hostname,
+        href: nu.href,
+        origin: nu.origin,
+        password: nu.password,
+        pathname: nu.pathname,
+        port: nu.port,
+        protocol: nu.protocol,
+        search: nu.search,
+        username: nu.username,
+      };
     }
   }
 
