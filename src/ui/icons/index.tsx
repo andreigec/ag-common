@@ -7,3 +7,4 @@ export * from './Pencil';
 export * from './Save';
 export * from './Undo';
 export * from './UserOutline';
+export * from './Warning';

@@ -3,11 +3,11 @@ import styled from '@emotion/styled';
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 import { random } from '../../../common/helpers/random';
+import { Warning } from '../../icons/Warning';
 import { ProgressBar } from '../ProgressBar';
 import { Cross } from './Cross';
 import { Tick } from './Tick';
 import type { IToastInt, IToastProviderOptions, TAddToast } from './types';
-import { Warning } from './Warning';
 
 export const ToastContext = createContext<{
   addToast: TAddToast;
