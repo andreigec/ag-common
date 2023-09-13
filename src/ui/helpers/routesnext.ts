@@ -1,4 +1,5 @@
 import { objectToString } from '../../common/helpers/object';
+import { stripUrl } from '../../common/helpers/string/url';
 import { getRenderLanguage } from './routes';
 
 /** next13 server only */
@@ -30,7 +31,7 @@ export const getNextAppRequest = ({
   const cookieDocument = headers.get('cookie');
 
   return {
-    url: new URL(url),
+    url: stripUrl(new URL(url)),
     query,
     userAgent,
     lang: getRenderLanguage(host),

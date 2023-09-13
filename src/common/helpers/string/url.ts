@@ -31,3 +31,17 @@ export function isValidUrl(raw: string) {
     return false;
   }
 }
+
+export const stripUrl = (nu: URL) => ({
+  hash: nu.hash,
+  host: nu.host,
+  hostname: nu.hostname,
+  href: nu.href,
+  origin: nu.origin,
+  password: nu.password,
+  pathname: nu.pathname,
+  port: nu.port,
+  protocol: nu.protocol,
+  search: nu.search,
+  username: nu.username,
+});

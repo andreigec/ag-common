@@ -2,6 +2,7 @@ import type { TLang } from '../../common/helpers/i18n';
 import { AllLang } from '../../common/helpers/i18n';
 import { castStringlyObject } from '../../common/helpers/object';
 import { stringToObject } from '../../common/helpers/string/object';
+import { stripUrl } from '../../common/helpers/string/url';
 import type { AxiosWrapperLite } from './jwt';
 
 export type TProtocol = 'http:' | 'https:';
@@ -106,19 +107,7 @@ export const getClientOrServerReqHref = ({
   if (typeof window !== 'undefined') {
     if (!forceServer) {
       const nu = new URL(window.location.href);
-      url = {
-        hash: nu.hash,
-        host: nu.host,
-        hostname: nu.hostname,
-        href: nu.href,
-        origin: nu.origin,
-        password: nu.password,
-        pathname: nu.pathname,
-        port: nu.port,
-        protocol: nu.protocol,
-        search: nu.search,
-        username: nu.username,
-      };
+      url = stripUrl(nu);
     }
   }
 
