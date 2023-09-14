@@ -10,7 +10,6 @@ export * from './extractAttributes';
 export * from './jwt';
 export * from './plural';
 export * from './routes';
-export * from './routesnext';
 export * from './serviceWorker';
 export * from './useContextMenu';
 export * from './useElementAttribute';
