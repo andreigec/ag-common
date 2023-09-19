@@ -1,3 +1,4 @@
+'use client';
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import type { Root } from 'react-dom/client';

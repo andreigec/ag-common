@@ -1,3 +1,4 @@
+'use client';
 import styled from '@emotion/styled';
 import type { ImgHTMLAttributes } from 'react';
 import React from 'react';

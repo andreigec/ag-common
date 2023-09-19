@@ -1,3 +1,4 @@
+'use client';
 /* eslint-disable react/destructuring-assignment */
 import { css } from '@emotion/react';
 import type { StyledComponent } from '@emotion/styled';
