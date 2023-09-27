@@ -74,7 +74,7 @@ export function objectToArray<T>(obj: { [a: string]: T }): IArrayType<T>[] {
  * @returns
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const objectAlphaSort = (object: any, depthLeft = -1): object => {
+export const objectAlphaSort = <T>(object: T, depthLeft = -1): T => {
   if (depthLeft === 0) {
     return object;
   }
@@ -85,12 +85,14 @@ export const objectAlphaSort = (object: any, depthLeft = -1): object => {
         .sort((a, b) => (a.toLowerCase() < b.toLowerCase() ? -1 : 1))
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .reduce((result: any, key) => {
+          //@ts-ignore
           result[key] = objectAlphaSort(object[key], depthLeft - 1);
 
           return result;
         }, {})
     );
   } else if (Array.isArray(object)) {
+    //@ts-ignore
     return object.map((obj) => objectAlphaSort(obj, depthLeft - 1));
   } else {
     return object;
