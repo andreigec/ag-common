@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import React from 'react';
 
 import { Checkmark, CircleDot } from '../../icons';
 import { Circle } from '../../icons/Circle';

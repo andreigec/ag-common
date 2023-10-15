@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import React from 'react';
 
 export const CircleDot = ({ style }: { style?: CSSProperties }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="42 42 427 427" style={style}>
