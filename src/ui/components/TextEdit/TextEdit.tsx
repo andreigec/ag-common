@@ -239,7 +239,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
           )}
           {(valueChange || editing !== !!defaultEditing) && (
             <Icon
-              style={iconRight}
+              style={{ ...iconRight, fill: '#134563' }}
               onClick={() => {
                 setEditing(!!defaultEditing);
                 setValue(defaultValue);

@@ -64,7 +64,10 @@ export const Chevron = ({
       onTouchStart={() => onToggle?.()}
       onKeyDown={(e) => e.key === 'Enter' && onToggle?.()}
     >
-      <IconStyled rotate={rotate} fill={colour} width={width} height={width}>
+      <IconStyled
+        rotate={rotate}
+        style={{ width, height: width, fill: colour }}
+      >
         {ChevronRight}
       </IconStyled>
     </Base>

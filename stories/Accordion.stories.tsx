@@ -16,7 +16,7 @@ const Template: StoryFn<typeof Accordion> = (args) => (
 export const Primary: StoryFn<typeof Accordion> = Template.bind({});
 
 Primary.args = {
-  title: 'hg',
+  title: 'test title',
   chevronColour: 'black',
 };
 export default base;

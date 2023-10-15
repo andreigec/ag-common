@@ -77,7 +77,7 @@ export const AutoHideSearchBox = (p: IAutoHideSearchBox) => {
         }}
       >
         {open && <CrossIcon />}
-        {!open && <Magnify colour="white" />}
+        {!open && <Magnify style={{ fill: 'white' }} />}
       </Icon>
       <SearchBoxStyled
         ref={textEditRef}

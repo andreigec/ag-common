@@ -72,7 +72,10 @@ export const CheckboxEdit = ({
           >
             <Save />
           </Icon>
-          <Icon style={iconRight} onClick={() => setValue(defaultValue)}>
+          <Icon
+            style={{ ...iconRight, fill: '#134563' }}
+            onClick={() => setValue(defaultValue)}
+          >
             <Undo />
           </Icon>
         </Icons>

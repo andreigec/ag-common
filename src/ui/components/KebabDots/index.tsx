@@ -14,8 +14,7 @@ export interface IKebabDots {
 }
 export const KebabDots = ({ onClick }: IKebabDots) => (
   <IconStyled
-    width="2rem"
-    height="2rem"
+    style={{ width: '2rem', height: '2rem' }}
     onClick={() => onClick?.()}
     data-icon="kebab"
   >

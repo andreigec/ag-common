@@ -1,32 +1,11 @@
 'use client';
 import styled from '@emotion/styled';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import React from 'react';
 
 import { removeUndefValuesFromObject } from '../../../common/helpers/object';
 import { HardOutline } from '../../styles/common';
 
-export interface IIcon {
-  disabled?: boolean;
-  fill?: string;
-  outline?: string;
-  /** default 100% */
-  width?: string;
-  /** default 100% */
-  height?: string;
-  rotate?: number;
-  canHover?: boolean;
-  /** default 'unset' */
-  margin?: string;
-  /** default 0 */
-  padding?: string;
-  onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
-  children?: ReactNode;
-  role?: string;
-  title?: string;
-  tabIndex?: number;
-  className?: string;
-}
 export const IconF = styled.span`
   transition: all 200ms;
   display: flex;
@@ -68,15 +47,41 @@ export const IconF = styled.span`
   }
 `;
 
+export interface IIcon {
+  disabled?: boolean;
+  outline?: string;
+  rotate?: number;
+  canHover?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
+  children?: ReactNode;
+  role?: string;
+  title?: string;
+  tabIndex?: number;
+  className?: string;
+  style?: {
+    /** default 100% */
+    width?: string;
+    /** default 100% */
+    height?: string;
+    /** default 0 */
+    padding?: string;
+    /** default unset */
+    margin?: string;
+    /** pass fill down to svg */
+    fill?: string;
+  } & CSSProperties;
+}
+
 export const Icon = (pr: IIcon) => {
   const { className, children, disabled, onClick } = pr;
   const CHND = pr.canHover && !pr.disabled;
-  const style: Record<string, string | null> = removeUndefValuesFromObject({
-    '--fill': pr.fill || null,
-    width: pr.width || '100%',
-    height: pr.height || '100%',
-    padding: pr.padding || '0',
-    margin: pr.margin || 'unset',
+  const style: CSSProperties = removeUndefValuesFromObject({
+    ...(pr?.style ?? {}),
+    '--fill': pr.style?.fill ?? null,
+    width: pr.style?.width || '100%',
+    height: pr.style?.height || '100%',
+    padding: pr.style?.padding || '0',
+    margin: pr.style?.margin || 'unset',
     transform: !pr.rotate ? null : `rotate(${pr.rotate || 0}deg)`,
     filter: !pr.disabled ? null : 'grayscale(1)',
     '--outlinecolour': pr.outline || null,
@@ -92,7 +97,7 @@ export const Icon = (pr: IIcon) => {
       style={style}
       data-chnd={CHND}
       data-hasoutline={pr.outline}
-      data-hasfill={!!pr.fill}
+      data-hasfill={!!pr.style?.fill}
     >
       {children}
     </IconF>

@@ -23,8 +23,10 @@ const Template: StoryFn<typeof Icon> = (args) => (
 export const Primary: StoryFn<typeof Icon> = Template.bind({});
 
 Primary.args = {
-  width: '2rem',
-  height: '2rem',
-  fill: 'red',
+  style: {
+    width: '2rem',
+    height: '2rem',
+    fill: 'red',
+  },
 };
 export default base;
