@@ -17,8 +17,9 @@ const items: ITimelineItem[] = [
   { key: '5', checked: false, title: 'c', disabled: true },
 ];
 const Template: StoryFn<typeof Timeline> = () => (
-  <div style={{ border: 'solid 1px black' }}>
+  <div style={{ border: 'solid 1px black', backgroundColor: '#ccc' }}>
     <Timeline
+      bgColour="#ccc"
       items={items}
       onClick={(p) => {
         // eslint-disable-next-line no-alert

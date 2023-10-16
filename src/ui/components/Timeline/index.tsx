@@ -32,7 +32,7 @@ const Line = styled.div`
 
 const Item = styled.div`
   z-index: 1;
-  background-color: white;
+  background-color: transparent;
   width: fit-content;
   height: 100%;
   display: flex;
@@ -60,6 +60,7 @@ export const Timeline = ({
   onClick,
   maxCircleSize = 'min(5vw,3rem)',
   className,
+  bgColour = 'white',
 }: {
   /** default min(5vw,3rem) */
   maxCircleSize?: string;
@@ -68,6 +69,8 @@ export const Timeline = ({
   items: ITimelineItem[];
   onClick?: (p: ITimelineItem) => void;
   className?: string;
+  /** used for behind icons. default white */
+  bgColour?: string;
 }) => {
   const firstFalse = items.findIndex((i) => !i.checked && !i.disabled);
   const lastTrue = findLastIndex(items, (i) => i.checked);
@@ -87,11 +90,18 @@ export const Timeline = ({
                 onClick={() => enabled && onClick?.(p)}
               >
                 {p.checked ? (
-                  <Checkmark style={{ fill: '#60b515' }} />
+                  <Checkmark
+                    style={{ fill: '#60b515', backgroundColor: bgColour }}
+                  />
                 ) : index !== firstFalse ? (
-                  <Circle style={{ fill: '#007cbb' }} dotted={p.disabled} />
+                  <Circle
+                    style={{ fill: '#007cbb', backgroundColor: bgColour }}
+                    dotted={p.disabled}
+                  />
                 ) : (
-                  <CircleDot style={{ fill: '#007cbb' }} />
+                  <CircleDot
+                    style={{ fill: '#007cbb', backgroundColor: bgColour }}
+                  />
                 )}
               </Icon>
             </Item>

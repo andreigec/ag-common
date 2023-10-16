@@ -19,7 +19,6 @@ export const Circle = ({
   >
     <path
       stroke={style?.fill ?? '#000'}
-      fill="white"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeDasharray={!dotted ? '' : '4 4'}
