@@ -55,22 +55,19 @@ export type ITimelineItem = {
 
 export const Timeline = ({
   lineColour = '#ccc',
-  circleSize,
   items,
   onClick,
+  maxCircleSize = '3rem',
 }: {
-  /** default fits, max 10rem */
-  circleSize?: string;
+  /** default 3rem */
+  maxCircleSize?: string;
   /** default #ccc */
   lineColour?: string;
   items: ITimelineItem[];
   onClick?: (p: ITimelineItem) => void;
 }) => {
-  const cs = {
-    maxWidth: '5rem',
-    ...(circleSize && { width: circleSize, maxWidth: circleSize }),
-  };
   const firstFalse = items.findIndex((i) => !i.checked && !i.disabled);
+  const maxWidth = `min(5vw,${maxCircleSize})`;
   return (
     <Base>
       <Row>
@@ -80,7 +77,10 @@ export const Timeline = ({
           return (
             <Item key={p.key} title={p.title}>
               <Icon
-                style={{ ...cs, cursor: enabled ? 'pointer' : 'default' }}
+                style={{
+                  maxWidth,
+                  cursor: enabled ? 'pointer' : 'default',
+                }}
                 onClick={() => enabled && onClick?.(p)}
               >
                 {p.checked ? (
@@ -98,7 +98,10 @@ export const Timeline = ({
       {items.find((i) => i.title) && (
         <Row style={{ marginTop: '1rem' }}>
           {items.map(({ title, key }) => (
-            <Title key={key} style={{ width: `${100 / items.length}%`, ...cs }}>
+            <Title
+              key={key}
+              style={{ width: `${100 / items.length}%`, maxWidth }}
+            >
               {title || ''}
             </Title>
           ))}
