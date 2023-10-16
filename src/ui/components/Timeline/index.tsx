@@ -2,6 +2,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
+import { findLastIndex } from '../../../common/helpers/array';
 import { Checkmark, CircleDot } from '../../icons';
 import { Circle } from '../../icons/Circle';
 import { Icon } from '../Icon';
@@ -69,12 +70,13 @@ export const Timeline = ({
   className?: string;
 }) => {
   const firstFalse = items.findIndex((i) => !i.checked && !i.disabled);
+  const lastTrue = findLastIndex(items, (i) => i.checked);
   return (
     <Base className={className}>
       <Row>
         <Line style={{ backgroundColor: lineColour }} />
         {items.map((p, index) => {
-          const enabled = p.checked || index === firstFalse;
+          const enabled = index === lastTrue || index === firstFalse;
           return (
             <Item key={p.key} title={p.title}>
               <Icon

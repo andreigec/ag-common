@@ -101,3 +101,15 @@ export function distinctBy<T, TY>(
 export const distinct = <T extends string | number>(arr: readonly T[]) => [
   ...new Set(arr),
 ];
+
+export function findLastIndex<T>(
+  arr: T[],
+  predicate: (value: T, index: number, array: T[]) => boolean,
+): number {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (predicate(arr[i], i, arr)) {
+      return i;
+    }
+  }
+  return -1;
+}
