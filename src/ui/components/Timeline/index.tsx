@@ -62,6 +62,7 @@ export const Timeline = ({
   className,
   bgColour = 'white',
   titleHover,
+  showTitles,
 }: {
   /** default min(5vw,3rem) */
   maxCircleSize?: string;
@@ -74,6 +75,8 @@ export const Timeline = ({
   bgColour?: string;
   /* provides title text from hover item* */
   titleHover?: (i: ITimelineItem) => string;
+  /** if true, will show titles under timeline. default false */
+  showTitles?: boolean;
 }) => {
   const firstFalse = items.findIndex((i) => !i.checked && !i.disabled);
   const lastTrue = findLastIndex(items, (i) => i.checked);
@@ -111,7 +114,7 @@ export const Timeline = ({
           );
         })}
       </Row>
-      {items.find((i) => i.title) && (
+      {showTitles && items.find((i) => i.title) && (
         <Row style={{ marginTop: '1rem' }}>
           {items.map(({ title, key }) => (
             <Title
