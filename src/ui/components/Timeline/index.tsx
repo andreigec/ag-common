@@ -62,7 +62,7 @@ export const Timeline = ({
   className,
   bgColour = 'white',
   titleHover,
-  showTitles,
+  showTitles = true,
 }: {
   /** default min(5vw,3rem) */
   maxCircleSize?: string;
@@ -75,7 +75,7 @@ export const Timeline = ({
   bgColour?: string;
   /* provides title text from hover item* */
   titleHover?: (i: ITimelineItem) => string;
-  /** if true, will show titles under timeline. default false */
+  /** if true, will show titles under timeline. default true */
   showTitles?: boolean;
 }) => {
   const firstFalse = items.findIndex((i) => !i.checked && !i.disabled);

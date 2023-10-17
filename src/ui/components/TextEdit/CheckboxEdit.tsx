@@ -35,7 +35,7 @@ export const CheckboxEdit = ({
   /**
    * if true, will add undo button after changes. if false, will submit after every keypress. default true
    */
-  allowUndo: boolean;
+  allowUndo?: boolean;
   /** display to right of CB */
   rightSpan?: React.ReactNode;
 }) => {
