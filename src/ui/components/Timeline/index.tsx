@@ -61,6 +61,7 @@ export const Timeline = ({
   maxCircleSize = 'min(5vw,3rem)',
   className,
   bgColour = 'white',
+  titleHover,
 }: {
   /** default min(5vw,3rem) */
   maxCircleSize?: string;
@@ -71,6 +72,8 @@ export const Timeline = ({
   className?: string;
   /** used for behind icons. default white */
   bgColour?: string;
+  /* provides title text from hover item* */
+  titleHover?: (i: ITimelineItem) => string;
 }) => {
   const firstFalse = items.findIndex((i) => !i.checked && !i.disabled);
   const lastTrue = findLastIndex(items, (i) => i.checked);
@@ -81,7 +84,7 @@ export const Timeline = ({
         {items.map((p, index) => {
           const enabled = index === lastTrue || index === firstFalse;
           return (
-            <Item key={p.key} title={p.title}>
+            <Item key={p.key} title={titleHover?.(p)}>
               <Icon
                 style={{
                   maxWidth: maxCircleSize,
