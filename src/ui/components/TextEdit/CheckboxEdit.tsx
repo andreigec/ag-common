@@ -1,6 +1,5 @@
 'use client';
 import styled from '@emotion/styled';
-import type { CSSProperties } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
@@ -58,33 +57,53 @@ export const CheckboxEdit = ({
       style={{ cursor: 'pointer' }}
       ref={ref}
       data-nogrow={noGrow}
-      onClick={() => {
+      onClick={(e) => {
         if (allowUndo) {
           setValue(!value);
         } else {
           onSubmit(!value);
         }
+        e.stopPropagation();
       }}
     >
       <ValueInputCB
         type="checkbox"
         data-type="checkbox"
         checked={value}
-        onKeyDown={(e) =>
-          e.key === 'Enter' && value !== defaultValue && onSubmit(value)
-        }
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && value !== defaultValue) {
+            onSubmit(value);
+          }
+          e.stopPropagation();
+        }}
+        onChange={(e) => {
+          if (allowUndo) {
+            setValue(!value);
+          } else {
+            onSubmit(!value);
+          }
+          e.stopPropagation();
+        }}
       />
       {allowUndo && value !== defaultValue && (
         <Icons center enableOverflow>
           <Icon
             style={iconLeft}
-            onClick={() => value !== defaultValue && onSubmit(value)}
+            onClick={(e) => {
+              if (value !== defaultValue) {
+                onSubmit(value);
+              }
+              e.stopPropagation();
+            }}
           >
             <Save />
           </Icon>
           <Icon
             style={{ ...iconRight, fill: '#134563' }}
-            onClick={() => setValue(defaultValue)}
+            onClick={(e) => {
+              setValue(defaultValue);
+              e.stopPropagation();
+            }}
           >
             <Undo />
           </Icon>
