@@ -1,5 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
+import type { CSSProperties } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
@@ -25,7 +26,9 @@ export const CheckboxEdit = ({
   defaultValue,
   onSubmit,
   noGrow = false,
+  /** default allowUndo=true */
   allowUndo = true,
+  rightSpan,
 }: {
   defaultValue: boolean;
   onSubmit: (val: boolean) => void;
@@ -33,7 +36,9 @@ export const CheckboxEdit = ({
   /**
    * if true, will add undo button after changes. if false, will submit after every keypress. default true
    */
-  allowUndo?: boolean;
+  allowUndo: boolean;
+  /** display to right of CB */
+  rightSpan?: React.ReactNode;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState(defaultValue);
@@ -80,6 +85,7 @@ export const CheckboxEdit = ({
           </Icon>
         </Icons>
       )}
+      {!rightSpan ? '' : rightSpan}
     </ValueBox>
   );
 };
