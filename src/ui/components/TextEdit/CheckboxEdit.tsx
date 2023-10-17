@@ -53,18 +53,23 @@ export const CheckboxEdit = ({
   });
 
   return (
-    <ValueBox {...noDrag} ref={ref} data-nogrow={noGrow}>
+    <ValueBox
+      {...noDrag}
+      style={{ cursor: 'pointer' }}
+      ref={ref}
+      data-nogrow={noGrow}
+      onClick={() => {
+        if (allowUndo) {
+          setValue(!value);
+        } else {
+          onSubmit(!value);
+        }
+      }}
+    >
       <ValueInputCB
         type="checkbox"
         data-type="checkbox"
         checked={value}
-        onChange={() => {
-          if (allowUndo) {
-            setValue(!value);
-          } else {
-            onSubmit(!value);
-          }
-        }}
         onKeyDown={(e) =>
           e.key === 'Enter' && value !== defaultValue && onSubmit(value)
         }
