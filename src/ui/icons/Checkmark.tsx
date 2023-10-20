@@ -16,6 +16,7 @@ export const Checkmark = ({
     style={{ ...style, fill: undefined }}
   >
     <path
+      fill="none"
       stroke={style?.fill ?? '#000'}
       strokeLinecap="round"
       strokeLinejoin="round"

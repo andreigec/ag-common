@@ -13,7 +13,12 @@ const Template: StoryFn = () => (
   <div>
     {Object.entries(Icons).map(([name, value]) => (
       <div
-        style={{ display: 'flex', flexFlow: 'row', alignItems: 'center' }}
+        style={{
+          display: 'flex',
+          flexFlow: 'row',
+          alignItems: 'center',
+          backgroundColor: '#ccc',
+        }}
         key={name}
       >
         {name}-

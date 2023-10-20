@@ -44,7 +44,7 @@ export const Dialog: StoryFn<typeof ActionWrapper> = TemplateModal.bind({});
 
 Dialog.args = {
   displayItems: searchLongList,
-  renderItem: (st) => st.index.toString(),
+  renderItem: (st) => <div>{(st.item as string).toString()}</div>,
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
 };

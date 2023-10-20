@@ -18,8 +18,10 @@ export const Inline: StoryFn<typeof SearchInline> = Template.bind({});
 
 Inline.args = {
   displayItems: searchLongList,
-  renderItem: (st) => st.index.toString(),
-  willDisplayItem: (st, i) => !st || i === st,
+  renderItem: (st) => <div>{(st.item as string).toString()}</div>,
+  willDisplayItem: (st, i) => !st || st === i,
   getKeyF: (i) => i as string,
+  // eslint-disable-next-line no-alert
+  onSelectItem: (a) => alert('click=' + a?.foundItem),
 };
 export default base;

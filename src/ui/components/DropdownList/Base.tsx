@@ -50,6 +50,7 @@ const ListItemStyle = styled.div`
     &[data-selected='true'] {
       opacity: 1 !important;
       background-color: ${colours.orangeRed} !important;
+      cursor: default;
     }
     &[data-selected='false'] {
       &:hover {
@@ -184,7 +185,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
         {open &&
           options.map((s, i) => (
             <ListItem
-              key={p.renderF(s).key}
+              key={typeof s === 'string' ? s : p.renderF(s).key}
               render={p.renderF(s)}
               onChange={() => p.onChange(s, i)}
               selected={s === state}

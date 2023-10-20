@@ -13,7 +13,7 @@ const base: Meta<typeof DropdownList> = {
   component: DropdownList,
 };
 
-const Template: StoryFn<typeof DropdownList> = () => (
+const Template: StoryFn<typeof DropdownList<string>> = () => (
   <div
     style={{
       color: 'white',
@@ -30,28 +30,32 @@ const Template: StoryFn<typeof DropdownList> = () => (
       //
     }}
     onClick={async (e) => {
-      const res = await DropdownListDialog({
+      const x = await DropdownListDialog({
         options: [1, 2, 3],
         renderF: (c) => <div>{c}</div>,
         position: { x: e.clientX, y: e.clientY },
       });
+      if (!x) {
+        alert('nothing selected');
+        return;
+      }
 
       // eslint-disable-next-line no-alert
-      window.alert('result=' + JSON.stringify(res, null, 2));
+      alert(`item=${x?.[0]} index=${x?.[1]}`);
     }}
   >
     click to open
   </div>
 );
 
-export const Dialog: StoryFn<typeof DropdownList> = Template.bind({});
+export const Dialog: StoryFn<typeof DropdownList<string>> = Template.bind({});
 
 Dialog.args = {
   options: ['LONG VALUEEEE', '1', '3'],
   value: 'LONG VALUEEEE',
   placeholder: 'test ph',
   children: <>test children</>,
-  onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
+  onChange: (a, b) => alert(`item=${a} index=${b}`),
   renderF: (r) => <div>{r as string}</div>,
 };
 export default base;

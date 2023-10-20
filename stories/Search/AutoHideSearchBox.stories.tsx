@@ -15,7 +15,7 @@ const Template: StoryFn<typeof Component> = (args) => <Component {...args} />;
 export const AutoHideSearchBox: StoryFn<typeof Component> = Template.bind({});
 
 const args: IAutoHideSearchBox = {
-  searchText: '',
+  searchText: 'needs a value to show',
   // eslint-disable-next-line no-alert
   setSearchText: (st, enter) => alert(`st=${st} enter=${enter}`),
 };

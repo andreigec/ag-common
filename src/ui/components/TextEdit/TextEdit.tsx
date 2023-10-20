@@ -34,6 +34,7 @@ const basecss = css`
   resize: none;
   overflow: hidden;
   background-color: white;
+  color: black;
   font-size: inherit;
   font-weight: inherit;
   font-family: inherit;
@@ -50,7 +51,7 @@ const ValueTextArea = styled.textarea`
 `;
 
 const ValueTextBox = styled.input`
-  ${basecss}
+  ${basecss};
 `;
 
 const ValueBoxEdit = styled(ValueBox)`

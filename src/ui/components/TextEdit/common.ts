@@ -28,6 +28,7 @@ export const ValueBox = styled.div`
 export const valueCss = css`
   width: 100%;
   height: 100%;
+  padding: 0;
   word-break: break-all;
   font-size: inherit;
   font-weight: inherit;

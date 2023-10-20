@@ -26,8 +26,8 @@ const Line = styled.div`
   position: absolute;
   top: 45%;
   height: 10%;
-  left: 0;
-  right: 0;
+  left: 1px;
+  right: 1px;
 `;
 
 const Item = styled.div`
@@ -61,7 +61,6 @@ export const Timeline = ({
   maxCircleSize = 'min(5vw,3rem)',
   className,
   bgColour = 'white',
-  titleHover,
   showTitles = true,
 }: {
   /** default min(5vw,3rem) */
@@ -73,8 +72,6 @@ export const Timeline = ({
   className?: string;
   /** used for behind icons. default white */
   bgColour?: string;
-  /* provides title text from hover item* */
-  titleHover?: (i: ITimelineItem) => string;
   /** if true, will show titles under timeline. default true */
   showTitles?: boolean;
 }) => {
@@ -87,7 +84,7 @@ export const Timeline = ({
         {items.map((p, index) => {
           const enabled = index === lastTrue || index === firstFalse;
           return (
-            <Item key={p.key} title={titleHover?.(p)}>
+            <Item key={p.key} title={p?.title}>
               <Icon
                 style={{
                   maxWidth: maxCircleSize,

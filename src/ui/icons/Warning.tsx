@@ -21,7 +21,7 @@ export const Warning = ({ className }: { className?: string }) => (
       </linearGradient>
     </defs>
     <path
-      fill="white"
+      fill="none"
       stroke="url(#a)"
       strokeWidth="4px"
       d="m797.94 212.01-25.607-48c-.736-1.333-2.068-2.074-3.551-2.074s-2.822.889-3.569 2.222l-25.417 48c-.598 1.185-.605 2.815.132 4s1.921 1.778 3.404 1.778h51.02c1.483 0 2.821-.741 3.42-1.926.747-1.185.753-2.667.165-4"

@@ -28,7 +28,7 @@ export const NoValue: StoryFn<typeof DropdownList> = Template.bind({});
 NoValue.args = {
   options: ['1', 'LONG VALUEEEE', '3'],
   placeholder: 'test ph',
-  onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
+  onChange: (a, b) => alert(`item=${a} index=${b}`),
   renderF: (r) => <div>{r as string}</div>,
 };
 export default base;

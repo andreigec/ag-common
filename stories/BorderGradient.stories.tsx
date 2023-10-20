@@ -18,5 +18,7 @@ export const Primary: StoryFn<typeof BorderGradient> = Template.bind({});
 Primary.args = {
   disabled: false,
   children: <div>test child</div>,
+  left: 'black',
+  right: 'white',
 };
 export default base;

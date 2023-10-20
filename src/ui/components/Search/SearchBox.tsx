@@ -37,6 +37,7 @@ const MagnifyIcon = styled.div`
   height: 1.5rem;
   margin-right: 0.5rem;
   cursor: pointer;
+  margin-left: 0.5rem;
 `;
 
 const CrossIconStyled = styled(CrossIcon)`
@@ -45,6 +46,11 @@ const CrossIconStyled = styled(CrossIcon)`
   @media ${bigScreen} {
     right: 2rem;
   }
+`;
+
+const TextEditStyled = styled(TextEdit)`
+  padding: 0;
+  height: 2.5rem;
 `;
 export interface ISearchBox {
   placeholderText?: string;
@@ -72,7 +78,7 @@ export const SearchBox = forwardRef<IRefTextEdit, ISearchBox>((p, ref) => {
 
   return (
     <Base data-type="search" className={p.className} {...filterDataProps(p)}>
-      <TextEdit
+      <TextEditStyled
         ref={textEditRef}
         placeholder={p.placeholderText}
         defaultEditing={{ focus: true }}

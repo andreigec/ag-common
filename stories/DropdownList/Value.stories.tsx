@@ -22,7 +22,7 @@ Value.args = {
   options: ['LONG VALUEEEE', '1', '3'],
   value: 'LONG VALUEEEE',
   placeholder: 'test ph',
-  onChange: (v) => alert('change=' + JSON.stringify(v, null, 2)),
+  onChange: (a, b) => alert(`item=${a} index=${b}`),
   renderF: (r) => <div>{r as string}</div>,
 };
 export default base;

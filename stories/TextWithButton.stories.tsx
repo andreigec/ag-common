@@ -13,9 +13,9 @@ const Template: StoryFn<typeof TextWithButton> = (args) => TextWithButton(args);
 export const Primary: StoryFn<typeof TextWithButton> = Template.bind({});
 
 Primary.args = {
-  // eslint-disable-next-line no-console
-  onSubmit: (c) => console.log('c=' + c),
-  placeholder: 'placeholder',
+  // eslint-disable-next-line no-alert
+  onSubmit: (c) => alert('sub=' + c),
+  placeholder: 'placeholder. will accept length > 3',
   submitText: 'submit text',
   validateF: (v) => v.length > 3,
 };

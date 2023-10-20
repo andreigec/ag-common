@@ -1,6 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
-import React, { useState } from 'react';
+import React, { cloneElement, useState } from 'react';
 
 import { take } from '../../../common/helpers/array';
 import { smallScreen } from '../../styles';
@@ -19,7 +19,7 @@ const Content = styled.div`
   margin: auto;
   display: flex;
   flex-flow: column;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   align-items: center;
   max-height: calc(100vh - 20rem);
   overflow-y: auto;
@@ -38,7 +38,6 @@ const Content = styled.div`
 
 const Row = styled.div`
   width: 100%;
-  cursor: pointer;
 `;
 
 type ISearchBase<T> = ISearchDialog<T> & {
@@ -46,7 +45,7 @@ type ISearchBase<T> = ISearchDialog<T> & {
   onSelectItem?: (v: TSearchModalRes<T>) => void;
 };
 export const SearchBase = <T,>(p: ISearchBase<T>) => {
-  const { maxDisplayItems = 20 } = p;
+  const { maxDisplayItems = 1000 } = p;
   const [searchText, setSearchText] = useState(p.defaultValue ?? '');
   const resWrap = (foundItem: T | undefined, target: EventTarget) => {
     if (!foundItem) {
@@ -60,7 +59,11 @@ export const SearchBase = <T,>(p: ISearchBase<T>) => {
     p.willDisplayItem(searchText, i),
   );
 
-  const { part: filteredItems } = take(filteredItemsRaw, maxDisplayItems);
+  const { part: filteredItems } = take(
+    filteredItemsRaw,
+    maxDisplayItems < 0 ? filteredItemsRaw.length : maxDisplayItems,
+  );
+  const outdiff = filteredItems.length !== p.displayItems.length;
   const showText =
     p.texts?.totalItems?.(filteredItems.length, p.displayItems.length) ??
     `Showing ${filteredItems.length} out of ${p.displayItems.length} total
@@ -70,12 +73,13 @@ export const SearchBase = <T,>(p: ISearchBase<T>) => {
     <Base className={p.className}>
       <SearchBox {...p} searchText={searchText} setSearchText={setSearchText} />
       <Content data-hasitems={!!filteredItems.length} data-type="content">
-        {filteredItems.map((item, index) => (
-          <Row key={p.getKeyF(item)} onClick={(e) => resWrap(item, e.target)}>
-            {p.renderItem({ searchText, item, index })}
-          </Row>
-        ))}
-        {searchText && <Row>{showText}</Row>}
+        {filteredItems.map((item, index) =>
+          cloneElement(p.renderItem({ searchText, item, index }), {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onClick: (e: any) => resWrap(item, e.target),
+          }),
+        )}
+        {outdiff && <Row>{showText}</Row>}
       </Content>
     </Base>
   );
