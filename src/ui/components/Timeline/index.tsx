@@ -28,10 +28,10 @@ const Line = styled.div`
   height: 10%;
   left: 1px;
   right: 1px;
+  z-index: -1;
 `;
 
 const Item = styled.div`
-  z-index: 1;
   background-color: transparent;
   width: fit-content;
   height: 100%;
