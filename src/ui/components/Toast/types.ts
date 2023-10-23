@@ -2,7 +2,7 @@ export type TToastAppearance = 'error' | 'warning' | 'success';
 export type TToastOptions =
   | {
       appearance: TToastAppearance;
-      /** default 5 seconds for success only. null to override */
+      /** default 5 seconds for success, 10 otherwise. null to override */
       autoClose?: number | null;
     }
   | undefined;

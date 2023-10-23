@@ -92,19 +92,21 @@ export const Toast = ({
   if (toast.options?.autoClose) {
     closeMs = toast.options?.autoClose;
   } else if (toast.options?.autoClose === undefined) {
-    closeMs = 5000;
+    if (toast?.options?.appearance === 'success') {
+      closeMs = 5000;
+    } else {
+      closeMs = 10000;
+    }
   }
 
   let icon = <Tick />;
 
   switch (toast?.options?.appearance) {
     case 'error': {
-      closeMs = undefined;
       icon = <Cross />;
       break;
     }
     case 'warning': {
-      closeMs = undefined;
       icon = <Warning />;
       break;
     }

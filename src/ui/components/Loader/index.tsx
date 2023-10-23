@@ -22,15 +22,23 @@ const Base = styled.div`
 
 const LoadingBack = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  &[data-type='abs'] {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  &[data-type='br'] {
+    bottom: 1rem;
+    right: 1rem;
+    top: auto;
+  }
+
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: transparent;
   opacity: 1;
   &[data-transparent='true'] {
     opacity: 0.1;
@@ -48,15 +56,26 @@ export interface ILoader {
    */
   height?: string | null;
   name: string;
+  /** position for loader. default full page takeover */
+  position?: 'abs' | 'br';
 }
-export const Loader = ({ name, height = '2rem', width = '2rem' }: ILoader) => {
+export const Loader = ({
+  name,
+  height = '2rem',
+  width = '2rem',
+  position = 'abs',
+}: ILoader) => {
   const [trans, setTrans] = useState(true);
   useEffect(() => {
     setTrans(false);
   }, []);
 
   return (
-    <LoadingBack data-loading={name} data-transparent={trans}>
+    <LoadingBack
+      data-loading={name}
+      data-transparent={trans}
+      data-type={position}
+    >
       <Base style={{ height: height as string, width: width as string }} />
     </LoadingBack>
   );
