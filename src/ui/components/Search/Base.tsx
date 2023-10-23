@@ -71,7 +71,14 @@ export const SearchBase = <T,>(p: ISearchBase<T>) => {
 
   return (
     <Base className={p.className}>
-      <SearchBox {...p} searchText={searchText} setSearchText={setSearchText} />
+      <SearchBox
+        {...p}
+        searchText={searchText}
+        setSearchText={(t) => {
+          setSearchText(t);
+          p.onSearchTextChange?.(t);
+        }}
+      />
       <Content data-hasitems={!!filteredItems.length} data-type="content">
         {filteredItems.map((item, index) =>
           cloneElement(p.renderItem({ searchText, item, index }), {
