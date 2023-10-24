@@ -15,9 +15,11 @@ const Template: StoryFn<typeof SearchBox> = (args) => <SearchBox {...args} />;
 export const SearchBoxB: StoryFn<typeof SearchBox> = Template.bind({});
 
 const args: ISearchBox = {
-  searchText: '',
+  searchText: 'test',
   // eslint-disable-next-line no-alert
   setSearchText: (st, enter) => alert(`st=${st} enter=${enter}`),
+  defaultValue: 'dv1',
 };
+
 SearchBoxB.args = args;
 export default base;

@@ -80,7 +80,7 @@ export const AutoHideSearchBox = (p: IAutoHideSearchBox) => {
         {!open && <Magnify style={{ fill: 'white' }} />}
       </Icon>
       <SearchBoxStyled
-        ref={textEditRef}
+        textBoxRef={textEditRef}
         {...p}
         className=""
         data-open={open}

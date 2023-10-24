@@ -1,11 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
-import React, {
-  createRef,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-} from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { debounce } from '../../helpers/debounce';
 import { filterDataProps } from '../../helpers/dom';
@@ -58,35 +53,27 @@ export interface ISearchBox {
   setSearchText: (val: string, enterPressed: boolean) => void;
   defaultValue?: string;
   className?: string;
+  textBoxRef?: React.RefObject<IRefTextEdit>;
 }
-export const SearchBox = forwardRef<IRefTextEdit, ISearchBox>((p, ref) => {
-  const textEditRef = createRef<IRefTextEdit>();
-  useImperativeHandle(ref, () => ({
-    setValue: (v) => {
-      const value = textEditRef.current?.getValue();
-      if (v === value) {
-        return;
-      }
-      textEditRef.current?.setValue(v);
-    },
-    focus: () => textEditRef.current?.focus(),
-    getValue: () => textEditRef.current?.getValue(),
-  }));
+export const SearchBox = (p: ISearchBox) => {
+  const ref = useRef<IRefTextEdit>(p.textBoxRef?.current ?? null);
+
   useEffect(() => {
-    textEditRef?.current?.setValue(p.searchText);
-  }, [p.searchText, textEditRef]);
+    ref?.current?.setValue(p.searchText);
+    p.setSearchText(p.searchText, true);
+  }, [p]);
 
   return (
     <Base data-type="search" className={p.className} {...filterDataProps(p)}>
       <TextEditStyled
-        ref={textEditRef}
+        ref={ref}
         placeholder={p.placeholderText}
         defaultEditing={{ focus: true }}
         singleLine
         leftContent={
           <MagnifyIcon
             onClick={() =>
-              p.setSearchText(textEditRef?.current?.getValue() || '', true)
+              p.setSearchText(ref?.current?.getValue() || '', true)
             }
           >
             <Magnify />
@@ -108,11 +95,11 @@ export const SearchBox = forwardRef<IRefTextEdit, ISearchBox>((p, ref) => {
       {p.searchText && (
         <CrossIconStyled
           onClick={() => {
-            textEditRef.current?.setValue('');
+            ref?.current?.setValue('');
             p.setSearchText('', true);
           }}
         />
       )}
     </Base>
   );
-});
+};

@@ -1,9 +1,15 @@
 'use client';
 import styled from '@emotion/styled';
-import React, { cloneElement, useState } from 'react';
+import React, {
+  cloneElement,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
 import { take } from '../../../common/helpers/array';
 import { smallScreen } from '../../styles';
+import type { IRefTextEdit } from '../TextEdit/types';
 import { SearchBox } from './SearchBox';
 import type { ISearchDialog, TSearchModalRes } from './types';
 
@@ -43,10 +49,26 @@ const Row = styled.div`
 type ISearchBase<T> = ISearchDialog<T> & {
   onSearchTextChange?: (v: string) => void;
   onSelectItem?: (v: TSearchModalRes<T>) => void;
+  textBoxRef?: React.RefObject<IRefTextEdit>;
 };
 export const SearchBase = <T,>(p: ISearchBase<T>) => {
   const { maxDisplayItems = 1000 } = p;
   const [searchText, setSearchText] = useState(p.defaultValue ?? '');
+
+  useImperativeHandle(p.textBoxRef, () => ({
+    setValue: (v) => {
+      const value = divRef?.current?.getValue();
+      if (v === value) {
+        return;
+      }
+      divRef?.current?.setValue(v);
+      setSearchText(v);
+    },
+    focus: () => divRef?.current?.focus(),
+    getValue: () => divRef?.current?.getValue(),
+  }));
+  const divRef = useRef<IRefTextEdit>(null);
+
   const resWrap = (foundItem: T | undefined, target: EventTarget) => {
     if (!foundItem) {
       p.onSelectItem?.(undefined);
@@ -78,6 +100,7 @@ export const SearchBase = <T,>(p: ISearchBase<T>) => {
           setSearchText(t);
           p.onSearchTextChange?.(t);
         }}
+        textBoxRef={divRef}
       />
       <Content data-hasitems={!!filteredItems.length} data-type="content">
         {filteredItems.map((item, index) =>
