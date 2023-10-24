@@ -1,4 +1,3 @@
-import type { Ref } from 'react';
 import React from 'react';
 
 import type { IRefTextEdit } from '../TextEdit/types';
@@ -9,6 +8,6 @@ export const SearchInline = <T,>(
   p: ISearchInline<T> & {
     onSelectItem?: ((v: TSearchModalRes<T>) => void) | undefined;
     onSearchTextChange?: (v: string) => void;
-    textBoxRef?: Ref<IRefTextEdit>;
+    textBoxRef?: React.RefObject<IRefTextEdit>;
   },
 ) => <SearchBase<T> {...p} />;
