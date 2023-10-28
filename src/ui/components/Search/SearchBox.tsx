@@ -59,7 +59,10 @@ export const SearchBox = (p: ISearchBox) => {
   const ref = useRef<IRefTextEdit>(p.textBoxRef?.current ?? null);
 
   useEffect(() => {
-    ref?.current?.setValue(p.searchText);
+    if (!ref.current || ref.current.getValue() === p.searchText) {
+      return;
+    }
+    ref.current.setValue(p.searchText);
     p.setSearchText(p.searchText, true);
   }, [p]);
 

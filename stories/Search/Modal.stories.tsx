@@ -18,7 +18,9 @@ export const Modal: StoryFn<typeof SearchModal> = Template.bind({});
 
 Modal.args = {
   displayItems: searchLongList,
-  renderItem: (st) => <div>{(st.item as string).toString()}</div>,
+  renderItem: (st) => (
+    <div key={st.item as string}>{(st.item as string).toString()}</div>
+  ),
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
 };
