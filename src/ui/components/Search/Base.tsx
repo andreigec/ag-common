@@ -37,7 +37,7 @@ const Content = styled.div`
   }
   @media ${smallScreen} {
     margin: 0;
-    width: 100%;
+    width: calc(100% - 0.5rem);
     margin-top: 1rem;
   }
 `;

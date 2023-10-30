@@ -45,6 +45,7 @@ const CrossIconStyled = styled(CrossIcon)`
 const TextEditStyled = styled(TextEdit)`
   padding: 0;
   height: 2.5rem;
+  background-color: white;
 `;
 export interface ISearchBox {
   placeholderText?: string;
