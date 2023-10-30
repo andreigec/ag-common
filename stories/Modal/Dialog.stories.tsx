@@ -22,7 +22,12 @@ const ActionWrapper = () => (
     onClick={async () => {
       const res = await ModalDialog(
         <div
-          style={{ width: '5rem', height: '5rem', backgroundColor: 'black' }}
+          style={{
+            width: '5rem',
+            height: '5rem',
+            backgroundColor: 'black',
+            color: 'white',
+          }}
         >
           test
         </div>,
