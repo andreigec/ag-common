@@ -20,10 +20,9 @@ const Base = styled.div`
   position: relative;
 
   @media ${smallScreen} {
+    padding: 0.5rem;
     margin: 0;
-    padding: 0;
-    padding-top: 0.5rem;
-    width: 100%;
+    width: calc(100% - 1rem);
   }
 `;
 
@@ -82,7 +81,6 @@ export const SearchBox = (p: ISearchBox) => {
             <Magnify />
           </MagnifyIcon>
         }
-        noGrow
         allowUndo={false}
         onClickOutsideWithNoValue={null}
         onSubmit={(v, enterPressed) =>

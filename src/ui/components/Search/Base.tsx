@@ -25,7 +25,7 @@ const Content = styled.div`
   margin: auto;
   display: flex;
   flex-flow: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
   max-height: calc(100vh - 20rem);
   overflow-y: auto;

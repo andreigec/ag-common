@@ -17,7 +17,7 @@ const Template: StoryFn<typeof SearchInline> = (args) => {
   const ref = createRef<IRefTextEdit>();
 
   return (
-    <div>
+    <div style={{ backgroundColor: '#333', color: 'white' }}>
       <div
         onClick={() => {
           ref.current?.setValue?.('hg');
