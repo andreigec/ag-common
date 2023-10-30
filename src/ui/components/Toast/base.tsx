@@ -149,7 +149,11 @@ export const ToastProvider = ({
   const [toasts, setToasts] = useState<IToastInt[]>([]);
   const addToast: TAddToast = (message, options) =>
     setToasts((currentToasts) => [
-      ...currentToasts,
+      ...currentToasts.filter(
+        (ct) =>
+          ct.message !== message ||
+          JSON.stringify(ct.options) !== JSON.stringify(options),
+      ),
       { id: random(10000).toString(), message, options },
     ]);
   const close = (id: string) =>

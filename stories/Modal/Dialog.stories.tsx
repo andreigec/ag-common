@@ -21,7 +21,11 @@ const ActionWrapper = () => (
     }}
     onClick={async () => {
       const res = await ModalDialog(
-        <div style={{ width: '5rem', height: '5rem' }}>test</div>,
+        <div
+          style={{ width: '5rem', height: '5rem', backgroundColor: 'black' }}
+        >
+          test
+        </div>,
       );
 
       // eslint-disable-next-line no-alert

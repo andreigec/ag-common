@@ -32,6 +32,7 @@ const ModalBase = styled.div`
     0 2px 15px 0 rgba(0, 0, 0, 0.05);
   max-width: 95vw;
   max-height: 95vh;
+  overflow: hidden;
   &[data-position='left'] {
     left: 0;
   }
