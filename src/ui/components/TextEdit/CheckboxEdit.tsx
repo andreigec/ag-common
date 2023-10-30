@@ -28,7 +28,9 @@ export const CheckboxEdit = ({
   /** default allowUndo=true */
   allowUndo = true,
   rightSpan,
+  className,
 }: {
+  className?: string;
   defaultValue: boolean;
   onSubmit: (val: boolean) => void;
   noGrow?: boolean;
@@ -54,6 +56,7 @@ export const CheckboxEdit = ({
   return (
     <ValueBox
       {...noDrag}
+      className={className}
       style={{ cursor: 'pointer' }}
       ref={ref}
       data-nogrow={noGrow}
