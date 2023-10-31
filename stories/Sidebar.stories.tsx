@@ -9,8 +9,11 @@ const app: Meta<typeof Sidebar> = {
   component: Sidebar,
 };
 
-const Template: StoryFn<typeof Sidebar> = (args) => <Sidebar {...args} />;
-
+const Template: StoryFn<typeof Sidebar> = (args) => (
+  <div style={{ backgroundColor: '#333', height: '20rem' }}>
+    <Sidebar {...args} />
+  </div>
+);
 export const Primary: StoryFn<typeof Sidebar> = Template.bind({});
 
 Primary.args = {

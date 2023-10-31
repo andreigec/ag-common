@@ -1,9 +1,11 @@
 'use client';
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useRef } from 'react';
 
+import { useOnClickOutside } from '../../helpers';
 import { useCookieBoolean } from '../../helpers/cookie/use';
 import { NoTextSelect } from '../../styles/common';
+import { smallScreen, smallScreenPx } from '../../styles/media';
 import { Chevron } from '../Chevron';
 
 const Base = styled.div`
@@ -11,9 +13,20 @@ const Base = styled.div`
   transition: all 200ms;
   border-right: solid 1px #ccc;
   padding-left: 0.5rem;
-  //width set in style
+  height: 100vh;
 
+  &[data-open='true'] {
+    width: 80vw;
+    max-width: 30rem;
+    @media ${smallScreen} {
+      max-width: unset;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+  }
   &[data-open='false'] {
+    width: 0.5rem;
     background-color: rgba(0, 0, 0, 0.1);
     cursor: pointer;
     &:hover,
@@ -34,14 +47,15 @@ const Base = styled.div`
 `;
 
 const ContentBlock = styled.div`
-  height: 100%;
-  left: -18rem;
+  left: -30rem;
   transition: left 200ms;
+  height: 100%;
   &[data-open='false'] {
     position: absolute;
     top: 0;
     z-index: 1;
-    //width set in style
+    width: 80vw;
+    max-width: 30rem;
   }
 `;
 
@@ -54,13 +68,14 @@ const Content = styled.div`
   &[data-open='false'] {
     filter: drop-shadow(1px 1px 0.5rem #555);
     border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
   }
 `;
 
 const Hamburger = styled.div`
   position: absolute;
   transition: all 200ms;
-  z-index: 1;
+  z-index: 2;
   &[data-open='false'] {
     top: 0.5rem;
     left: 0.25rem;
@@ -101,22 +116,24 @@ export interface ISidebar {
    * optionally pass in SSR cookiedocument
    */
   cookieDocument?: string;
-  /**
-   * default 15rem
-   */
-  width?: string;
 }
 export const Sidebar = ({
   children,
   className,
   key = 'sidebar',
   cookieDocument,
-  width = '15rem',
 }: ISidebar) => {
+  const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useCookieBoolean({
     name: key,
     defaultValue: false,
     cookieDocument: cookieDocument,
+  });
+  useOnClickOutside({ ref }, () => {
+    if (!open || window.innerWidth > smallScreenPx) {
+      return;
+    }
+    setOpen(false);
   });
 
   return (
@@ -126,16 +143,12 @@ export const Sidebar = ({
       data-open={open}
       onClick={() => !open && setOpen(true)}
       data-hover
-      style={{ width: !open ? '0.5rem' : width }}
+      ref={ref}
     >
       <Hamburger data-open={open} onClick={() => setOpen(!open)} data-hover>
         <ChevronStyled point={open ? 'left' : 'right'} width="100%" />
       </Hamburger>
-      <ContentBlock
-        data-type="content-block"
-        data-open={open}
-        style={{ width: !open ? width : undefined }}
-      >
+      <ContentBlock data-type="content-block" data-open={open}>
         <Content
           data-type="content"
           data-open={open}
