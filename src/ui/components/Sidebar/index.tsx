@@ -60,6 +60,7 @@ const Content = styled.div`
 const Hamburger = styled.div`
   position: absolute;
   transition: all 200ms;
+  z-index: 1;
   &[data-open='false'] {
     top: 0.5rem;
     left: 0.25rem;
