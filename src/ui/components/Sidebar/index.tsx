@@ -10,7 +10,6 @@ const Base = styled.div`
   position: relative;
   transition: all 200ms;
   border-right: solid 1px #ccc;
-  margin-right: 1rem;
   padding-left: 0.5rem;
   //width set in style
 
@@ -28,13 +27,14 @@ const Base = styled.div`
   ${NoTextSelect};
 
   &:hover {
-    [data-content] {
+    [data-type='content-block'] {
       left: 1rem;
     }
   }
 `;
 
 const ContentBlock = styled.div`
+  height: 100%;
   left: -18rem;
   transition: left 200ms;
   &[data-open='false'] {
@@ -50,11 +50,8 @@ const Content = styled.div`
   flex-flow: column;
   width: 100%;
   height: 100%;
-  margin-top: 2rem;
 
   &[data-open='false'] {
-    padding: 1rem;
-    background-color: white;
     filter: drop-shadow(1px 1px 0.5rem #555);
     border-radius: 1rem;
   }
@@ -123,6 +120,7 @@ export const Sidebar = ({
 
   return (
     <Base
+      data-type="sidebar"
       className={className}
       data-open={open}
       onClick={() => !open && setOpen(true)}
@@ -133,11 +131,12 @@ export const Sidebar = ({
         <ChevronStyled point={open ? 'left' : 'right'} width="100%" />
       </Hamburger>
       <ContentBlock
-        data-content
+        data-type="content-block"
         data-open={open}
         style={{ width: !open ? width : undefined }}
       >
         <Content
+          data-type="content"
           data-open={open}
           onClick={(e) => {
             e.stopPropagation();
