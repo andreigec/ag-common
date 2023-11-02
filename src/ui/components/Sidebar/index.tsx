@@ -4,6 +4,7 @@ import React, { useRef } from 'react';
 
 import { useOnClickOutside } from '../../helpers';
 import { useCookieBoolean } from '../../helpers/cookie/use';
+import { Hamburger } from '../../icons/Hamburger';
 import { NoTextSelect } from '../../styles/common';
 import { smallScreen, smallScreenPx } from '../../styles/media';
 import { Chevron } from '../Chevron';
@@ -72,7 +73,7 @@ const Content = styled.div`
   }
 `;
 
-const Hamburger = styled.div`
+const HamburgerB = styled.div`
   position: absolute;
   transition: all 200ms;
   z-index: 2;
@@ -90,8 +91,9 @@ const Hamburger = styled.div`
   width: 1.5rem;
   height: 1.5rem;
   background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.25rem;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.7);
   }
   border-radius: 50%;
   border: solid 1px rgba(0, 0, 0, 0.5);
@@ -145,9 +147,9 @@ export const Sidebar = ({
       data-hover
       ref={ref}
     >
-      <Hamburger data-open={open} onClick={() => setOpen(!open)} data-hover>
-        <ChevronStyled point={open ? 'left' : 'right'} width="100%" />
-      </Hamburger>
+      <HamburgerB data-open={open} onClick={() => setOpen(!open)} data-hover>
+        {open ? <ChevronStyled point={'left'} width="100%" /> : <Hamburger />}
+      </HamburgerB>
       <ContentBlock data-type="content-block" data-open={open}>
         <Content
           data-type="content"

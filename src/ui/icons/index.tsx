@@ -4,6 +4,7 @@ export * from './Circle';
 export * from './CircleDot';
 export * from './CrossIcon';
 export * from './Door';
+export * from './Hamburger';
 export * from './HorizontalDots';
 export * from './Magnify';
 export * from './Pencil';
