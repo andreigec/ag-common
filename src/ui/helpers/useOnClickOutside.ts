@@ -7,12 +7,12 @@ import { isRightClick } from './dom';
 type Event = MouseEvent | TouchEvent;
 export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   p: {
+    ref: RefObject<T>;
     /**
      * default false
      */
     disabled?: boolean;
-
-    ref: RefObject<T>;
+    /** if true, will also consider moving mouse outside div. default false */
     moveMouseOutside?: boolean;
   },
   handler: (event: Event) => void,

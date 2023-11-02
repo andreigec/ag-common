@@ -10,6 +10,7 @@ import { Icon } from '../Icon';
 const Base = styled.div`
   width: 100%;
   overflow: hidden;
+  background-color: inherit;
 `;
 const Row = styled.div`
   display: flex;
@@ -20,6 +21,8 @@ const Row = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  background-color: inherit;
+  z-index: 0;
 `;
 
 const Line = styled.div`
@@ -32,7 +35,7 @@ const Line = styled.div`
 `;
 
 const Item = styled.div`
-  background-color: transparent;
+  background-color: inherit;
   width: fit-content;
   height: 100%;
   display: flex;
@@ -60,7 +63,7 @@ export const Timeline = ({
   onClick,
   maxCircleSize = 'min(5vw,3rem)',
   className,
-  bgColour = 'white',
+  bgColour = 'inherit',
   showTitles = true,
 }: {
   /** default min(5vw,3rem) */
@@ -70,7 +73,7 @@ export const Timeline = ({
   items: ITimelineItem[];
   onClick?: (p: ITimelineItem) => void;
   className?: string;
-  /** used for behind icons. default white */
+  /** used for behind icons. default inherit */
   bgColour?: string;
   /** if true, will show titles under timeline. default true */
   showTitles?: boolean;
