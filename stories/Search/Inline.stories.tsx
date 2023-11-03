@@ -4,8 +4,9 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React, { createRef } from 'react';
 
-import type { IRefTextEdit, ISearchInline } from '../../src';
 import { SearchInline } from '../../src/ui/components/Search/Inline';
+import type { ISearchDialog } from '../../src/ui/components/Search/types';
+import type { IRefTextEdit } from '../../src/ui/components/TextEdit/types';
 import { searchLongList } from './common';
 
 const base: Meta<typeof SearchInline> = {
@@ -13,7 +14,7 @@ const base: Meta<typeof SearchInline> = {
   component: SearchInline,
 };
 
-const Template: StoryFn<typeof SearchInline<string>> = (args) => {
+const Template: StoryFn<ISearchDialog<string>> = (args) => {
   const ref = createRef<IRefTextEdit>();
 
   return (
@@ -39,7 +40,7 @@ const Template: StoryFn<typeof SearchInline<string>> = (args) => {
   );
 };
 
-export const Inline: StoryFn<typeof SearchInline<string>> = Template.bind({});
+export const Inline: StoryFn<ISearchDialog<string>> = Template.bind({});
 
 Inline.args = {
   displayItems: searchLongList,
@@ -52,9 +53,9 @@ Inline.args = {
   onSelectItem: (a) => alert('click=' + a?.foundItem),
   defaultValue: '',
   rowCountOpt: { display: 'top' },
-} satisfies ISearchInline<string>;
+} satisfies ISearchDialog<string>;
 export default base;
 
 export const DefaultWithArgs = () => (
-  <Inline {...(Inline.args as ISearchInline<string>)} />
+  <Inline {...(Inline.args as ISearchDialog<string>)} />
 );

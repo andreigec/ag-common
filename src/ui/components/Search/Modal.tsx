@@ -4,7 +4,7 @@ import React from 'react';
 
 import { bigScreen, smallScreen } from '../../styles';
 import { Modal } from '../Modal/Modal';
-import { SearchBase } from './Base';
+import { SearchInline } from './Inline';
 import type { ISearchModal } from './types';
 
 const ModalStyled = styled(Modal)`
@@ -30,6 +30,6 @@ export const SearchModal = <T,>(p: ISearchModal<T>) => (
     showCloseButton={false}
     closeOnClickOutside={true}
   >
-    <SearchBase<T> {...p} />
+    <SearchInline<T> {...p} />
   </ModalStyled>
 );

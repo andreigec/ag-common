@@ -52,5 +52,4 @@ export interface ISearchDialog<T> {
     display?: 'bottom' | 'top' | 'off';
   };
 }
-export type ISearchInline<T> = ISearchDialog<T>;
 export type ISearchModal<T> = ISearchDialog<T>;

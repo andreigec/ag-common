@@ -21,5 +21,6 @@ export const Primary: StoryFn<IDarkMode> = Template.bind({});
 
 Primary.args = {
   onSubmit: (m) => alert('mode=' + m),
+  iconSize: '2rem',
 } satisfies IDarkMode;
 export default base;
