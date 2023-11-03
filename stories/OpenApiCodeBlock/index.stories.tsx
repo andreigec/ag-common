@@ -8,6 +8,11 @@ import type {
   IOpenApiCodeBlock,
 } from '../../src/ui/components/OpenApiCodeBlock/types';
 
+type TypedCode = IOpenApiCodeBlock<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  testop: ({ testparam1 }: { testparam1: string }) => Promise<any>;
+}>;
+
 const base: Meta<typeof OpenApiCodeBlock> = {
   title: 'UI/OpenApiCodeBlock',
   component: OpenApiCodeBlock,
@@ -30,23 +35,17 @@ const schema: IOpenApi = {
   },
 };
 
-const Template: StoryFn<typeof OpenApiCodeBlock> = (args) => (
-  <div style={{ backgroundColor: 'white', padding: '1rem', whiteSpace: 'pre' }}>
-    <OpenApiCodeBlock {...args} />
-    ...
-    <div>schema:{JSON.stringify(schema, null, 2)}</div>
-  </div>
-);
-export const Primary: StoryFn<typeof OpenApiCodeBlock> = Template.bind({});
-const args: IOpenApiCodeBlock<{
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  testop: ({ testparam1 }: { testparam1: string }) => Promise<any>;
-}> = {
+const Template: StoryFn<TypedCode> = (args) => <OpenApiCodeBlock {...args} />;
+export const Primary: StoryFn<TypedCode> = Template.bind({});
+
+//@ts-ignore
+Primary.args = {
   schema,
   funcF: (f) => f.testop({ testparam1: '2' }),
   apiKey: 'test api key',
-};
-
-//@ts-ignore
-Primary.args = args;
+} satisfies TypedCode;
 export default base;
+
+export const DefaultWithArgs = () => (
+  <Primary {...(Primary.args as TypedCode)} />
+);

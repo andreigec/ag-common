@@ -10,14 +10,13 @@ const base: Meta<typeof Component> = {
   component: Component,
 };
 
-const Template: StoryFn<typeof Component> = (args) => <Component {...args} />;
+const Template: StoryFn<IAutoHideSearchBox> = (args) => <Component {...args} />;
 
-export const AutoHideSearchBox: StoryFn<typeof Component> = Template.bind({});
+export const AutoHideSearchBox: StoryFn<IAutoHideSearchBox> = Template.bind({});
 
-const args: IAutoHideSearchBox = {
+AutoHideSearchBox.args = {
   searchText: 'needs a value to show',
   // eslint-disable-next-line no-alert
   setSearchText: (st, enter) => alert(`st=${st} enter=${enter}`),
-};
-AutoHideSearchBox.args = args;
+} satisfies IAutoHideSearchBox;
 export default base;

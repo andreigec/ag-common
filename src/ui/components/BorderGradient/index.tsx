@@ -7,6 +7,7 @@ import { removeUndefValuesFromObject } from '../../../common/helpers/object';
 import { colours } from '../../styles/colours';
 
 const BGcss = css`
+  max-height: calc(100% - 6px);
   display: flex;
   border: 0;
   padding: 3px;
@@ -57,7 +58,7 @@ export interface IBorderGradient {
   radius?: string;
   left?: string;
   right?: string;
-  children: JSX.Element | (JSX.Element | string | number | undefined)[];
+  children: React.ReactNode;
   padding?: string;
   onClick?: (e: IOnClick) => void;
   href?: string;

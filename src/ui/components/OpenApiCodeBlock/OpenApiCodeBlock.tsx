@@ -11,11 +11,12 @@ import type { IOpenApiCodeBlock } from './types';
 const Base = styled.div`
   display: flex;
   flex-flow: column;
-  width: calc(100% - 4rem);
+  width: calc(100% - 2rem);
   flex-grow: 1;
   border: solid 1px #333;
-  margin: 1rem;
   padding: 1rem;
+  overflow-y: auto;
+  max-height: calc(100% - 2rem);
 `;
 
 const Verb = styled.div`
@@ -56,7 +57,7 @@ export const OpenApiCodeBlock = <TDefaultApi,>(
 
   return (
     <Base>
-      <FlexRow center>
+      <FlexRow center noGrow>
         <Verb>{verb}</Verb>
         <ApiName>{operation.description ?? path}</ApiName>
       </FlexRow>

@@ -7,6 +7,7 @@ import {
   DropdownList,
   DropdownListDialog,
 } from '../../src/ui/components/DropdownList';
+import type { IDropdownList } from '../../src/ui/components/DropdownList/types';
 
 const base: Meta<typeof DropdownList> = {
   title: 'UI/DropdownList',
@@ -57,5 +58,5 @@ Dialog.args = {
   children: <>test children</>,
   onChange: (a, b) => alert(`item=${a} index=${b}`),
   renderF: (r) => <div>{r as string}</div>,
-};
+} satisfies IDropdownList<string>;
 export default base;

@@ -3,6 +3,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { IConfirmModal } from '../../src/ui/components/Confirm';
 import { ConfirmModal } from '../../src/ui/components/Confirm';
 
 const base: Meta<typeof ConfirmModal> = {
@@ -21,5 +22,5 @@ Modal.args = {
   onSubmit: (e) => {
     alert('res=' + e);
   },
-};
+} satisfies IConfirmModal;
 export default base;

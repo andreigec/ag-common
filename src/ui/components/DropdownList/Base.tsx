@@ -17,6 +17,7 @@ const Base = styled.div`
   justify-content: space-between;
   cursor: pointer;
   flex-grow: 0;
+  max-height: 100%;
 `;
 
 const DropItems = styled.div`
@@ -41,6 +42,7 @@ const ListItemStyle = styled.div`
   padding-left: 0.5rem;
   flex-grow: 1;
   padding: 1rem;
+  height: calc(100% - 2rem);
   cursor: pointer;
   display: flex;
   overflow: hidden;
@@ -127,6 +129,8 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     const maxLen = 20;
     const newStyle: Record<string, string | number> = {
       minWidth: `calc(${maxLen}ch + 2rem)`,
+      filter: `drop-shadow(1px 1px 0.5rem ${shadow})`,
+      maxHeight,
     };
 
     const minPx = convertRemToPixels(2 + maxLen / 2);
@@ -145,9 +149,6 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     } else {
       newStyle.top = '0';
     }
-
-    newStyle.filter = `drop-shadow(1px 1px 0.5rem ${shadow})`;
-    newStyle.maxHeight = maxHeight;
 
     if (JSON.stringify(style) !== JSON.stringify(newStyle)) {
       setStyle(newStyle);

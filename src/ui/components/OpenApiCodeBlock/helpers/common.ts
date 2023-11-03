@@ -10,7 +10,6 @@ import type {
 
 export const Highlight = styled.span`
   color: green;
-  text-transform: capitalize;
 `;
 
 export const Highlight2 = styled.span`
@@ -36,7 +35,7 @@ const getApiUrl = <TDefaultApi>(p: IOpenApiCodeBlock<TDefaultApi>) => {
 const getFunctionName = <TDefaultApi>(p: IOpenApiCodeBlock<TDefaultApi>) => {
   let ret = p.funcF.toString();
   const i1 = ret.indexOf('.') + 1;
-  const i2 = indexOfNumber(ret, '(', 1);
+  const i2 = ret.indexOf('(', i1);
   ret = ret.substring(i1, i2);
   return ret;
 };

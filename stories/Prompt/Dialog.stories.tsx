@@ -44,5 +44,5 @@ export const Dialog: StoryFn<typeof ActionWrapper> = TemplateModal.bind({});
 Dialog.args = {
   bottomText: 'bottom',
   topText: 'top',
-};
+} satisfies IPromptDialog;
 export default base;

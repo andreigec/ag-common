@@ -36,11 +36,13 @@ const base: Meta<typeof ActionWrapper> = {
   component: ActionWrapper,
 };
 
-const TemplateModal: StoryFn<typeof ActionWrapper> = (args) => (
+const TemplateModal: StoryFn<typeof ActionWrapper<string>> = (args) => (
   <ActionWrapper {...args} />
 );
 
-export const Dialog: StoryFn<typeof ActionWrapper> = TemplateModal.bind({});
+export const Dialog: StoryFn<typeof ActionWrapper<string>> = TemplateModal.bind(
+  {},
+);
 
 Dialog.args = {
   displayItems: searchLongList,
@@ -49,5 +51,5 @@ Dialog.args = {
   ),
   willDisplayItem: (st, i) => !st || i === st,
   getKeyF: (i) => i as string,
-};
+} satisfies ISearchDialog<string>;
 export default base;
