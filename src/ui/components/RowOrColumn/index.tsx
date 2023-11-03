@@ -1,13 +1,13 @@
 'use client';
 import styled from '@emotion/styled';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import React from 'react';
 
-import { bigScreen, smallScreen } from '../../styles/media';
+import { bigScreen, smallScreen, vSmallScreen } from '../../styles/media';
 
 const Base = styled.div`
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row;
   flex-grow: 1;
   width: 100%;
   @media ${bigScreen} {
@@ -15,10 +15,16 @@ const Base = styled.div`
       flex-flow: row;
     }
   }
+  &[data-break='small'] {
+    @media ${smallScreen} {
+      flex-flow: column;
+    }
+  }
 
-  @media ${smallScreen} {
-    flex-flow: column;
-    overflow: unset;
+  &[data-break='vsmall'] {
+    @media ${vSmallScreen} {
+      flex-flow: column;
+    }
   }
 
   &[data-center='true'] {
@@ -29,9 +35,6 @@ const Base = styled.div`
     flex-grow: 0;
     width: auto;
   }
-  &[data-enableoverflow='true'] {
-    overflow: visible;
-  }
 `;
 export interface IRowOrColumn {
   noGrow?: boolean;
@@ -39,19 +42,18 @@ export interface IRowOrColumn {
   noWrap?: boolean;
   children: ReactNode;
   className?: string;
-  title?: string;
-  enableOverflow?: boolean;
+  break?: 'small' | 'vsmall';
+  style?: CSSProperties;
 }
 export type IFlexColumn = IRowOrColumn;
 export type IFlexRow = IRowOrColumn;
 export const RowOrColumn = (props: IRowOrColumn) => (
   <Base
-    title={props.title}
     data-nogrow={props.noGrow ?? false}
     data-center={props.center ?? false}
     data-nowrap={props.noWrap ?? false}
-    data-enableoverflow={props.enableOverflow ?? false}
     {...props}
+    data-break={props.break ?? 'small'}
   >
     {props.children}
   </Base>

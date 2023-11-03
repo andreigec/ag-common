@@ -9,26 +9,22 @@ const Base = styled.div`
   display: flex;
   flex-flow: column;
   flex-grow: 1;
+  width: 100%;
+  height: 100%;
   &[data-center='true'] {
     justify-content: center;
     align-items: center;
   }
   &[data-nogrow='true'] {
     flex-grow: 0;
-  }
-  overflow: visible;
-  &[data-enableoverflow='false'] {
-    overflow: hidden;
-    max-width: 100%;
+    width: unset;
   }
 `;
 
 export const FlexColumn = (props: IFlexColumn) => (
   <Base
-    title={props.title}
     data-nogrow={props.noGrow ?? false}
     data-center={props.center ?? false}
-    data-enableoverflow={props.enableOverflow ?? false}
     {...props}
   >
     {props.children}

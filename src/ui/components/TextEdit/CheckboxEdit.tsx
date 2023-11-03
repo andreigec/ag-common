@@ -91,7 +91,7 @@ export const CheckboxEdit = ({
         }}
       />
       {allowUndo && value !== defaultValue && (
-        <Icons center enableOverflow>
+        <Icons center>
           <Icon
             style={iconLeft}
             onClick={(e) => {

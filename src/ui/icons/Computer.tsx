@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import React from 'react';
 
-export const Magnify = ({
+export const Computer = ({
   style,
 }: {
   style?: {
@@ -11,15 +11,13 @@ export const Magnify = ({
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 490 490"
+    viewBox="0 0 24 24"
     style={{ ...style }}
   >
     <path
-      fill="none"
-      stroke={style?.fill ?? 'black'}
-      strokeWidth="36"
-      strokeLinecap="round"
-      d="M280 278a153 153 0 1 0-2 2l170 170m-91-117 110 110-26 26-110-110"
+      fillRule="evenodd"
+      d="M2 6a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-6v1h2a1 1 0 1 1 0 2H9a1 1 0 1 1 0-2h2v-1H5a3 3 0 0 1-3-3V6Zm3-1a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H5Z"
+      clipRule="evenodd"
     />
   </svg>
 );

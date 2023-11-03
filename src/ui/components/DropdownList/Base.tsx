@@ -1,5 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
+import type { CSSProperties } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { convertRemToPixels } from '../../helpers/dom';
@@ -124,10 +125,10 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     }
   }, [options, value]);
 
-  const [style, setStyle] = useState<Record<string, string | number>>({});
+  const [style, setStyle] = useState<CSSProperties>({});
   useEffect(() => {
     const maxLen = 20;
-    const newStyle: Record<string, string | number> = {
+    const newStyle: CSSProperties = {
       minWidth: `calc(${maxLen}ch + 2rem)`,
       filter: `drop-shadow(1px 1px 0.5rem ${shadow})`,
       maxHeight,

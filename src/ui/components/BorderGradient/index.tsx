@@ -1,6 +1,7 @@
 'use client';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import type { CSSProperties } from 'react';
 import React from 'react';
 
 import { removeUndefValuesFromObject } from '../../../common/helpers/object';
@@ -83,15 +84,14 @@ export const BorderGradient = ({
   canClick = false,
 }: IBorderGradient) => {
   const CCND = canClick && !disabled;
-  const style: Record<string, string | number | null> =
-    removeUndefValuesFromObject({
-      flexGrow: noGrow ? 0 : 1,
-      '--left': left,
-      '--right': right,
-      borderRadius: radius,
-      filter: !disabled ? null : 'grayscale(1)',
-      cursor: CCND ? 'pointer' : 'default',
-    });
+  const style: CSSProperties = removeUndefValuesFromObject({
+    flexGrow: noGrow ? 0 : 1,
+    '--left': left,
+    '--right': right,
+    borderRadius: radius,
+    filter: !disabled ? null : 'grayscale(1)',
+    cursor: CCND ? 'pointer' : 'default',
+  });
 
   const props = {
     onClick: (e: IOnClick) => !disabled && onClick && onClick(e),

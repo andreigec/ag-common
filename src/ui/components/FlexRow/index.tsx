@@ -27,19 +27,13 @@ const Base = styled.div`
     justify-content: center;
     align-items: center;
   }
-
-  &[data-enableoverflow='true'] {
-    overflow: visible;
-  }
 `;
 
 export const FlexRow = (props: IFlexRow) => (
   <Base
-    title={props.title}
     data-nowrap={props.noWrap ?? false}
     data-nogrow={props.noGrow ?? false}
     data-center={props.center ?? false}
-    data-enableoverflow={props.enableOverflow ?? false}
     {...props}
   >
     {props.children}

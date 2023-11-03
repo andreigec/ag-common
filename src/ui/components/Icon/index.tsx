@@ -13,6 +13,10 @@ export const IconF = styled.span`
   align-items: center;
   font-size: 2rem;
   cursor: inherit;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: unset;
   &[data-chnd='true'] {
     cursor: pointer;
     &:hover {
@@ -78,10 +82,10 @@ export const Icon = (pr: IIcon) => {
   const style: CSSProperties = removeUndefValuesFromObject({
     ...(pr?.style ?? {}),
     '--fill': pr.style?.fill ?? null,
-    width: pr.style?.width || '100%',
-    height: pr.style?.height || '100%',
-    padding: pr.style?.padding || '0',
-    margin: pr.style?.margin || 'unset',
+    width: pr.style?.width,
+    height: pr.style?.height,
+    padding: pr.style?.padding,
+    margin: pr.style?.margin,
     transform: !pr.rotate ? null : `rotate(${pr.rotate || 0}deg)`,
     filter: !pr.disabled ? null : 'grayscale(1)',
     '--outlinecolour': pr.outline || null,
@@ -98,6 +102,7 @@ export const Icon = (pr: IIcon) => {
       data-chnd={CHND}
       data-hasoutline={pr.outline}
       data-hasfill={!!pr.style?.fill}
+      data-type="iconbox"
     >
       {children}
     </IconF>
