@@ -16,15 +16,7 @@ const SRollUpRow = styled.div`
   display: flex;
   cursor: pointer;
 `;
-
-export const Accordion = ({
-  title,
-  children,
-  open,
-  setOpen,
-  chevronColour = 'white',
-  className,
-}: {
+export interface IAccordion {
   children: string | JSX.Element | JSX.Element[];
   title: string;
   /** controlled component if provided */
@@ -33,7 +25,16 @@ export const Accordion = ({
   setOpen?: (open: boolean) => void;
   chevronColour?: string;
   className?: string;
-}) => {
+}
+
+export const Accordion = ({
+  title,
+  children,
+  open,
+  setOpen,
+  chevronColour = 'white',
+  className,
+}: IAccordion) => {
   const [openSt, setOpenSt] = useState(false);
   const controlled = open !== undefined;
 

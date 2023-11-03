@@ -11,13 +11,17 @@ import { take } from '../../../common/helpers/array';
 import { smallScreen } from '../../styles';
 import type { IRefTextEdit } from '../TextEdit/types';
 import { SearchBox } from './SearchBox';
-import type { ISearchDialog, TSearchModalRes } from './types';
+import type { ISearchDialog } from './types';
 
 const Base = styled.div`
   display: flex;
   flex-flow: column;
   flex-grow: 1;
   width: 100%;
+  height: calc(100% - 1rem);
+  @media ${smallScreen} {
+    height: calc(100% - 0.5rem);
+  }
 `;
 
 const Content = styled.div`
@@ -27,7 +31,7 @@ const Content = styled.div`
   flex-flow: column;
   justify-content: flex-start;
   align-items: center;
-  max-height: calc(100vh - 20rem);
+  max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -38,21 +42,28 @@ const Content = styled.div`
   @media ${smallScreen} {
     margin: 0;
     width: calc(100% - 0.5rem);
-    margin-top: 1rem;
   }
 `;
 
-const Row = styled.div`
+const RowCount = styled.div`
   width: 100%;
+  text-align: center;
+  width: fit-content;
+  text-decoration-color: currentcolor;
+  text-decoration: underline;
+
+  &[data-top='true'] {
+    padding-bottom: 0.5rem;
+  }
+  &[data-top='false'] {
+    padding-top: 0.5rem;
+  }
 `;
 
-type ISearchBase<T> = ISearchDialog<T> & {
-  onSearchTextChange?: (v: string) => void;
-  onSelectItem?: (v: TSearchModalRes<T>) => void;
-  textBoxRef?: React.RefObject<IRefTextEdit>;
-};
+type ISearchBase<T> = ISearchDialog<T>;
 export const SearchBase = <T,>(p: ISearchBase<T>) => {
   const { maxDisplayItems = 1000 } = p;
+  const rowCountOptDisplay = p?.rowCountOpt?.display ?? 'bottom';
   const [searchText, setSearchText] = useState(p.defaultValue ?? '');
 
   useImperativeHandle(p.textBoxRef, () => ({
@@ -103,13 +114,18 @@ export const SearchBase = <T,>(p: ISearchBase<T>) => {
         textBoxRef={divRef}
       />
       <Content data-hasitems={!!filteredItems.length} data-type="content">
+        {rowCountOptDisplay === 'top' && outdiff && (
+          <RowCount data-top="true">{showText}</RowCount>
+        )}
         {filteredItems.map((item, index) =>
           cloneElement(p.renderItem({ searchText, item, index }), {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onClick: (e: any) => resWrap(item, e.target),
           }),
         )}
-        {outdiff && <Row>{showText}</Row>}
+        {rowCountOptDisplay === 'bottom' && outdiff && (
+          <RowCount data-top="false">{showText}</RowCount>
+        )}
       </Content>
     </Base>
   );

@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 const Base = styled.div`
   display: flex;
   flex-flow: row;
+  max-height: 100%;
 `;
 
 const Input = styled.input`
@@ -42,20 +43,21 @@ const Button = styled.button`
     background-color: #ccc;
   }
 `;
-
-export const TextWithButton = ({
-  submitText = 'Submit',
-  placeholder,
-  validateF,
-  onSubmit,
-}: {
+export interface ITextWithButton {
   /** default "Submit" */
   submitText?: string;
   placeholder?: string;
   /** if provided will validate and block submission accordingly */
   validateF?: (s: string) => boolean;
   onSubmit: (s: string) => void;
-}) => {
+}
+
+export const TextWithButton = ({
+  submitText = 'Submit',
+  placeholder,
+  validateF,
+  onSubmit,
+}: ITextWithButton) => {
   const [value, setValue] = useState('');
   const valid = !validateF ? true : validateF(value);
 

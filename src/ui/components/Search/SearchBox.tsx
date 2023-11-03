@@ -23,6 +23,7 @@ const Base = styled.div`
     padding: 0.5rem;
     margin: 0;
     width: calc(100% - 1rem);
+    max-height: calc(100% - 1rem);
   }
 `;
 

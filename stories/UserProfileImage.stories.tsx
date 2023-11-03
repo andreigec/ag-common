@@ -21,39 +21,37 @@ const TemplateUserProfileImage: StoryFn<typeof UserProfileImage> = (args) => (
   <UserProfileImage {...args} />
 );
 
-export const WorkingUserImage: StoryFn<typeof UserProfileImage> =
-  TemplateUserImage.bind({});
-const wui: IUserImage = {
+export const WorkingUserImage: StoryFn<IUserImage> = TemplateUserImage.bind({});
+
+WorkingUserImage.args = {
   image: 'https://avatars.githubusercontent.com/u/1860848?s=40&v=4',
-};
+} satisfies IUserImage;
 
-WorkingUserImage.args = wui;
+export const BrokenUserImage: StoryFn<IUserImage> = TemplateUserImage.bind({});
 
-export const BrokenUserImage: StoryFn<typeof UserProfileImage> =
-  TemplateUserImage.bind({});
-const bui: IUserImage = {
+BrokenUserImage.args = {
   image: 'https://xxx',
-};
-
-BrokenUserImage.args = bui;
+} satisfies IUserImage;
 
 export const WorkingUserProfileImage: StoryFn<typeof UserProfileImage> =
   TemplateUserProfileImage.bind({});
-const wupi: IUserProfileImage = {
+
+WorkingUserProfileImage.args = {
   user: {
     picture: 'https://avatars.githubusercontent.com/u/1860848?s=40&v=4',
     fullname: 'test name',
     userId: 'my id',
   },
-};
-
-WorkingUserProfileImage.args = wupi;
+} satisfies IUserProfileImage;
 
 export const BrokenUserProfileImage: StoryFn<typeof UserProfileImage> =
   TemplateUserProfileImage.bind({});
-const bupi: IUserProfileImage = {
-  user: { picture: 'https://xxx', fullname: 'full name', userId: 'my id' },
-};
 
-BrokenUserProfileImage.args = bupi;
+BrokenUserProfileImage.args = {
+  user: { picture: 'https://xxx', fullname: 'full name', userId: 'my id' },
+} satisfies IUserProfileImage;
 export default base;
+
+export const DefaultWithArgs = () => (
+  <WorkingUserImage {...(WorkingUserImage.args as IUserProfileImage)} />
+);

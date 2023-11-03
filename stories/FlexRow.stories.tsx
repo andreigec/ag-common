@@ -2,6 +2,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { IRowOrColumn } from '../src';
 import { FlexRow } from '../src/ui/components/FlexRow';
 
 const base: Meta<typeof FlexRow> = {
@@ -21,5 +22,5 @@ Primary.args = {
       <div>3</div>
     </>
   ),
-};
+} satisfies IRowOrColumn;
 export default base;

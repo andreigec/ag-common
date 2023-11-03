@@ -11,7 +11,7 @@ import type { ISearchDialog, TSearchModalRes } from './types';
  */
 export const SearchDialog = async <T,>(
   p: ISearchDialog<T>,
-): Promise<TSearchModalRes<T>> => {
+): Promise<TSearchModalRes<T> | undefined> => {
   const placeholderText = p.placeholderText || '';
   let originalStyle: string | undefined;
 
@@ -38,7 +38,7 @@ export const SearchDialog = async <T,>(
       <SearchModal
         {...p}
         placeholderText={placeholderText}
-        onSelectItem={(f: TSearchModalRes<T>) => {
+        onSelectItem={(f: TSearchModalRes<T> | undefined) => {
           try {
             document.body.style.overflow = originalStyle || '';
             res(f);

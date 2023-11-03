@@ -13,30 +13,29 @@ const base: Meta<typeof Chevron> = {
 const Template: StoryFn<typeof Chevron> = (args) => <Chevron {...args} />;
 
 export const Up: StoryFn<typeof Chevron> = Template.bind({});
-const upArgs: IChevron = {
-  point: 'up',
-};
 
-Up.args = upArgs;
+Up.args = {
+  point: 'up',
+} satisfies IChevron;
 
 export const Left: StoryFn<typeof Chevron> = Template.bind({});
-const leftArgs: IChevron = {
-  point: 'left',
-};
 
-Left.args = leftArgs;
+Left.args = {
+  point: 'left',
+} satisfies IChevron;
 
 export const Right: StoryFn<typeof Chevron> = Template.bind({});
-const rightArgs: IChevron = {
-  point: 'right',
-};
 
-Right.args = rightArgs;
+Right.args = {
+  point: 'right',
+} satisfies IChevron;
 
 export const Down: StoryFn<typeof Chevron> = Template.bind({});
-const downArgs: IChevron = {
-  point: 'down',
-};
 
-Down.args = downArgs;
+Down.args = {
+  point: 'down',
+} satisfies IChevron;
+
 export default base;
+
+export const DefaultWithArgs = () => <Left {...(Left.args as IChevron)} />;

@@ -3,6 +3,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { ICheckboxEdit } from '../../src/ui/components/TextEdit';
 import { CheckboxEdit } from '../../src/ui/components/TextEdit';
 
 const base: Meta<typeof CheckboxEdit> = {
@@ -22,5 +23,5 @@ CheckboxEditF.args = {
   defaultValue: true,
   onSubmit: (s) => alert('ret=' + JSON.stringify(s, null, 2)),
   rightSpan: <span style={{ color: 'red' }}>hello</span>,
-};
+} satisfies ICheckboxEdit;
 export default base;

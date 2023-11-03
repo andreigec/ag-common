@@ -2,6 +2,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { ITimelineChart } from '../src/ui/components/TimelineChart';
 import { TimelineChart } from '../src/ui/components/TimelineChart';
 
 const base: Meta<typeof TimelineChart> = {
@@ -46,5 +47,8 @@ Primary.args = {
       data: [{ x: new Date().getTime(), y: 1 }],
     },
   ],
-};
+} satisfies ITimelineChart;
 export default base;
+export const DefaultWithArgs = () => (
+  <Primary {...(Primary.args as ITimelineChart)} />
+);

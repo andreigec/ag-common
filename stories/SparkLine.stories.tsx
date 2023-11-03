@@ -2,6 +2,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { ISparkLine } from '../src/ui/components/SparkLine';
 import { SparkLine } from '../src/ui/components/SparkLine';
 
 const base: Meta<typeof SparkLine> = {
@@ -9,11 +10,7 @@ const base: Meta<typeof SparkLine> = {
   component: SparkLine,
 };
 
-const Template: StoryFn<typeof SparkLine> = (args) => (
-  <div style={{ width: '20rem', height: '4rem' }}>
-    <SparkLine {...args} />
-  </div>
-);
+const Template: StoryFn<typeof SparkLine> = (args) => <SparkLine {...args} />;
 
 export const Primary: StoryFn<typeof SparkLine> = Template.bind({});
 
@@ -25,5 +22,9 @@ Primary.args = {
   ],
   pointTitleF: (v) => JSON.stringify(v),
   pointColour: 'red',
-};
+} satisfies ISparkLine;
 export default base;
+
+export const DefaultWithArgs = () => (
+  <Primary {...(Primary.args as ISparkLine)} />
+);

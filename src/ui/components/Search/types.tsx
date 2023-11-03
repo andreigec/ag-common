@@ -1,3 +1,11 @@
+import type { IRefTextEdit } from '../TextEdit/types';
+
+export type TSearchModalRes<T> = {
+  foundItem: T;
+  searchText: string;
+  target: EventTarget;
+};
+
 export interface ISearchDialog<T> {
   defaultValue?: string;
   placeholderText?: string;
@@ -35,10 +43,14 @@ export interface ISearchDialog<T> {
      */
     totalItems?: (showing: number, outof: number) => string;
   };
-}
-export type TSearchModalRes<T> =
-  | undefined
-  | { foundItem: T; searchText: string; target: EventTarget };
-export type ISearchModal<T> = ISearchDialog<T>;
 
+  onSearchTextChange?: (v: string) => void;
+  onSelectItem?: (v: TSearchModalRes<T> | undefined) => void;
+  textBoxRef?: React.RefObject<IRefTextEdit>;
+  rowCountOpt?: {
+    /** if provided will change position of row count when some lines are hidden. default bottom */
+    display?: 'bottom' | 'top' | 'off';
+  };
+}
 export type ISearchInline<T> = ISearchDialog<T>;
+export type ISearchModal<T> = ISearchDialog<T>;

@@ -2,6 +2,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { ITable } from '../src/ui/components/Table';
 import { Table } from '../src/ui/components/Table';
 
 const base: Meta<typeof Table> = {
@@ -19,5 +20,7 @@ Primary.args = {
     { content: <div>content1</div>, groupTitle: 'group1' },
     { content: <div>content2</div>, groupTitle: 'group1' },
   ],
-};
+} satisfies ITable;
 export default base;
+
+export const DefaultWithArgs = () => <Primary {...(Primary.args as ITable)} />;

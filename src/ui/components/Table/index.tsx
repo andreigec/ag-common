@@ -8,6 +8,8 @@ const Base = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
 `;
 
 const TableRow = styled.div`

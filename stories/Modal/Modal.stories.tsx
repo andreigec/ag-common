@@ -2,6 +2,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { IModal } from '../../src/ui/components/Modal';
 import { Modal } from '../../src/ui/components/Modal';
 
 const base: Meta<typeof Modal> = {
@@ -21,5 +22,5 @@ Primary.args = {
     //
   },
   children: <div style={{ width: '5rem', height: '5rem' }}>test</div>,
-};
+} satisfies IModal;
 export default base;

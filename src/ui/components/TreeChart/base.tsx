@@ -10,8 +10,8 @@ import type { TreeNodeData, TreeNodeOut } from './types';
 
 const Base = styled.div`
   border: solid 1px #ccc;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  max-height: 100%;
+  overflow-y: auto;
 `;
 
 const NodeChildren = styled.div`

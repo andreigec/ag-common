@@ -2,6 +2,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { ILoader } from '../src/ui/components/Loader';
 import { Loader } from '../src/ui/components/Loader';
 
 const base: Meta<typeof Loader> = {
@@ -10,9 +11,7 @@ const base: Meta<typeof Loader> = {
 };
 
 const Template: StoryFn<typeof Loader> = (args) => (
-  <div
-    style={{ height: '400px', backgroundColor: '#ccc', position: 'relative' }}
-  >
+  <div style={{ backgroundColor: '#ccc', position: 'relative' }}>
     test content
     <Loader {...args} />
     test content
@@ -24,5 +23,7 @@ export const Primary: StoryFn<typeof Loader> = Template.bind({});
 Primary.args = {
   name: 'test loader',
   position: 'br',
-};
+} satisfies ILoader;
 export default base;
+
+export const DefaultWithArgs = () => <Primary {...(Primary.args as ILoader)} />;

@@ -3,6 +3,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { ITextEdit } from '../../src/ui/components/TextEdit';
 import { TextEdit } from '../../src/ui/components/TextEdit';
 
 const base: Meta<typeof TextEdit> = {
@@ -25,5 +26,5 @@ Multi.args = {
     focus: true,
   },
   onSubmit: (s) => alert('ret=' + JSON.stringify(s, null, 2)),
-};
+} satisfies ITextEdit;
 export default base;

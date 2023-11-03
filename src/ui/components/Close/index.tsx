@@ -37,12 +37,10 @@ export interface IClose {
   onClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   className?: string;
 }
-export const Close = (p: IClose) => {
-  return (
-    <Base
-      {...filterDataProps(p)}
-      className={p.className}
-      onClick={(e) => p.onClick?.(e)}
-    />
-  );
-};
+export const Close = (p: IClose) => (
+  <Base
+    {...filterDataProps(p)}
+    className={p.className}
+    onClick={(e) => p.onClick?.(e)}
+  />
+);

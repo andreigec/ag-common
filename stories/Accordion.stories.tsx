@@ -2,6 +2,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { IAccordion } from '../src/ui/components/Accordion';
 import { Accordion } from '../src/ui/components/Accordion';
 
 const base: Meta<typeof Accordion> = {
@@ -9,14 +10,17 @@ const base: Meta<typeof Accordion> = {
   component: Accordion,
 };
 
-const Template: StoryFn<typeof Accordion> = (args) => (
-  <Accordion {...args}>content here</Accordion>
-);
+const Template: StoryFn<IAccordion> = (args) => <Accordion {...args} />;
 
-export const Primary: StoryFn<typeof Accordion> = Template.bind({});
+export const Primary: StoryFn<IAccordion> = Template.bind({});
 
 Primary.args = {
   title: 'test title',
   chevronColour: 'black',
-};
+  children: 'content here',
+} satisfies IAccordion;
 export default base;
+
+export const DefaultWithArgs = () => (
+  <Primary {...(Primary.args as IAccordion)} />
+);

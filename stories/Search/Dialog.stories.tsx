@@ -49,7 +49,7 @@ Dialog.args = {
   renderItem: (st) => (
     <div key={st.item as string}>{(st.item as string).toString()}</div>
   ),
-  willDisplayItem: (st, i) => !st || i === st,
+  willDisplayItem: (st, i) => !st || i.includes(st),
   getKeyF: (i) => i as string,
 } satisfies ISearchDialog<string>;
 export default base;

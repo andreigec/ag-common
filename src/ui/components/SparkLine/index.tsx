@@ -5,8 +5,8 @@ import React from 'react';
 import { rangePercentage } from '../../../common/helpers/math';
 
 const Base = styled.div`
-  width: calc(100% - 2px - 1rem);
-  height: 100%;
+  width: calc(100% - 1rem - 2px);
+  height: calc(100% - 1rem - 2px);
   border: solid 1px #666;
   border-radius: 0.5rem;
   padding: 0.5rem;
@@ -14,7 +14,6 @@ const Base = styled.div`
 
 const Points = styled.div`
   position: relative;
-
   width: 100%;
   height: 100%;
 `;

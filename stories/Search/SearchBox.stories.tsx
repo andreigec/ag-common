@@ -2,8 +2,10 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import type { ISearchBox } from '../../src/ui/components/Search';
-import { SearchBox } from '../../src/ui/components/Search';
+import {
+  type ISearchBox,
+  SearchBox,
+} from '../../src/ui/components/Search/SearchBox';
 
 const base: Meta<typeof SearchBox> = {
   title: 'UI/Search',
@@ -14,12 +16,10 @@ const Template: StoryFn<typeof SearchBox> = (args) => <SearchBox {...args} />;
 
 export const SearchBoxB: StoryFn<typeof SearchBox> = Template.bind({});
 
-const args: ISearchBox = {
+SearchBoxB.args = {
   searchText: 'test',
   // eslint-disable-next-line no-alert
   setSearchText: (st, enter) => alert(`st=${st} enter=${enter}`),
-  defaultValue: 'dv1',
-};
-
-SearchBoxB.args = args;
+  defaultValue: '2',
+} satisfies ISearchBox;
 export default base;

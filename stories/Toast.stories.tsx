@@ -58,5 +58,5 @@ Dialog.args = {
     },
   },
   container: { darkMode: false },
-};
+} satisfies IToastTest;
 export default base;

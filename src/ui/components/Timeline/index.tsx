@@ -57,15 +57,7 @@ export type ITimelineItem = {
     }
 );
 
-export const Timeline = ({
-  lineColour = '#ccc',
-  items,
-  onClick,
-  maxCircleSize = 'min(5vw,3rem)',
-  className,
-  bgColour = 'inherit',
-  showTitles = true,
-}: {
+export interface ITimeline {
   /** default min(5vw,3rem) */
   maxCircleSize?: string;
   /** default #ccc */
@@ -73,11 +65,18 @@ export const Timeline = ({
   items: ITimelineItem[];
   onClick?: (p: ITimelineItem) => void;
   className?: string;
-  /** used for behind icons. default inherit */
-  bgColour?: string;
   /** if true, will show titles under timeline. default true */
   showTitles?: boolean;
-}) => {
+}
+
+export const Timeline = ({
+  lineColour = '#ccc',
+  items,
+  onClick,
+  maxCircleSize = 'min(5vw,3rem)',
+  className,
+  showTitles = true,
+}: ITimeline) => {
   const firstFalse = items.findIndex((i) => !i.checked && !i.disabled);
   const lastTrue = findLastIndex(items, (i) => i.checked);
   return (
@@ -97,16 +96,16 @@ export const Timeline = ({
               >
                 {p.checked ? (
                   <Checkmark
-                    style={{ fill: '#60b515', backgroundColor: bgColour }}
+                    style={{ fill: '#60b515', backgroundColor: 'inherit' }}
                   />
                 ) : index !== firstFalse ? (
                   <Circle
-                    style={{ fill: '#007cbb', backgroundColor: bgColour }}
+                    style={{ fill: '#007cbb', backgroundColor: 'inherit' }}
                     dotted={p.disabled}
                   />
                 ) : (
                   <CircleDot
-                    style={{ fill: '#007cbb', backgroundColor: bgColour }}
+                    style={{ fill: '#007cbb', backgroundColor: 'inherit' }}
                   />
                 )}
               </Icon>

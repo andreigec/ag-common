@@ -21,15 +21,7 @@ const Icons = styled(FlexRow)`
   right: -2rem;
 `;
 
-export const CheckboxEdit = ({
-  defaultValue,
-  onSubmit,
-  noGrow = false,
-  /** default allowUndo=true */
-  allowUndo = true,
-  rightSpan,
-  className,
-}: {
+export interface ICheckboxEdit {
   className?: string;
   defaultValue: boolean;
   onSubmit: (val: boolean) => void;
@@ -40,7 +32,17 @@ export const CheckboxEdit = ({
   allowUndo?: boolean;
   /** display to right of CB */
   rightSpan?: React.ReactNode;
-}) => {
+}
+
+export const CheckboxEdit = ({
+  defaultValue,
+  onSubmit,
+  noGrow = false,
+  /** default allowUndo=true */
+  allowUndo = true,
+  rightSpan,
+  className,
+}: ICheckboxEdit) => {
   const ref = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState(defaultValue);
   useEffect(() => {

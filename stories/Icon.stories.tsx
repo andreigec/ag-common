@@ -2,6 +2,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { IIcon } from '../src/ui/components/Icon';
 import { Icon } from '../src/ui/components/Icon';
 
 const TestSvg = (
@@ -28,5 +29,5 @@ Primary.args = {
     height: '2rem',
     fill: 'red',
   },
-};
+} satisfies IIcon;
 export default base;

@@ -1,13 +1,8 @@
 import React from 'react';
 
-import type { IRefTextEdit } from '../TextEdit/types';
 import { SearchBase } from './Base';
-import type { ISearchInline, TSearchModalRes } from './types';
+import type { ISearchInline } from './types';
 
-export const SearchInline = <T,>(
-  p: ISearchInline<T> & {
-    onSelectItem?: ((v: TSearchModalRes<T>) => void) | undefined;
-    onSearchTextChange?: (v: string) => void;
-    textBoxRef?: React.RefObject<IRefTextEdit>;
-  },
-) => <SearchBase<T> {...p} />;
+export const SearchInline = <T,>(p: ISearchInline<T>) => (
+  <SearchBase<T> {...p} />
+);

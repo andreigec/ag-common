@@ -5,7 +5,7 @@ import React from 'react';
 import { bigScreen, smallScreen } from '../../styles';
 import { Modal } from '../Modal/Modal';
 import { SearchBase } from './Base';
-import type { ISearchModal, TSearchModalRes } from './types';
+import type { ISearchModal } from './types';
 
 const ModalStyled = styled(Modal)`
   display: flex;
@@ -21,16 +21,12 @@ const ModalStyled = styled(Modal)`
   }
 `;
 
-export const SearchModal = <T,>(
-  p: ISearchModal<T> & {
-    onSelectItem: (v: TSearchModalRes<T>) => void;
-  },
-) => (
+export const SearchModal = <T,>(p: ISearchModal<T>) => (
   <ModalStyled
     position="center"
     topPosition="center"
     open={true}
-    setOpen={() => p.onSelectItem(undefined)}
+    setOpen={() => p?.onSelectItem?.(undefined)}
     showCloseButton={false}
     closeOnClickOutside={true}
   >

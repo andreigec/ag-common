@@ -2,6 +2,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
+import type { ISidebar } from '../src/ui/components/Sidebar';
 import { Sidebar } from '../src/ui/components/Sidebar';
 
 const app: Meta<typeof Sidebar> = {
@@ -23,5 +24,5 @@ Primary.args = {
       <div>sidebar item2</div>
     </>
   ),
-};
+} satisfies ISidebar;
 export default app;
