@@ -12,7 +12,10 @@ const app: Meta<typeof Sidebar> = {
 
 const Template: StoryFn<typeof Sidebar> = (args) => (
   <div style={{ backgroundColor: '#333', height: '20rem' }}>
-    <Sidebar {...args} />
+    <Sidebar {...args}>
+      <div>s</div>
+      <div>s</div>
+    </Sidebar>
   </div>
 );
 export const Primary: StoryFn<typeof Sidebar> = Template.bind({});

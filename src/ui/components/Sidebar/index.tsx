@@ -1,5 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
+import type { ReactNode } from 'react';
 import React, { useRef, useState } from 'react';
 
 import { useOnClickOutside } from '../../helpers';
@@ -106,7 +107,7 @@ const ChevronStyled = styled(Chevron)`
 `;
 
 export interface ISidebar {
-  children: JSX.Element;
+  children: ReactNode;
   className?: string;
 }
 export const Sidebar = ({ children, className }: ISidebar) => {
