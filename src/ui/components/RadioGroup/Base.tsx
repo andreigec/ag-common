@@ -3,8 +3,6 @@ import styled from '@emotion/styled';
 import type { CSSProperties } from 'react';
 import React, { useState } from 'react';
 
-import { noDrag } from '../../styles/common';
-
 const Base = styled.div`
   display: flex;
   flex-flow: row;
@@ -47,12 +45,7 @@ export const RadioGroup = <T,>(p: IRadioGroup<T>) => {
   const [index, setIndex] = useState<number>(p.defaultIndex ?? 0);
 
   return (
-    <Base
-      {...noDrag}
-      className={p.className}
-      style={p.style}
-      data-mode={p.mode ?? 'horiz'}
-    >
+    <Base className={p.className} style={p.style} data-mode={p.mode ?? 'horiz'}>
       {p.values.map((v, i) => (
         <Label
           // eslint-disable-next-line react/no-array-index-key

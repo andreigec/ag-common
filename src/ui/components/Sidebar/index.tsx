@@ -1,9 +1,8 @@
 'use client';
 import styled from '@emotion/styled';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { useOnClickOutside } from '../../helpers';
-import { useCookieBoolean } from '../../helpers/cookie/use';
 import { Hamburger } from '../../icons/Hamburger';
 import { NoTextSelect } from '../../styles/common';
 import { smallScreen, smallScreenPx } from '../../styles/media';
@@ -107,30 +106,12 @@ const ChevronStyled = styled(Chevron)`
 `;
 
 export interface ISidebar {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  children: any;
+  children: JSX.Element;
   className?: string;
-  /**
-   * used for localstorage. default 'sidebar'
-   */
-  key?: string;
-  /**
-   * optionally pass in SSR cookiedocument
-   */
-  cookieDocument?: string;
 }
-export const Sidebar = ({
-  children,
-  className,
-  key = 'sidebar',
-  cookieDocument,
-}: ISidebar) => {
+export const Sidebar = ({ children, className }: ISidebar) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useCookieBoolean({
-    name: key,
-    defaultValue: false,
-    cookieDocument: cookieDocument,
-  });
+  const [open, setOpen] = useState(false);
   useOnClickOutside({ ref }, () => {
     if (!open || window.innerWidth > smallScreenPx) {
       return;
