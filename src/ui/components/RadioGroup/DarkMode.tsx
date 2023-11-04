@@ -1,17 +1,13 @@
 'use client';
 import styled from '@emotion/styled';
-import React, { useState } from 'react';
+import React from 'react';
 
+import { useCookie } from '../../helpers/cookie/use';
 import { Computer, Moon, Sun } from '../../icons';
 import { FlexColumn } from '../FlexColumn';
 import { Icon } from '../Icon';
 import { RadioGroup } from './Base';
-
-export enum TDarkMode {
-  'dark',
-  'light',
-  'system',
-}
+import { TDarkMode } from './types';
 
 const IconStyled = styled(Icon)`
   > svg {
@@ -46,7 +42,7 @@ const getColours = (p: TDarkMode, vert: boolean) => {
   }
 };
 
-const v: {
+const modes: {
   mode: TDarkMode;
   icon: (p: { style: { fill: string } }) => JSX.Element;
 }[] = [
@@ -56,34 +52,57 @@ const v: {
 ];
 
 export interface IDarkMode {
-  /** default system */
-  default?: TDarkMode;
-  onSubmit: (p: TDarkMode) => void;
+  onSubmit?: (p: TDarkMode) => void;
   /** default horiz */
   mode?: 'vert' | 'horiz';
   /** default 2.5rem */
   iconSize?: string;
   className?: string;
+  cookieDocument: string;
 }
+/** shows darkmode toggle. Persists to cookie, and modifies html classList with either dark-mode or light-mode */
 export const DarkMode = (p: IDarkMode) => {
   const { iconSize = '2.5rem' } = p;
-  let defaultIndex = v.findIndex((v2) => v2.mode === p.default);
-  if (defaultIndex === -1) {
-    defaultIndex = 1;
-  }
 
-  const [index, setIndex] = useState<number>(defaultIndex);
-  const [fill, background] = getColours(v[index].mode, p.mode === 'vert');
+  const [darkmode, setDarkmodeRaw] = useCookie<TDarkMode>({
+    defaultValue: TDarkMode.system,
+    name: 'darkmode',
+    cookieDocument: p.cookieDocument,
+    parse: (v) => Number(v) as TDarkMode,
+    stringify: (v) => v.toString(),
+  });
+  const index = modes.findIndex((d) => d.mode === darkmode);
+
+  const [fill, background] = getColours(modes[index].mode, p.mode === 'vert');
   const twCalc = `calc(${iconSize} + ${iconSize} + ${iconSize} + 20px)`;
+
+  const setDarkmode = (newDarkMode: TDarkMode) => {
+    let className = '';
+    if (newDarkMode === TDarkMode.dark) {
+      className += 'dark-mode';
+    } else if (newDarkMode === TDarkMode.light) {
+      className += 'light-mode';
+    } else {
+      className = '';
+    }
+    document.getElementsByTagName('html')[0].classList.remove('dark-mode');
+    document.getElementsByTagName('html')[0].classList.remove('light-mode');
+    if (className) {
+      document.getElementsByTagName('html')[0].classList.add(className);
+    }
+
+    setDarkmodeRaw(newDarkMode);
+    p.onSubmit?.(newDarkMode);
+  };
+
   return (
     <RadioGroup
       className={p.className}
       mode={p.mode}
-      values={v}
+      values={modes}
       defaultIndex={index}
-      onSubmit={(v, i) => {
-        setIndex(i);
-        p.onSubmit(v.mode);
+      onSubmit={({ mode }) => {
+        setDarkmode(mode);
       }}
       style={{
         background,

@@ -25,7 +25,7 @@ export function setCookieRawWrapper<T>(p: {
 
   wipeCookies(p.name);
 
-  if (!p.value) {
+  if (p.value === undefined) {
     return;
   }
 

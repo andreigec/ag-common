@@ -37,7 +37,7 @@ export function useCookie<T>(p: {
   };
 
   const [cookie, setCookie] = useState<T>(
-    getCookieRawWrapper({ ...p, parse }) || p.defaultValue,
+    getCookieRawWrapper({ ...p, parse }) ?? p.defaultValue,
   );
 
   const setState = (valueRaw: SetStateAction<T>) => {
@@ -62,9 +62,9 @@ export const useCookieString = (p: {
 }) =>
   useCookie<string>({
     ...p,
-    parse: (s) => s || '',
+    parse: (s) => s ?? '',
     stringify: (s) => s,
-    defaultValue: p.defaultValue || '',
+    defaultValue: p.defaultValue ?? '',
   });
 
 export const useCookieNumber = (p: {

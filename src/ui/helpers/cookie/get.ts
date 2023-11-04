@@ -24,7 +24,7 @@ export function getCookieRawWrapper<T>({
   parse?: (s: string) => T;
 }): T {
   const parse: TParse<T> = (s) => {
-    if (!s) {
+    if (s === undefined || s === null) {
       return defaultValue;
     }
 
@@ -44,7 +44,7 @@ export function getCookieRawWrapper<T>({
       cookieDocument,
     });
 
-    if (!newv) {
+    if (newv === undefined || newv === null) {
       break;
     }
 
