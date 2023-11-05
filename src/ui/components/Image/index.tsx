@@ -7,8 +7,12 @@ import { bigScreen, smallScreen } from '../../styles/media';
 
 const Base = styled.img`
   object-fit: contain;
-  min-height: 5rem;
+  width: 100%;
+  height: 100%;
+
   min-width: 5rem;
+  min-height: 5rem;
+
   max-width: 100%;
 
   &[data-smalltop='true'] {
@@ -17,19 +21,18 @@ const Base = styled.img`
     }
   }
   @media ${smallScreen} {
-    width: 90vw;
+    max-width: 90vw;
 
     &[data-bigonly='true'] {
       display: none;
     }
     &[data-small='true'] {
-      width: 50vw;
+      max-width: 50vw;
       max-height: 25rem;
     }
   }
 
   @media ${bigScreen} {
-    width: 100%;
     max-width: 50rem;
     &[data-smallonly='true'] {
       display: none;

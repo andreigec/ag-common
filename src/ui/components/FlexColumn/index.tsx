@@ -18,6 +18,7 @@ const Base = styled.div`
   &[data-nogrow='true'] {
     flex-grow: 0;
     width: unset;
+    height: unset;
   }
 `;
 

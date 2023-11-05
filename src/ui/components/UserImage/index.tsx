@@ -74,7 +74,12 @@ export const UserImage = ({
     <Base className={className} title={title} data-fail={failed}>
       {UserOutline}
       {failed !== 1 && (
-        <Img alt="user" src={image} onError={() => setFailed(1)} />
+        <Img
+          alt="user"
+          src={image}
+          onError={() => setFailed(1)}
+          onAbort={() => setFailed(1)}
+        />
       )}
     </Base>
   );

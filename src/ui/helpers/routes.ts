@@ -155,13 +155,12 @@ export const getServerReq = ({
   query: Record<string, string | string[] | undefined>;
 }) => {
   const href = calculateServerHref({
-    host: headers.host || '?',
+    host: headers.host || 'testhost',
     pathname,
   });
 
   const parsedQuery =
     !query || Object.keys(query).length === 0 ? {} : castStringlyObject(query);
-
   const ret = getClientOrServerReqHref({
     url: !href ? undefined : new URL(href),
     query: parsedQuery,
