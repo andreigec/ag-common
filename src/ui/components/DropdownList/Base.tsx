@@ -157,7 +157,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   }, [maxHeight, open, options, renderF, shadow, style]);
 
   const defaultRender = !p.value ? <KebabDots /> : <>{p.renderF(p.value)}</>;
-  const openDisplay = p.children || (
+  const openDisplay = p.children ?? (
     <ListItem
       selected
       render={defaultRender}

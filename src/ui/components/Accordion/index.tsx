@@ -17,7 +17,7 @@ const SRollUpRow = styled.div`
   cursor: pointer;
 `;
 export interface IAccordion {
-  children: string | JSX.Element | JSX.Element[];
+  children: string | React.ReactNode;
   title: string;
   /** controlled component if provided */
   open?: boolean;

@@ -1,7 +1,7 @@
 export interface IModal {
   open: boolean;
   setOpen: (b: boolean) => void;
-  children: JSX.Element | JSX.Element[];
+  children: React.ReactNode;
   position?: 'left' | 'right' | 'center';
   topPosition?: 'bottom' | 'top' | 'center';
   showCloseButton?: boolean;

@@ -1,6 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 import React from 'react';
 
 import { removeUndefValuesFromObject } from '../../../common/helpers/object';
@@ -57,7 +57,7 @@ export interface IIcon {
   rotate?: number;
   canHover?: boolean;
   onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
-  children?: ReactNode;
+  children?: React.ReactNode;
   role?: string;
   title?: string;
   tabIndex?: number;

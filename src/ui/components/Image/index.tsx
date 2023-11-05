@@ -14,6 +14,7 @@ const Base = styled.img`
   min-height: 5rem;
 
   max-width: 100%;
+  max-height: 100%;
 
   &[data-smalltop='true'] {
     @media ${smallScreen} {
@@ -21,25 +22,27 @@ const Base = styled.img`
     }
   }
   @media ${smallScreen} {
-    max-width: 90vw;
+    max-width: 50vw;
+    max-height: 50vh;
 
     &[data-bigonly='true'] {
       display: none;
     }
     &[data-small='true'] {
-      max-width: 50vw;
-      max-height: 25rem;
+      max-width: 25vw;
+      max-height: 25vh;
     }
   }
 
   @media ${bigScreen} {
-    max-width: 50rem;
+    max-width: 50vw;
+    max-height: 50vh;
     &[data-smallonly='true'] {
       display: none;
     }
     &[data-small='true'] {
-      max-width: 30rem;
-      max-height: 25rem;
+      max-width: 30vw;
+      max-height: 30vh;
     }
   }
 `;
