@@ -115,7 +115,6 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   useOnClickOutside({ disabled: !open, ref, moveMouseOutside: false }, () => {
     setOpen(false);
     setBounced(false);
-    p.onChange(undefined, 0);
   });
 
   useEffect(() => {

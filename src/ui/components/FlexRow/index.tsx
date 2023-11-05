@@ -6,7 +6,6 @@ import type { IFlexRow } from '../RowOrColumn';
 
 const Base = styled.div`
   position: relative;
-  overflow: hidden;
   display: flex;
   flex-flow: row wrap;
 

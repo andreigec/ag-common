@@ -48,12 +48,14 @@ export const getOperation = <TDefaultApi>(
   const func = getFunctionName(p);
   Object.entries(p.schema.paths).forEach(([pathN, ops]) =>
     Object.entries(ops).forEach(([verbN, op]) => {
-      if (op.operationId === func) {
+      //openapi codegen gives raw fn, match that as well
+      if (op.operationId === func || op.operationId + 'Raw' === func) {
         path = pathN;
         verb = verbN;
       }
     }),
   );
+
   if (!path || !verb) {
     return {
       error: 'operation not found',
