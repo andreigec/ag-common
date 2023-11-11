@@ -36,15 +36,16 @@ const GroupTitle = styled.div`
 const GroupWrap = styled.div`
   display: flex;
   flex-flow: column;
+  width: 100%;
 `;
 
-export interface TableItem {
+export interface ITableItem {
   content: JSX.Element;
-  groupTitle: string;
+  groupTitle?: string;
 }
 
 export interface ITable {
-  children: TableItem[];
+  children: ITableItem[];
   className?: string;
   headerRow?: JSX.Element;
 }

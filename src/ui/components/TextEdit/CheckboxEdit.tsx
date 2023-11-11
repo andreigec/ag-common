@@ -27,7 +27,7 @@ export interface ICheckboxEdit {
   onSubmit: (val: boolean) => void;
   noGrow?: boolean;
   /**
-   * if true, will add undo button after changes. if false, will submit after every keypress. default true
+   * if true, will add undo button after changes. if false, will submit after every keypress. default false
    */
   allowUndo?: boolean;
   /** display to right of CB */
@@ -38,8 +38,7 @@ export const CheckboxEdit = ({
   defaultValue,
   onSubmit,
   noGrow = false,
-  /** default allowUndo=true */
-  allowUndo = true,
+  allowUndo = false,
   rightSpan,
   className,
 }: ICheckboxEdit) => {
