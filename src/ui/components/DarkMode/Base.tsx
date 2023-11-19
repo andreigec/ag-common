@@ -1,13 +1,24 @@
 'use client';
 import styled from '@emotion/styled';
-import React from 'react';
+import type { CSSProperties } from 'react';
+import React, { useState } from 'react';
 
 import { useCookie } from '../../helpers/cookie/use';
 import { Computer, Moon, Sun } from '../../icons';
 import { FlexColumn } from '../FlexColumn';
 import { Icon } from '../Icon';
-import { RadioGroup } from './Base';
 import { TDarkMode } from './types';
+
+const Base = styled.div`
+  display: flex;
+  flex-flow: row;
+  &[data-mode='vert'] {
+    flex-flow: column;
+  }
+  overflow: hidden;
+  justify-content: space-between;
+  border-radius: 2rem;
+`;
 
 const IconStyled = styled(Icon)`
   > svg {
@@ -18,8 +29,11 @@ const IconStyled = styled(Icon)`
 const Label = styled(FlexColumn)`
   border-radius: 50%;
   overflow: hidden;
+  cursor: pointer;
+
   &[data-selected='true'] {
     background-color: white;
+    cursor: default;
   }
 `;
 
@@ -58,6 +72,7 @@ export interface IDarkMode {
   /** default 2.5rem */
   iconSize?: string;
   className?: string;
+  style?: CSSProperties;
   cookieDocument: string;
 }
 /** shows darkmode toggle. Persists to cookie, and modifies html classList with either dark-mode or light-mode */
@@ -71,11 +86,12 @@ export const DarkMode = (p: IDarkMode) => {
     parse: (v) => Number(v) as TDarkMode,
     stringify: (v) => v.toString(),
   });
-  const index = modes.findIndex((d) => d.mode === darkmode);
 
+  const [index, setIndex] = useState<number>(
+    modes.findIndex((d) => d.mode === darkmode) ?? 0,
+  );
   const [fill, background] = getColours(modes[index].mode, p.mode === 'vert');
-  const twCalc = `calc(${iconSize} + ${iconSize} + ${iconSize} + 20px)`;
-
+  const twCalc = `calc(${iconSize} + ${iconSize} + ${iconSize} )`;
   const setDarkmode = (newDarkMode: TDarkMode) => {
     let className = '';
     if (newDarkMode === TDarkMode.dark) {
@@ -96,15 +112,11 @@ export const DarkMode = (p: IDarkMode) => {
   };
 
   return (
-    <RadioGroup
+    <Base
       className={p.className}
-      mode={p.mode}
-      values={modes}
-      defaultIndex={index}
-      onSubmit={({ mode }) => {
-        setDarkmode(mode);
-      }}
+      data-mode={p.mode ?? 'horiz'}
       style={{
+        ...p.style,
         background,
         border: `solid 2px ${fill}`,
         width: twCalc,
@@ -115,18 +127,29 @@ export const DarkMode = (p: IDarkMode) => {
           height: twCalc,
         }),
       }}
-      renderLabel={(v, selected) => {
+    >
+      {modes.map((v, i) => {
+        const selected = index === i;
         return (
           <Label
             data-selected={selected}
             style={{ width: iconSize, height: iconSize }}
+            // eslint-disable-next-line react/no-array-index-key
+            key={i.toString()}
+            onClick={() => {
+              if (index === i) {
+                return;
+              }
+              setIndex(i);
+              setDarkmode(v.mode);
+            }}
           >
             <IconStyled>
               {v.icon({ style: { fill: selected ? fill : 'white' } })}
             </IconStyled>
           </Label>
         );
-      }}
-    />
+      })}
+    </Base>
   );
 };

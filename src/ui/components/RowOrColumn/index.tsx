@@ -44,6 +44,7 @@ export interface IRowOrColumn {
   className?: string;
   break?: 'small' | 'vsmall';
   style?: CSSProperties;
+  onClick?: () => void;
 }
 export type IFlexColumn = IRowOrColumn;
 export type IFlexRow = IRowOrColumn;

@@ -58,7 +58,7 @@ export const CheckboxEdit = ({
     <ValueBox
       {...noDrag}
       className={className}
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: 'pointer', width: 'fit-content', flexGrow: 0 }}
       ref={ref}
       data-nogrow={noGrow}
       onClick={(e) => {

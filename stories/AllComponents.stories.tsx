@@ -8,6 +8,7 @@ import { DefaultWithArgs as BorderGradient } from './BorderGradient.stories';
 import { DefaultWithArgs as Button } from './Button.stories';
 import { DefaultWithArgs as Chevron } from './Chevron.stories';
 import { DefaultWithArgs as Close } from './Close.stories';
+import { DefaultWithArgs as DarkMode } from './DarkMode.stories';
 import { DefaultWithArgs as DropdownList } from './DropdownList/Value.stories';
 import { DefaultWithArgs as OpenApiCodeBlock } from './OpenApiCodeBlock/index.stories';
 import { DefaultWithArgs as ProgressBar } from './ProgressBar.stories';
@@ -33,13 +34,15 @@ const Components = styled.div`
   width: 50%;
 `;
 
-const components: [string, () => JSX.Element, boolean][] = [
+const components: /** name, component, isbig */
+[string, () => JSX.Element, boolean][] = [
   ['Accordion', Accordion, false],
   ['BorderGradient', BorderGradient, false],
   ['Button', Button, false],
   ['Chevron', Chevron, false],
   ['Close', Close, true],
   ['DropdownList', DropdownList, false],
+  ['DarkMode', DarkMode, false],
   ['OpenApiCodeBlock', OpenApiCodeBlock, true],
   ['ProgressBar', ProgressBar, false],
   ['Search', Search, true],
