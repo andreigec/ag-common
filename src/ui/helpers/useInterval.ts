@@ -11,6 +11,8 @@ export function useInterval<T>(
   /** ms delay */
   delay: number | null,
   opt?: {
+    /** if false, wont call callback. default true */
+    enabled?: boolean;
     /** called when cleaning up useEffect */
     onEnd?: () => void;
     /** will be passed result of callback, and can cancel interval if passed */
@@ -29,6 +31,9 @@ export function useInterval<T>(
     }
 
     const id = setInterval(() => {
+      if (opt?.enabled === false) {
+        return;
+      }
       const res = savedCallback.current();
       if (opt?.determineEnd?.(res)) {
         clearInterval(id);

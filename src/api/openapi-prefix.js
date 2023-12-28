@@ -22,9 +22,7 @@ function cleanSrc() {
     c = c.replace(/cognitopreferred_role/, "'cognito:preferred_role'");
     c = c.replace(/cognitousername/, "'cognito:username'");
     c = c.replace(/cognitogroups/, "'cognito:groups'");
-    c = `import {URL, URLSearchParams} from 'url'
-    ${c}`;
-
+    
     fs.writeFileSync(f, c);
   });
 
