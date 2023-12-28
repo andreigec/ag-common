@@ -3,8 +3,8 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import type { IPromptModal } from '../../src/ui/components/Prompt/Modal';
 import { PromptModal } from '../../src/ui/components/Prompt/Modal';
+import type { IPromptModal } from '../../src/ui/components/Prompt/types';
 
 const base: Meta<typeof PromptModal> = {
   title: 'UI/Prompt',
@@ -21,5 +21,6 @@ Modal.args = {
   bottomText: 'bottom',
   topText: 'top',
   res: (v) => alert('res=' + v),
+  style: { backgroundColor: 'grey', color: 'teal' },
 } satisfies IPromptModal;
 export default base;

@@ -1,24 +1,25 @@
 'use client';
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
-import type { Root } from 'react-dom/client';
 
 import { Button } from '../Button';
 import { FlexColumn } from '../FlexColumn';
 import { FlexRow } from '../FlexRow';
 import { Modal } from '../Modal/Modal';
 import { TextEdit } from '../TextEdit';
+import type { IPromptModal } from './types';
 
 const Base = styled.div`
   width: 95vw;
   max-width: 30rem;
   height: 50vh;
   max-height: 15rem;
-  padding: 1rem;
 `;
 
 const Content = styled(FlexColumn)`
-  height: 100%;
+  padding: 1rem;
+  height: calc(100% - 2rem);
+  width: calc(100% - 2rem);
 `;
 
 const TopText = styled.div`
@@ -41,19 +42,6 @@ const Bottom = styled(FlexRow)`
     margin-right: 1rem;
   }
 `;
-export interface IPromptModal {
-  defaultValue?: string;
-  placeholder?: string;
-  res: (v: string | undefined) => void;
-  root?: Root;
-  wrapper?: HTMLDivElement;
-  topText?: string;
-  bottomText: string;
-  /** default 'OK' */
-  okText?: string;
-  /** default "cancel" */
-  cancelText?: string;
-}
 export const PromptModal = ({
   root,
   wrapper,
@@ -64,6 +52,7 @@ export const PromptModal = ({
   cancelText = 'Cancel',
   defaultValue,
   placeholder,
+  style,
 }: IPromptModal) => {
   const [text, setText] = useState(defaultValue || '');
   const ret = (v: string | undefined) => {
@@ -85,7 +74,7 @@ export const PromptModal = ({
       closeOnClickOutside={false}
     >
       <Base>
-        <Content>
+        <Content style={style}>
           {topText && <TopText>{topText}</TopText>}
           <BottomText>{bottomText}</BottomText>
           <TextEdit

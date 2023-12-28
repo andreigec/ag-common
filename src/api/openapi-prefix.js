@@ -6,6 +6,7 @@ const SwaggerParser = require('swagger-parser');
 const fs = require('fs');
 const process = require('process');
 var pathV = require('path');
+
 var cwd = process.cwd();
 var resolvePath = (p) => pathV.resolve(cwd, p);
 //
@@ -22,7 +23,7 @@ function cleanSrc() {
     c = c.replace(/cognitopreferred_role/, "'cognito:preferred_role'");
     c = c.replace(/cognitousername/, "'cognito:username'");
     c = c.replace(/cognitogroups/, "'cognito:groups'");
-    
+
     fs.writeFileSync(f, c);
   });
 

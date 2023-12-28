@@ -22,5 +22,6 @@ Modal.args = {
   onSubmit: (e) => {
     alert('res=' + e);
   },
+  style: { backgroundColor: 'grey', color: 'teal' },
 } satisfies IConfirmModal;
 export default base;

@@ -14,7 +14,7 @@ export const apiResponseToAxiosResponse = async <T>(
   p: () => Promise<ApiResponse<T>>,
 ): Promise<AxiosResponse<T>> => {
   try {
-    var r = await p()
+    const r = await p();
     const r1: AxiosResponse = {
       status: r.raw.status,
       statusText: r.raw.statusText,
@@ -29,9 +29,7 @@ export const apiResponseToAxiosResponse = async <T>(
     };
 
     return r1;
-
-  }
-  catch (e) {
+  } catch (e) {
     const er = e as Response;
 
     //try and get body
@@ -61,4 +59,4 @@ export const apiResponseToAxiosResponse = async <T>(
 
     return ret;
   }
-}
+};

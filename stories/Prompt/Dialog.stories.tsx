@@ -2,8 +2,8 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
-import type { IPromptDialog } from '../../src/ui/components/Prompt/Dialog';
 import { PromptDialog } from '../../src/ui/components/Prompt/Dialog';
+import type { IPromptDialog } from '../../src/ui/components/Prompt/types';
 
 const ActionWrapper = (args: IPromptDialog) => (
   <div

@@ -2,13 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { PromptModal } from './Modal';
+import type { IPromptDialog } from './types';
 
-export interface IPromptDialog {
-  topText?: string;
-  bottomText: string;
-  defaultValue?: string;
-  placeholder?: string;
-}
 export const PromptDialog = async (
   p: IPromptDialog,
 ): Promise<string | undefined> => {

@@ -13,11 +13,12 @@ const Base = styled.div`
   max-width: 30rem;
   height: 50vh;
   max-height: 15rem;
-  padding: 1rem;
 `;
 
 const Content = styled(FlexColumn)`
-  height: 100%;
+  padding: 1rem;
+  height: calc(100% - 2rem);
+  width: calc(100% - 2rem);
 `;
 
 const TopText = styled.div`
@@ -47,6 +48,7 @@ export const ConfirmModal = ({
   topText,
   okText = 'OK',
   cancelText = 'Cancel',
+  style,
 }: IConfirmModal) => {
   return (
     <Modal
@@ -58,7 +60,7 @@ export const ConfirmModal = ({
       closeOnClickOutside={false}
     >
       <Base>
-        <Content>
+        <Content style={style}>
           {topText && <TopText>{topText}</TopText>}
           <BottomText>{bottomText}</BottomText>
           <Bottom noGrow>

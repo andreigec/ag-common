@@ -12,6 +12,7 @@ import type { IConfirmDialog } from './types';
 export const ConfirmDialog = async ({
   bottomText,
   topText,
+  style,
 }: IConfirmDialog): Promise<boolean> => {
   return new Promise((res) => {
     const idName = 'ag-confirm-dialog';
@@ -38,6 +39,7 @@ export const ConfirmDialog = async ({
         bottomText={bottomText}
         topText={topText}
         onSubmit={onSubmit}
+        style={style}
       />,
     );
   });
