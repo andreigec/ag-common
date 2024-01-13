@@ -98,18 +98,10 @@ const ListItem = ({
 );
 
 export function DropdownList<T>(p: IDropdownList<T>) {
-  const {
-    options,
-    value,
-    placeholder,
-    className,
-    renderF,
-    shadow = '#555',
-    maxHeight = '50vh',
-  } = p;
+  const { shadow = '#555', maxHeight = '50vh' } = p;
 
   const ref = useRef<HTMLDivElement>(null);
-  const [state, setState] = useState(value);
+  const [state, setState] = useState(p.value);
   const [open, setOpen] = useState(p.open);
   const [bounced, setBounced] = useState(false);
   useOnClickOutside({ disabled: !open, ref, moveMouseOutside: false }, () => {
@@ -118,11 +110,12 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   });
 
   useEffect(() => {
-    const newv = value;
-    if (JSON.stringify(newv) !== JSON.stringify(value)) {
+    const newv = p.value;
+    
+    if (JSON.stringify(newv) !== JSON.stringify(state)) {
       setState(newv);
     }
-  }, [options, value]);
+  }, [p.options, p.value]);
 
   const [style, setStyle] = useState<CSSProperties>({});
   useEffect(() => {
@@ -153,7 +146,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     if (JSON.stringify(style) !== JSON.stringify(newStyle)) {
       setStyle(newStyle);
     }
-  }, [maxHeight, open, options, renderF, shadow, style]);
+  }, [maxHeight, open, p.options, p.renderF, shadow, style]);
 
   const defaultRender = !p.value ? <KebabDots /> : <>{p.renderF(p.value)}</>;
   const openDisplay = p.children ?? (
@@ -173,9 +166,9 @@ export function DropdownList<T>(p: IDropdownList<T>) {
 
   return (
     <Base
-      className={className}
+      className={p.className}
       ref={ref}
-      title={placeholder}
+      title={p.placeholder}
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -184,7 +177,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     >
       <DropItems data-open={open} style={style} data-bounced={bounced}>
         {open &&
-          options.map((s, i) => (
+          p.options.map((s, i) => (
             <ListItem
               key={typeof s === 'string' ? s : p.renderF(s).key}
               render={p.renderF(s)}
