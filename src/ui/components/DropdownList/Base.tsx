@@ -111,11 +111,11 @@ export function DropdownList<T>(p: IDropdownList<T>) {
 
   useEffect(() => {
     const newv = p.value;
-    
+
     if (JSON.stringify(newv) !== JSON.stringify(state)) {
       setState(newv);
     }
-  }, [p.options, p.value]);
+  }, [p.value, state]);
 
   const [style, setStyle] = useState<CSSProperties>({});
   useEffect(() => {

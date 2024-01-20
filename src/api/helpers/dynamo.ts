@@ -18,7 +18,7 @@ import { chunk } from '../../common/helpers/array';
 import { asyncForEach } from '../../common/helpers/async';
 import { debug, trace, warn } from '../../common/helpers/log';
 import { sleep } from '../../common/helpers/sleep';
-import type { DYNAMOKEYS, IQueryDynamo, Key } from '../types';
+import type { IQueryDynamo, Key } from '../types';
 
 export const setDynamo = (region: string) => {
   let raw = new DynamoDBClient({ region });
@@ -382,8 +382,9 @@ export const queryDynamo = async <T>({
     startKey = lek;
 
     debug(
-      `dynamo query against ${params?.input
-        .TableName} ok, count=${newItems?.length} ${JSON.stringify(params)}`,
+      `dynamo query against ${
+        params?.input.TableName
+      } ok, count=${newItems?.length} ${JSON.stringify(params)}`,
       ` next startkey=${startKey}`,
     );
 
@@ -440,22 +441,27 @@ export const wipeTable = async (
   }
 };
 
-export const getDynamoUpdates = (items: DYNAMOKEYS) => {
-  const cleanedKeys = Object.keys(items).filter((r) => r !== 'PK');
+/** gets all fields in dynamokeys, and moves them into update expressions. eg will turn item.yourFieldName, into a dynamo write into field "yourFieldName" */
+export const getDynamoUpdates = (
+  item: Record<string, string | number | boolean>,
+  opt?: {
+    /** default PK. will also exclude null or undefined */
+    excludeKeys?: string[];
+  },
+) => {
+  let ek = opt?.excludeKeys ?? ['PK'];
   let UpdateExpression = '';
   const ExpressionAttributeNames: Record<string, string> = {};
   const ExpressionAttributeValues: Record<string, string | number> = {};
-  cleanedKeys.forEach((key) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const v = (items as any)[key];
-    if (v) {
-      UpdateExpression += `${!UpdateExpression ? '' : ','} #${key} = :${key}`;
-      ExpressionAttributeNames[`#${key}`] = key;
-      ExpressionAttributeValues[`:${key}`] = v;
-    } else {
-      warn(`no value for key:${key}`);
-    }
-  });
+  //
+  const cleanedKeys = Object.entries(item).filter(([k]) => !ek.includes(k));
+  cleanedKeys
+    .filter(([_k, v]) => v !== null && v !== undefined)
+    .forEach(([k, v]) => {
+      UpdateExpression += `${!UpdateExpression ? '' : ','} #${k} = :${k}`;
+      ExpressionAttributeNames[`#${k}`] = k;
+      ExpressionAttributeValues[`:${k}`] = v.toString();
+    });
   return {
     UpdateExpression,
     ExpressionAttributeNames,

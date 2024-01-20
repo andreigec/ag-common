@@ -139,7 +139,7 @@ function printStackTrace(...args: undefined[]) {
     while (currentFunction) {
       const fn = currentFunction.toString();
       const fname =
-        fn.substring(fn.indexOf('function') + 8, fn.indexOf('(')) ||
+        fn.substring(fn.indexOf('function') + 8, fn.indexOf('(')) ??
         'anonymous';
 
       callstack.push(fname);
