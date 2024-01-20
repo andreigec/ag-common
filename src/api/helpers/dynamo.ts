@@ -451,7 +451,8 @@ export const getDynamoUpdates = (
 ) => {
   let ek = opt?.excludeKeys ?? ['PK'];
   ek = ek.map((r) => r.toLowerCase());
-  let UpdateExpression = '';
+  let UpdateExpression = `SET 
+  `;
   const ExpressionAttributeNames: Record<string, string> = {};
   const ExpressionAttributeValues: Record<string, string | number> = {};
   //
@@ -461,13 +462,12 @@ export const getDynamoUpdates = (
   cleanedKeys
     .filter(([_k, v]) => v !== null && v !== undefined)
     .forEach(([k, v]) => {
-      UpdateExpression += `${!UpdateExpression ? '' : ','} #${k} = :${k}`;
+      UpdateExpression += `#${k} = :${k}, `;
       ExpressionAttributeNames[`#${k}`] = k;
       ExpressionAttributeValues[`:${k}`] = v.toString();
     });
   return {
-    UpdateExpression: `SET\
-    ${UpdateExpression}`,
+    UpdateExpression,
     ExpressionAttributeNames,
     ExpressionAttributeValues,
   };
