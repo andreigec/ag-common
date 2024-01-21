@@ -471,5 +471,6 @@ export const getDynamoUpdates = (
     UpdateExpression,
     ExpressionAttributeNames,
     ExpressionAttributeValues,
+    ReturnValues: 'UPDATED_NEW',
   };
 };
