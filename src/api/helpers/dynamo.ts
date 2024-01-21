@@ -454,7 +454,8 @@ export const getDynamoUpdates = (
   let UpdateExpression = `SET 
   `;
   const ExpressionAttributeNames: Record<string, string> = {};
-  const ExpressionAttributeValues: Record<string, string | number> = {};
+  const ExpressionAttributeValues: Record<string, string | number | boolean> =
+    {};
   //
   const cleanedKeys = Object.entries(item).filter(
     ([k]) => !ek.includes(k.toLowerCase()),
@@ -464,7 +465,7 @@ export const getDynamoUpdates = (
     .forEach(([k, v]) => {
       UpdateExpression += `#${k} = :${k}, `;
       ExpressionAttributeNames[`#${k}`] = k;
-      ExpressionAttributeValues[`:${k}`] = v.toString();
+      ExpressionAttributeValues[`:${k}`] = v;
     });
   return {
     UpdateExpression,
