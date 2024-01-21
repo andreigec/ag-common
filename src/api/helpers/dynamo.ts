@@ -448,7 +448,12 @@ export const getDynamoUpdates = (
     /** default PK. will also exclude null or undefined */
     excludeKeys?: string[];
   },
-) => {
+): {
+  UpdateExpression: string;
+  ExpressionAttributeNames: Record<string, string>;
+  ExpressionAttributeValues: Record<string, string | number | boolean>;
+  ReturnValues: 'UPDATED_NEW';
+} => {
   let ek = opt?.excludeKeys ?? ['PK'];
   ek = ek.map((r) => r.toLowerCase());
   let UpdateExpression = `SET 
