@@ -4,6 +4,7 @@
 const fs = require('fs');
 const process = require('process');
 const pathV = require('path');
+
 const cwd = process.cwd();
 const resolvePath = (p) => pathV.resolve(cwd, p);
 function run() {
