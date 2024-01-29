@@ -5,6 +5,7 @@ export interface TreeNodeOut {
   children: TreeNodeOut[];
 }
 export interface TreeNodeData {
+  className?: string;
   data: {
     path: string;
     /** count of this path. default 1 */

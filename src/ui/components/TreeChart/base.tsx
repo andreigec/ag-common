@@ -127,7 +127,7 @@ export const TreeChart = (tnd: TreeNodeData) => {
   }
 
   return (
-    <Base ref={r}>
+    <Base ref={r} className={tnd.className}>
       {headDim && render({ tnd, n: head, depth: 0, head, headDim })}
     </Base>
   );
