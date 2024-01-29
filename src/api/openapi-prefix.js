@@ -23,6 +23,10 @@ function cleanSrc() {
     c = c.replace(/cognitopreferred_role/, "'cognito:preferred_role'");
     c = c.replace(/cognitousername/, "'cognito:username'");
     c = c.replace(/cognitogroups/, "'cognito:groups'");
+    c = c.replace(
+      /this\.configuration\.queryParamsStringify\(/,
+      '(this.configuration.queryParamsStringify||querystring)(',
+    );
 
     fs.writeFileSync(f, c);
   });
