@@ -8,8 +8,8 @@ const pathV = require('path');
 const cwd = process.cwd();
 const resolvePath = (p) => pathV.resolve(cwd, p);
 function run() {
-  if (!fs.existsSync('./dist')) {
-    console.log('no dist directory, cant run openapi postfix');
+  if (!fs.existsSync('./dist') || !fs.existsSync('./dist/api')) {
+    console.log('no dist/api directory, cant run openapi postfix');
     return;
   }
   console.log('running openapi postfixes');
