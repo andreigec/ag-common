@@ -71,11 +71,13 @@ export const useCallOpenApi = <T, TDefaultApi>(
           ...config,
           headers: undefined,
           ssrCacheItems: undefined,
+          overrideAuth: undefined,
         }) !==
         JSON.stringify({
           ...inConfig,
           headers: undefined,
           ssrCacheItems: undefined,
+          overrideAuth: undefined,
         })
       ) {
         setConfig(inConfig);
