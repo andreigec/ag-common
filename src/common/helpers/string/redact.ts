@@ -5,7 +5,8 @@ export function redactString(str: string) {
   const repl = '$1<redacted>$2';
   ret = ret.replace(/(\b)grant_type.+?(\b)/gm, repl);
   ret = ret.replace(/(\b)Bearer .+?(\b)/gm, repl);
-  ret = ret.replace(/(\b)eyJ[a-zA-Z0-9]{10}.+?(\b)/gm, repl);
+  //jwt (base64 with .s)
+  ret = ret.replace(/(eyJ[\w-]*\.[\w-]*\.[\w-]*)/gim, '<redacted>');
   return ret;
 }
 
