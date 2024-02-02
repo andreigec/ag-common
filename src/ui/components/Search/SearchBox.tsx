@@ -1,6 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 
 import { debounce } from '../../helpers/debounce';
 import { filterDataProps } from '../../helpers/dom';
@@ -57,27 +57,28 @@ export interface ISearchBox {
   textBoxRef?: React.RefObject<IRefTextEdit>;
 }
 export const SearchBox = (p: ISearchBox) => {
-  const ref = useRef<IRefTextEdit>(p.textBoxRef?.current ?? null);
-
   useEffect(() => {
-    if (!ref.current || ref.current.getValue() === p.searchText) {
+    if (
+      !p.textBoxRef?.current ||
+      p.textBoxRef?.current.getValue() === p.searchText
+    ) {
       return;
     }
-    ref.current.setValue(p.searchText);
+    p.textBoxRef?.current.setValue(p.searchText);
     p.setSearchText(p.searchText, true);
   }, [p]);
 
   return (
     <Base data-type="search" className={p.className} {...filterDataProps(p)}>
       <TextEditStyled
-        ref={ref}
+        ref={p.textBoxRef}
         placeholder={p.placeholderText}
         defaultEditing={{ focus: true }}
         singleLine
         leftContent={
           <MagnifyIcon
             onClick={() =>
-              p.setSearchText(ref?.current?.getValue() || '', true)
+              p.setSearchText(p.textBoxRef?.current?.getValue() || '', true)
             }
           >
             <Magnify />
@@ -98,7 +99,7 @@ export const SearchBox = (p: ISearchBox) => {
       {p.searchText && (
         <CrossIconStyled
           onClick={() => {
-            ref?.current?.setValue('');
+            p.textBoxRef?.current?.setValue('');
             p.setSearchText('', true);
           }}
         />
