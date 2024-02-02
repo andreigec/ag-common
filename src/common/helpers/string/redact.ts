@@ -6,7 +6,7 @@ export function redactString(str: string) {
   ret = ret.replace(/(\b)grant_type.+?(\b)/gm, repl);
   ret = ret.replace(/(\b)Bearer .+?(\b)/gm, repl);
   //jwt (base64 with .s)
-  ret = ret.replace(/(eyJ[\w-]*\.[\w-]*\.[\w-]*)/gim, '<redacted>');
+  ret = ret.replace(/(eyJ[\w-_.]*\.[\w-_.]*\.[\w-_.]*)/gim, '<redacted>');
   return ret;
 }
 
