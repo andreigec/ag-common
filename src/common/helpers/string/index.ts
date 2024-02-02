@@ -4,6 +4,7 @@ export * from './contains';
 export * from './getExtendedStringSegment';
 export * from './json';
 export * from './object';
+export * from './redact';
 export * from './surround';
 export * from './trim';
 export * from './truncate';

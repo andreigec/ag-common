@@ -23,9 +23,11 @@ const Template: StoryFn = () => (
       >
         {name}-
         <Icon style={{ width: '2rem', height: '2rem', fill: 'red' }}>
-          {typeof value === 'object'
-            ? value
-            : value({ style: { fill: 'green' } })}
+          <>
+            {typeof value === 'object'
+              ? value
+              : value({ style: { fill: 'green' } })}
+          </>
         </Icon>
       </div>
     ))}

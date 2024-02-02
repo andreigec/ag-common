@@ -2,6 +2,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
+import { distinctBy } from '../../../common';
 import { rangePercentage } from '../../../common/helpers/math';
 
 const Base = styled.div`
@@ -42,21 +43,24 @@ export const SparkLine = (p: ISparkLine) => {
   const xMax = Math.max(...raw.map((d) => d.x));
   const yMin = Math.min(...raw.map((d) => d.y));
   const yMax = Math.max(...raw.map((d) => d.y));
-  const data = raw.map((orig) => ({
-    x:
-      rangePercentage({
-        value: orig.x,
-        min: xMin,
-        max: xMax,
-      }) * 100,
-    y:
-      rangePercentage({
-        value: orig.y,
-        min: yMin,
-        max: yMax,
-      }) * 100,
-    orig,
-  }));
+  const data = distinctBy(
+    raw.map((orig) => ({
+      x:
+        rangePercentage({
+          value: orig.x,
+          min: xMin,
+          max: xMax,
+        }) * 100,
+      y:
+        rangePercentage({
+          value: orig.y,
+          min: yMin,
+          max: yMax,
+        }) * 100,
+      orig,
+    })),
+    (s) => s.x,
+  );
 
   return (
     <Base className={p.className} title={p.title}>

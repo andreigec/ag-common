@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { notEmpty } from '.';
+import { notEmpty } from './array';
 
 export type TLogType = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL';
 export const GetLogLevel = (l: TLogType) =>

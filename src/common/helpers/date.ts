@@ -66,16 +66,75 @@ export const dateTimeToNearestMinute = (minutes: number, date?: Date) => {
   return rounded;
 };
 
-export const getUtcDateTime = () => {
+export const dayInMs = 8.64e7;
+
+/** strings are padded numbers, eg '02' */
+export interface IUtcDateParams {
+  year: number;
+  month: number;
+  day: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+export const getUtcDateTime = (
+  /** if true will 0 H,M,S */
+  skipTime?: boolean,
+) => {
   const date = new Date();
 
-  const year = date.getUTCFullYear();
-  const month = ('0' + (date.getUTCMonth() + 1)).slice(-2);
-  const day = ('0' + date.getUTCDate()).slice(-2);
-  const hours = ('0' + date.getUTCHours()).slice(-2);
-  const minutes = ('0' + date.getUTCMinutes()).slice(-2);
-  const seconds = ('0' + date.getUTCSeconds()).slice(-2);
+  const p = {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1,
+    day: date.getUTCDate(),
+    hours: date.getUTCHours(),
+    minutes: date.getUTCMinutes(),
+    seconds: date.getUTCSeconds(),
+    tz: 'UTC',
+  };
+  if (skipTime) {
+    p.hours = p.minutes = p.seconds = 0;
+  }
 
-  const datetime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds} UTC`;
-  return new Date(datetime);
+  const ticks = toMs(p);
+  return { ticks };
+};
+
+export const toMs = ({
+  day,
+  hours,
+  minutes,
+  month,
+  seconds,
+  year,
+}: IUtcDateParams) => {
+  // Calculate milliseconds in a year (365 days x 24 hours x 60 minutes x 60 seconds x 1000 milliseconds)
+  const millisecondsInYear = 365 * 24 * 60 * 60 * 1000;
+
+  // Calculate milliseconds in a month (based on 30 days)
+  const millisecondsInMonth = 30 * 24 * 60 * 60 * 1000;
+
+  // Calculate milliseconds in a day
+  const millisecondsInDay = 24 * 60 * 60 * 1000;
+
+  // Calculate milliseconds in an hour
+  const millisecondsInHour = 60 * 60 * 1000;
+
+  // Calculate milliseconds in a minute
+  const millisecondsInMinute = 60 * 1000;
+
+  // Calculate milliseconds in a second
+  const millisecondsInSecond = 1000;
+
+  // Calculate milliseconds since epoch based on given datetime values
+  // Note: Math.floor() is used to round down to the nearest integer
+  const millisecondsSinceEpoch =
+    (year - 1970) * millisecondsInYear +
+    (month - 1) * millisecondsInMonth +
+    (day - 1) * millisecondsInDay +
+    hours * millisecondsInHour +
+    minutes * millisecondsInMinute +
+    seconds * millisecondsInSecond;
+  return millisecondsSinceEpoch;
 };
