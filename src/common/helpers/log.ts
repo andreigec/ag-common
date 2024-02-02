@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import { notEmpty } from './array';
+import { redactObject } from './string/redact';
 
 export type TLogType = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL';
 export const GetLogLevel = (l: TLogType) =>
@@ -40,7 +41,11 @@ function logprocess(type: TLogType, args: unknown[]) {
 
   ////////
   const datetime = new Date().toLocaleTimeString('en-GB');
-  const log = [`[${datetime}]`, type, ...args.filter(notEmpty)];
+  const log = [
+    `[${datetime}]`,
+    type,
+    ...args.filter(notEmpty).map((s) => redactObject(s)),
+  ];
 
   if (logShim) {
     logShim(...log);

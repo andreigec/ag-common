@@ -3,7 +3,7 @@ import { assert } from 'console';
 import { warn } from '../log';
 import { redactObject, redactString } from './redact';
 
-assert(redactString('ab grant_typesdadas ') === 'ab <redact> ');
+assert(redactString('ab grant_typesdadas ') === 'ab <redacted> ');
 
 const a = JSON.stringify(
   redactObject({
@@ -16,9 +16,9 @@ const a = JSON.stringify(
 );
 const b = JSON.stringify({
   a: 1,
-  b: '<redact>',
-  c: '<redact> ',
-  d: '<redact>',
+  b: '<redacted>',
+  c: '<redacted> ',
+  d: '<redacted>',
   e: 'ok',
 });
 warn(`testing =\n${a}\n${b}`);

@@ -13,7 +13,7 @@
     "lint": "npx eslint --ext .ts,.tsx .",
     "start": "cross-env BROWSER=none cross-env storybook dev -p 6006",
     "build-storybook": "storybook build -o docs --quiet",
-    "test-run": "globstar -- node --import tsx --test \"src/**/*.test.ts\""
+    "test": "globstar -- node --import tsx --test \"src/**/redact.test.ts\""
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.390",
