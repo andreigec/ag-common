@@ -10,13 +10,17 @@ const base: Meta<typeof SparkLine> = {
   component: SparkLine,
 };
 
-const Template: StoryFn<typeof SparkLine> = (args) => <SparkLine {...args} />;
+const Template: StoryFn<typeof SparkLine> = (args) => (
+  <div style={{ width: '4rem', height: '1rem', backgroundColor: '#ccc' }}>
+    <SparkLine {...args} />
+  </div>
+);
 
 export const Primary: StoryFn<typeof SparkLine> = Template.bind({});
 
 Primary.args = {
   data: [
-    { x: 1, y: 0 },
+    { x: 1, y: 1 },
     { x: 5, y: 5 },
     { x: 10, y: 1 },
   ],

@@ -5,25 +5,28 @@ import React from 'react';
 import { distinctBy } from '../../../common';
 import { rangePercentage } from '../../../common/helpers/math';
 
+const barWidth = 2;
 const Base = styled.div`
-  width: calc(100% - 1rem - 2px);
-  height: calc(100% - 1rem - 2px);
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
   border: solid 1px #666;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  overflow: hidden;
 `;
 
 const Points = styled.div`
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: calc(100% - ${barWidth}px);
+  height: calc(100% - ${barWidth}px);
+  margin-left: ${barWidth}px;
 `;
 
 const Point = styled.div`
   position: absolute;
-  border-width: 2px;
-  border-style: solid;
-  width: 1px;
+  width: ${barWidth}px;
 `;
 
 export interface ISparkLine {
@@ -72,9 +75,9 @@ export const SparkLine = (p: ISparkLine) => {
             style={{
               backgroundColor: pointColour,
               borderColor: pointColour,
-              left: pt.x + '%',
+              left: `calc(${pt.x}% - ${barWidth}px)`,
               bottom: 0,
-              height: pt.y + '%',
+              height: `calc(${pt.y}% + ${barWidth}px)`,
             }}
           />
         ))}
