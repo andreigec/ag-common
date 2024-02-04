@@ -1,4 +1,4 @@
-import { debug, warn } from '../../../common/helpers/log';
+import { warn } from '../../../common/helpers/log';
 import { fromBase64 } from '../../../common/helpers/string/base64';
 import type { TParse } from './const';
 import { getCookie, wipeCookies } from './raw';
@@ -54,7 +54,6 @@ export function getCookieRawWrapper<T>({
 
   try {
     if (!raw) {
-      debug('no cookie found:' + name);
       return defaultValue;
     }
     return parse(fromBase64(raw));
