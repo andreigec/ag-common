@@ -8,15 +8,17 @@ import { colours } from './colours';
  * @param outlineColour default='white'
  * @param sizePx default = 1px
  */
-export const HardOutline = (outlineColour = 'white', sizePx = 1) => {
+export const HardOutline = (outlineColour = 'white', sizePx = 1) => css`\
+filter: ${HardOutlineFilter(outlineColour, sizePx)};
+`;
+
+export const HardOutlineFilter = (outlineColour = 'white', sizePx = 1) => {
   const px = `${sizePx}px`;
 
-  return css`
-    filter: drop-shadow(${px} ${px} 0px ${outlineColour})
-      drop-shadow(-${px} ${px} 0px ${outlineColour})
-      drop-shadow(${px} -${px} 0px ${outlineColour})
-      drop-shadow(-${px} -${px} 0px ${outlineColour});
-  `;
+  return `drop-shadow(${px} ${px} 0px ${outlineColour})
+  drop-shadow(-${px} ${px} 0px ${outlineColour})
+  drop-shadow(${px} -${px} 0px ${outlineColour})
+  drop-shadow(-${px} -${px} 0px ${outlineColour})`;
 };
 
 /** disable user text selection */

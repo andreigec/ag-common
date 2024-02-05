@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 export interface TreeNodeOut {
   name: string;
   size: number;
@@ -19,4 +21,5 @@ export interface TreeNodeData {
     pathCount: number;
     fullCount: number;
   }) => string;
+  style?: CSSProperties;
 }
