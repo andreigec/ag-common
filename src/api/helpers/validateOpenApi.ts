@@ -3,7 +3,7 @@ import OpenAPIRequestValidator from 'openapi-request-validator';
 
 import type { TLang } from '../../common/helpers/i18n';
 import { getValidatedLang } from '../../common/helpers/i18n';
-import { debug, error as errorF, info, warn } from '../../common/helpers/log';
+import { debug, error as errorF, trace, warn } from '../../common/helpers/log';
 import {
   objectKeysToLowerCase,
   tryJsonParse,
@@ -138,7 +138,7 @@ export async function validateOpenApi<T>({
   } else {
     try {
       request.params = opm.pathParams;
-      info(
+      debug(
         'req=',
         JSON.stringify(
           {
@@ -159,8 +159,8 @@ export async function validateOpenApi<T>({
 
       if (resp) {
         warn('bad request');
-        warn('opm=', JSON.stringify(opm, null, 2));
-        warn('resp=', JSON.stringify(resp, null, 2));
+        debug('opm=', JSON.stringify(opm, null, 2));
+        debug('resp=', JSON.stringify(resp, null, 2));
         return returnCode(400, `error:${resp?.errors?.[0]?.message}`);
       }
 

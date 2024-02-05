@@ -3,7 +3,7 @@ import { decode, verify } from 'jsonwebtoken';
 // eslint-disable-next-line import/no-named-as-default
 import JwksClient from 'jwks-rsa';
 
-import { debug, error, info } from '../../common/helpers/log';
+import { debug, error, info, trace } from '../../common/helpers/log';
 import type { IdJwt, User } from '../../ui/helpers/jwt';
 import type { APIGatewayProxyResult } from '../types';
 import { returnCode } from './api';
@@ -30,7 +30,7 @@ const jwtVerify = async ({
             jwksUri,
           };
 
-          info(`jwksClient config=`, jc);
+          debug(`jwksClient config=`, jc);
           jwksClient = JwksClient(jc);
         }
 

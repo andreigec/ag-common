@@ -207,7 +207,7 @@ export const scan = async <T>(
         ExclusiveStartKey,
       });
 
-      trace(`running dynamo scan=${JSON.stringify(params, null, 2)}`);
+      debug(`running dynamo scan=${JSON.stringify(params, null, 2)}`);
 
       const {
         Items: newitems,
@@ -222,7 +222,7 @@ export const scan = async <T>(
       }
     } while (ExclusiveStartKey);
 
-    trace(`dynamo scan against ${tableName} ok, count=${Items?.length}`);
+    debug(`dynamo scan against ${tableName} ok, count=${Items?.length}`);
 
     return { data: Items };
   } catch (e) {
