@@ -6,8 +6,6 @@ import { notEmpty } from '../../../common/helpers/array';
 import { UserOutline } from '../../icons/UserOutline';
 
 const Base = styled.div`
-  width: 2.5rem;
-  height: 2.5rem;
   border-radius: 50%;
   border: solid 1px white;
   overflow: hidden;
@@ -47,8 +45,6 @@ const Base = styled.div`
 `;
 
 const Img = styled.img`
-  width: 2.5rem;
-  height: 2.5rem;
   position: absolute;
   top: 0;
   left: 0;
@@ -59,11 +55,14 @@ export interface IUserImage {
   className?: string;
   /** default "user image" */
   title?: string;
+  opt?: { width?: string; height?: string };
 }
+
 export const UserImage = ({
   image,
   className,
   title = 'user image',
+  opt,
 }: IUserImage) => {
   const [failed, setFailed] = useState<0 | 0.5 | 1>(0);
   useEffect(() => {
@@ -71,7 +70,17 @@ export const UserImage = ({
   }, []);
 
   return (
-    <Base className={className} title={title} data-fail={failed}>
+    <Base
+      className={className}
+      title={title}
+      data-fail={failed}
+      style={{
+        width: opt?.width || '100%',
+        height: opt?.height || '100%',
+        maxWidth: '100%',
+        maxHeight: '100%',
+      }}
+    >
       {UserOutline}
       {failed !== 1 && (
         <Img
@@ -79,6 +88,7 @@ export const UserImage = ({
           src={image}
           onError={() => setFailed(1)}
           onAbort={() => setFailed(1)}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
       )}
     </Base>
@@ -88,12 +98,20 @@ export const UserImage = ({
 export interface IUserProfileImage {
   className?: string;
   user?: { picture: string; fullname: string; userId: string };
+  /** 100% if not provided. default 2.5rem */
+  opt?: { width?: string; height?: string };
 }
-export const UserProfileImage = ({ className, user }: IUserProfileImage) => {
+export const UserProfileImage = ({
+  className,
+  user,
+  opt = { width: '2.5rem', height: '2.5rem' },
+}: IUserProfileImage) => {
   const image = user?.picture;
 
   const titleA = [user?.fullname, user?.userId].filter(notEmpty);
   const title = titleA.length === 0 ? '' : titleA.join(' - ');
 
-  return <UserImage image={image} title={title} className={className} />;
+  return (
+    <UserImage image={image} title={title} className={className} opt={opt} />
+  );
 };
