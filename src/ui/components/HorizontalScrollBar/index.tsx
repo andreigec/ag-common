@@ -30,7 +30,7 @@ export const HorizontalScrollBar = ({
   }, [scrollRef]);
 
   return (
-    <div ref={scrollRef} style={{ overflowX: 'scroll' }} className={className}>
+    <div ref={scrollRef} style={{ overflowX: 'auto' }} className={className}>
       {children}
     </div>
   );

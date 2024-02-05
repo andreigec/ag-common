@@ -18,6 +18,7 @@ import { chunk } from '../../common/helpers/array';
 import { asyncForEach } from '../../common/helpers/async';
 import { debug, trace, warn } from '../../common/helpers/log';
 import { sleep } from '../../common/helpers/sleep';
+import { trimSide } from '../../common/helpers/string/trim';
 import type { IQueryDynamo, Key } from '../types';
 
 export const setDynamo = (region: string) => {
@@ -456,8 +457,7 @@ export const getDynamoUpdates = (
 } => {
   let ek = opt?.excludeKeys ?? ['PK'];
   ek = ek.map((r) => r.toLowerCase());
-  let UpdateExpression = `SET 
-  `;
+  let UpdateExpression = `SET `;
   const ExpressionAttributeNames: Record<string, string> = {};
   const ExpressionAttributeValues: Record<string, string | number | boolean> =
     {};
@@ -473,7 +473,7 @@ export const getDynamoUpdates = (
       ExpressionAttributeValues[`:${k}`] = v;
     });
   return {
-    UpdateExpression,
+    UpdateExpression: trimSide(UpdateExpression, false, ' ', ','),
     ExpressionAttributeNames,
     ExpressionAttributeValues,
     ReturnValues: 'UPDATED_NEW',
