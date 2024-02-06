@@ -48,6 +48,11 @@ export const IconF = styled.span`
   svg {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+  }
+
+  img {
+    object-fit: contain;
   }
 `;
 
