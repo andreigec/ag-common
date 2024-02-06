@@ -2,6 +2,7 @@ import type { AxiosError } from 'axios';
 
 import { retryHttpCodes, retryHttpMs } from '../../../common/const';
 import { notEmpty } from '../../../common/helpers/array';
+import { debug } from '../../../common/helpers/log';
 import { sleep } from '../../../common/helpers/sleep';
 import { getCookieString } from '../cookie';
 import type { AxiosWrapperLite, User } from '../jwt';
@@ -91,6 +92,11 @@ export const callOpenApi = async <T, TDefaultApi>(
       {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         pre: (oldFetchParams: any) => {
+          const url = oldFetchParams?.url ?? '(url)';
+          const verb = oldFetchParams?.init?.method ?? '(verb)';
+
+          debug(`callOpenApi: making ${verb} call to ${url}`);
+
           oldFetchParams.init.headers = {
             authorization: config.baseOptions.headers.authorization,
             ...oldFetchParams.init.headers,
