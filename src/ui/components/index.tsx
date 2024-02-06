@@ -20,6 +20,7 @@ export * from './OpenApiCodeBlock';
 export * from './PieChart';
 export * from './ProgressBar';
 export * from './Prompt';
+export * from './PulseRing';
 export * from './RadioGroup';
 export * from './RowOrColumn';
 export * from './Search';
