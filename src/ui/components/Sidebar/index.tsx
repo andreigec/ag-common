@@ -1,12 +1,26 @@
 'use client';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import React, { useRef, useState } from 'react';
 
 import { useOnClickOutside } from '../../helpers';
 import { Hamburger } from '../../icons/Hamburger';
 import { NoTextSelect } from '../../styles/common';
-import { smallScreen, smallScreenPx } from '../../styles/media';
+import { bigScreen, smallScreen, smallScreenPx } from '../../styles/media';
 import { Chevron } from '../Chevron';
+
+const closedSidebarHover = css`
+  width: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  &:hover,
+  &:hover [data-hover='true'] {
+    background-color: #ccc;
+  }
+  &:hover {
+    border-right: solid 1px #999;
+  }
+`;
 
 const Base = styled.div`
   position: relative;
@@ -15,47 +29,58 @@ const Base = styled.div`
   padding-left: 0.5rem;
   height: 100vh;
 
-  &[data-open='true'] {
-    width: 80vw;
-    max-width: 30rem;
-    @media ${smallScreen} {
-      max-width: unset;
-      position: fixed;
-      top: 0;
-      left: 0;
-    }
-  }
-  &[data-open='false'] {
-    width: 0.5rem;
-    background-color: rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    &:hover,
-    &:hover [data-hover='true'] {
-      background-color: #ccc;
-    }
-    &:hover {
-      border-right: solid 1px #999;
-    }
-  }
   ${NoTextSelect};
-
   &:hover {
     [data-type='content-block'] {
       left: 1rem;
     }
   }
+
+  &[data-open='true'] {
+    width: fit-content;
+
+    @media ${smallScreen} {
+      max-width: unset;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+  }
+  &[data-open='false'] {
+    ${closedSidebarHover};
+  }
+
+  :not([data-open]) {
+    @media ${smallScreen} {
+      ${closedSidebarHover};
+    }
+    @media ${bigScreen} {
+      width: fit-content;
+    }
+  }
+`;
+
+const closedContentBlockOffScreen = css`
+  left: -100vw;
+  transition: left 200ms;
+  height: 100%;
 `;
 
 const ContentBlock = styled.div`
-  left: -30rem;
-  transition: left 200ms;
-  height: 100%;
+  ${closedContentBlockOffScreen};
   &[data-open='false'] {
     position: absolute;
     top: 0;
     z-index: 1;
-    width: 80vw;
-    max-width: 30rem;
+    width: fit-content;
+  }
+
+  :not([data-open]) {
+    @media ${smallScreen} {
+      position: absolute;
+      ${closedContentBlockOffScreen};
+    }
   }
 `;
 
@@ -76,9 +101,23 @@ const HamburgerB = styled.div`
   position: absolute;
   transition: all 200ms;
   z-index: 2;
+
+  &[data-hide-on-big='true'] {
+    @media ${bigScreen} {
+      display: none;
+    }
+  }
+
   &[data-open='false'] {
     top: 0.5rem;
     left: 0.25rem;
+  }
+
+  :not([data-open]) {
+    @media ${bigScreen} {
+      top: 0.5rem;
+      right: -0.75rem;
+    }
   }
   &[data-open='true'] {
     top: 0.5rem;
@@ -108,10 +147,22 @@ const ChevronStyled = styled(Chevron)`
 export interface ISidebar {
   children: React.ReactNode;
   className?: string;
+  /** default:defaultClosed
+   * defaultClosed: always closed by default.
+   * fixedOpen: always open on bigscreen. cant close if bigscreen
+   */
+  mode?: 'defaultClosed' | 'fixedOpen';
 }
-export const Sidebar = ({ children, className }: ISidebar) => {
+export const Sidebar = ({
+  children,
+  className,
+  mode = 'defaultClosed',
+}: ISidebar) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean | null>(
+    mode === 'defaultClosed' ? false : null,
+  );
+
   useOnClickOutside({ ref }, () => {
     if (!open || window.innerWidth > smallScreenPx) {
       return;
@@ -128,8 +179,16 @@ export const Sidebar = ({ children, className }: ISidebar) => {
       data-hover
       ref={ref}
     >
-      <HamburgerB data-open={open} onClick={() => setOpen(!open)} data-hover>
-        {open ? <ChevronStyled point={'left'} width="100%" /> : <Hamburger />}
+      <HamburgerB
+        data-hide-on-big={mode === 'fixedOpen'}
+        data-open={open}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen(!open);
+        }}
+        data-hover
+      >
+        {open ? <ChevronStyled point="left" width="100%" /> : <Hamburger />}
       </HamburgerB>
       <ContentBlock data-type="content-block" data-open={open}>
         <Content

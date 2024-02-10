@@ -3,7 +3,7 @@ import OpenAPIRequestValidator from 'openapi-request-validator';
 
 import type { TLang } from '../../common/helpers/i18n';
 import { getValidatedLang } from '../../common/helpers/i18n';
-import { debug, error as errorF, trace, warn } from '../../common/helpers/log';
+import { debug, error as errorF, warn } from '../../common/helpers/log';
 import {
   objectKeysToLowerCase,
   tryJsonParse,

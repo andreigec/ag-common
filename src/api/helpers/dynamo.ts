@@ -16,7 +16,7 @@ import {
 // ES6 import
 import { chunk } from '../../common/helpers/array';
 import { asyncForEach } from '../../common/helpers/async';
-import { debug, trace, warn } from '../../common/helpers/log';
+import { debug, warn } from '../../common/helpers/log';
 import { sleep } from '../../common/helpers/sleep';
 import { trimSide } from '../../common/helpers/string/trim';
 import type { IQueryDynamo, Key } from '../types';

@@ -12,10 +12,7 @@ const app: Meta<typeof Sidebar> = {
 
 const Template: StoryFn<typeof Sidebar> = (args) => (
   <div style={{ backgroundColor: '#333', height: '20rem' }}>
-    <Sidebar {...args}>
-      <div>s</div>
-      <div>s</div>
-    </Sidebar>
+    <Sidebar {...args} />
   </div>
 );
 export const Primary: StoryFn<typeof Sidebar> = Template.bind({});
@@ -23,9 +20,10 @@ export const Primary: StoryFn<typeof Sidebar> = Template.bind({});
 Primary.args = {
   children: (
     <>
-      <div>sidebar item</div>
+      <div style={{ backgroundColor: '#666' }}>sidebar item</div>
       <div>sidebar item2</div>
     </>
   ),
+  mode: 'fixedOpen',
 } satisfies ISidebar;
 export default app;
