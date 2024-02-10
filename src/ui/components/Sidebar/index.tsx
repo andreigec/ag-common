@@ -10,6 +10,7 @@ import { bigScreen, smallScreen, smallScreenPx } from '../../styles/media';
 import { Chevron } from '../Chevron';
 
 const closedSidebarHover = css`
+  padding-left: 0.5rem;
   width: 0.5rem;
   background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
@@ -26,7 +27,6 @@ const Base = styled.div`
   position: relative;
   transition: all 200ms;
   border-right: solid 1px #ccc;
-  padding-left: 0.5rem;
   height: 100vh;
 
   ${NoTextSelect};
