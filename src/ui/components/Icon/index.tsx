@@ -49,6 +49,7 @@ export const IconF = styled.span`
     width: 100%;
     height: 100%;
     object-fit: contain;
+    aspect-ratio: 1/1;
   }
 
   img {
