@@ -24,7 +24,8 @@ const closedSidebarHover = css`
 `;
 
 const Base = styled.div`
-  position: relative;
+  position: sticky;
+  top: 0;
   transition: all 200ms;
   border-right: solid 1px #ccc;
   height: 100vh;
