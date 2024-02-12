@@ -148,7 +148,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     }
   }, [maxHeight, open, p.options, p.renderF, shadow, style]);
 
-  const defaultRender = !p.value ? <KebabDots /> : <>{p.renderF(p.value)}</>;
+  const defaultRender = !p.value ? <KebabDots /> : <>{p.renderF(p.value, 0)}</>;
   const openDisplay = p.children ?? (
     <ListItem
       selected
@@ -179,8 +179,8 @@ export function DropdownList<T>(p: IDropdownList<T>) {
         {open &&
           p.options.map((s, i) => (
             <ListItem
-              key={typeof s === 'string' ? s : p.renderF(s).key}
-              render={p.renderF(s)}
+              key={typeof s === 'string' ? s : p.renderF(s, i).key}
+              render={p.renderF(s, i)}
               onChange={() => p.onChange(s, i)}
               selected={s === state}
             />
