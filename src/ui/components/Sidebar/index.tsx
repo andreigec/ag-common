@@ -29,6 +29,7 @@ const Base = styled.div`
   transition: all 200ms;
   border-right: solid 1px #ccc;
   height: 100vh;
+  z-index: 1;
 
   ${NoTextSelect};
   &:hover {
@@ -45,7 +46,6 @@ const Base = styled.div`
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 1;
     }
   }
   &[data-open='false'] {
