@@ -1,13 +1,13 @@
 'use client';
 import styled from '@emotion/styled';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, Dispatch, SetStateAction } from 'react';
 import React, { useState } from 'react';
 
 import { useCookie } from '../../helpers/cookie/use';
 import { Computer, Moon, Sun } from '../../icons';
 import { FlexColumn } from '../FlexColumn';
 import { Icon } from '../Icon';
-import { TDarkMode } from './types';
+import { TDarkMode, TDarkModeCalc } from './types';
 
 const Base = styled.div`
   display: flex;
@@ -75,22 +75,65 @@ export interface IDarkMode {
   style?: CSSProperties;
   cookieDocument: string;
 }
-/** shows darkmode toggle. Persists to cookie, and modifies html classList with either dark-mode or light-mode */
-export const DarkMode = (p: IDarkMode) => {
-  const { iconSize = '2.5rem' } = p;
 
-  const [darkmode, setDarkmodeRaw] = useCookie<TDarkMode>({
+export interface IUseDarkMode {
+  darkmode: TDarkMode;
+  setDarkmode: Dispatch<SetStateAction<TDarkMode>>;
+  /** converts system to the required output */
+  calcDarkMode: () => TDarkModeCalc;
+}
+
+export const UseDarkMode = ({
+  cookieDocument,
+}: {
+  cookieDocument: string;
+}): IUseDarkMode => {
+  const [darkmode, setDarkmode] = useCookie<TDarkMode>({
     defaultValue: TDarkMode.system,
     name: 'darkmode',
-    cookieDocument: p.cookieDocument,
+    cookieDocument: cookieDocument,
     parse: (v) => Number(v) as TDarkMode,
     stringify: (v) => v.toString(),
   });
 
+  const calcDarkMode = (): TDarkModeCalc => {
+    const isDarkMode = window.matchMedia?.(
+      '(prefers-color-scheme: dark)',
+    ).matches;
+
+    if (darkmode === TDarkMode.system) {
+      return isDarkMode ? TDarkModeCalc.dark : TDarkModeCalc.light;
+    }
+
+    return darkmode === TDarkMode.dark
+      ? TDarkModeCalc.dark
+      : TDarkModeCalc.light;
+  };
+
+  return {
+    darkmode,
+    setDarkmode,
+    calcDarkMode,
+  };
+};
+
+/** shows darkmode toggle. Persists to cookie, and modifies html classList with either dark-mode or light-mode
+ * this method has the darkmode passed in, so UseDarkMode can be used globally
+ */
+export const DarkModeAux = ({
+  iconSize = '2.5rem',
+  className,
+  mode,
+  onSubmit,
+  style,
+  dm,
+}: IDarkMode & {
+  dm: IUseDarkMode;
+}) => {
   const [index, setIndex] = useState<number>(
-    modes.findIndex((d) => d.mode === darkmode) ?? 0,
+    modes.findIndex((d) => d.mode === dm.darkmode) ?? 0,
   );
-  const [fill, background] = getColours(modes[index].mode, p.mode === 'vert');
+  const [fill, background] = getColours(modes[index].mode, mode === 'vert');
   const twCalc = `calc(${iconSize} + ${iconSize} + ${iconSize} )`;
   const setDarkmode = (newDarkMode: TDarkMode) => {
     let className = '';
@@ -107,22 +150,22 @@ export const DarkMode = (p: IDarkMode) => {
       document.getElementsByTagName('html')[0].classList.add(className);
     }
 
-    setDarkmodeRaw(newDarkMode);
-    p.onSubmit?.(newDarkMode);
+    dm.setDarkmode(newDarkMode);
+    onSubmit?.(newDarkMode);
   };
 
   return (
     <Base
-      className={p.className}
-      data-mode={p.mode ?? 'horiz'}
+      className={className}
+      data-mode={mode ?? 'horiz'}
       style={{
-        ...p.style,
+        ...style,
         background,
         border: `solid 2px ${fill}`,
         width: twCalc,
         height: iconSize,
 
-        ...(p.mode === 'vert' && {
+        ...(mode === 'vert' && {
           width: iconSize,
           height: twCalc,
         }),
@@ -152,4 +195,10 @@ export const DarkMode = (p: IDarkMode) => {
       })}
     </Base>
   );
+};
+
+/** shows darkmode toggle. Persists to cookie, and modifies html classList with either dark-mode or light-mode */
+export const DarkMode = (p: IDarkMode) => {
+  const dm = UseDarkMode({ cookieDocument: p.cookieDocument });
+  return DarkModeAux({ ...p, dm });
 };

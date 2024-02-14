@@ -3,3 +3,7 @@ export enum TDarkMode {
   'light',
   'system',
 }
+export enum TDarkModeCalc {
+  'dark',
+  'light',
+}
