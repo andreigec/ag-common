@@ -14,7 +14,7 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 
 // ES6 import
-import { chunk } from '../../common/helpers/array';
+import { chunk, take } from '../../common/helpers/array';
 import { asyncForEach } from '../../common/helpers/async';
 import { debug, warn } from '../../common/helpers/log';
 import { sleep } from '../../common/helpers/sleep';
@@ -184,27 +184,32 @@ export const scan = async <T>(
     filter?: {
       filterExpression: string;
       attrNames: Record<string, string>;
-      attrValues: Record<string, string>;
+      attrValues?: Record<string, string>;
     };
     /** ProjectionExpression. will csv values */
     requiredAttributeList?: string[];
+    /** default =ALL */
+    maxCount?: number;
   },
 ): Promise<{ data: T[] } | { error: string }> => {
   try {
     let ExclusiveStartKey: Key | undefined;
-    const Items: T[] = [];
+    let Items: T[] = [];
     do {
       let params = new ScanCommand({
         TableName: tableName,
         ...(opt?.filter && {
           FilterExpression: opt.filter.filterExpression,
           ExpressionAttributeNames: opt.filter.attrNames,
-          ExpressionAttributeValues: opt.filter.attrValues,
+          ...(opt.filter.attrValues && {
+            ExpressionAttributeValues: opt.filter.attrValues,
+          }),
         }),
         ...(opt?.requiredAttributeList && {
           ProjectionExpression: opt.requiredAttributeList.join(', '),
         }),
         ExclusiveStartKey,
+        Limit: opt?.maxCount ?? undefined,
       });
 
       debug(`running dynamo scan=${JSON.stringify(params, null, 2)}`);
@@ -220,7 +225,14 @@ export const scan = async <T>(
       if (newitems) {
         Items.push(...newitems.map((r) => r as T));
       }
-    } while (ExclusiveStartKey);
+    } while (
+      ExclusiveStartKey &&
+      (!opt?.maxCount || Items.length < opt.maxCount)
+    );
+
+    if (opt?.maxCount) {
+      ({ part: Items } = take(Items, opt?.maxCount));
+    }
 
     debug(`dynamo scan against ${tableName} ok, count=${Items?.length}`);
 

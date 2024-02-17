@@ -85,12 +85,16 @@ export const Timeline = ({
         <Line style={{ backgroundColor: lineColour }} />
         {items.map((p, index) => {
           const enabled = index === lastTrue || index === firstFalse;
+          let cursor = enabled ? 'pointer' : 'default';
+          if (p.checked) {
+            cursor = '';
+          }
           return (
             <Item key={p.key} title={p?.title}>
               <Icon
                 style={{
                   maxWidth: maxCircleSize,
-                  cursor: enabled ? 'pointer' : 'default',
+                  cursor,
                 }}
                 onClick={() => enabled && onClick?.(p)}
               >
