@@ -122,19 +122,20 @@ export function paramsToObject(entries: any) {
  */
 export function objectToString(
   obj: Record<string, string>,
+  /** eg '=' */
   joinKeyValue: string,
+  /** eg '&' */
   joinKeys: string,
 ) {
-  let ret = '';
   if (!obj || Object.keys(obj).length === 0) {
-    return ret;
+    return '';
   }
 
-  Object.entries(obj).forEach(([key, value]) => {
-    ret += `${joinKeys}${key}${joinKeyValue}${value}`;
-  });
+  const raw = Object.entries(obj).map(
+    ([key, value]) => key + joinKeyValue + value,
+  );
+  const ret = raw.join(joinKeys);
 
-  ret = trim(ret, joinKeyValue);
   return ret;
 }
 
