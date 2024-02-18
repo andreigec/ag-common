@@ -8,9 +8,20 @@ import { take } from './array';
 export async function asyncForEach<T>(
   array: T[],
   callback: (i: T, index: number, array: T[]) => void,
+  opt?: {
+    /** default 1 */
+    maxConcurrency?: number;
+  },
 ) {
-  for (let index = 0; index < array.length; index += 1) {
-    await callback(array[index], index, array);
+  const maxConcurrency = opt?.maxConcurrency ?? 1;
+  let rem = array;
+  let start = 0;
+  while (rem.length > 0) {
+    const { rest, part } = take(rem, maxConcurrency);
+    rem = rest;
+    const proms = part.map((p, i) => callback(p, start + i, array));
+    start += part.length;
+    await Promise.all(proms);
   }
 }
 
