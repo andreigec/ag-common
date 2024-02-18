@@ -299,7 +299,7 @@ export const queryDynamo = async <T>({
   skValue,
   skOperator = '=',
   indexName,
-  count = 1000,
+  limit = 1000,
   startKey,
   filterName,
   filterValue,
@@ -366,7 +366,7 @@ export const queryDynamo = async <T>({
       ExpressionAttributeNames: ean,
       ExpressionAttributeValues: eav,
       ScanIndexForward: sortAscending,
-      Limit: count > 0 ? count : 1000,
+      Limit: limit ?? 1000,
       ...(indexName && { IndexName: indexName }),
       ...(startKey && {
         ExclusiveStartKey: startKey,
@@ -401,7 +401,7 @@ export const queryDynamo = async <T>({
       ` next startkey=${startKey}`,
     );
 
-    if (count > 0 && (newItems?.length ?? 0) >= count) {
+    if (!!limit && Items.length > limit) {
       return { data: Items, startKey };
     }
   } while (startKey && Object.keys(startKey).length > 0);

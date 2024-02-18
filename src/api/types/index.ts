@@ -77,7 +77,7 @@ export interface IQueryDynamo {
   tableName: string;
   indexName?: string;
   /** default 1000 */
-  count?: number;
+  limit?: number;
   startKey?: Key;
   filterName?: string;
   filterValue?: string | number | boolean;
