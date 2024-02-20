@@ -1,5 +1,5 @@
 {
-  "version": "0.0.634",
+  "version": "0.0.635",
   "name": "ag-common",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
