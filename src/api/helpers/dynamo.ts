@@ -363,7 +363,7 @@ export const queryDynamo = async <T>({
       ExpressionAttributeNames: ean,
       ExpressionAttributeValues: eav,
       ScanIndexForward: sortAscending,
-      ...(limit !== null && limit !== -1 && { Limit: limit || 1000 }),
+      ...(limit !== null && { Limit: limit || 1000 }),
       ...(indexName && { IndexName: indexName }),
       ...(startKey && {
         ExclusiveStartKey: startKey,
