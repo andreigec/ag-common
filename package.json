@@ -8,9 +8,9 @@
   "license": "ISC",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "format": "eslint --ext .ts,.tsx,.js,.json src --fix",
+    "format": "eslint --ext .ts,.tsx src --fix",
     "lint:tsc": "tsc --noEmit",
-    "lint:eslint": "eslint --ext .ts,.tsx,.js,.json src",
+    "lint:eslint": "eslint --ext .ts,.tsx src",
     "lint": "pnpm run /^lint:/",
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "start": "cross-env BROWSER=none cross-env storybook dev -p 6006",
