@@ -76,7 +76,7 @@ export interface IQueryDynamo {
   skOperator?: TSkOperator;
   tableName: string;
   indexName?: string;
-  /** default 1000 */
+  /** default 1000. if -1 or null will not apply */
   limit?: number;
   startKey?: Key;
   filterName?: string;

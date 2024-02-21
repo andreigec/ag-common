@@ -189,7 +189,7 @@ export const scan = async <T>(
     /** ProjectionExpression. will csv values */
     requiredAttributeList?: string[];
     /** default =ALL */
-    maxCount?: number;
+    limit?: number;
   },
 ): Promise<{ data: T[] } | { error: string }> => {
   try {
@@ -209,7 +209,7 @@ export const scan = async <T>(
           ProjectionExpression: opt.requiredAttributeList.join(', '),
         }),
         ExclusiveStartKey,
-        Limit: opt?.maxCount ?? undefined,
+        ...(opt?.limit && { Limit: opt.limit }),
       });
 
       debug(`running dynamo scan=${JSON.stringify(params, null, 2)}`);
@@ -225,13 +225,10 @@ export const scan = async <T>(
       if (newitems) {
         Items.push(...newitems.map((r) => r as T));
       }
-    } while (
-      ExclusiveStartKey &&
-      (!opt?.maxCount || Items.length < opt.maxCount)
-    );
+    } while (ExclusiveStartKey && (!opt?.limit || Items.length < opt.limit));
 
-    if (opt?.maxCount) {
-      ({ part: Items } = take(Items, opt?.maxCount));
+    if (opt?.limit) {
+      ({ part: Items } = take(Items, opt?.limit));
     }
 
     debug(`dynamo scan against ${tableName} ok, count=${Items?.length}`);
@@ -366,7 +363,7 @@ export const queryDynamo = async <T>({
       ExpressionAttributeNames: ean,
       ExpressionAttributeValues: eav,
       ScanIndexForward: sortAscending,
-      Limit: limit ?? 1000,
+      ...(limit !== null && limit !== -1 && { Limit: limit || 1000 }),
       ...(indexName && { IndexName: indexName }),
       ...(startKey && {
         ExclusiveStartKey: startKey,
