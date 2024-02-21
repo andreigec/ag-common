@@ -15,6 +15,7 @@ export * from './Image';
 export * from './InfiniteScroll';
 export * from './KebabDots';
 export * from './Loader';
+export * from './Markdown';
 export * from './MinSidebar';
 export * from './Modal';
 export * from './OpenApiCodeBlock';
