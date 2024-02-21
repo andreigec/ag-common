@@ -113,3 +113,8 @@ export function findLastIndex<T>(
   }
   return -1;
 }
+export const insertElementAtIndex = <T>(
+  arr: T[],
+  element: T,
+  index: number,
+) => [...arr.slice(0, index), element, ...arr.slice(index)];

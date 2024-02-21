@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { info, SetLogLevel, warn } from '../../common';
+import { debug, info, SetLogLevel, warn } from '../../common';
 import {
   getItemDynamo,
   putDynamo,
@@ -33,7 +33,7 @@ async function run() {
     throw new Error('put not found');
   }
 
-  console.log('get item');
+  debug('get item');
   const ge = await getItemDynamo<{ PK: string }>({
     tableName,
     pkName: 'PK',
@@ -48,12 +48,12 @@ async function run() {
   }
 
   //
-  console.log('query');
+  debug('query');
   const q = await queryDynamo<{ PK: string }>({
     tableName,
     pkName: 'PK',
     pkValue: PK,
-    count: 1,
+    limit: 1,
     sortAscending: true,
   });
   if ('error' in q) {
@@ -65,7 +65,7 @@ async function run() {
   }
 
   //
-  console.log('wipe');
+  debug('wipe');
 
   await wipeTable(tableName);
 

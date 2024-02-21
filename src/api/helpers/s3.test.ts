@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { SetLogLevel } from '../../common';
+import { debug, SetLogLevel } from '../../common';
 import { deleteFiles, getS3Objects, putS3Object } from './s3';
 
 const Bucket = 'ag-common-tests';
@@ -29,6 +29,6 @@ async function run() {
   if ('error' in df) {
     throw df.error;
   }
-  console.log('ok');
+  debug('ok');
 }
 void run();
