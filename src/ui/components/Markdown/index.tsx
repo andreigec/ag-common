@@ -85,6 +85,7 @@ function renderMarkdown({
     if (line.match(star)) {
       output.push(
         <p
+          key={line}
           dangerouslySetInnerHTML={{
             __html: line.replace(star, `<b>$1</b>`).trim(),
           }}
@@ -136,17 +137,17 @@ function renderMarkdown({
       const level = line.match(/^#+/)?.[0]?.length ?? 0;
       const t = trimSide(line, true, '#').trim();
       if (level === 1) {
-        output.push(<h1>{preprocessText(t)}</h1>);
+        output.push(<h1 key={t}>{preprocessText(t)}</h1>);
       } else if (level === 2) {
-        output.push(<h2>{preprocessText(t)}</h2>);
+        output.push(<h2 key={t}>{preprocessText(t)}</h2>);
       } else if (level === 3) {
-        output.push(<h3>{preprocessText(t)}</h3>);
+        output.push(<h3 key={t}>{preprocessText(t)}</h3>);
       } else if (level === 4) {
-        output.push(<h4>{preprocessText(t)}</h4>);
+        output.push(<h4 key={t}>{preprocessText(t)}</h4>);
       } else if (level === 5) {
-        output.push(<h5>{preprocessText(t)}</h5>);
+        output.push(<h5 key={t}>{preprocessText(t)}</h5>);
       } else if (level >= 6) {
-        output.push(<h6>{preprocessText(t)}</h6>);
+        output.push(<h6 key={t}>{preprocessText(t)}</h6>);
       }
     }
     //ul - li

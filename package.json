@@ -8,11 +8,11 @@
   "license": "ISC",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "format": "npx eslint --ext .ts,.tsx ./src --fix && npx eslint --ext .ts,.tsx ./stories --fix",
-    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "format": "eslint --ext .ts,.tsx,.js,.json src --fix",
     "lint:tsc": "tsc --noEmit",
-    "lint:eslint": "eslint --ext .ts,.tsx .",
+    "lint:eslint": "eslint --ext .ts,.tsx,.js,.json src",
     "lint": "pnpm run /^lint:/",
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
     "start": "cross-env BROWSER=none cross-env storybook dev -p 6006",
     "build-storybook": "storybook build -o docs --quiet",
     "test": "globstar -- node --import tsx --test \"src/**/*.test.ts\""

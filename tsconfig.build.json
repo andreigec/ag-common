@@ -15,14 +15,6 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
-    "plugins": [
-      {
-        "name": "typescript-styled-plugin",
-        "lint": {
-          "unknownProperties": "error"
-        }
-      }
-    ],
     "lib": [
       "dom",
       "es2015",

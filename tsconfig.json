@@ -15,33 +15,10 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
-    "plugins": [
-      {
-        "name": "typescript-styled-plugin",
-        "lint": {
-          "unknownProperties": "error"
-        }
-      }
-    ],
-    "lib": [
-      "dom",
-      "es2015",
-      "es2016",
-      "es2017",
-      "es2018",
-      "dom.iterable"
-    ],
+    "lib": ["dom", "es2015", "es2016", "es2017", "es2018", "dom.iterable"],
     "declaration": true,
     "outDir": "dist"
   },
-  "include": [
-    "src",
-    "stories",
-    "tsconfig.json",
-    "*.config.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/node_modules/**"
-  ]
+  "include": ["src", "stories", "tsconfig.json", "*.config.js"],
+  "exclude": ["node_modules", "**/node_modules/**"]
 }

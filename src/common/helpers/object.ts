@@ -1,5 +1,3 @@
-import { trim } from '.';
-
 export const tryJsonParse = <T>(
   str: string | undefined | null,
   defaultValue: T | undefined | null,
