@@ -1,5 +1,5 @@
 {
-  "version": "0.0.636",
+  "version": "0.0.637",
   "name": "ag-common",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,8 +10,8 @@
     "preinstall": "npx only-allow pnpm",
     "format": "npx eslint --ext .ts,.tsx ./src --fix && npx eslint --ext .ts,.tsx ./stories --fix",
     "build": "rimraf dist && tsc -p tsconfig.build.json",
-    "lint:tsc":"tsc --noEmit",
-    "lint:eslint":"eslint --ext .ts,.tsx .",
+    "lint:tsc": "tsc --noEmit",
+    "lint:eslint": "eslint --ext .ts,.tsx .",
     "lint": "pnpm run /^lint:/",
     "start": "cross-env BROWSER=none cross-env storybook dev -p 6006",
     "build-storybook": "storybook build -o docs --quiet",
