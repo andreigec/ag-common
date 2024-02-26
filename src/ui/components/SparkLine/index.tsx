@@ -2,7 +2,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { distinctBy } from '../../../common';
+import { distinctBy } from '../../../common/helpers/array';
 import { rangePercentage } from '../../../common/helpers/math';
 
 const barWidth = 2;

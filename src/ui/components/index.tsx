@@ -1,4 +1,5 @@
 export * from './Accordion';
+export * from './BarChart';
 export * from './BorderGradient';
 export * from './Button';
 export * from './Chevron';

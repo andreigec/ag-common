@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { debug, info, SetLogLevel, warn } from '../../common';
+import { debug, info, SetLogLevel, warn } from '../../common/helpers/log';
 import {
   getItemDynamo,
   putDynamo,

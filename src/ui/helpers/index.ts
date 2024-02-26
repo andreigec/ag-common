@@ -23,3 +23,4 @@ export * from './useOverloadPageSearch';
 export * from './useQueryString';
 export * from './useResize';
 export * from './useTimeout';
+export * from './useTooltip';
