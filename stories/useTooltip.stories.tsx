@@ -12,9 +12,9 @@ interface ITest {
   test: string;
 }
 const Template: StoryFn = () => {
-  const UT = useTooltip<ITest & { key: string }>();
+  const UT = useTooltip<ITest & { selectedKey: string }>();
   return (
-    <div data-key="parent">
+    <div data-type="parent">
       <UT.Comp pos={UT.pos}>
         {(data) => <div>content: {data.test}</div>}
       </UT.Comp>
@@ -23,14 +23,14 @@ const Template: StoryFn = () => {
         style={{ width: '10rem;', height: '10rem;', border: 'solid 1px black' }}
         onMouseLeave={() => UT.setPos(undefined)}
         onMouseMove={(element) => {
-          const key =
+          const selectedKey =
             document
               .elementFromPoint(element.pageX, element.pageY)
-              ?.getAttribute('data-key') ?? '';
+              ?.getAttribute('data-barchartitem-key') ?? '';
           UT.setPos({
             element,
-            parent: element.currentTarget.closest("[data-key='parent']"),
-            data: { test: 'test', key },
+            parent: element.currentTarget.closest("[data-type='parent']"),
+            data: { test: 'test', selectedKey },
           });
         }}
       >

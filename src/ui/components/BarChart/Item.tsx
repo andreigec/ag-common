@@ -42,7 +42,7 @@ export const Item = ({
     <Title>{data.name}</Title>
     {data.values.map((v) => (
       <div
-        data-key={v.name}
+        data-barchartitem-key={v.name}
         key={v.name}
         style={{
           height: '100%',

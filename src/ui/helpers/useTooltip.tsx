@@ -7,22 +7,20 @@ const Base = styled.div`
   z-index: 2;
 `;
 
-interface IPos {
-  x?: number;
-  y?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any;
+interface IPos<T> {
+  x: number;
+  y: number;
+  data: T;
   parentWidth: number;
   parentHeight: number;
 }
 
-const Comp = ({
+const Comp = <T,>({
   pos,
   children,
 }: {
-  pos: IPos | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  children: (data?: any) => JSX.Element;
+  pos: IPos<T> | undefined;
+  children: (data: T) => JSX.Element;
 }) => {
   const ref = createRef<HTMLDivElement>();
   const [size, setSize] = useState<{
@@ -41,7 +39,7 @@ const Comp = ({
     });
   }, [ref, size]);
 
-  if (pos?.x === undefined || pos?.y === undefined) {
+  if (!pos) {
     return null;
   }
 
@@ -81,7 +79,7 @@ const Comp = ({
 };
 
 export const useTooltip = <T,>() => {
-  const pos = useState<IPos>();
+  const pos = useState<IPos<T>>();
 
   const setPos = (p?: {
     element: MouseEvent;

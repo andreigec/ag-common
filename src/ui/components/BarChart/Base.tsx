@@ -25,34 +25,34 @@ const ItemStyled = styled(Item)`
   }
 `;
 
-export const BarChart = ({ data }: { data: IBarChartData[] }) => {
-  const UT = useTooltip<IBarChartData & { key: string }>();
+export const BarChart = ({ data: dataRaw }: { data: IBarChartData[] }) => {
+  const UT = useTooltip<{ data: IBarChartData; selectedKey?: string }>();
 
-  const maxWidth = Math.max(...data.map((a) => a.total));
+  const maxWidth = Math.max(...dataRaw.map((a) => a.total));
 
   return (
     <BarChartBase data-type="bcb">
-      <UT.Comp pos={UT.pos}>{(data) => <TooltipContent data={data} />}</UT.Comp>
-      {data.map((data) => (
+      <UT.Comp pos={UT.pos}>{(p) => <TooltipContent {...p} />}</UT.Comp>
+      {dataRaw.map((data) => (
         <ItemStyled
           key={data.name}
           data={data}
           maxWidth={maxWidth}
           onMouseLeave={() => UT.setPos(undefined)}
           onMouseMove={(element) => {
-            const key =
+            const selectedKey =
               document
                 .elementFromPoint(element.pageX, element.pageY)
-                ?.getAttribute('data-key') ?? '';
+                ?.getAttribute('data-barchartitem-key') ?? '';
             UT.setPos({
               element,
               parent: element.currentTarget.closest("[data-type='bcb']"),
-              data: { ...data, key },
+              data: { data, selectedKey },
             });
           }}
         />
       ))}
-      <Legend data={data} maxWidth={maxWidth} />
+      <Legend data={dataRaw} maxWidth={maxWidth} />
     </BarChartBase>
   );
 };

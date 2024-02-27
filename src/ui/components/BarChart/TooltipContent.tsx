@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { take } from '../../../common/helpers/array';
-import { sumArray } from '../../../common/helpers/math';
+import { getLegendItems } from './getLegendItems';
 import type { IBarChartData } from './types';
 
 const Base = styled.div`
@@ -35,35 +34,26 @@ const Total = styled.span`
   }
 `;
 
-export const TooltipContent = (p: {
-  data: IBarChartData & { key: string };
+export const TooltipContent = ({
+  data,
+  selectedKey,
+}: {
+  data: IBarChartData;
+  selectedKey?: string;
 }) => {
-  if (!p.data) {
-    return null;
-  }
-
-  const total = p.data.total;
-
-  // eslint-disable-next-line prefer-const
-  let { part, rest } = take(p.data.values, 3);
-  const ri = rest.findIndex((r) => r.name === p.data.key);
-  if (p.data.key && ri !== -1) {
-    part.push(rest[ri]);
-    rest = rest.splice(ri, 1);
-  }
-  const restTotal = sumArray(rest.map((s) => s.value));
+  const { part, rest, restTotal } = getLegendItems({ data, selectedKey });
 
   return (
     <Base>
-      <Title>{p.data.name}</Title>
+      <Title>{data.name}</Title>
       <Row>
         <span>total</span>
-        <Total>{total}</Total>
+        <Total>{data.total}</Total>
       </Row>
       {part.map((v) => (
         <Row style={{ color: v.colour }} key={v.name}>
-          <ItemTitle data-selected={p.data.key === v.name}>{v.name}</ItemTitle>
-          <Total data-selected={p.data.key === v.name}>{v.value}</Total>
+          <ItemTitle data-selected={selectedKey === v.name}>{v.name}</ItemTitle>
+          <Total data-selected={selectedKey === v.name}>{v.value}</Total>
         </Row>
       ))}
       {rest.length > 0 && (

@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 
 import { distinctBy, flat } from '../../../common/helpers/array';
+import { getLegendItems } from './getLegendItems';
 import type { IBarChartData } from './types';
 
 const Base = styled.div`
@@ -77,9 +78,12 @@ export const Legend = ({
 
   const keys = distinctBy(
     flat(
-      data.map((d) =>
-        d.values.map((v) => ({ colour: v.colour, name: v.name })),
-      ),
+      data.map((data) => {
+        return getLegendItems({ data }).part.map((v) => ({
+          colour: v.colour,
+          name: v.name,
+        }));
+      }),
     ),
     (s) => s.name,
   ).sort((a, b) => (a.name < b.name ? -1 : 1));
@@ -96,14 +100,12 @@ export const Legend = ({
       </Bar>
       {keys.length > 1 && (
         <Items>
-          {keys.map((k) => {
-            return (
-              <Item key={k.name}>
-                <Col style={{ backgroundColor: k.colour }} />
-                {k.name}
-              </Item>
-            );
-          })}
+          {keys.map((k) => (
+            <Item key={k.name}>
+              <Col style={{ backgroundColor: k.colour }} />
+              {k.name}
+            </Item>
+          ))}
         </Items>
       )}
     </Base>
