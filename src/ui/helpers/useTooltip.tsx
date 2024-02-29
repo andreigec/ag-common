@@ -8,11 +8,12 @@ const Base = styled.div`
 `;
 
 interface IPos<T> {
-  x: number;
-  y: number;
+  cursor: MouseEvent;
   data: T;
   parentWidth: number;
   parentHeight: number;
+  x: number;
+  y: number;
 }
 
 const Comp = <T,>({
@@ -55,10 +56,10 @@ const Comp = <T,>({
       right = pos.parentWidth - pos.x + 5;
     }
     //
-    bottom = pos.parentHeight - pos.y + 5;
-    if (pos.y - size.p.tooltipHeight < pos.parentHeight) {
-      bottom = undefined;
-      top = pos.y + 5;
+    top = pos.y + 5;
+    if (top + size.p.tooltipHeight > pos.parentHeight) {
+      top = undefined;
+      bottom = pos.parentHeight - pos.y;
     }
   }
 
@@ -92,20 +93,22 @@ export const useTooltip = <T,>() => {
     }
 
     const {
-      left,
-      top,
+      top: parentTop,
+      left: parentLeft,
       width: parentWidth,
       height: parentHeight,
-    } = p.element.currentTarget.getBoundingClientRect();
+    } = p.parent?.getBoundingClientRect() ?? { width: 0, height: 0 };
 
-    const x = p.element.clientX - left;
-    const y = p.element.clientY - top;
+    const x = p.element.pageX - (parentLeft ?? 0);
+    const y = p.element.pageY - (parentTop ?? 0);
+
     const p2 = {
-      x,
-      y,
+      cursor: p.element,
       data: p.data,
       parentWidth,
       parentHeight,
+      x,
+      y,
     };
 
     pos[1](p2);

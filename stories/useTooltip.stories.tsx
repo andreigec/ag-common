@@ -14,13 +14,57 @@ interface ITest {
 const Template: StoryFn = () => {
   const UT = useTooltip<ITest & { selectedKey: string }>();
   return (
-    <div data-type="parent">
+    <div
+      data-type="parent"
+      style={{
+        border: 'solid 1px black',
+        position: 'relative',
+        display: 'flex',
+        width: '80%',
+        margin: 'auto',
+        marginTop: '5rem',
+      }}
+    >
       <UT.Comp pos={UT.pos}>
-        {(data) => <div>content: {data.test}</div>}
+        {(data) => (
+          <div
+            style={{ width: '100px', height: '100px', backgroundColor: '#333' }}
+          >
+            content: {data.test}
+          </div>
+        )}
       </UT.Comp>
       parent
       <div
-        style={{ width: '10rem;', height: '10rem;', border: 'solid 1px black' }}
+        style={{
+          width: '10rem',
+          height: '10rem',
+          border: 'solid 1px black',
+          position: 'relative',
+        }}
+        onMouseLeave={() => UT.setPos(undefined)}
+        onMouseMove={(element) => {
+          const selectedKey =
+            document
+              .elementFromPoint(element.pageX, element.pageY)
+              ?.getAttribute('data-barchartitem-key') ?? '';
+          UT.setPos({
+            element,
+            parent: element.currentTarget.closest("[data-type='parent']"),
+            data: { test: 'test', selectedKey },
+          });
+        }}
+      >
+        child
+      </div>
+      <div
+        style={{
+          width: '10rem',
+          height: '10rem',
+          border: 'solid 1px black',
+          position: 'relative',
+          marginLeft: 'auto',
+        }}
         onMouseLeave={() => UT.setPos(undefined)}
         onMouseMove={(element) => {
           const selectedKey =
