@@ -55,6 +55,7 @@ export const LineChart = (p: ILineChart) => {
     tt: tt2,
     lt: lt2,
     ...UT.pos?.data,
+    fixed: false,
   });
   return (
     <Base
@@ -157,7 +158,7 @@ export const LineChart = (p: ILineChart) => {
           </React.Fragment>
         ))}
       </svg>
-      <Legend data={p.data} colours={p.colours} lt={lt} />
+      <Legend data={p.data} colours={p.colours} lt={lt} tt={tt} />
     </Base>
   );
 };

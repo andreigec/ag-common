@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 
 import { twelveHMs } from '../../../common';
-import { take } from '../../../common/helpers/array';
+import { getLegendItems } from './getLegendItems';
 import type { ILineChartItemRaw } from './types';
 
 const Base = styled.div`
@@ -59,42 +59,25 @@ const Col = styled.div`
   border-radius: 50%;
   margin-right: 0.25rem;
 `;
-const legendItemsKeys = ({
-  data,
-  colours,
-}: {
-  data: ILineChartItemRaw[];
-  colours: Record<string, string>;
-}) => {
-  const val: Record<string, { value: number; colour: string; name: string }> =
-    {};
-
-  data.forEach((d) => {
-    if (!val[d.name]) {
-      val[d.name] = { colour: colours[d.name], name: d.name, value: d.y };
-    } else {
-      val[d.name].value += d.y;
-    }
-  });
-  const values = Object.values(val);
-
-  const legendItems = take(values, 3).part.map((v) => ({
-    colour: v.colour,
-    name: v.name,
-  }));
-  return legendItems;
-};
 
 export const Legend = ({
   data,
   lt,
+  tt,
   colours,
 }: {
   data: ILineChartItemRaw[];
   colours: Record<string, string>;
   lt: (a: number) => string;
+  tt: (a: number) => string;
 }) => {
-  const legendItems = legendItemsKeys({ data, colours });
+  const legendItems = getLegendItems({
+    data,
+    colours,
+    fixed: true,
+    lt,
+    tt,
+  }).part;
   const xs = data.map((a) => a.x);
   const minX = Math.min(...xs);
   const maxX = Math.max(...xs);
