@@ -15,6 +15,7 @@ export * from './Icon';
 export * from './Image';
 export * from './InfiniteScroll';
 export * from './KebabDots';
+export * from './LineChart';
 export * from './Loader';
 export * from './Markdown';
 export * from './MinSidebar';

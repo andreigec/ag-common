@@ -30,11 +30,28 @@ export const dateDiffToString = (lowDate: Date, highDate?: Date) => {
   return ts;
 };
 
-export const getDMY = (date: Date, dayOffset?: number) => {
-  const date1 = addDays(date, dayOffset ?? 0);
+export const getDMY = (
+  date: Date,
+  opt?: { dayOffset?: number; short?: boolean },
+) => {
+  const date1 = addDays(date, opt?.dayOffset ?? 0);
   const d = String(date1.getDate()).padStart(2, '0');
   const m = String(date1.getMonth() + 1).padStart(2, '0'); // January is 0!
   const y = date1.getFullYear();
 
+  if (opt?.short) {
+    return `${y.toString().substring(2, 4)}-${m}-${d}`;
+  }
+
   return `${y}-${m}-${d}`;
+};
+
+export const isDate = (d: string | number) => {
+  if (!isNaN(Number(d))) {
+    //some arbitrary min date number
+    if (Number(d) < 345600000) {
+      return false;
+    }
+  }
+  return new Date(d).toString() !== 'Invalid Date';
 };
