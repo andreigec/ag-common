@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { sumArray } from '../../../common/helpers/math';
-import { getLegendItems } from './getLegendItems';
-import type { ILineChartItemRaw } from './types';
+import { legendItemsKeys } from './getLegendItems';
+import type { ILineChart } from './types';
 
 const Base = styled.div`
   display: flex;
@@ -60,33 +59,8 @@ const Col = styled.div`
   margin-right: 0.25rem;
 `;
 
-export const Legend = (p: {
-  data: ILineChartItemRaw[];
-  className?: string;
-  /** name -> colour */
-  colours: Record<string, string>;
-  tooltipTitle?: (a: number) => string;
-  legendTitle?: (a: number) => string;
-}) => {
-  const total = sumArray(p.data.map((a) => a.y));
-
-  const val: Record<string, { value: number; colour: string; name: string }> =
-    {};
-
-  p.data.forEach((d) => {
-    if (!val[d.name]) {
-      val[d.name] = { colour: p.colours[d.name], name: d.name, value: d.y };
-    } else {
-      val[d.name].value += d.y;
-    }
-  });
-  const values = Object.values(val);
-
-  const keys = getLegendItems({ data: { total, values } }).part.map((v) => ({
-    colour: v.colour,
-    name: v.name,
-  }));
-
+export const Legend = (p: ILineChart) => {
+  const legendItems = legendItemsKeys(p);
   const xs = p.data.map((a) => a.x);
   const minX = Math.min(...xs);
   const maxX = Math.max(...xs);
@@ -112,9 +86,9 @@ export const Legend = (p: {
           ))}
         </Numbers>
       </Bar>
-      {keys.length > 1 && (
+      {legendItems.length > 1 && (
         <Items>
-          {keys.map((k) => (
+          {legendItems.map((k) => (
             <Item key={k.name}>
               <Col style={{ backgroundColor: k.colour }} />
               {k.name}

@@ -56,7 +56,6 @@ export const interpolate = (raw: ILineChartItemRaw[]) => {
           min: yMin,
           max: yMax,
         }) * 100;
-
       return {
         x1,
         x2,

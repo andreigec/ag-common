@@ -6,6 +6,7 @@ import { distinctBy } from '../../../common';
 import { rangePercentage } from '../../../common/helpers/math';
 import { useTooltip } from '../../helpers/useTooltip';
 import { timeLegendTitle, timeTooltipTitle } from './dateHelpers';
+import { legendItemsKeys } from './getLegendItems';
 import { interpolate } from './interpolate';
 import { Legend } from './Legend';
 import { TooltipContent } from './TooltipContent';
@@ -44,6 +45,8 @@ export const LineChart = (p: ILineChart) => {
     lt = (s) => s.toString();
   }
 
+  const legendItems = legendItemsKeys(p);
+
   return (
     <Base
       className={p.className}
@@ -52,7 +55,8 @@ export const LineChart = (p: ILineChart) => {
     >
       <UT.Comp pos={UT.pos}>{(p) => <TooltipContent {...p} />}</UT.Comp>
       <svg
-        viewBox={`0 0 100 100`}
+        //slight offset to show circles
+        viewBox={`-1 -1 102 102`}
         transform="scale(-1,1) scale(-1,-1)"
         width="100%"
         height="100%"
@@ -104,7 +108,7 @@ export const LineChart = (p: ILineChart) => {
       >
         {points.map((p2) => (
           <React.Fragment key={JSON.stringify(p2)}>
-            {p2.origX === UT.pos?.data.x && (
+            {(p2.origX === UT.pos?.data.x || p2.x1 === p2.x2) && (
               <circle
                 cx={p2.x2}
                 cy={p2.y2}
@@ -112,14 +116,18 @@ export const LineChart = (p: ILineChart) => {
                 fill={p.colours[p2.name]}
               ></circle>
             )}
-            <line
-              strokeOpacity={1}
-              x1={p2.x1}
-              x2={p2.x2}
-              y1={p2.y1}
-              y2={p2.y2}
-              style={{ stroke: p.colours[p2.name] }}
-            />
+            {p2.x1 !== p2.x2 && (
+              <line
+                strokeOpacity={
+                  legendItems.find((f) => f.name === p2.name) ? 1 : 0.3
+                }
+                x1={p2.x1}
+                x2={p2.x2}
+                y1={p2.y1}
+                y2={p2.y2}
+                style={{ stroke: p.colours[p2.name] }}
+              />
+            )}
           </React.Fragment>
         ))}
       </svg>

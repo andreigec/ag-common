@@ -41,7 +41,7 @@ export const TooltipContent = (p: ILineChartTooltip) => {
     values: p.values,
   };
 
-  const { part, rest, restTotal } = getLegendItems({
+  const li = getLegendItems({
     data,
   });
 
@@ -52,16 +52,16 @@ export const TooltipContent = (p: ILineChartTooltip) => {
         <span>total</span>
         <Total>{data.total}</Total>
       </Row>
-      {part.map((v) => (
+      {li.part.map((v) => (
         <Row key={v.name + v.value} style={{ color: v.colour }}>
           <ItemTitle>{v.name}</ItemTitle>
           <Total>{v.value}</Total>
         </Row>
       ))}
-      {rest.length > 0 && (
+      {li.rest.length > 0 && (
         <Row>
-          <span>{rest.length} more</span>
-          <Total>{restTotal}</Total>
+          <span>{li.rest.length} more</span>
+          <Total>{li.restTotal}</Total>
         </Row>
       )}
     </Base>
