@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { sumArray } from '../../../common/helpers/math';
-import { getLegendItems } from './getLegendItems';
+import type { ILegendItems } from './getLegendItems';
 import type { ILineChartTooltip } from './types';
 
 const Base = styled.div`
@@ -34,34 +33,29 @@ const Total = styled.span`
     text-decoration: underline;
   }
 `;
-export const TooltipContent = (p: ILineChartTooltip) => {
-  const data = {
-    name: p.name,
-    total: sumArray(p.values.map((a) => a.value)),
-    values: p.values,
-  };
-
-  const li = getLegendItems({
-    data,
-  });
-
+export const TooltipContent = (
+  p: ILineChartTooltip & {
+    legendItems: ILegendItems;
+  },
+) => {
+  const name = p.tt?.(p.selectedXs?.[0].x ?? 0) ?? '';
   return (
     <Base>
-      <Title>{data.name}</Title>
+      <Title>{name}</Title>
       <Row>
         <span>total</span>
-        <Total>{data.total}</Total>
+        <Total>{p.legendItems.total}</Total>
       </Row>
-      {li.part.map((v) => (
-        <Row key={v.name + v.value} style={{ color: v.colour }}>
+      {p.legendItems.part.map((v) => (
+        <Row key={v.name + v.y} style={{ color: v.colour }}>
           <ItemTitle>{v.name}</ItemTitle>
-          <Total>{v.value}</Total>
+          <Total>{v.y}</Total>
         </Row>
       ))}
-      {li.rest.length > 0 && (
+      {p.legendItems.rest.length > 0 && (
         <Row>
-          <span>{li.rest.length} more</span>
-          <Total>{li.restTotal}</Total>
+          <span>{p.legendItems.rest.length} more</span>
+          <Total>{p.legendItems.restTotal}</Total>
         </Row>
       )}
     </Base>

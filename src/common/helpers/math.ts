@@ -88,6 +88,10 @@ export function rangePercentage({
   const v = clamp({ value, min, max });
   const r = (v - min) / (max - min);
 
+  if (isNaN(r)) {
+    return 0;
+  }
+
   return r;
 }
 

@@ -2,15 +2,15 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { distinctBy } from '../../../common';
+import { distinctBy } from '../../../common/helpers/array';
 import { rangePercentage } from '../../../common/helpers/math';
 import { useTooltip } from '../../helpers/useTooltip';
 import { timeLegendTitle, timeTooltipTitle } from './dateHelpers';
-import { legendItemsKeys } from './getLegendItems';
+import { getLegendItems } from './getLegendItems';
 import { interpolate } from './interpolate';
 import { Legend } from './Legend';
 import { TooltipContent } from './TooltipContent';
-import type { ILineChart, ILineChartTooltip } from './types';
+import type { ILineChart, ILineChartState } from './types';
 
 const Base = styled.div`
   width: calc(100% - 1px);
@@ -25,7 +25,7 @@ const Base = styled.div`
 `;
 
 export const LineChart = (p: ILineChart) => {
-  const UT = useTooltip<ILineChartTooltip>();
+  const UT = useTooltip<ILineChartState>();
 
   const { points, xTime } = interpolate(p.data);
 
@@ -45,15 +45,35 @@ export const LineChart = (p: ILineChart) => {
     lt = (s) => s.toString();
   }
 
-  const legendItems = legendItemsKeys(p);
+  const lt2 = lt as (a: number) => string;
 
+  const tt2 = tt as (a: number) => string;
+
+  const legendItems = getLegendItems({
+    colours: p.colours,
+    data: p.data,
+    tt: tt2,
+    lt: lt2,
+    ...UT.pos?.data,
+  });
   return (
     <Base
       className={p.className}
       data-type="lcb"
       onMouseLeave={() => UT.setPos(undefined)}
     >
-      <UT.Comp pos={UT.pos}>{(p) => <TooltipContent {...p} />}</UT.Comp>
+      <UT.Comp pos={UT.pos}>
+        {(p2) => (
+          <TooltipContent
+            {...p2}
+            colours={p.colours}
+            data={p.data}
+            lt={lt2}
+            tt={tt2}
+            legendItems={legendItems}
+          />
+        )}
+      </UT.Comp>
       <svg
         //slight offset to show circles
         viewBox={`-1 -1 102 102`}
@@ -77,38 +97,44 @@ export const LineChart = (p: ILineChart) => {
               max: bb.left + bb.width,
             }) * 100;
 
-          const selectedPoints: { x: number; y: number }[] = points
-            .filter((p) => relativeX >= p.x1 && relativeX < p.x2)
-            .map((a) => ({ x: a.origX, y: a.origY }));
+          let selectedPoints = points.filter(
+            (p) => relativeX >= p.x1 && relativeX < p.x2,
+          );
 
+          //if there are just single dots on the graph, choose the ones that are closest (share the smallest gap distance)
+          if (selectedPoints.length === 0) {
+            const sp1 = points
+              .map((p) => ({
+                ...p,
+                gap: Math.abs(p.x1 - relativeX),
+              }))
+              .sort((a, b) => (a.gap < b.gap ? -1 : 1));
+            const mingap = sp1?.[0].gap;
+            selectedPoints = sp1.filter((r) => r.gap === mingap);
+          }
           const selectedXs = distinctBy(
             p.data.filter(({ x, y }) =>
-              selectedPoints.find((a) => a.x === x && a.y === y),
+              selectedPoints?.find((a) => a.origX === x && a.origY === y),
             ),
             (s) => JSON.stringify(s),
           );
-
-          const td: ILineChartTooltip = {
-            name: tt?.(selectedXs?.[0].x) ?? '',
-            total: 1,
-            values: selectedXs.map((a) => ({
-              colour: p.colours[a.name],
-              name: a.name,
-              value: a.y,
-            })),
-            x: selectedXs?.[0].x,
-          };
-
           UT.setPos({
             element,
             parent,
-            data: td,
+            data: {
+              selectedPoints: selectedPoints.map((a) => ({
+                x: a.origX,
+                y: a.origY,
+              })),
+              selectedXs,
+            },
           });
         }}
       >
         {points.map((p2) => (
           <React.Fragment key={JSON.stringify(p2)}>
-            {(p2.origX === UT.pos?.data.x || p2.x1 === p2.x2) && (
+            {(p2.origX === UT.pos?.data.selectedXs?.[0]?.x ||
+              p2.x1 === p2.x2) && (
               <circle
                 cx={p2.x2}
                 cy={p2.y2}
@@ -119,7 +145,7 @@ export const LineChart = (p: ILineChart) => {
             {p2.x1 !== p2.x2 && (
               <line
                 strokeOpacity={
-                  legendItems.find((f) => f.name === p2.name) ? 1 : 0.3
+                  legendItems.part.find((f) => f.name === p2.name) ? 1 : 0.3
                 }
                 x1={p2.x1}
                 x2={p2.x2}
@@ -131,12 +157,7 @@ export const LineChart = (p: ILineChart) => {
           </React.Fragment>
         ))}
       </svg>
-      <Legend
-        colours={p.colours}
-        data={p.data}
-        tooltipTitle={tt}
-        legendTitle={lt}
-      />
+      <Legend data={p.data} colours={p.colours} lt={lt} />
     </Base>
   );
 };

@@ -67,6 +67,7 @@ export const dateTimeToNearestMinute = (minutes: number, date?: Date) => {
 };
 
 export const dayInMs = 8.64e7;
+export const twelveHMs = 43200000;
 
 /** strings are padded numbers, eg '02' */
 export interface IUtcDateParams {

@@ -18,8 +18,8 @@ export const colours = {
 };
 
 export const LCD2 = [
-  { x: 1709166259647, y: 2, name: 'analytica.click', rollup: false },
-  { x: 1709185768760, y: 79, name: 'eldenring.quest', rollup: false },
+  { x: 1709211600000, y: 2, name: 'analytica.click', rollup: false },
+  { x: 1709211600000, y: 79, name: 'eldenring.quest', rollup: false },
 ];
 export const LCD = [
   {

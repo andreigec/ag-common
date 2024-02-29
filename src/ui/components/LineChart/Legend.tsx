@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
-import { legendItemsKeys } from './getLegendItems';
-import type { ILineChart } from './types';
+import { twelveHMs } from '../../../common';
+import { take } from '../../../common/helpers/array';
+import type { ILineChartItemRaw } from './types';
 
 const Base = styled.div`
   display: flex;
@@ -58,31 +59,66 @@ const Col = styled.div`
   border-radius: 50%;
   margin-right: 0.25rem;
 `;
+const legendItemsKeys = ({
+  data,
+  colours,
+}: {
+  data: ILineChartItemRaw[];
+  colours: Record<string, string>;
+}) => {
+  const val: Record<string, { value: number; colour: string; name: string }> =
+    {};
 
-export const Legend = (p: ILineChart) => {
-  const legendItems = legendItemsKeys(p);
-  const xs = p.data.map((a) => a.x);
+  data.forEach((d) => {
+    if (!val[d.name]) {
+      val[d.name] = { colour: colours[d.name], name: d.name, value: d.y };
+    } else {
+      val[d.name].value += d.y;
+    }
+  });
+  const values = Object.values(val);
+
+  const legendItems = take(values, 3).part.map((v) => ({
+    colour: v.colour,
+    name: v.name,
+  }));
+  return legendItems;
+};
+
+export const Legend = ({
+  data,
+  lt,
+  colours,
+}: {
+  data: ILineChartItemRaw[];
+  colours: Record<string, string>;
+  lt: (a: number) => string;
+}) => {
+  const legendItems = legendItemsKeys({ data, colours });
+  const xs = data.map((a) => a.x);
   const minX = Math.min(...xs);
   const maxX = Math.max(...xs);
 
   const itemsRaw = [minX];
   const gap = (maxX - minX) / 10;
-  if (gap > 1) {
+
+  if (gap > twelveHMs) {
     for (let a = 1; a < 9; a += 1) {
       itemsRaw.push(itemsRaw[a - 1] + gap);
     }
   }
   itemsRaw.push(maxX);
 
-  const items = itemsRaw.map((d) => p.legendTitle?.(d) ?? d);
+  const items = itemsRaw.map((d) => lt(d) ?? d);
 
   return (
     <Base>
       <Bar>
         <Line />
         <Numbers>
-          {items.map((i) => (
-            <span key={i}>{i}</span>
+          {items.map((i, i2) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <span key={i + i2}>{i}</span>
           ))}
         </Numbers>
       </Bar>

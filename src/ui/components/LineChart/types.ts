@@ -4,15 +4,18 @@ export type ILineChartItemRaw = {
   name: string;
 };
 
-export interface ILineChartTooltip {
-  name: string;
-  total: number;
-  x?: number;
-  values: {
-    name: string;
-    value: number;
-    colour: string;
+export interface ILineChartState {
+  selectedPoints?: {
+    x: number;
+    y: number;
   }[];
+  selectedXs?: ILineChartItemRaw[];
+}
+export interface ILineChartTooltip extends ILineChartState {
+  tt: (a: number) => string;
+  lt: (a: number) => string;
+  data: ILineChartItemRaw[];
+  colours: Record<string, string>;
 }
 
 export interface ILineChart {
