@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
+import type { IVarStyles } from '../../styles/common';
 import { getLegendItems } from './getLegendItems';
 import type { IBarChartData } from './types';
 
 const Base = styled.div`
-  background-color: var(--main-bg);
-  border: solid 1px var(--main-bg-mid);
   padding: 0.5rem;
 `;
 
@@ -37,14 +36,21 @@ const Total = styled.span`
 export const TooltipContent = ({
   data,
   selectedKey,
+  style,
 }: {
   data: IBarChartData;
   selectedKey?: string;
+  style: IVarStyles;
 }) => {
   const { part, rest, restTotal } = getLegendItems({ data, selectedKey });
 
   return (
-    <Base>
+    <Base
+      style={{
+        ...style,
+        border: `solid 1px ${style.borderColor}`,
+      }}
+    >
       <Title>{data.name}</Title>
       <Row>
         <span>total</span>

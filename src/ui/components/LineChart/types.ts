@@ -1,3 +1,5 @@
+import type { IVarStyles } from '../../styles/common';
+
 export type ILineChartItemRaw = {
   x: number;
   y: number;
@@ -25,4 +27,5 @@ export interface ILineChart {
   colours: Record<string, string>;
   tooltipTitle?: (a: number) => string;
   legendTitle?: (a: number) => string;
+  style: Partial<IVarStyles>;
 }

@@ -9,11 +9,7 @@ export const Magnify = ({
     fill?: string;
   } & CSSProperties;
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 490 490"
-    style={{ ...style }}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 490" style={style}>
     <path
       fill="none"
       stroke={style?.fill ?? 'black'}

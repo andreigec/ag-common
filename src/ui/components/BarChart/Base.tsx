@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 
 import { useTooltip } from '../../helpers/useTooltip';
+import { getVarStyles, type IVarStyles } from '../../styles/common';
 import { Item } from './Item';
 import { Legend } from './Legend';
 import { TooltipContent } from './TooltipContent';
@@ -14,7 +15,6 @@ const BarChartBase = styled.div`
   height: 100%;
   margin-top: 0.5rem;
   position: relative;
-  background-color: var(--main-bg);
 `;
 
 const ItemStyled = styled(Item)`
@@ -25,16 +25,26 @@ const ItemStyled = styled(Item)`
   }
 `;
 
-export const BarChart = ({ data: dataRaw }: { data: IBarChartData[] }) => {
-  const UT = useTooltip<{ data: IBarChartData; selectedKey?: string }>();
+export const BarChart = ({
+  data: dataRaw,
+  style: sRaw,
+}: {
+  data: IBarChartData[];
+  style?: Partial<IVarStyles>;
+}) => {
+  const style = getVarStyles(sRaw);
+  const UT = useTooltip<{ selectedKey?: string; data: IBarChartData }>();
 
   const maxWidth = Math.max(...dataRaw.map((a) => a.total));
 
   return (
-    <BarChartBase data-type="bcb">
-      <UT.Comp pos={UT.pos}>{(p) => <TooltipContent {...p} />}</UT.Comp>
+    <BarChartBase data-type="bcb" style={style}>
+      <UT.Comp pos={UT.pos}>
+        {(p) => <TooltipContent {...p} style={style} />}
+      </UT.Comp>
       {dataRaw.map((data) => (
         <ItemStyled
+          style={style}
           key={data.name}
           data={data}
           maxWidth={maxWidth}
@@ -47,12 +57,12 @@ export const BarChart = ({ data: dataRaw }: { data: IBarChartData[] }) => {
             UT.setPos({
               element,
               parent: element.currentTarget.closest("[data-type='bcb']"),
-              data: { data, selectedKey },
+              data: { selectedKey, data },
             });
           }}
         />
       ))}
-      <Legend data={dataRaw} maxWidth={maxWidth} />
+      <Legend data={dataRaw} maxWidth={maxWidth} style={style} />
     </BarChartBase>
   );
 };

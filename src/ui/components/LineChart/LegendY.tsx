@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
+import type { IVarStyles } from '../../styles/common';
 import type { ILineChartItemRaw } from './types';
 
 const Base = styled.div`
@@ -16,13 +17,17 @@ const Numbers = styled.div`
   justify-content: space-between;
   z-index: 1;
   > span {
-    color: var(--main-fg);
-    background-color: var(--main-bg);
     text-align: right;
   }
 `;
 
-export const LegendY = ({ data }: { data: ILineChartItemRaw[] }) => {
+export const LegendY = ({
+  data,
+  style,
+}: {
+  data: ILineChartItemRaw[];
+  style: IVarStyles;
+}) => {
   const ys = data.map((a) => a.y);
   const minY = Math.min(...ys);
   const maxY = Math.max(...ys);
@@ -39,11 +44,19 @@ export const LegendY = ({ data }: { data: ILineChartItemRaw[] }) => {
   const ch = maxY.toString().length;
 
   return (
-    <Base style={{ maxWidth: `${ch}ch`, paddingRight: '1ch' }}>
+    <Base style={{ ...style, maxWidth: `${ch}ch`, paddingRight: '1ch' }}>
       <Numbers>
         {items.map((i, i2) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <span key={i + i2}>{i}</span>
+          <span
+            // eslint-disable-next-line react/no-array-index-key
+            key={i + i2}
+            style={{
+              color: style.color,
+              backgroundColor: style.backgroundColor,
+            }}
+          >
+            {i}
+          </span>
         ))}
       </Numbers>
     </Base>

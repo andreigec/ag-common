@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
+import type { IVarStyles } from '../../styles/common';
 import type { ILegendItems } from './getLegendItems';
 import type { ILineChartTooltip } from './types';
 
 const Base = styled.div`
-  background-color: var(--main-bg);
-  border: solid 1px var(--main-bg-mid);
   padding: 0.5rem;
 `;
 
@@ -37,10 +36,16 @@ export const TooltipContent = (
   p: ILineChartTooltip & {
     legendItems: ILegendItems;
   },
+  style: IVarStyles,
 ) => {
   const name = p.tt?.(p.selectedXs?.[0].x ?? 0) ?? '';
   return (
-    <Base>
+    <Base
+      style={{
+        ...style,
+        border: `solid 1px ${style.borderColor}`,
+      }}
+    >
       <Title>{name}</Title>
       <Row>
         <span>total</span>

@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 
 import { twelveHMs } from '../../../common';
+import type { IVarStyles } from '../../styles/common';
 import { getLegendItems } from './getLegendItems';
 import type { ILineChartItemRaw } from './types';
 
@@ -9,7 +10,6 @@ const Base = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
-  color: var(--main-fg);
 `;
 
 const Bar = styled.div`
@@ -25,7 +25,6 @@ const Line = styled.div`
   height: 2px;
   left: 0;
   right: 0;
-  background-color: var(--main-fg);
 `;
 
 const Numbers = styled.div`
@@ -34,10 +33,6 @@ const Numbers = styled.div`
   flex-flow: row;
   justify-content: space-between;
   z-index: 1;
-
-  > span {
-    background-color: var(--main-bg);
-  }
 `;
 
 const Items = styled.div`
@@ -74,11 +69,13 @@ export const LegendX = ({
   lt,
   tt,
   colours,
+  style,
 }: {
   data: ILineChartItemRaw[];
   colours: Record<string, string>;
   lt: (a: number) => string;
   tt: (a: number) => string;
+  style: IVarStyles;
 }) => {
   const legendItems = getLegendItems({
     data,
@@ -109,13 +106,24 @@ export const LegendX = ({
   const ch = maxY.toString().length + 1;
 
   return (
-    <Base style={{ marginLeft: 'auto', width: `calc(100% - ${ch}ch)` }}>
+    <Base
+      style={{
+        ...style,
+        marginLeft: 'auto',
+        width: `calc(100% - ${ch}ch)`,
+      }}
+    >
       <Bar>
-        <Line />
+        <Line style={{ backgroundColor: style.color }} />
         <Numbers>
           {items.map((i, i2) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <span key={i + i2}>{i}</span>
+            <span
+              // eslint-disable-next-line react/no-array-index-key
+              key={i + i2}
+              style={{ backgroundColor: style.backgroundColor }}
+            >
+              {i}
+            </span>
           ))}
         </Numbers>
       </Bar>

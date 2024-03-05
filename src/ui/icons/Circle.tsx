@@ -15,7 +15,7 @@ export const Circle = ({
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="2 2 20 20"
-    style={{ ...style }}
+    style={style}
   >
     <path
       fill="none"

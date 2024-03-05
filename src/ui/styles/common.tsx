@@ -1,6 +1,7 @@
 'use client';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import type { CSSProperties } from 'react';
 
 import { colours } from './colours';
 
@@ -80,3 +81,21 @@ export const Card = styled.div`
   padding: 1rem;
   border: solid 2px ${colours.lighter};
 `;
+
+export interface IVarStyles {
+  /** default var(--main-fg) */
+  color: string;
+  /** default var(--main-bg) */
+  backgroundColor: string;
+  /** default var(--main-bg-mid) */
+  borderColor: string;
+}
+
+export const getVarStyles = (
+  raw?: Partial<IVarStyles & CSSProperties>,
+): IVarStyles => ({
+  ...raw,
+  color: raw?.color ?? 'var(--main-fg)',
+  backgroundColor: raw?.backgroundColor ?? 'var(--main-bg)',
+  borderColor: raw?.borderColor ?? 'var(--main-bg-mid)',
+});

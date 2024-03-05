@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 
 import { distinctBy, flat } from '../../../common/helpers/array';
+import type { IVarStyles } from '../../styles/common';
 import { getLegendItems } from './getLegendItems';
 import type { IBarChartData } from './types';
 
@@ -24,7 +25,6 @@ const Line = styled.div`
   height: 2px;
   left: 0;
   right: 0;
-  background-color: var(--main-fg);
 `;
 
 const Numbers = styled.div`
@@ -34,9 +34,6 @@ const Numbers = styled.div`
   flex-flow: row;
   justify-content: space-between;
   z-index: 1;
-  > span {
-    background-color: var(--main-bg);
-  }
 `;
 
 const Items = styled.div`
@@ -64,9 +61,11 @@ const Col = styled.div`
 export const Legend = ({
   data,
   maxWidth,
+  style,
 }: {
   data: IBarChartData[];
   maxWidth: number;
+  style: IVarStyles;
 }) => {
   const items = [0];
   if (maxWidth > 10) {
@@ -89,12 +88,22 @@ export const Legend = ({
   ).sort((a, b) => (a.name < b.name ? -1 : 1));
 
   return (
-    <Base>
+    <Base style={style}>
       <Bar>
-        <Line />
+        <Line
+          style={{ background: style.backgroundColor, color: style.color }}
+        />
         <Numbers>
           {items.map((i) => (
-            <span key={i}>{i}</span>
+            <span
+              style={{
+                backgroundColor: style.backgroundColor,
+                color: style.color,
+              }}
+              key={i}
+            >
+              {i}
+            </span>
           ))}
         </Numbers>
       </Bar>

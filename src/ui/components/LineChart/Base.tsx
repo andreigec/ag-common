@@ -5,6 +5,7 @@ import React from 'react';
 import { distinctBy } from '../../../common/helpers/array';
 import { rangePercentage } from '../../../common/helpers/math';
 import { useTooltip } from '../../helpers/useTooltip';
+import { getVarStyles } from '../../styles/common';
 import { FlexRow } from '../FlexRow';
 import { timeLegendTitle, timeTooltipTitle } from './dateHelpers';
 import { getLegendItems } from './getLegendItems';
@@ -29,14 +30,13 @@ const Base = styled.div`
 
 const Svg = styled.svg`
   padding: 2px;
-  border-left: solid 1px var(--main-fg);
-  border-top: solid 1px var(--main-fg);
   width: calc(100% - 5px);
   height: calc(100% - 5px);
 `;
 
 export const LineChart = (p: ILineChart) => {
   const UT = useTooltip<ILineChartState>();
+  const style = getVarStyles(p.style);
 
   const { points, xTime } = interpolate(p.data);
 
@@ -71,6 +71,10 @@ export const LineChart = (p: ILineChart) => {
 
   const SvgC = (
     <Svg
+      style={{
+        borderLeft: `solid 1px ${style.borderColor}`,
+        borderTop: `solid 1px ${style.borderColor}`,
+      }}
       transform="scale(-1,1) scale(-1,-1)"
       strokeWidth={'3px'}
       fillOpacity={1}
@@ -155,6 +159,7 @@ export const LineChart = (p: ILineChart) => {
       className={p.className}
       data-type="lcb"
       onMouseLeave={() => UT.setPos(undefined)}
+      style={style}
     >
       <UT.Comp pos={UT.pos}>
         {(p2) => (
@@ -169,10 +174,16 @@ export const LineChart = (p: ILineChart) => {
         )}
       </UT.Comp>
       <FlexRow noWrap>
-        <LegendY data={p.data} />
+        <LegendY data={p.data} style={style} />
         {SvgC}
       </FlexRow>
-      <LegendX data={p.data} colours={p.colours} lt={lt} tt={tt} />
+      <LegendX
+        data={p.data}
+        colours={p.colours}
+        lt={lt}
+        tt={tt}
+        style={style}
+      />
     </Base>
   );
 };

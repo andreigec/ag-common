@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import type { MouseEventHandler } from 'react';
 import React from 'react';
 
-import { HardOutline } from '../../styles';
+import type { IVarStyles } from '../../styles';
+import { HardOutlineFilter } from '../../styles';
 import type { IBarChartData } from './types';
 
 const Base = styled.div`
@@ -17,8 +18,6 @@ const Base = styled.div`
 const Title = styled.div`
   position: absolute;
   left: 0.25rem;
-  color: var(--main-fg);
-  ${HardOutline('var(--main-bg)')};
 `;
 
 export const Item = ({
@@ -27,19 +26,29 @@ export const Item = ({
   onMouseMove,
   onMouseLeave,
   maxWidth,
+  style,
 }: {
   data: IBarChartData;
   className?: string;
   onMouseMove?: MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: MouseEventHandler<HTMLDivElement>;
   maxWidth: number;
+  style: IVarStyles;
 }) => (
   <Base
     className={className}
     onMouseMove={onMouseMove}
     onMouseLeave={onMouseLeave}
+    style={style}
   >
-    <Title>{data.name}</Title>
+    <Title
+      style={{
+        color: style.color,
+        filter: HardOutlineFilter(style.backgroundColor),
+      }}
+    >
+      {data.name}
+    </Title>
     {data.values.map((v) => (
       <div
         data-barchartitem-key={v.name}
