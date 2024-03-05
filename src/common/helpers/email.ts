@@ -3,7 +3,7 @@ import { notEmpty } from './array';
 const regex =
   /^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
-export const isEmailValid = (email: string) => {
+export const isEmailValid = (email: string | undefined) => {
   if (!email) return false;
 
   if (email.length > 256) return false;
