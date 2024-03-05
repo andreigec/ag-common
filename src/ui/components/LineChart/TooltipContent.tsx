@@ -35,15 +35,15 @@ const Total = styled.span`
 export const TooltipContent = (
   p: ILineChartTooltip & {
     legendItems: ILegendItems;
+    style: IVarStyles;
   },
-  style: IVarStyles,
 ) => {
   const name = p.tt?.(p.selectedXs?.[0].x ?? 0) ?? '';
   return (
     <Base
       style={{
-        ...style,
-        border: `solid 1px ${style.borderColor}`,
+        ...p.style,
+        border: `solid 1px ${p.style.borderColor}`,
       }}
     >
       <Title>{name}</Title>

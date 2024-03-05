@@ -170,6 +170,7 @@ export const LineChart = (p: ILineChart) => {
             lt={lt2}
             tt={tt2}
             legendItems={legendItems}
+            style={style}
           />
         )}
       </UT.Comp>
