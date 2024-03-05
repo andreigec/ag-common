@@ -10,8 +10,17 @@ const base: Meta<typeof LineChart> = {
   component: LineChart,
 };
 
+const style = {
+  width: '100%',
+  height: '40vh',
+  '--main-bg': 'white',
+  '--main-bg-mid': '#ccc',
+  '--main-fg': '#111',
+  '--main-fg-mid': '#555',
+  'background-color': 'var(--main-bg)',
+};
 const Template: StoryFn<typeof LineChart> = (args) => (
-  <div style={{ width: '100%', height: '40vh' }}>
+  <div style={style}>
     <LineChart {...args} />
   </div>
 );

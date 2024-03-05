@@ -9,6 +9,7 @@ const Base = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
+  color: var(--main-fg);
 `;
 
 const Bar = styled.div`
@@ -33,6 +34,7 @@ const Numbers = styled.div`
   flex-flow: row;
   justify-content: space-between;
   z-index: 1;
+
   > span {
     background-color: var(--main-bg);
   }
@@ -44,13 +46,20 @@ const Items = styled.div`
   flex-flow: row wrap;
   position: relative;
   justify-content: space-between;
+  margin-top: 0.5rem;
 `;
+
 const Item = styled.div`
   display: flex;
   flex-flow: row;
   position: relative;
   align-items: center;
-  flex-basis: 25%;
+  &:not(:first-of-type) {
+    padding-left: 0.5rem;
+  }
+  &:not(:last-of-type) {
+    padding-right: 0.5rem;
+  }
 `;
 
 const Col = styled.div`
@@ -60,7 +69,7 @@ const Col = styled.div`
   margin-right: 0.25rem;
 `;
 
-export const Legend = ({
+export const LegendX = ({
   data,
   lt,
   tt,
@@ -79,14 +88,17 @@ export const Legend = ({
     tt,
   }).part;
   const xs = data.map((a) => a.x);
+  const ys = data.map((a) => a.y);
   const minX = Math.min(...xs);
   const maxX = Math.max(...xs);
+  const maxY = Math.max(...ys);
 
   const itemsRaw = [minX];
-  const gap = (maxX - minX) / 10;
+  const gc = 8;
+  const gap = (maxX - minX) / gc;
 
   if (gap > twelveHMs) {
-    for (let a = 1; a < 9; a += 1) {
+    for (let a = 1; a < gc; a += 1) {
       itemsRaw.push(itemsRaw[a - 1] + gap);
     }
   }
@@ -94,8 +106,10 @@ export const Legend = ({
 
   const items = itemsRaw.map((d) => lt(d) ?? d);
 
+  const ch = maxY.toString().length + 1;
+
   return (
-    <Base>
+    <Base style={{ marginLeft: 'auto', width: `calc(100% - ${ch}ch)` }}>
       <Bar>
         <Line />
         <Numbers>
