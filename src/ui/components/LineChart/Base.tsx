@@ -7,7 +7,7 @@ import { rangePercentage } from '../../../common/helpers/math';
 import { useTooltip } from '../../helpers/useTooltip';
 import { getVarStyles } from '../../styles/common';
 import { FlexRow } from '../FlexRow';
-import { timeLegendTitle, timeTooltipTitle } from './dateHelpers';
+import { isToday, timeLegendTitle, timeTooltipTitle } from './dateHelpers';
 import { getLegendItems } from './getLegendItems';
 import { interpolate } from './interpolate';
 import { LegendX } from './LegendX';
@@ -32,6 +32,12 @@ const Svg = styled.svg`
   padding: 2px;
   width: calc(100% - 5px);
   height: calc(100% - 5px);
+
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 1000;
+    }
+  }
 `;
 
 export const LineChart = (p: ILineChart) => {
@@ -147,7 +153,13 @@ export const LineChart = (p: ILineChart) => {
               x2={`${p2.x2}%`}
               y1={`${p2.y1}%`}
               y2={`${p2.y2}%`}
-              style={{ stroke: p.colours[p2.name] }}
+              style={{
+                stroke: p.colours[p2.name],
+                ...(p2.isToday && {
+                  strokeDasharray: 10,
+                  animation: 'dash 50s linear reverse infinite',
+                }),
+              }}
             />
           )}
         </React.Fragment>

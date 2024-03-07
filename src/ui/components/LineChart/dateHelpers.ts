@@ -24,3 +24,11 @@ export const timeTooltipTitle = (s: number) => {
 
   return `${dmy} ${diff}`;
 };
+
+export const isToday = (s: number) => {
+  if (!s) {
+    return false;
+  }
+  const td = new Date().getTime() - Number(s);
+  return td < 0;
+};

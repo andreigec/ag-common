@@ -1,6 +1,7 @@
 import { distinctBy, groupByList } from '../../../common';
 import { rangePercentage } from '../../../common/helpers/math';
 import { isDate } from '../../helpers/date';
+import { isToday } from './dateHelpers';
 import type { ILineChartItemRaw } from './types';
 
 interface ILineChartItemComp {
@@ -11,7 +12,9 @@ interface ILineChartItemComp {
   name: string;
   origX: number;
   origY: number;
+  isToday: boolean;
 }
+
 export const interpolate = (raw: ILineChartItemRaw[]) => {
   const points: ILineChartItemComp[] = [];
   const xs = raw.map((r) => r.x);
@@ -65,6 +68,7 @@ export const interpolate = (raw: ILineChartItemRaw[]) => {
         name: p.name,
         origX: p.x,
         origY: p.y,
+        isToday: isToday(p.x),
       } satisfies ILineChartItemComp;
     });
     points.push(...distinctBy(p, (s) => JSON.stringify(s)));

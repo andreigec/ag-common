@@ -1,3 +1,5 @@
+import { dayInMs } from '../src/common/helpers/date';
+
 export const colours = {
   'analytica.click': 'rgb(11,132,165)',
   'bollardart.com.au': 'rgb(255,160,86)',
@@ -17,10 +19,16 @@ export const colours = {
   'webscrape.app': 'rgb(141,221,208)',
 };
 
-export const LCD2 = [
-  { x: 1709211600000, y: 2, name: 'analytica.click', rollup: false },
-  { x: 1709211600000, y: 79, name: 'eldenring.quest', rollup: false },
-];
+function convertToMidnight(date: Date): Date {
+  // Set the time to midnight (00:00:00)
+  date.setHours(0);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+
+  return date;
+}
+
 export const LCD = [
   {
     x: 1707566400000,
@@ -467,7 +475,7 @@ export const LCD = [
     rollup: false,
   },
   {
-    x: 1709211600000,
+    x: convertToMidnight(new Date()).getTime() + dayInMs,
     y: 45,
     name: 'eldenring.quest',
     rollup: false,
