@@ -7,7 +7,7 @@ import { rangePercentage } from '../../../common/helpers/math';
 import { useTooltip } from '../../helpers/useTooltip';
 import { getVarStyles } from '../../styles/common';
 import { FlexRow } from '../FlexRow';
-import { isToday, timeLegendTitle, timeTooltipTitle } from './dateHelpers';
+import { timeLegendTitle, timeTooltipTitle } from './dateHelpers';
 import { getLegendItems } from './getLegendItems';
 import { interpolate } from './interpolate';
 import { LegendX } from './LegendX';
@@ -135,15 +135,24 @@ export const LineChart = (p: ILineChart) => {
     >
       {points.map((p2) => (
         <React.Fragment key={JSON.stringify(p2)}>
-          {(p2.origX === UT.pos?.data.selectedXs?.[0]?.x ||
-            p2.x1 === p2.x2) && (
-            <circle
-              cx={`${p2.x2}%`}
-              cy={`${p2.y2}%`}
-              r="8px"
-              fill={p.colours[p2.name]}
-            ></circle>
-          )}
+          {
+            //mouse selected
+            (p2.origX === UT.pos?.data.selectedXs?.[0]?.x ||
+              //only single date point
+              p2.x1 === p2.x2 ||
+              //is the last point
+              p2.isLast) && (
+              <circle
+                cx={`${p2.x2}%`}
+                cy={`${p2.y2}%`}
+                r="8px"
+                style={{ zIndex: 1 }}
+                {...(p2.isToday && p2.isLast
+                  ? { stroke: p.colours[p2.name], fill: 'transparent' }
+                  : { fill: p.colours[p2.name] })}
+              ></circle>
+            )
+          }
           {p2.x1 !== p2.x2 && (
             <line
               strokeOpacity={

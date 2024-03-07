@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 
 import { twelveHMs } from '../../../common';
+import { bigScreen, smallScreen } from '../../styles';
 import type { IVarStyles } from '../../styles/common';
 import { getLegendItems } from './getLegendItems';
 import type { ILineChartItemRaw } from './types';
@@ -33,6 +34,13 @@ const Numbers = styled.div`
   flex-flow: row;
   justify-content: space-between;
   z-index: 1;
+
+  @media ${smallScreen} {
+    [data-group='1'],
+    [data-group='2'] {
+      display: none;
+    }
+  }
 `;
 
 const Items = styled.div`
@@ -90,18 +98,18 @@ export const LegendX = ({
   const maxX = Math.max(...xs);
   const maxY = Math.max(...ys);
 
-  const itemsRaw = [minX];
+  const itemsRaw: { v: number; group: number }[] = [{ v: minX, group: 0 }];
   const gc = 8;
   const gap = (maxX - minX) / gc;
 
   if (gap > twelveHMs) {
     for (let a = 1; a < gc; a += 1) {
-      itemsRaw.push(itemsRaw[a - 1] + gap);
+      itemsRaw.push({ v: itemsRaw[a - 1].v + gap, group: (a % 3) + 1 });
     }
   }
-  itemsRaw.push(maxX);
+  itemsRaw.push({ v: maxX, group: 0 });
 
-  const items = itemsRaw.map((d) => lt(d) ?? d);
+  const items = itemsRaw.map((d) => ({ v: lt(d.v) ?? d.v, group: d.group }));
 
   const ch = maxY.toString().length + 1;
 
@@ -119,10 +127,11 @@ export const LegendX = ({
           {items.map((i, i2) => (
             <span
               // eslint-disable-next-line react/no-array-index-key
-              key={i + i2}
+              key={i.v + i2}
+              data-group={i.group}
               style={{ backgroundColor: style.backgroundColor }}
             >
-              {i}
+              {i.v}
             </span>
           ))}
         </Numbers>

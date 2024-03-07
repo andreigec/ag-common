@@ -13,6 +13,7 @@ interface ILineChartItemComp {
   origX: number;
   origY: number;
   isToday: boolean;
+  isLast: boolean;
 }
 
 export const interpolate = (raw: ILineChartItemRaw[]) => {
@@ -69,6 +70,7 @@ export const interpolate = (raw: ILineChartItemRaw[]) => {
         origX: p.x,
         origY: p.y,
         isToday: isToday(p.x),
+        isLast: i === items.length - 1,
       } satisfies ILineChartItemComp;
     });
     points.push(...distinctBy(p, (s) => JSON.stringify(s)));
