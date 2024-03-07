@@ -133,46 +133,49 @@ export const LineChart = (p: ILineChart) => {
         });
       }}
     >
-      {points.map((p2) => (
-        <React.Fragment key={JSON.stringify(p2)}>
-          {
-            //mouse selected
-            (p2.origX === UT.pos?.data.selectedXs?.[0]?.x ||
-              //only single date point
-              p2.x1 === p2.x2 ||
-              //is the last point
-              p2.isLast) && (
-              <circle
-                cx={`${p2.x2}%`}
-                cy={`${p2.y2}%`}
-                r="8px"
-                style={{ zIndex: 1 }}
-                {...(p2.isToday && p2.isLast
-                  ? { stroke: p.colours[p2.name], fill: 'transparent' }
-                  : { fill: p.colours[p2.name] })}
-              ></circle>
-            )
-          }
-          {p2.x1 !== p2.x2 && (
-            <line
-              strokeOpacity={
-                legendItems.part.find((f) => f.name === p2.name) ? 1 : 0.3
-              }
-              x1={`${p2.x1}%`}
-              x2={`${p2.x2}%`}
-              y1={`${p2.y1}%`}
-              y2={`${p2.y2}%`}
-              style={{
-                stroke: p.colours[p2.name],
-                ...(p2.isToday && {
-                  strokeDasharray: 10,
-                  animation: 'dash 50s linear reverse infinite',
-                }),
-              }}
-            />
-          )}
-        </React.Fragment>
-      ))}
+      {points.map((p2) => {
+        const isSelected = p2.origX === UT.pos?.data.selectedXs?.[0]?.x;
+        return (
+          <React.Fragment key={JSON.stringify(p2)}>
+            {
+              //mouse selected
+              (isSelected ||
+                //only single date point
+                p2.x1 === p2.x2 ||
+                //is the last point
+                p2.isLast) && (
+                <circle
+                  cx={`${p2.x2}%`}
+                  cy={`${p2.y2}%`}
+                  r="8px"
+                  style={{ zIndex: 1 }}
+                  {...(p2.isToday && p2.isLast && !isSelected
+                    ? { stroke: p.colours[p2.name], fill: 'transparent' }
+                    : { fill: p.colours[p2.name] })}
+                ></circle>
+              )
+            }
+            {p2.x1 !== p2.x2 && (
+              <line
+                strokeOpacity={
+                  legendItems.part.find((f) => f.name === p2.name) ? 1 : 0.3
+                }
+                x1={`${p2.x1}%`}
+                x2={`${p2.x2}%`}
+                y1={`${p2.y1}%`}
+                y2={`${p2.y2}%`}
+                style={{
+                  stroke: p.colours[p2.name],
+                  ...(p2.isToday && {
+                    strokeDasharray: 10,
+                    animation: 'dash 50s linear reverse infinite',
+                  }),
+                }}
+              />
+            )}
+          </React.Fragment>
+        );
+      })}
     </Svg>
   );
   return (
