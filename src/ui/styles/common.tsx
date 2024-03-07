@@ -19,7 +19,7 @@ export const HardOutlineFilter = (outlineColour = 'white', sizePx = 1) => {
   return `drop-shadow(${px} ${px} 0px ${outlineColour})
   drop-shadow(-${px} ${px} 0px ${outlineColour})
   drop-shadow(${px} -${px} 0px ${outlineColour})
-  drop-shadow(-${px} -${px} 0px ${outlineColour});`;
+  drop-shadow(-${px} -${px} 0px ${outlineColour})`;
 };
 
 /** disable user text selection */

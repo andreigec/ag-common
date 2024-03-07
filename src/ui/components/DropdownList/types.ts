@@ -8,6 +8,8 @@ export interface IDropdownList<T> {
    */
   value?: T;
   onChange: (v: T | undefined, index: number) => void;
+  /** will call on close/click outside */
+  onClose?: () => void;
   /**
    * placeholder title for list
    */

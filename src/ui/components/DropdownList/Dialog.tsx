@@ -12,8 +12,8 @@ export const DropdownListDialog = async <T,>(
 ): Promise<undefined | [v: T, index: number]> => {
   return new Promise((res) => {
     const id = 'ag-common-ddld';
+    //already open
     if (document.querySelectorAll('#' + id).length) {
-      res(undefined);
       return;
     }
 
@@ -27,6 +27,10 @@ export const DropdownListDialog = async <T,>(
       <DropdownList
         {...p}
         open
+        onClose={() => {
+          root.unmount();
+          wrapper.remove();
+        }}
         onChange={(v, i) => {
           root.unmount();
           wrapper.remove();

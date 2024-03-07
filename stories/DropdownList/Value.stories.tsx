@@ -22,7 +22,9 @@ Value.args = {
   value: 'LONG VALUEEEE',
   placeholder: 'test ph',
   onChange: (a, b) => alert(`item=${a} index=${b}`),
-  renderF: (r) => <div>{r as string}</div>,
+  renderF: (r) => (
+    <div style={{ width: '50px', height: '50px' }}>{r as string}</div>
+  ),
 } satisfies IDropdownList<string>;
 export default base;
 

@@ -43,7 +43,6 @@ const ListItemStyle = styled.div`
   padding-left: 0.5rem;
   flex-grow: 1;
   padding: 1rem;
-  height: calc(100% - 2rem);
   cursor: pointer;
   display: flex;
   overflow: hidden;
@@ -83,6 +82,7 @@ const ListItem = ({
   onChange?: () => void;
 }) => (
   <ListItemStyle
+    data-type="ddl-item"
     data-selected={selected}
     data-default={defaultV}
     onClick={(e) => {
@@ -107,6 +107,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   useOnClickOutside({ disabled: !open, ref, moveMouseOutside: false }, () => {
     setOpen(false);
     setBounced(false);
+    p.onClose?.();
   });
 
   useEffect(() => {
@@ -173,6 +174,9 @@ export function DropdownList<T>(p: IDropdownList<T>) {
         e.stopPropagation();
         e.preventDefault();
         setOpen(!open);
+        if (open) {
+          p.onClose?.();
+        }
       }}
     >
       <DropItems data-open={open} style={style} data-bounced={bounced}>
