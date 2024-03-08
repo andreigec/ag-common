@@ -45,7 +45,6 @@ const ListItemStyle = styled.div`
   padding: 1rem;
   cursor: pointer;
   display: flex;
-  overflow: hidden;
   justify-content: center;
   align-items: center;
   &[data-default='false'] {
@@ -125,6 +124,7 @@ export function DropdownList<T>(p: IDropdownList<T>) {
       minWidth: `calc(${maxLen}ch + 2rem)`,
       filter: `drop-shadow(1px 1px 0.5rem ${shadow})`,
       maxHeight,
+      width: 'fit-content',
     };
 
     const minPx = convertRemToPixels(2 + maxLen / 2);
