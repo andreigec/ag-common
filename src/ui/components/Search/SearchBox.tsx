@@ -1,6 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { debounce } from '../../helpers/debounce';
 import { filterDataProps } from '../../helpers/dom';
@@ -52,33 +52,36 @@ export interface ISearchBox {
   placeholderText?: string;
   searchText: string;
   setSearchText: (val: string, enterPressed: boolean) => void;
-  defaultValue?: string;
   className?: string;
   textBoxRef?: React.RefObject<IRefTextEdit>;
 }
 export const SearchBox = (p: ISearchBox) => {
+  const textBoxRef = useRef<IRefTextEdit>(p.textBoxRef?.current ?? null);
+
   useEffect(() => {
     if (
-      !p.textBoxRef?.current ||
-      p.textBoxRef?.current.getValue() === p.searchText
+      !textBoxRef?.current ||
+      textBoxRef?.current.getValue() === p.searchText
     ) {
       return;
     }
-    p.textBoxRef?.current.setValue(p.searchText);
+    textBoxRef?.current.setValue(p.searchText);
+
     p.setSearchText(p.searchText, true);
   }, [p]);
 
   return (
     <Base data-type="search" className={p.className} {...filterDataProps(p)}>
       <TextEditStyled
-        ref={p.textBoxRef}
+        ref={textBoxRef}
+        defaultValue={p.searchText}
         placeholder={p.placeholderText}
         defaultEditing={{ focus: true }}
         singleLine
         leftContent={
           <MagnifyIcon
             onClick={() =>
-              p.setSearchText(p.textBoxRef?.current?.getValue() || '', true)
+              p.setSearchText(textBoxRef?.current?.getValue() || '', true)
             }
           >
             <Magnify />
@@ -94,12 +97,11 @@ export const SearchBox = (p: ISearchBox) => {
             { key: 'pagesearch', time: 200 },
           )
         }
-        defaultValue={p.defaultValue}
       />
       {p.searchText && (
         <CrossIconStyled
           onClick={() => {
-            p.textBoxRef?.current?.setValue('');
+            textBoxRef?.current?.setValue('');
             p.setSearchText('', true);
           }}
         />

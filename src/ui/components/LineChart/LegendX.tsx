@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 
 import { twelveHMs } from '../../../common';
-import { bigScreen, smallScreen } from '../../styles';
+import { smallScreen } from '../../styles';
 import type { IVarStyles } from '../../styles/common';
 import { getLegendItems } from './getLegendItems';
 import type { ILineChartItemRaw } from './types';

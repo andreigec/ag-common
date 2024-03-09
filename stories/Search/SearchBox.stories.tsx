@@ -20,6 +20,5 @@ SearchBoxB.args = {
   searchText: 'test',
   // eslint-disable-next-line no-alert
   setSearchText: (st, enter) => alert(`st=${st} enter=${enter}`),
-  defaultValue: '2',
 } satisfies ISearchBox;
 export default base;

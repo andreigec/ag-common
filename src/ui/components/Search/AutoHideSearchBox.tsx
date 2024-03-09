@@ -84,7 +84,6 @@ export const AutoHideSearchBox = (p: IAutoHideSearchBox) => {
         {...p}
         className=""
         data-open={open}
-        defaultValue={p.searchText}
         setSearchText={(val, enter) => {
           //we dont want empty enters to do anything
           if (val === '' && enter) {
