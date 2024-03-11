@@ -155,7 +155,19 @@ export const castObject = <TIn, TOut>(
 };
 
 /** remove key values from an object where the value is null or undefined or other specific passed in values  */
-export const removeUndefValuesFromObject = <T>(
+export const removeUndefValuesFromObject = <TA>(orig: Record<string, TA>) => {
+  const ret = {} as Record<string, TA extends undefined | null ? never : TA>;
+  Object.entries(orig).forEach(([k, v]) => {
+    if (v !== null && v !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (ret as any)[k] = v;
+    }
+  });
+  return ret;
+};
+
+/** remove key values from an object where the value is null or undefined or other specific passed in values  */
+export const removeUndefValuesFromObjectAdditional = <T>(
   orig: Record<string, T>,
   /** other than null or undefined */
   ...additionalRemoves: T[]
