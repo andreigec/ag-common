@@ -70,6 +70,17 @@ export const Modal = ({
   className,
   closeOnClickOutside = true,
 }: IModal) => {
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow || '';
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, [open]);
+
   const [bounced, setBounced] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(

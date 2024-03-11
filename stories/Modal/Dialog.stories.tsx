@@ -9,7 +9,8 @@ const ActionWrapper = () => (
     style={{
       color: 'white',
       backgroundColor: 'black',
-      height: '5rem',
+      //test body overflow
+      height: '120vh',
       width: '10rem',
       cursor: 'pointer',
       fontSize: '2rem',

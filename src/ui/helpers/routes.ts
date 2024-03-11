@@ -1,3 +1,4 @@
+import { trimSide } from '../../common';
 import type { TLang } from '../../common/helpers/i18n';
 import { AllLang } from '../../common/helpers/i18n';
 import { castStringlyObject } from '../../common/helpers/object';
@@ -84,6 +85,14 @@ export const getRenderLanguage = (host?: string | null): TLang => {
   return 'en';
 };
 
+export const getClientReqHref = (): IRequestCommon => {
+  const nu = new URL(window.location.href);
+  const url = stripUrl(nu);
+  const query = stringToObject(trimSide(url.search, true, '?') || '', '=', '&');
+  const userAgent = navigator.userAgent;
+  return { url, query, userAgent, lang: getRenderLanguage(url.host) };
+};
+
 /**
  * get parsed url. use on client/SSR. defaults to window location if possible
  * @param param0
@@ -92,27 +101,16 @@ export const getRenderLanguage = (host?: string | null): TLang => {
 export const getClientOrServerReqHref = ({
   url,
   query,
-  forceServer = false,
   userAgent,
 }: {
   url?: URLLite;
   query?: Record<string, string>;
-  /**
-   * if true, wont use window location. default false
-   */
-  forceServer?: boolean;
+
   /** will use navigator if possible */
   userAgent?: string;
-}) => {
+}): IRequestCommon => {
   if (typeof window !== 'undefined') {
-    if (!forceServer) {
-      const nu = new URL(window.location.href);
-      url = stripUrl(nu);
-    }
-  }
-
-  if (typeof navigator !== 'undefined') {
-    userAgent = navigator.userAgent;
+    return getClientReqHref();
   }
 
   if (!url) {
@@ -121,7 +119,10 @@ export const getClientOrServerReqHref = ({
 
   return {
     url,
-    query: { ...query, ...stringToObject(url.search || '', '=', '&') },
+    query: {
+      ...query,
+      ...stringToObject(trimSide(url.search, true, '?') || '', '=', '&'),
+    },
     userAgent: userAgent ?? '?',
     lang: getRenderLanguage(url.host),
   };
@@ -164,7 +165,6 @@ export const getServerReq = ({
   const ret = getClientOrServerReqHref({
     url: !href ? undefined : new URL(href),
     query: parsedQuery,
-    forceServer: true,
     userAgent: headers['user-agent']?.toLowerCase(),
   });
 
