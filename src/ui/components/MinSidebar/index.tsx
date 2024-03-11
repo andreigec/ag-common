@@ -62,12 +62,12 @@ export const MinSidebar = ({
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<boolean>(false);
 
-  useOnClickOutside({ ref }, () => {
-    if (!open || window.innerWidth > smallScreenPx) {
-      return;
-    }
-    setOpen(false);
-  });
+  useOnClickOutside(
+    { ref, disabled: () => !open || window.innerWidth > smallScreenPx },
+    () => {
+      setOpen(false);
+    },
+  );
 
   return (
     <Base

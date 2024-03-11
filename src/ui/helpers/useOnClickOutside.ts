@@ -8,32 +8,47 @@ type Event = MouseEvent | TouchEvent;
 export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   p: {
     ref: RefObject<T>;
-    /**
-     * default false
-     */
-    disabled?: boolean;
+    /** can either be a boolean, or a callback */
+    disabled?: boolean | (() => boolean);
     /** if true, will also consider moving mouse outside div. default false */
     moveMouseOutside?: boolean;
   },
   handler: (event: Event) => void,
 ) {
   useEffect(() => {
-    if (p.disabled || typeof window === 'undefined') {
-      return () => {
-        //
-      };
-    }
-
     const listener = (event: Event) => {
+      const disabled =
+        !p.disabled || typeof p.disabled === 'boolean'
+          ? p.disabled ?? false
+          : p.disabled();
+
+      if (disabled) {
+        return;
+      }
+
       //
       const isRightMB = isRightClick(event);
       if (isRightMB) {
         return;
       }
 
-      const el = p.ref?.current;
-      // Do nothing if clicking ref's element or descendent elements
-      if (!el || el.contains((event?.target as Node) || null)) {
+      const el = p.ref?.current as unknown as Element;
+      if (!el) {
+        return;
+      }
+
+      //walk dom tree to see if nodes match
+      let n = event.target as unknown as Element;
+      let found = false;
+      while (n) {
+        if (n.isEqualNode(el)) {
+          found = true;
+          break;
+        }
+        n = n.parentNode as Element;
+      }
+
+      if (found) {
         return;
       }
 

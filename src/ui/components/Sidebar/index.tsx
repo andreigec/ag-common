@@ -164,12 +164,12 @@ export const Sidebar = ({
     mode === 'defaultClosed' ? false : null,
   );
 
-  useOnClickOutside({ ref }, () => {
-    if (!open || window.innerWidth > smallScreenPx) {
-      return;
-    }
-    setOpen(false);
-  });
+  useOnClickOutside(
+    { ref, disabled: () => !open || window.innerWidth > smallScreenPx },
+    () => {
+      setOpen(false);
+    },
+  );
 
   return (
     <Base
