@@ -45,12 +45,7 @@ export function sumArray(array: number[]) {
   return array.reduce((a, b) => a + b, 0);
 }
 
-export function isNumber(val: string) {
-  const re = new RegExp(`(\\d+\\.?\\d*)(\\d)`);
-  const m = val.toString().match(re);
-
-  return !!m;
-}
+export const isNumber = (num: string) => /^-{0,1}\d*\.{0,1}\d+$/.test(num);
 
 export function toFixedDown(num: number, scale: number) {
   if (!`${num}`.includes('e')) {

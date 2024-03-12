@@ -154,6 +154,26 @@ export const castObject = <TIn, TOut>(
   return ret;
 };
 
+/**
+ * run func over values in object to filter
+ * @param orig
+ * @param castF
+ * @returns
+ */
+export const filterObject = <TA extends Record<string | number, TB>, TB>(
+  orig: TA,
+  filterF: (t: TB) => boolean,
+): Partial<TA> => {
+  const ret = {} as TA;
+  Object.entries(orig).forEach(([k, v]) => {
+    if (filterF(v)) {
+      //@ts-ignore
+      ret[k] = v;
+    }
+  });
+  return ret;
+};
+
 /** remove key values from an object where the value is null or undefined or other specific passed in values  */
 export const removeUndefValuesFromObject = <TA>(orig: Record<string, TA>) => {
   const ret = {} as Record<string, TA extends undefined | null ? never : TA>;
