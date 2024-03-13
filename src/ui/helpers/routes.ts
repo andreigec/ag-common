@@ -85,10 +85,18 @@ export const getRenderLanguage = (host?: string | null): TLang => {
   return 'en';
 };
 
+const getQuery = (url: { search: string }) =>
+  stringToObject(
+    trimSide(decodeURIComponent(url.search.replace(/\+/g, '%20')), true, '?') ||
+      '',
+    '=',
+    '&',
+  );
+
 export const getClientReqHref = (): IRequestCommon => {
   const nu = new URL(window.location.href);
   const url = stripUrl(nu);
-  const query = stringToObject(trimSide(url.search, true, '?') || '', '=', '&');
+  const query = getQuery(url);
   const userAgent = navigator.userAgent;
   return { url, query, userAgent, lang: getRenderLanguage(url.host) };
 };
@@ -121,7 +129,7 @@ export const getClientOrServerReqHref = ({
     url,
     query: {
       ...query,
-      ...stringToObject(trimSide(url.search, true, '?') || '', '=', '&'),
+      ...getQuery(url),
     },
     userAgent: userAgent ?? '?',
     lang: getRenderLanguage(url.host),
