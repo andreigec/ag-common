@@ -1,6 +1,7 @@
 'use client';
 import styled from '@emotion/styled';
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { bounce } from '../../styles';
@@ -69,7 +70,9 @@ export const Modal = ({
   closeOnMoveMouseOutside = false,
   className,
   closeOnClickOutside = true,
+  portalId,
 }: IModal) => {
+  const [elem, setElem] = useState<Element | undefined | null>();
   useEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow || '';
     if (open) {
@@ -103,11 +106,16 @@ export const Modal = ({
     }
   }, [open, bounced]);
 
+  useEffect(() => {
+    if (elem === undefined && portalId) {
+      setElem(document.getElementById(portalId));
+    }
+  }, [elem, portalId]);
+
   if (!open) {
     return <></>;
   }
-
-  return (
+  const Content = (
     <FixedBackground>
       <ModalBase
         data-bounced={bounced}
@@ -123,4 +131,12 @@ export const Modal = ({
       </ModalBase>
     </FixedBackground>
   );
+  if (portalId && elem === undefined) {
+    return null;
+  }
+  if (portalId && elem) {
+    return createPortal(Content, elem);
+  }
+
+  return Content;
 };

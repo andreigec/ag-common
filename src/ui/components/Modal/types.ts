@@ -8,4 +8,6 @@ export interface IModal {
   closeOnMoveMouseOutside?: boolean;
   className?: string;
   closeOnClickOutside?: boolean;
+  /** if provided, will create inside this #id */
+  portalId?: string;
 }
