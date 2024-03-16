@@ -1,3 +1,5 @@
+import type { IVarStyles } from '../../styles';
+
 export type TToastAppearance = 'error' | 'warning' | 'success';
 export type TToastOptions =
   | {
@@ -7,17 +9,30 @@ export type TToastOptions =
     }
   | undefined;
 export type TAddToast = (m: string, options?: TToastOptions) => void;
+export type TAddToastDetailed = (
+  p: Omit<IToastDetailed, 'id' | 'type' | 'options'>,
+  options?: TToastOptions,
+) => void;
 
 export interface IToastProviderOptions {
-  /** default false */
-  darkMode?: boolean;
+  style?: Partial<IVarStyles>;
 }
 
-export interface IToast {
+interface IToastStandard {
+  type: 'standard';
   message: string;
   options?: TToastOptions;
-}
-
-export interface IToastInt extends IToast {
   id: string;
 }
+
+interface IToastDetailed {
+  type: 'detailed';
+  title?: string;
+  content: JSX.Element;
+  id: string;
+  options?: TToastOptions;
+  /** if provided will show. undef will show default icon. null wont show */
+  icon?: JSX.Element | null;
+}
+
+export type IToastInt = IToastStandard | IToastDetailed;

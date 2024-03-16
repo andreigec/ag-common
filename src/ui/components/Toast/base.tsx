@@ -4,13 +4,23 @@ import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 import { random } from '../../../common/helpers/random';
 import { Warning } from '../../icons/Warning';
+import type { IVarStyles } from '../../styles/common';
+import { getVarStyles } from '../../styles/common';
+import { FlexColumn } from '../FlexColumn';
+import { FlexRow } from '../FlexRow';
 import { ProgressBar } from '../ProgressBar';
 import { Cross } from './Cross';
 import { Tick } from './Tick';
-import type { IToastInt, IToastProviderOptions, TAddToast } from './types';
+import type {
+  IToastInt,
+  IToastProviderOptions,
+  TAddToast,
+  TAddToastDetailed,
+} from './types';
 
 export const ToastContext = createContext<{
   addToast: TAddToast;
+  addToastDetailed: TAddToastDetailed;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }>({} as any);
 const ToastContainerStyle = styled.div`
@@ -19,6 +29,11 @@ const ToastContainerStyle = styled.div`
   right: 0;
   margin: 0.5rem;
   z-index: 10000;
+
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  max-width: 50vw;
 `;
 
 const ToastStyle = styled.div`
@@ -27,19 +42,12 @@ const ToastStyle = styled.div`
   align-items: center;
   padding: 0.5rem;
   position: relative;
-  color: white;
   font-size: 1.2rem;
   &:not(:last-of-type) {
     margin-bottom: 8px;
   }
 
   border-radius: 6px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  &[data-dark='false'] {
-    background-color: rgba(255, 255, 255, 0.8);
-    color: black;
-  }
 `;
 
 const CloseStyle = styled.span`
@@ -56,15 +64,9 @@ const CloseStyle = styled.span`
   justify-content: center;
   align-items: center;
   color: white;
+  z-index: 1;
   &:hover {
-    background-color: #333;
-  }
-
-  &[data-dark='false'] {
-    color: #000;
-    &:hover {
-      background-color: #eee;
-    }
+    background-color: var(--bg);
   }
 `;
 const Icon = styled.div`
@@ -81,13 +83,12 @@ const ProgressBarStyled = styled(ProgressBar)`
 export const Toast = ({
   toast,
   close,
-  providerOptions,
+  style,
 }: {
   toast: IToastInt;
-  providerOptions: IToastProviderOptions;
+  style: IVarStyles;
   close: (s: string) => void;
 }) => {
-  const darkMode = providerOptions?.darkMode ?? false;
   let closeMs: number | undefined;
   if (toast.options?.autoClose) {
     closeMs = toast.options?.autoClose;
@@ -120,13 +121,44 @@ export const Toast = ({
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (toast.type === 'standard') {
+    const st = { color: style.color, '--bg': style.borderColor };
+    return (
+      <ToastStyle style={style}>
+        <CloseStyle onClick={() => close(toast.id)} style={st}>
+          &times;
+        </CloseStyle>
+        <Icon style={{ fill: style.color }}>{icon}</Icon>
+        {toast.message}
+        {closeMs !== undefined && (
+          <ProgressBarStyled
+            max={100}
+            min={0}
+            dotPercentages={null}
+            transitionToMs={closeMs}
+          />
+        )}
+      </ToastStyle>
+    );
+  }
+  const st = { color: style.color, '--bg': style.borderColor };
   return (
-    <ToastStyle data-dark={darkMode}>
-      <CloseStyle data-dark={darkMode} onClick={() => close(toast.id)}>
+    <ToastStyle style={style}>
+      <CloseStyle onClick={() => close(toast.id)} style={st}>
         &times;
       </CloseStyle>
-      <Icon>{icon}</Icon>
-      {toast.message}
+      <FlexRow noWrap center>
+        {toast.icon === undefined && <Icon>{icon}</Icon>}
+        {toast.icon}
+        <FlexColumn
+          style={{ marginLeft: toast.icon === null ? '0' : '0.5rem' }}
+        >
+          <b>{toast.title}</b>
+          {toast.content}
+        </FlexColumn>
+      </FlexRow>
+
       {closeMs !== undefined && (
         <ProgressBarStyled
           max={100}
@@ -151,28 +183,32 @@ export const ToastProvider = ({
     setToasts((currentToasts) => [
       ...currentToasts.filter(
         (ct) =>
+          ct.type === 'detailed' ||
           ct.message !== message ||
           JSON.stringify(ct.options) !== JSON.stringify(options),
       ),
-      { id: random(10000).toString(), message, options },
+      { id: random(10000).toString(), message, options, type: 'standard' },
     ]);
+
+  const addToastDetailed: TAddToastDetailed = (p, options) =>
+    setToasts((currentToasts) => [
+      ...currentToasts,
+      { id: random(10000).toString(), ...p, options, type: 'detailed' },
+    ]);
+
   const close = (id: string) =>
     setToasts((currentToasts) =>
       currentToasts.filter((toast) => toast.id !== id),
     );
-  const contextValue = useMemo(() => ({ addToast }), []);
+  const contextValue = useMemo(() => ({ addToast, addToastDetailed }), []);
+  const style = getVarStyles(providerOptions?.style);
 
   return (
     <ToastContext.Provider value={contextValue}>
       {children}
       <ToastContainerStyle>
         {toasts.map((toast) => (
-          <Toast
-            key={toast.id}
-            toast={toast}
-            close={close}
-            providerOptions={providerOptions ?? {}}
-          />
+          <Toast key={toast.id} toast={toast} close={close} style={style} />
         ))}
       </ToastContainerStyle>
     </ToastContext.Provider>
