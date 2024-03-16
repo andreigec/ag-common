@@ -47,6 +47,7 @@ const ToastStyle = styled.div`
     margin-bottom: 8px;
   }
 
+  border: solid 1px;
   border-radius: 6px;
 `;
 
