@@ -12,7 +12,7 @@ interface ITest {
   test: string;
 }
 const Template: StoryFn = () => {
-  const UT = useTooltip<ITest & { selectedKey: string }>();
+  const UT = useTooltip<ITest>();
   return (
     <div
       data-type="parent"
@@ -44,14 +44,10 @@ const Template: StoryFn = () => {
         }}
         onMouseLeave={() => UT.setPos(undefined)}
         onMouseMove={(element) => {
-          const selectedKey =
-            document
-              .elementFromPoint(element.pageX, element.pageY)
-              ?.getAttribute('data-barchartitem-key') ?? '';
           UT.setPos({
             element,
             parent: element.currentTarget.closest("[data-type='parent']"),
-            data: { test: 'test', selectedKey },
+            data: { test: 'test1' },
           });
         }}
       >
@@ -67,14 +63,10 @@ const Template: StoryFn = () => {
         }}
         onMouseLeave={() => UT.setPos(undefined)}
         onMouseMove={(element) => {
-          const selectedKey =
-            document
-              .elementFromPoint(element.pageX, element.pageY)
-              ?.getAttribute('data-barchartitem-key') ?? '';
           UT.setPos({
             element,
             parent: element.currentTarget.closest("[data-type='parent']"),
-            data: { test: 'test', selectedKey },
+            data: { test: 'test2' },
           });
         }}
       >

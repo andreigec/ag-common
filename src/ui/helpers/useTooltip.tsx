@@ -48,18 +48,21 @@ const Comp = <T,>({
   let right: number | undefined;
   let top: number | undefined;
   let bottom: number | undefined;
-
+  const gap = 5;
   if (size?.p) {
-    left = pos.x + 5;
-    if (pos.x + size.p.tooltipWidth > pos.parentWidth) {
+    left = pos.x + gap;
+    if (pos.x + gap + size.p.tooltipWidth > pos.parentWidth) {
       left = undefined;
-      right = pos.parentWidth - pos.x + 5;
+      right = pos.parentWidth - pos.x + gap;
     }
     //
-    top = pos.y + 5;
+    top = pos.y + gap;
     if (top + size.p.tooltipHeight > pos.parentHeight) {
       top = undefined;
       bottom = pos.parentHeight - pos.y;
+      if (bottom + size.p.tooltipHeight > pos.parentHeight) {
+        bottom = pos.parentHeight - size.p.tooltipHeight;
+      }
     }
   }
 
@@ -80,7 +83,7 @@ const Comp = <T,>({
 };
 
 export const useTooltip = <T,>() => {
-  const pos = useState<IPos<T>>();
+  const [pos, setPosRaw] = useState<IPos<T>>();
 
   const setPos = (p?: {
     element: MouseEvent;
@@ -88,7 +91,7 @@ export const useTooltip = <T,>() => {
     data: T;
   }) => {
     if (!p) {
-      pos[1](undefined);
+      setPosRaw(undefined);
       return;
     }
 
@@ -111,12 +114,12 @@ export const useTooltip = <T,>() => {
       y,
     };
 
-    pos[1](p2);
+    setPosRaw(p2);
   };
 
   return {
     Comp,
     setPos,
-    pos: pos[0],
+    pos,
   };
 };
