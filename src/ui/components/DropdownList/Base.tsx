@@ -23,7 +23,7 @@ const Base = styled.div`
 
 const DropItems = styled.div`
   flex-flow: column;
-  z-index: 5;
+  z-index: 1;
   display: none;
   background-color: white;
   cursor: default;
@@ -38,7 +38,6 @@ const DropItems = styled.div`
 `;
 
 const ListItemStyle = styled.div`
-  z-index: 1;
   font-weight: 500;
   padding-left: 0.5rem;
   flex-grow: 1;

@@ -56,11 +56,11 @@ export const partition = <T>(array: T[], func: (v: T) => boolean) =>
     ? null
     : [array.filter((r) => func(r)), array.filter((r) => !func(r))];
 
-export function notEmpty<TValue>(
-  value: TValue | null | undefined | false,
-): value is TValue {
-  return value !== null && value !== undefined && value !== false;
-}
+/** removes null, undefined, false, empty string */
+export const notEmpty = <TValue>(
+  value: TValue | null | undefined | false | '',
+): value is TValue =>
+  value !== null && value !== undefined && value !== false && value !== '';
 
 /**
  * return a distinct array of items determined by a key function
