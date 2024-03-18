@@ -71,6 +71,7 @@ export const Modal = ({
   className,
   closeOnClickOutside = true,
   portalId,
+  style,
 }: IModal) => {
   const [elem, setElem] = useState<Element | undefined | null>();
   useEffect(() => {
@@ -123,6 +124,7 @@ export const Modal = ({
         data-topposition={topPosition}
         ref={ref}
         className={className}
+        style={style}
       >
         {showCloseButton && (
           <CloseStyled data-type="modal-close" onClick={() => setOpen(false)} />

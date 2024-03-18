@@ -28,7 +28,7 @@ const Template: StoryFn = () => {
       <UT.Comp pos={UT.pos}>
         {(data) => (
           <div
-            style={{ width: '100px', height: '100px', backgroundColor: '#333' }}
+            style={{ width: '10rem', height: '100px', backgroundColor: '#333' }}
           >
             content: {data.test}
           </div>

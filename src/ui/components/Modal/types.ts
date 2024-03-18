@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 export interface IModal {
   open: boolean;
   setOpen: (b: boolean) => void;
@@ -10,4 +12,6 @@ export interface IModal {
   closeOnClickOutside?: boolean;
   /** if provided, will create inside this #id */
   portalId?: string;
+  /**applied to modal inside fixed */
+  style?: CSSProperties;
 }
