@@ -29,7 +29,6 @@ const getPaths = (schema: any) =>
 const setUpApiGw = ({
   stack,
   NODE_ENV,
-  certificate,
   shortStackName,
   r53,
   cors = {
@@ -39,12 +38,13 @@ const setUpApiGw = ({
 }: {
   stack: Construct;
   NODE_ENV: string;
-  certificate: certmgr.ICertificate;
+
   shortStackName: string;
   cors?: { allowOrigins: string[]; allowHeaders: string[] };
   r53?: {
     hostedZone?: route53.IHostedZone;
     apiUrl: string;
+    certificate: certmgr.ICertificate;
   };
 }) => {
   const api = new apigw.RestApi(stack, `${shortStackName}-api-${NODE_ENV}`, {
@@ -56,7 +56,7 @@ const setUpApiGw = ({
   if (r53) {
     const dn = new apigw.DomainName(stack, 'domain', {
       domainName: r53.apiUrl,
-      certificate,
+      certificate: r53.certificate,
       endpointType: apigw.EndpointType.EDGE,
       securityPolicy: apigw.SecurityPolicy.TLS_1_2,
       mapping: api,
@@ -204,7 +204,7 @@ export const openApiImpl = (p: {
    * 'default' will be applied to all functions
    */
   lambdaConfig: ILambdaConfigs;
-  certificate: certmgr.ICertificate;
+
   shortStackName: string;
   /**
    * defaults:
@@ -226,6 +226,7 @@ export const openApiImpl = (p: {
     apiUrl: string;
     /** if provided will add r53 record to apigw domainame  */
     hostedZone?: route53.IHostedZone;
+    certificate: certmgr.ICertificate;
   };
 }) => {
   if (!p.schema) {
