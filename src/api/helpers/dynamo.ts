@@ -12,6 +12,7 @@ import {
   QueryCommand,
   ScanCommand,
 } from '@aws-sdk/lib-dynamodb';
+import type { AwsCredentialIdentity } from '@smithy/types';
 
 // ES6 import
 import { chunk, take } from '../../common/helpers/array';
@@ -21,11 +22,15 @@ import { sleep } from '../../common/helpers/sleep';
 import { trimSide } from '../../common/helpers/string/trim';
 import type { IQueryDynamo, Key } from '../types';
 
-export const setDynamo = (region: string) => {
-  let raw = new DynamoDBClient({ region });
+export const setDynamo = (
+  region: string,
+  credentials?: AwsCredentialIdentity,
+) => {
+  let raw = new DynamoDBClient({ region, credentials });
   const ddbDocClient = DynamoDBDocument.from(raw, {
     marshallOptions: { removeUndefinedValues: true },
   });
+  dynamoDb = ddbDocClient;
   return ddbDocClient;
 };
 
