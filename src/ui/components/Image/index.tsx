@@ -1,7 +1,7 @@
 'use client';
 import styled from '@emotion/styled';
 import type { ImgHTMLAttributes } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { bigScreen, smallScreen } from '../../styles/media';
 
@@ -59,6 +59,10 @@ export interface IImage {
 }
 export const Image = (p: ImgHTMLAttributes<HTMLImageElement> & IImage) => {
   const { smalltop, bigonly, smallonly, small, ...p1 } = p;
+  const [display, setDisplay] = useState(true);
+  if (!display) {
+    return null;
+  }
 
   return (
     <Base
@@ -67,6 +71,7 @@ export const Image = (p: ImgHTMLAttributes<HTMLImageElement> & IImage) => {
       data-bigonly={bigonly}
       data-smallonly={smallonly}
       data-small={small}
+      onError={() => setDisplay(false)}
     />
   );
 };

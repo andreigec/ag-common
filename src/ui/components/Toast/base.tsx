@@ -123,11 +123,16 @@ export const Toast = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const closeStyle = { color: style.color, '--bg': style.borderColor };
+  const toastStyle = {
+    ...style,
+    boxShadow: `hsl(from ${style.borderColor} h s 25%) 0px 7px 29px 0px`,
+  };
+
   if (toast.type === 'standard') {
-    const st = { color: style.color, '--bg': style.borderColor };
     return (
-      <ToastStyle style={style}>
-        <CloseStyle onClick={() => close(toast.id)} style={st}>
+      <ToastStyle style={toastStyle}>
+        <CloseStyle onClick={() => close(toast.id)} style={closeStyle}>
           &times;
         </CloseStyle>
         <Icon style={{ fill: style.color }}>{icon}</Icon>
@@ -143,10 +148,9 @@ export const Toast = ({
       </ToastStyle>
     );
   }
-  const st = { color: style.color, '--bg': style.borderColor };
   return (
-    <ToastStyle style={style}>
-      <CloseStyle onClick={() => close(toast.id)} style={st}>
+    <ToastStyle style={toastStyle}>
+      <CloseStyle onClick={() => close(toast.id)} style={closeStyle}>
         &times;
       </CloseStyle>
       <FlexRow noWrap center>
