@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 
+import { hashCode } from '../../../common';
 import { insertElementAtIndex } from '../../../common/helpers/array';
 import { trimSide } from '../../../common/helpers/string/trim';
 
@@ -10,34 +11,32 @@ const injectTable = ({
 }: {
   tableRows: string[];
   preprocessText: (s: string) => string | JSX.Element;
-}) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          {tableRows[0]
-            .split('|')
-            .map((header) => header.trim())
-            .map((header) => (
-              <th key={header}>{preprocessText(header)}</th>
+}) => (
+  <table key={hashCode(JSON.stringify(tableRows))}>
+    <thead>
+      <tr>
+        {tableRows[0]
+          .split('|')
+          .map((header) => header.trim())
+          .map((header) => (
+            <th key={header}>{preprocessText(header)}</th>
+          ))}
+      </tr>
+    </thead>
+    <tbody>
+      {tableRows.slice(2).map((row) => {
+        const cells = row.split('|').map((cell) => cell.trim());
+        return (
+          <tr key={row}>
+            {cells.map((cell) => (
+              <td key={cell}>{preprocessText(cell)}</td>
             ))}
-        </tr>
-      </thead>
-      <tbody>
-        {tableRows.slice(2).map((row) => {
-          const cells = row.split('|').map((cell) => cell.trim());
-          return (
-            <tr key={row}>
-              {cells.map((cell) => (
-                <td key={cell}>{preprocessText(cell)}</td>
-              ))}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
-};
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+);
 
 const injectGroup = ({
   output,
@@ -78,14 +77,15 @@ function renderMarkdown({
   let a = -1;
   do {
     a += 1;
-    const line = lines?.[a] ?? '';
+    const line = lines[a] ?? '';
+    const la = line + a;
 
     const star = /\*\*(.*?)\*\*/gim;
     //handle inline **s
     if (line.match(star)) {
       output.push(
         <p
-          key={line}
+          key={la}
           dangerouslySetInnerHTML={{
             __html: line.replace(star, `<b>$1</b>`).trim(),
           }}
@@ -154,20 +154,20 @@ function renderMarkdown({
     else if (line.startsWith('*') || line.startsWith('-')) {
       const t = line.slice(2).trim();
       if (t.length > 0) {
-        output.push(<li>{preprocessText(t)}</li>);
+        output.push(<li key={t}>{preprocessText(t)}</li>);
       }
     }
     //ol - li
     else if (line.match(/^[0-9]+\./gim)) {
       const t = line.slice(3).trim();
       if (t.length > 0) {
-        output.push(<li key={line}>{preprocessText(t)}</li>);
+        output.push(<li key={t}>{preprocessText(t)}</li>);
       }
     }
     //text
     else {
       if (line.length > 0) {
-        output.push(<p key={line}>{preprocessText(line)}</p>);
+        output.push(<p key={la}>{preprocessText(line)}</p>);
       }
     }
   } while (a < lines.length);
