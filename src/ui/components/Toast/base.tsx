@@ -92,9 +92,9 @@ export const Toast = ({
 }) => {
   let closeMs: number | undefined;
   if (toast.options?.autoClose) {
-    closeMs = toast.options?.autoClose;
+    closeMs = toast.options.autoClose;
   } else if (toast.options?.autoClose === undefined) {
-    if (toast?.options?.appearance === 'success') {
+    if (toast.options?.appearance === 'success') {
       closeMs = 5000;
     } else {
       closeMs = 10000;
@@ -103,7 +103,7 @@ export const Toast = ({
 
   let icon = <Tick />;
 
-  switch (toast?.options?.appearance) {
+  switch (toast.options?.appearance) {
     case 'error': {
       icon = <Cross />;
       break;

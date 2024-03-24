@@ -37,7 +37,7 @@ export function useInterval<T>(
       const res = savedCallback.current();
       if (opt?.determineEnd?.(res)) {
         clearInterval(id);
-        opt?.onEnd?.();
+        opt.onEnd?.();
       }
     }, delay);
 

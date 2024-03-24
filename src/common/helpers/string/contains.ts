@@ -17,7 +17,7 @@ export function containsInsensitiveIndex(
   },
   ...args: string[]
 ) {
-  if (!str || !args) {
+  if (!str) {
     return -1;
   }
 

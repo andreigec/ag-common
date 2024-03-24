@@ -10,9 +10,6 @@ export function stringToObject(
   splitKeys: string,
 ) {
   const ret: Record<string, string> = {};
-  if (!stringToObject) {
-    return ret;
-  }
 
   raw.split(splitKeys).forEach((set) => {
     const [k, v] = set.split(splitKeyValue);

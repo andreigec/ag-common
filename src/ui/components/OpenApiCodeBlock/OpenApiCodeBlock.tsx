@@ -49,6 +49,7 @@ export const OpenApiCodeBlock = <TDefaultApi,>(
 ) => {
   const ops = getOperation(p);
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (ops.error || !ops.verb || !ops.operation) {
     return <Base>{ops.error}</Base>;
   }

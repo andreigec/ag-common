@@ -7,7 +7,7 @@ import { expireDate } from './const';
  * @returns
  */
 export const getAllCookies = (cookieString?: string) => {
-  const cookieKeyValuePairs: Record<string, string> = {};
+  const cookieKeyValuePairs: Partial<Record<string, string>> = {};
   if (!cookieString) {
     return cookieKeyValuePairs;
   }
@@ -16,7 +16,7 @@ export const getAllCookies = (cookieString?: string) => {
 
   for (let i = 0; i < cookieArr.length; i++) {
     const cookieKeyValue = cookieArr[i].split('=');
-    cookieKeyValuePairs[cookieKeyValue[0].trim()] = cookieKeyValue[1].trim();
+    cookieKeyValuePairs[cookieKeyValue[0].trim()] = cookieKeyValue[1]?.trim();
   }
   return cookieKeyValuePairs;
 };
@@ -28,7 +28,7 @@ export const getCookie = ({
 }: {
   name: string;
   cookieDocument?: string;
-}) => getAllCookies(cookieDocument)?.[name];
+}) => getAllCookies(cookieDocument)[name];
 
 /**
  * expiryDays <0 will delete
@@ -70,7 +70,7 @@ export function wipeCookies(name: string) {
   }
 
   let currentCount = 0;
-  // eslint-disable-next-line no-constant-condition
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
   while (true) {
     if (
       getCookie({

@@ -26,6 +26,7 @@ const getTopItems = ({
     {};
 
   data.forEach((d) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!val[d.name]) {
       val[d.name] = { colour: colours[d.name], name: d.name, value: d.y };
     } else {

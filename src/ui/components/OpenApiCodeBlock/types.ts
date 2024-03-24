@@ -1,5 +1,5 @@
 export interface IOpenApiOperation {
-  description: string;
+  description?: string;
   operationId: string;
   security?: { [name: string]: string }[];
 }

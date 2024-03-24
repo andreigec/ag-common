@@ -1,6 +1,6 @@
 const toFixed = (num: number, fixed: number): number => {
   const re = new RegExp(`^-?\\d+(?:.\\d{0,${fixed || -1}})?`);
-  const x = num?.toString()?.match(re)?.[0];
+  const x = num.toString().match(re)?.[0];
   if (!x) {
     return num;
   }

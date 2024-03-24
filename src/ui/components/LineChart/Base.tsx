@@ -111,12 +111,12 @@ export const LineChart = (p: ILineChart) => {
               gap: Math.abs(p.x1 - relativeX),
             }))
             .sort((a, b) => (a.gap < b.gap ? -1 : 1));
-          const mingap = sp1?.[0].gap;
+          const mingap = sp1[0].gap;
           selectedPoints = sp1.filter((r) => r.gap === mingap);
         }
         const selectedXs = distinctBy(
           p.data.filter(({ x, y }) =>
-            selectedPoints?.find((a) => a.origX === x && a.origY === y),
+            selectedPoints.find((a) => a.origX === x && a.origY === y),
           ),
           (s) => JSON.stringify(s),
         );

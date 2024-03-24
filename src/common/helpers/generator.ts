@@ -7,7 +7,7 @@ export async function runGenerator<T>(
 
   do {
     curr = await iter.next();
-    if (!curr?.value || curr.value.length === 0) {
+    if (!curr.value || curr.value.length === 0) {
       return;
     }
 

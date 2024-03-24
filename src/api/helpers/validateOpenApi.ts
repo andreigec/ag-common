@@ -50,7 +50,7 @@ const getOperation = ({
     'i',
   ).exec(path);
 
-  const pathParams = re?.groups && JSON.parse(JSON.stringify(re?.groups));
+  const pathParams = re?.groups && JSON.parse(JSON.stringify(re.groups));
 
   return { operation, pathParams };
 };
@@ -107,7 +107,7 @@ export async function validateOpenApi<T>({
     params: undefined as any,
     query: event.queryStringParameters,
     body: tryJsonParse(event.body, event.body),
-    headers: objectKeysToLowerCase(event?.headers),
+    headers: objectKeysToLowerCase(event.headers),
   };
 
   const method = event.requestContext.httpMethod.toLowerCase();
@@ -123,7 +123,7 @@ export async function validateOpenApi<T>({
     schema,
   });
 
-  if (!opm?.operation) {
+  if (!opm.operation) {
     const msg = `no request handler found! for ${method} ${event.path} - cant validate`;
     errorF(msg);
     return returnCode(400, msg);
@@ -172,8 +172,7 @@ export async function validateOpenApi<T>({
 
   let userProfile: User | undefined;
   let error: APIGatewayProxyResult | undefined;
-  const authHeader =
-    event.headers?.Authorization || event.headers?.authorization;
+  const authHeader = event.headers.Authorization || event.headers.authorization;
 
   if (authorized === true || (authorized === 'optional' && authHeader)) {
     const vf = getAndValidateTokenOverride ?? getAndValidateToken;

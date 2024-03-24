@@ -37,14 +37,14 @@ export function getCookieRawWrapper<T>({
   let raw = '';
   let currentCount = 0;
 
-  // eslint-disable-next-line no-constant-condition
+  // eslint-disable-next-line no-constant-condition, @typescript-eslint/no-unnecessary-condition
   while (true) {
     const newv = getCookie({
       name: name + currentCount,
       cookieDocument,
     });
 
-    if (newv === undefined || newv === null) {
+    if (newv === undefined) {
       break;
     }
 

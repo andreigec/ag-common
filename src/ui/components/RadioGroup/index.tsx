@@ -43,7 +43,7 @@ export interface IRadioGroup<T> {
 export const RadioGroup = <T,>(p: IRadioGroup<T>) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { renderLabel = (x) => (x as any).toString() } = p;
-  const [index, setIndex] = useState<number>(p.defaultIndex ?? 0);
+  const [index, setIndex] = useState<number>(p.defaultIndex);
 
   return (
     <Base className={p.className} style={p.style} data-mode={p.mode ?? 'horiz'}>

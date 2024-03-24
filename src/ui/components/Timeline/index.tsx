@@ -90,7 +90,7 @@ export const Timeline = ({
             cursor = '';
           }
           return (
-            <Item key={p.key} title={p?.title}>
+            <Item key={p.key} title={p.title}>
               <Icon
                 style={{
                   maxWidth: maxCircleSize,

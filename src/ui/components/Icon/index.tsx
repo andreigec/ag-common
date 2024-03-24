@@ -86,7 +86,7 @@ export const Icon = (pr: IIcon) => {
   const { className, children, disabled, onClick } = pr;
   const CHND = pr.canHover && !pr.disabled;
   const style: CSSProperties = removeUndefValuesFromObject({
-    ...(pr?.style ?? {}),
+    ...(pr.style ?? {}),
     '--fill': pr.style?.fill ?? null,
     width: pr.style?.width,
     height: pr.style?.height,

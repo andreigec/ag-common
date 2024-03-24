@@ -92,7 +92,7 @@ export const generateDynamoPKS = ({
   const c = '#';
   const keys = [L1, L2, L3, L4, L5, L6].filter(notEmpty);
   const additionalPK =
-    additionalPKValues && additionalPKValues?.length > 0
+    additionalPKValues && additionalPKValues.length > 0
       ? `#${additionalPKValues.join(c)}`
       : '';
 

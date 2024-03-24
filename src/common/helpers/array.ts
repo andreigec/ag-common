@@ -52,7 +52,7 @@ export const chunk = <T>(array: T[], max: number): T[][] => {
   return rows;
 };
 export const partition = <T>(array: T[], func: (v: T) => boolean) =>
-  !array?.length
+  !array.length
     ? null
     : [array.filter((r) => func(r)), array.filter((r) => !func(r))];
 

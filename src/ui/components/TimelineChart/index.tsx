@@ -53,14 +53,14 @@ export const TimelineChart: FC<ITimelineChart> = ({
   const yMin = Math.min(...yValues);
   const yMax = Math.max(...yValues);
   const xScale = (x: number): number =>
-    Math.ceil(width * ((x - xMin) / (xMax - xMin))) ?? 0;
+    Math.ceil(width * ((x - xMin) / (xMax - xMin)));
 
   const yScale = (y: number): number => {
     let ret = Math.ceil(height * ((yMax - y) / (yMax - yMin)));
     if (isNaN(ret)) {
       ret = y;
     }
-    return ret ?? y;
+    return ret;
   };
 
   const getPathData = ({ data }: ITimelineChartSeries): string => {
@@ -97,7 +97,7 @@ export const TimelineChart: FC<ITimelineChart> = ({
             {label && (
               <>
                 <text
-                  x={xScale(data?.[0]?.x) + strokeWidth * 2}
+                  x={xScale(data[0]?.x) + strokeWidth * 2}
                   y={yScale(data[data.length - 1]?.y)}
                   fontSize="12"
                   textAnchor="middle"
@@ -109,7 +109,7 @@ export const TimelineChart: FC<ITimelineChart> = ({
                 </text>
 
                 <text
-                  x={xScale(data?.[0]?.x) + strokeWidth * 2}
+                  x={xScale(data[0]?.x) + strokeWidth * 2}
                   y={yScale(data[data.length - 1]?.y)}
                   fontSize="12"
                   textAnchor="middle"

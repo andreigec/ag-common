@@ -13,7 +13,7 @@ export const convertToRaw = ({
 }: {
   tnd: TreeNodeData;
 }): TreeNodeRaw => {
-  if (!data || data.length === 0) {
+  if (data.length === 0) {
     return { children: {}, size: 0, name: '', depth: 0 };
   }
   const dm: TreeNodeRaw = { size: 0, children: {}, name: '', depth: 0 };
@@ -21,16 +21,18 @@ export const convertToRaw = ({
   data.forEach((line) => {
     const names = line.path.split(pathDelimiter || '/');
 
-    let node = dm;
+    let node: TreeNodeRaw | undefined = dm;
 
     let a = 0;
     do {
       node.size += line.size;
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (names[a] === undefined) {
         break;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!node.children[names[a]]) {
         node.children[names[a]] = {
           children: {},
@@ -40,7 +42,7 @@ export const convertToRaw = ({
         };
       }
 
-      node = node.children[names[a]];
+      node = node.children[names[a]] as TreeNodeRaw | undefined;
 
       a += 1;
     } while (node);

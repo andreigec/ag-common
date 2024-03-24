@@ -62,20 +62,20 @@ const RowCount = styled.div`
 
 export const SearchInline = <T,>(p: ISearchDialog<T>) => {
   const { maxDisplayItems = 1000 } = p;
-  const rowCountOptDisplay = p?.rowCountOpt?.display ?? 'bottom';
+  const rowCountOptDisplay = p.rowCountOpt?.display ?? 'bottom';
   const [searchText, setSearchText] = useState(p.defaultValue ?? '');
 
   useImperativeHandle(p.textBoxRef, () => ({
     setValue: (v) => {
-      const value = textBoxRef?.current?.getValue();
+      const value = textBoxRef.current?.getValue();
       if (v === value) {
         return;
       }
-      textBoxRef?.current?.setValue(v);
+      textBoxRef.current?.setValue(v);
       setSearchText(v);
     },
-    focus: () => textBoxRef?.current?.focus(),
-    getValue: () => textBoxRef?.current?.getValue(),
+    focus: () => textBoxRef.current?.focus(),
+    getValue: () => textBoxRef.current?.getValue(),
   }));
   const textBoxRef = useRef<IRefTextEdit>(null);
 

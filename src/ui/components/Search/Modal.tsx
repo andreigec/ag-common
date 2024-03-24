@@ -26,7 +26,7 @@ export const SearchModal = <T,>(p: ISearchModal<T>) => (
     position="center"
     topPosition="center"
     open={true}
-    setOpen={() => p?.onSelectItem?.(undefined)}
+    setOpen={() => p.onSelectItem?.(undefined)}
     showCloseButton={false}
     closeOnClickOutside={true}
   >

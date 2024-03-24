@@ -61,6 +61,7 @@ export const axiosHelper = async <TOut>({
         axiosV = axios.post;
       } else if (verb === 'patch') {
         axiosV = axios.patch;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       } else if (verb === 'delete') {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         axiosV = axios.delete as any;

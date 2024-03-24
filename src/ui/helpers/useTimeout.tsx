@@ -13,7 +13,7 @@ export function useTimeout(
   }, [callback]);
 
   useEffect(() => {
-    let id: NodeJS.Timeout;
+    let id: NodeJS.Timeout | undefined;
     function tick() {
       const ret = savedCallback.current();
 

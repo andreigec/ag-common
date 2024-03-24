@@ -59,13 +59,10 @@ export const SearchBox = (p: ISearchBox) => {
   const textBoxRef = useRef<IRefTextEdit>(p.textBoxRef?.current ?? null);
 
   useEffect(() => {
-    if (
-      !textBoxRef?.current ||
-      textBoxRef?.current.getValue() === p.searchText
-    ) {
+    if (!textBoxRef.current || textBoxRef.current.getValue() === p.searchText) {
       return;
     }
-    textBoxRef?.current.setValue(p.searchText);
+    textBoxRef.current.setValue(p.searchText);
 
     p.setSearchText(p.searchText, true);
   }, [p]);
@@ -81,7 +78,7 @@ export const SearchBox = (p: ISearchBox) => {
         leftContent={
           <MagnifyIcon
             onClick={() =>
-              p.setSearchText(textBoxRef?.current?.getValue() || '', true)
+              p.setSearchText(textBoxRef.current?.getValue() || '', true)
             }
           >
             <Magnify />
@@ -101,7 +98,7 @@ export const SearchBox = (p: ISearchBox) => {
       {p.searchText && (
         <CrossIconStyled
           onClick={() => {
-            textBoxRef?.current?.setValue('');
+            textBoxRef.current?.setValue('');
             p.setSearchText('', true);
           }}
         />

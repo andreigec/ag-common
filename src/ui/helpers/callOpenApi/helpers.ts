@@ -33,7 +33,7 @@ export const apiResponseToAxiosResponse = async <T>(
     const er = e as Response;
 
     //try and get body
-    let statusText = er.statusText || (e as Error)?.stack || '';
+    let statusText = er.statusText || (e as Error).stack || '';
 
     if (er.body) {
       try {
@@ -49,6 +49,7 @@ export const apiResponseToAxiosResponse = async <T>(
       status: er.status,
       statusText,
       headers:
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         er.headers &&
         arrayToObject(
           Object.entries(er.headers),

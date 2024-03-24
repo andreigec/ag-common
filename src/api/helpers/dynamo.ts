@@ -233,10 +233,10 @@ export const scan = async <T>(
     } while (ExclusiveStartKey && (!opt?.limit || Items.length < opt.limit));
 
     if (opt?.limit) {
-      ({ part: Items } = take(Items, opt?.limit));
+      ({ part: Items } = take(Items, opt.limit));
     }
 
-    debug(`dynamo scan against ${tableName} ok, count=${Items?.length}`);
+    debug(`dynamo scan against ${tableName} ok, count=${Items.length}`);
 
     return { data: Items };
   } catch (e) {
@@ -398,7 +398,7 @@ export const queryDynamo = async <T>({
 
     debug(
       `dynamo query against ${
-        params?.input.TableName
+        params.input.TableName
       } ok, count=${newItems?.length} ${JSON.stringify(params)}`,
       ` next startkey=${startKey}`,
     );
@@ -439,9 +439,9 @@ export const wipeTable = async (
       throw allraw.error;
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let all = allraw?.data?.map((d) => d as any) || [];
+    let all = allraw.data.map((d) => d as any) || [];
 
-    warn(`will delete ${all?.length} items from ${tableName}`);
+    warn(`will delete ${all.length} items from ${tableName}`);
 
     await batchDelete({
       tableName,

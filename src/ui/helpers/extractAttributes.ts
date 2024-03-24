@@ -1,5 +1,5 @@
 export const extractAttributes = ({ idName }: { idName: string }) => {
-  if (!document?.getElementById(idName)?.attributes) {
+  if (!document.getElementById(idName)?.attributes) {
     return {};
   }
 

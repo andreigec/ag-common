@@ -43,7 +43,7 @@ async function run() {
     throw ge.error;
   }
 
-  if (ge?.data?.PK !== PK) {
+  if (ge.data.PK !== PK) {
     throw new Error('ge not found:' + PK);
   }
 
@@ -60,7 +60,7 @@ async function run() {
     throw q.error;
   }
 
-  if (q?.data?.[0]?.PK !== PK) {
+  if (q.data[0]?.PK !== PK) {
     throw new Error('query not found:' + PK);
   }
 

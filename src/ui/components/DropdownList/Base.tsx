@@ -127,14 +127,14 @@ export function DropdownList<T>(p: IDropdownList<T>) {
     };
 
     const minPx = convertRemToPixels(2 + maxLen / 2);
-    const offsetLeft = ref?.current?.offsetLeft ?? 0;
+    const offsetLeft = ref.current?.offsetLeft ?? 0;
     if (offsetLeft < minPx) {
       newStyle.left = '0';
     } else {
       newStyle.right = '0';
     }
 
-    const b = ref?.current?.getBoundingClientRect() ?? { bottom: 0 };
+    const b = ref.current?.getBoundingClientRect() ?? { bottom: 0 };
     const ih = typeof window !== 'undefined' ? window.innerHeight : 0;
     //below screen
     if (b.bottom + 50 > ih) {

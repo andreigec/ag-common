@@ -32,13 +32,13 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
         return;
       }
 
-      const el = p.ref?.current as unknown as Element;
+      const el = p.ref.current as unknown as Element | undefined;
       if (!el) {
         return;
       }
 
       //walk dom tree to see if nodes match
-      let n = event.target as unknown as Element;
+      let n = event.target as unknown as Element | undefined;
       let found = false;
       while (n) {
         if (n.isEqualNode(el)) {

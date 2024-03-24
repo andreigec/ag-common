@@ -21,7 +21,7 @@ export function getIdTokenAuthHeaderRaw({
 
   //if override supplied will only use that and not refresh
   if (overrideAuth?.id_token) {
-    idToken = overrideAuth?.id_token;
+    idToken = overrideAuth.id_token;
   } else {
     idToken = getCookieString({
       name: 'id_token',
@@ -53,7 +53,7 @@ async function getIdTokenAuthHeader({
   if (idToken) {
     const updated = await refreshToken();
     if (updated?.jwt?.id_token) {
-      idToken = updated?.jwt?.id_token;
+      idToken = updated.jwt.id_token;
     }
   }
 
@@ -130,9 +130,10 @@ export const callOpenApi = async <T, TDefaultApi>(
         ae.status ?? '',
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (ae.response?.data as any)?.toString() ?? '',
-        ae.response?.statusText?.toString() ?? '',
-        ae.response?.status?.toString() ?? '',
-        ae.message?.toString() ?? '',
+        ae.response?.statusText.toString() ?? '',
+        ae.response?.status.toString() ?? '',
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        ae.message.toString() ?? '',
       ]
         .filter(notEmpty)
         .sort((a, b) => (a.length < b.length ? -1 : 1))

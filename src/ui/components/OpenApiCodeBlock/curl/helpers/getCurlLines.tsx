@@ -17,7 +17,7 @@ export const getCurlLines = <TDefaultApi,>(
     return { error: secline.error };
   }
 
-  const bodyLines = getBody(p) ?? undefined;
+  const bodyLines = getBody(p);
   const headerLines: JSX.Element[] = [];
   if (secline.content) {
     headerLines.push(secline.content);
@@ -33,7 +33,7 @@ export const getCurlLines = <TDefaultApi,>(
     error: undefined,
     headerLines: headerLines,
     fullApiUrl: withPath,
-    bodyLine: bodyLines?.content,
+    bodyLine: bodyLines.content,
     operation,
   };
 };

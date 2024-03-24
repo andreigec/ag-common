@@ -75,7 +75,7 @@ export const InfiniteScroll = (p: IInfiniteScroll) => {
         debounce(
           () => {
             setStartScrollTop(scrollTop);
-            p?.onScroll?.({ scrollTop, isDown: startScrollTop < scrollTop });
+            p.onScroll?.({ scrollTop, isDown: startScrollTop < scrollTop });
           },
           {
             key: 'in-scr',

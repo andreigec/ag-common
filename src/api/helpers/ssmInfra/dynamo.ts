@@ -50,7 +50,7 @@ export const generateDynamoSSMParams = ({
     });
   }
 
-  if (gsi && gsi?.length > 0) {
+  if (gsi && gsi.length > 0) {
     saveToSsm({
       stack,
       path: `${baseKey}/gsi`,

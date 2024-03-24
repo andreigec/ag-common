@@ -127,7 +127,7 @@ export const getAndValidateToken: TGetAndValidateToken = async ({
         };
       }
 
-      subject = decoded?.sub;
+      subject = decoded.sub;
       if (!subject) {
         const mess = 'user should have responded with subject (sub) field';
         error(mess);
@@ -135,7 +135,7 @@ export const getAndValidateToken: TGetAndValidateToken = async ({
       }
 
       let { picture } = decoded;
-      if (decoded?.identities?.[0]?.providerName === 'Facebook') {
+      if (decoded.identities[0]?.providerName === 'Facebook') {
         picture = JSON.parse(decoded.picture).data.url;
       }
 

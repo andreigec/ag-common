@@ -204,7 +204,7 @@ export async function listFiles(
         }),
       );
 
-      response.Contents?.filter((r) => r.Key)?.map((c) => {
+      response.Contents?.filter((r) => r.Key).map((c) => {
         ret.push(c.Key as string);
       });
     } while (response.IsTruncated);

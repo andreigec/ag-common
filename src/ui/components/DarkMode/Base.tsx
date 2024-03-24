@@ -97,7 +97,7 @@ export const UseDarkMode = ({
   });
 
   const calcDarkMode = (): TDarkModeCalc => {
-    const isDarkMode = window.matchMedia?.(
+    const isDarkMode = window.matchMedia(
       '(prefers-color-scheme: dark)',
     ).matches;
 
@@ -131,7 +131,7 @@ export const DarkModeAux = ({
   dm: IUseDarkMode;
 }) => {
   const [index, setIndex] = useState<number>(
-    modes.findIndex((d) => d.mode === dm.darkmode) ?? 0,
+    modes.findIndex((d) => d.mode === dm.darkmode),
   );
   const [fill, background] = getColours(modes[index].mode, mode === 'vert');
   const twCalc = `calc(${iconSize} + ${iconSize} + ${iconSize} )`;

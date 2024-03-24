@@ -194,7 +194,7 @@ export const removeUndefValuesFromObjectAdditional = <T>(
 ) => {
   const ret: Record<string, T> = {};
   Object.entries(orig).forEach(([k, v]) => {
-    if (v !== null && v !== undefined && !additionalRemoves?.includes(v)) {
+    if (v !== null && v !== undefined && !additionalRemoves.includes(v)) {
       ret[k] = v;
     }
   });

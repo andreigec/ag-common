@@ -1,5 +1,4 @@
 export * from './axiosHelper';
-export * from './browserHelpers';
 export * from './callOpenApi';
 export * from './cognito';
 export * from './cookie';

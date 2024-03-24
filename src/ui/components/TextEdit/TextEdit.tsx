@@ -194,6 +194,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
     >
       {p.leftContent ?? null}
       <Comp
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         tabIndex={editing ? 0 : undefined}
         data-editing="true"
         data-valuechange={valueChange.toString()}
@@ -231,10 +232,7 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
       {allowUndo && (
         <Right>
           {valueChange && (
-            <Icon
-              style={iconLeft}
-              onClick={() => valueChange && p.onSubmit(value, false)}
-            >
+            <Icon style={iconLeft} onClick={() => p.onSubmit(value, false)}>
               <Save />
             </Icon>
           )}

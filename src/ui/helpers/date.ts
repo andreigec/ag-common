@@ -8,10 +8,6 @@ import { plural } from './plural';
  * @returns
  */
 export const dateDiffToString = (lowDate: Date, highDate?: Date) => {
-  if (!lowDate) {
-    return '';
-  }
-
   const d = dateDiff(lowDate, highDate ?? new Date());
   if (isNaN(d.totalYears)) {
     return '';

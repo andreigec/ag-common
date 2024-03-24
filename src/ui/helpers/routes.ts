@@ -169,7 +169,7 @@ export const getServerReq = ({
   });
 
   const parsedQuery =
-    !query || Object.keys(query).length === 0 ? {} : castStringlyObject(query);
+    Object.keys(query).length === 0 ? {} : castStringlyObject(query);
   const ret = getClientOrServerReqHref({
     url: !href ? undefined : new URL(href),
     query: parsedQuery,

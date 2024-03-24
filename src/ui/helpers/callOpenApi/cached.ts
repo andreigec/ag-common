@@ -107,7 +107,7 @@ export const callOpenApiCachedRaw = <T, TDefaultApi>(
   //get ssr cache value
   const ssrCached: T | undefined = p.ssrCacheItems?.find(
     (s) => s.cacheKey === p.cacheKey,
-  )?.prefillData?.data;
+  )?.prefillData.data;
 
   //if we have ssr cache and there is no existing cache then set
   if (!callOpenApiCache.get<T>(userPrefixedCacheKey) && ssrCached) {
