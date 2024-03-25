@@ -1,15 +1,18 @@
 import styled from '@emotion/styled';
 import type { MouseEvent } from 'react';
 import React, { createRef, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 const Base = styled.div`
   position: absolute;
   z-index: 2;
 `;
+const globalId = 'ag-tooltip-portal';
 
 interface IPos<T> {
   cursor: MouseEvent;
   data: T;
+  usePortal: boolean;
   parentWidth: number;
   parentHeight: number;
   x: number;
@@ -29,7 +32,7 @@ const Comp = <T,>({
   }>();
 
   useEffect(() => {
-    if (size?.p ?? !ref.current) {
+    if ((size?.p?.tooltipHeight && size.p.tooltipWidth) || !ref.current) {
       return;
     }
     setSize({
@@ -57,16 +60,23 @@ const Comp = <T,>({
     }
     //
     top = pos.y + gap;
-    if (top + size.p.tooltipHeight > pos.parentHeight) {
+    const newBottom = pos.parentHeight - size.p.tooltipHeight;
+
+    if (
+      top + size.p.tooltipHeight > pos.parentHeight &&
+      //check against really tall
+      newBottom > 0
+    ) {
       top = undefined;
       bottom = pos.parentHeight - pos.y;
+
       if (bottom + size.p.tooltipHeight > pos.parentHeight) {
-        bottom = pos.parentHeight - size.p.tooltipHeight;
+        bottom = newBottom;
       }
     }
   }
 
-  return (
+  const Content = (
     <Base
       ref={ref}
       style={{
@@ -74,16 +84,37 @@ const Comp = <T,>({
         right,
         top,
         bottom,
+        zIndex: 10,
+        ...(pos.usePortal && { position: 'fixed' }),
         ...(!size?.p && { zIndex: -1 }),
       }}
     >
       {children(pos.data)}
     </Base>
   );
+  if (pos.usePortal) {
+    return createPortal(
+      Content,
+      document.querySelector(`#${globalId}`) as Element,
+    );
+  }
+  return Content;
 };
 
 export const useTooltip = <T,>() => {
   const [pos, setPosRaw] = useState<IPos<T>>();
+
+  useEffect(() => {
+    if (document.querySelectorAll(`#${globalId}`).length > 0) {
+      return;
+    }
+    const d = document.createElement('div');
+    d.id = globalId;
+    document.body.appendChild(d);
+    return () => {
+      document.querySelector(`#${globalId}`)?.remove();
+    };
+  }, []);
 
   const setPos = (p?: {
     element: MouseEvent;
@@ -95,15 +126,22 @@ export const useTooltip = <T,>() => {
       return;
     }
 
-    const {
-      top: parentTop,
-      left: parentLeft,
-      width: parentWidth,
-      height: parentHeight,
-    } = p.parent?.getBoundingClientRect() ?? { width: 0, height: 0 };
+    let parentTop = 0;
+    let parentLeft = 0;
+    let parentWidth = document.body.clientWidth;
+    let parentHeight = document.body.clientHeight;
 
-    const x = p.element.pageX - (parentLeft ?? 0);
-    const y = p.element.pageY - (parentTop ?? 0);
+    if (p.parent) {
+      ({
+        top: parentTop,
+        left: parentLeft,
+        width: parentWidth,
+        height: parentHeight,
+      } = p.parent.getBoundingClientRect());
+    }
+
+    const x = p.element.pageX - parentLeft;
+    const y = p.element.pageY - parentTop;
 
     const p2 = {
       cursor: p.element,
@@ -112,6 +150,7 @@ export const useTooltip = <T,>() => {
       parentHeight,
       x,
       y,
+      usePortal: !p.parent,
     };
 
     setPosRaw(p2);

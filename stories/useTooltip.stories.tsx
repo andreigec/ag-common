@@ -11,6 +11,7 @@ const base: Meta = {
 interface ITest {
   test: string;
 }
+
 const Template: StoryFn = () => {
   const UT = useTooltip<ITest>();
   return (
@@ -76,7 +77,50 @@ const Template: StoryFn = () => {
   );
 };
 
+const GlobalT: StoryFn = () => {
+  const UT = useTooltip<ITest>();
+  return (
+    <div
+      data-type="parent"
+      style={{
+        position: 'relative',
+      }}
+    >
+      <div
+        style={{
+          width: '10rem',
+          height: '1ch',
+          border: 'solid 1px black',
+          position: 'relative',
+          marginLeft: 'auto',
+        }}
+        onMouseLeave={() => UT.setPos(undefined)}
+        onMouseMove={(element) => {
+          UT.setPos({
+            element,
+            parent: null,
+            data: { test: 'test2' },
+          });
+        }}
+      >
+        child
+      </div>
+      <UT.Comp pos={UT.pos}>
+        {(data) => (
+          <div
+            style={{ width: '10rem', height: '100px', backgroundColor: '#333' }}
+          >
+            content: {data.test}
+          </div>
+        )}
+      </UT.Comp>
+    </div>
+  );
+};
+
 export const Primary: StoryFn = Template.bind({});
+
+export const Global: StoryFn = GlobalT.bind({});
 
 Primary.args = {};
 export default base;
