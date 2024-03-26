@@ -32,13 +32,29 @@ const Comp = <T,>({
   }>();
 
   useEffect(() => {
-    if ((size?.p?.tooltipHeight && size.p.tooltipWidth) || !ref.current) {
+    if (!ref.current) {
+      return;
+    }
+    const tooltipWidth = Math.max(
+      ref.current.clientWidth,
+      ref.current.scrollWidth,
+    );
+    const tooltipHeight = Math.max(
+      ref.current.clientHeight,
+      ref.current.scrollHeight,
+    );
+    if (
+      tooltipHeight === size?.p?.tooltipHeight ||
+      tooltipWidth === size?.p?.tooltipWidth ||
+      tooltipHeight === 0 ||
+      tooltipWidth === 0
+    ) {
       return;
     }
     setSize({
       p: {
-        tooltipWidth: ref.current.clientWidth,
-        tooltipHeight: ref.current.clientHeight,
+        tooltipWidth,
+        tooltipHeight,
       },
     });
   }, [ref, size]);
@@ -54,25 +70,28 @@ const Comp = <T,>({
   const gap = 5;
   if (size?.p) {
     left = pos.x + gap;
+    const newRight = pos.parentWidth - pos.x + gap;
+
     if (pos.x + gap + size.p.tooltipWidth > pos.parentWidth) {
       left = undefined;
-      right = pos.parentWidth - pos.x + gap;
+      right = newRight;
     }
     //
     top = pos.y + gap;
-    const newBottom = pos.parentHeight - size.p.tooltipHeight;
 
-    if (
-      top + size.p.tooltipHeight > pos.parentHeight &&
-      //check against really tall
-      newBottom > 0
-    ) {
+    if (top + size.p.tooltipHeight > pos.parentHeight) {
       top = undefined;
       bottom = pos.parentHeight - pos.y;
+    }
 
-      if (bottom + size.p.tooltipHeight > pos.parentHeight) {
-        bottom = newBottom;
-      }
+    if (right && right + size.p.tooltipWidth > pos.parentWidth) {
+      right = undefined;
+      left = 0;
+    }
+
+    if (bottom && bottom + size.p.tooltipHeight > pos.parentHeight) {
+      bottom = undefined;
+      top = 0;
     }
   }
 

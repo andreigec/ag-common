@@ -38,7 +38,7 @@ const Template: StoryFn = () => {
       parent
       <div
         style={{
-          width: '10rem',
+          width: '15rem',
           height: '10rem',
           border: 'solid 1px black',
           position: 'relative',
@@ -56,7 +56,7 @@ const Template: StoryFn = () => {
       </div>
       <div
         style={{
-          width: '10rem',
+          width: '15rem',
           height: '10rem',
           border: 'solid 1px black',
           position: 'relative',
