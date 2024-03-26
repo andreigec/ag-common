@@ -28,12 +28,20 @@ export const DropdownListDialog = async <T,>(
         {...p}
         open
         onClose={() => {
-          root.unmount();
-          wrapper.remove();
+          try {
+            root.unmount();
+            wrapper.remove();
+          } catch (e) {
+            //
+          }
         }}
         onChange={(v, i) => {
-          root.unmount();
-          wrapper.remove();
+          try {
+            root.unmount();
+            wrapper.remove();
+          } catch (e) {
+            //
+          }
           res(!v ? undefined : [v, i]);
         }}
       >

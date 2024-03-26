@@ -131,7 +131,11 @@ export const useTooltip = <T,>() => {
     d.id = globalId;
     document.body.appendChild(d);
     return () => {
-      document.querySelector(`#${globalId}`)?.remove();
+      try {
+        document.querySelector(`#${globalId}`)?.remove();
+      } catch (e) {
+        //
+      }
     };
   }, []);
 

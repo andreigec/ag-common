@@ -16,8 +16,12 @@ export const ModalDialog = async (
         open={true}
         setOpen={(o) => {
           if (!o) {
-            root.unmount();
-            wrapper.remove();
+            try {
+              root.unmount();
+              wrapper.remove();
+            } catch (e) {
+              //
+            }
           }
 
           res('ok');

@@ -144,10 +144,14 @@ export const DarkModeAux = ({
     } else {
       className = '';
     }
-    document.getElementsByTagName('html')[0].classList.remove('dark-mode');
-    document.getElementsByTagName('html')[0].classList.remove('light-mode');
-    if (className) {
-      document.getElementsByTagName('html')[0].classList.add(className);
+    try {
+      document.getElementsByTagName('html')[0].classList.remove('dark-mode');
+      document.getElementsByTagName('html')[0].classList.remove('light-mode');
+      if (className) {
+        document.getElementsByTagName('html')[0].classList.add(className);
+      }
+    } catch (e) {
+      //
     }
 
     dm.setDarkmode(newDarkMode);
