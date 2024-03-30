@@ -6,7 +6,7 @@ import { Modal } from './Modal';
 
 export const ModalDialog = async (
   content: JSX.Element,
-  opt?: { style?: CSSProperties },
+  opt?: { style?: CSSProperties; portalId?: string },
 ): Promise<string | undefined> => {
   return new Promise((res) => {
     const wrapper = document.body.appendChild(document.createElement('div'));

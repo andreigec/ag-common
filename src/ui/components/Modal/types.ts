@@ -10,8 +10,8 @@ export interface IModal {
   closeOnMoveMouseOutside?: boolean;
   className?: string;
   closeOnClickOutside?: boolean;
-  /** if provided, will create inside this #id */
-  portalId?: string;
+  /** if provided, will create inside this #id. default "ag-modal-portal". if null, wont use global id */
+  portalId?: string | null;
   /**applied to modal inside fixed */
   style?: CSSProperties;
 }

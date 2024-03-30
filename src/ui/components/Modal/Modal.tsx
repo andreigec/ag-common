@@ -8,6 +8,8 @@ import { bounce } from '../../styles';
 import { Close } from '../Close';
 import type { IModal } from './types';
 
+const globalId = 'ag-modal-portal';
+
 const FixedBackground = styled.div`
   position: fixed;
   top: 0;
@@ -70,10 +72,37 @@ export const Modal = ({
   closeOnMoveMouseOutside = false,
   className,
   closeOnClickOutside = true,
-  portalId,
+  portalId: pidraw,
   style,
 }: IModal) => {
+  let portalId = pidraw;
+  if (portalId === undefined) {
+    portalId = globalId;
+  }
   const [elem, setElem] = useState<Element | undefined | null>();
+
+  useEffect(() => {
+    if (
+      portalId === null ||
+      document.querySelectorAll(`#${portalId}`).length > 0
+    ) {
+      return;
+    }
+    const d = document.createElement('div');
+    d.id = portalId;
+    d.style.position = 'fixed';
+    d.style.zIndex = '10';
+    document.body.appendChild(d);
+    return () => {
+      try {
+        document.querySelector(`#${portalId}`)?.remove();
+      } catch (e) {
+        //
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow || '';
     if (open) {
