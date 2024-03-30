@@ -111,11 +111,9 @@ const Comp = <T,>({
       {children(pos.data)}
     </Base>
   );
-  if (pos.usePortal) {
-    return createPortal(
-      Content,
-      document.querySelector(`#${globalId}`) as Element,
-    );
+  const e = document.querySelector(`#${globalId}`) as Element | undefined;
+  if (pos.usePortal && e) {
+    return createPortal(Content, e);
   }
   return Content;
 };
