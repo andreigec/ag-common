@@ -40,6 +40,7 @@ export const Item = ({
     onMouseMove={onMouseMove}
     onMouseLeave={onMouseLeave}
     style={style}
+    data-type="bcb-item"
   >
     <Title
       style={{

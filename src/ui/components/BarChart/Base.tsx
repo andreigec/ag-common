@@ -28,9 +28,11 @@ const ItemStyled = styled(Item)`
 export const BarChart = ({
   data: dataRaw,
   style: sRaw,
+  className,
 }: {
   data: IBarChartData[];
   style?: Partial<IVarStyles>;
+  className?: string;
 }) => {
   const style = getVarStyles(sRaw);
   const UT = useTooltip<{ selectedKey?: string; data: IBarChartData }>();
@@ -38,7 +40,7 @@ export const BarChart = ({
   const maxWidth = Math.max(...dataRaw.map((a) => a.total));
 
   return (
-    <BarChartBase data-type="bcb" style={style}>
+    <BarChartBase data-type="bcb" style={style} className={className}>
       <UT.Comp pos={UT.pos}>
         {(p) => <TooltipContent {...p} style={style} />}
       </UT.Comp>
