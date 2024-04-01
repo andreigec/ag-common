@@ -109,7 +109,7 @@ export const LegendX = ({
   }
   itemsRaw.push({ v: maxX, group: 0 });
 
-  const items = itemsRaw.map((d) => ({ v: lt(d.v) ?? d.v, group: d.group }));
+  const items = itemsRaw.map((d) => ({ v: lt(d.v), group: d.group }));
 
   const ch = maxY.toString().length + 1;
 

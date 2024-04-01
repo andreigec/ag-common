@@ -38,7 +38,7 @@ export const TooltipContent = (
     style: IVarStyles;
   },
 ) => {
-  const name = p.tt(p.selectedXs?.[0].x ?? 0) ?? '';
+  const name = p.tt(p.selectedXs?.[0].x ?? 0);
   return (
     <Base
       style={{

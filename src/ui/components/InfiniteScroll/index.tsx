@@ -36,7 +36,7 @@ export const InfiniteScroll = (p: IInfiniteScroll) => {
   const ref = createRef<HTMLDivElement>();
   const [startIndex] = useState(p.startIndex ?? 0);
   const [endIndex, setEndIndex] = useState<number>(
-    (startIndex ?? 0) + incrementNumber,
+    startIndex + incrementNumber,
   );
   const [startScrollTop, setStartScrollTop] = useState(0);
 

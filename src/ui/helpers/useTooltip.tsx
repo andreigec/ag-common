@@ -7,11 +7,11 @@ const Base = styled.div`
   position: absolute;
   z-index: 2;
 `;
-const globalId = 'ag-tooltip-portal';
 
 interface IPos<T> {
   cursor: MouseEvent;
   data: T;
+  portalId: string;
   usePortal: boolean;
   parentWidth: number;
   parentHeight: number;
@@ -111,30 +111,39 @@ const Comp = <T,>({
       {children(pos.data)}
     </Base>
   );
-  const e = document.querySelector(`#${globalId}`) as Element | undefined;
+  const e = document.querySelector(`#${pos.portalId}`) as Element | undefined;
   if (pos.usePortal && e) {
+    console.log('1');
     return createPortal(Content, e);
   }
+  console.log('2');
   return Content;
 };
 
-export const useTooltip = <T,>() => {
+type IUT = {
+  /** default 'ag-tooltip-portal' */
+  portalId: string;
+};
+
+export const useTooltip = <T,>(p?: IUT) => {
+  const portalId = p?.portalId || 'ag-tooltip-portal';
   const [pos, setPosRaw] = useState<IPos<T>>();
 
   useEffect(() => {
-    if (document.querySelectorAll(`#${globalId}`).length > 0) {
+    if (document.querySelectorAll(`#${portalId}`).length > 0) {
       return;
     }
     const d = document.createElement('div');
-    d.id = globalId;
+    d.id = portalId;
     document.body.appendChild(d);
     return () => {
       try {
-        document.querySelector(`#${globalId}`)?.remove();
+        document.querySelector(`#${portalId}`)?.remove();
       } catch (e) {
         //
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setPos = (p?: {
@@ -172,6 +181,7 @@ export const useTooltip = <T,>() => {
       x,
       y,
       usePortal: !p.parent,
+      portalId,
     };
 
     setPosRaw(p2);

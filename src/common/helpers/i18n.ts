@@ -9,7 +9,7 @@ export type TResource = {
 } & { en: string };
 
 export const getValidatedLang = (raw: string): TLang => {
-  const f = AllLang.find((l) => l === raw) as TLang;
+  const f = AllLang.find((l) => l === raw) as TLang | undefined;
   if (!f) {
     return 'en';
   }
@@ -33,6 +33,7 @@ export const useTranslation = <T extends { [a: string]: TResource }>(
       return v1 ?? '';
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return texts[lineText].en ?? '???';
   };
 
