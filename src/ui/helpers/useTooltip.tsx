@@ -113,10 +113,8 @@ const Comp = <T,>({
   );
   const e = document.querySelector(`#${pos.portalId}`) as Element | undefined;
   if (pos.usePortal && e) {
-    console.log('1');
     return createPortal(Content, e);
   }
-  console.log('2');
   return Content;
 };
 
