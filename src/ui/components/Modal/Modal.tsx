@@ -79,7 +79,7 @@ export const Modal = ({
   if (portalId === undefined) {
     portalId = globalId;
   }
-  const [elem, setElem] = useState<Element | undefined | null>();
+  const [portalElem, setPortalElem] = useState<Element | undefined | null>();
 
   useEffect(() => {
     if (
@@ -123,6 +123,18 @@ export const Modal = ({
       moveMouseOutside: closeOnMoveMouseOutside,
     },
     () => {
+      //there might be multiple models open, only close the last one on the stack
+      if (portalElem) {
+        const myid = Array.prototype.indexOf.call(
+          portalElem.children,
+          //parent because fixed background is first
+          ref.current?.parentElement,
+        );
+        const childcount = portalElem.children.length;
+        if (myid + 1 !== childcount) {
+          return;
+        }
+      }
       if (closeOnClickOutside && open) {
         setOpen(false);
         setBounced(false);
@@ -137,14 +149,15 @@ export const Modal = ({
   }, [open, bounced]);
 
   useEffect(() => {
-    if (elem === undefined && portalId) {
-      setElem(document.getElementById(portalId));
+    if (portalElem === undefined && portalId) {
+      setPortalElem(document.getElementById(portalId));
     }
-  }, [elem, portalId]);
+  }, [portalElem, portalId]);
 
   if (!open) {
     return <></>;
   }
+
   const Content = (
     <FixedBackground>
       <ModalBase
@@ -162,11 +175,11 @@ export const Modal = ({
       </ModalBase>
     </FixedBackground>
   );
-  if (portalId && elem === undefined) {
+  if (portalId && portalElem === undefined) {
     return null;
   }
-  if (portalId && elem) {
-    return createPortal(Content, elem);
+  if (portalId && portalElem) {
+    return createPortal(Content, portalElem);
   }
 
   return Content;
