@@ -50,11 +50,14 @@ export interface ILambdaConfig {
 /**
  * 'default' will be applied to all functions
  */
-export interface ILambdaConfigs {
-  [pathHyphenVerb: string]: ILambdaConfig & {
-    default?: ILambdaConfig;
-  };
-}
+export type ILambdaConfigs = Partial<
+  Record<
+    string,
+    ILambdaConfig & {
+      default?: ILambdaConfig;
+    }
+  >
+>;
 
 export type TSkOperator =
   | 'BETWEEN'
