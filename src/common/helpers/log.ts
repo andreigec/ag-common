@@ -17,8 +17,8 @@ export const SetLogShim = (ls: TLogShim) => {
 };
 
 let userLogLevel: TLogType | undefined;
-export const SetLogLevel = (l: TLogType) => {
-  const lu = l.toUpperCase() as TLogType;
+export const SetLogLevel = (l?: TLogType) => {
+  const lu = (l ?? 'INFO').toUpperCase() as TLogType;
   if (GetLogLevel(lu) === -1) {
     return;
   }
