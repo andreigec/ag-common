@@ -133,7 +133,7 @@ export const callOpenApi = async <T, TDefaultApi>(
         ae.response?.statusText.toString() ?? '',
         ae.response?.status.toString() ?? '',
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        ae.message.toString() ?? '',
+        ae.message?.toString() ?? '',
       ]
         .filter(notEmpty)
         .sort((a, b) => (a.length < b.length ? -1 : 1))
