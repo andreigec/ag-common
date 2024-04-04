@@ -5,23 +5,26 @@ import { createRoot } from 'react-dom/client';
 import { Modal } from './Modal';
 
 export const ModalDialog = async (
-  content: JSX.Element,
+  content: React.ReactNode | ((p: { close: () => void }) => React.ReactNode),
   opt?: { style?: CSSProperties; portalId?: string },
 ): Promise<string | undefined> => {
   return new Promise((res) => {
     const wrapper = document.body.appendChild(document.createElement('div'));
     const root = createRoot(wrapper);
+    const onClose = () => {
+      try {
+        root.unmount();
+        wrapper.remove();
+      } catch (e) {
+        //
+      }
+    };
     root.render(
       <Modal
         open={true}
         setOpen={(o) => {
           if (!o) {
-            try {
-              root.unmount();
-              wrapper.remove();
-            } catch (e) {
-              //
-            }
+            onClose();
           }
 
           res('ok');
@@ -30,7 +33,13 @@ export const ModalDialog = async (
         position="center"
         style={opt?.style}
       >
-        {content}
+        {typeof content !== 'function'
+          ? content
+          : content({
+              close: () => {
+                onClose();
+              },
+            })}
       </Modal>,
     );
   });

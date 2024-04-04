@@ -4,7 +4,16 @@ import { fromBase64, toBase64 } from './string/base64';
 
 export const toBuffer = (ab: ArrayBuffer) => Buffer.from(ab);
 
-function toArrayBuffer(base64: string) {
+export function bufferToArrayBuffer(buffer: Buffer) {
+  const arrayBuffer = new ArrayBuffer(buffer.length);
+  const view = new Uint8Array(arrayBuffer);
+  for (let i = 0; i < buffer.length; ++i) {
+    view[i] = buffer[i];
+  }
+  return arrayBuffer;
+}
+
+export function b64ToArrayBuffer(base64: string) {
   const binary_string = fromBase64(base64);
   const len = binary_string.length;
   const bytes = new Uint8Array(len);
@@ -34,4 +43,4 @@ export function arrayBufferToBase64(buffer: ArrayBuffer) {
  * @param raw
  * @returns
  */
-export const base64ToBinary = (raw: string) => toBuffer(toArrayBuffer(raw));
+export const base64ToBinary = (raw: string) => toBuffer(b64ToArrayBuffer(raw));
