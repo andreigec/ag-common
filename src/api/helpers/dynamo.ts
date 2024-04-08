@@ -80,7 +80,7 @@ export const batchWrite = async <T extends Record<string, any>>(
       let params = new BatchWriteCommand({
         RequestItems: {
           [`${tableName}`]: items.map((Item) => ({
-            PutRequest: { Item: Item },
+            PutRequest: { Item },
           })),
         },
       });

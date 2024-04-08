@@ -1,6 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
-import React, { useEffect, useRef } from 'react';
+import React, { createRef, useEffect, useRef } from 'react';
 
 import { debounce } from '../../helpers/debounce';
 import { filterDataProps } from '../../helpers/dom';
@@ -54,18 +54,31 @@ export interface ISearchBox {
   setSearchText: (val: string, enterPressed: boolean) => void;
   className?: string;
   textBoxRef?: React.RefObject<IRefTextEdit>;
+  /**
+   * if truthy will enable text edit mode by default. if focus is true, will also focus on open
+   */
+  defaultEditing?: { focus?: boolean };
 }
 export const SearchBox = (p: ISearchBox) => {
-  const textBoxRef = useRef<IRefTextEdit>(p.textBoxRef?.current ?? null);
+  const ur = useRef(p.textBoxRef);
+  const cr = createRef<IRefTextEdit>();
+
+  const textBoxRef = (!p.textBoxRef ? cr : ur) as unknown as
+    | React.RefObject<IRefTextEdit>
+    | undefined;
 
   useEffect(() => {
-    if (!textBoxRef.current || textBoxRef.current.getValue() === p.searchText) {
+    if (
+      !textBoxRef?.current ||
+      textBoxRef.current.getValue() === p.searchText
+    ) {
       return;
     }
+
     textBoxRef.current.setValue(p.searchText);
 
     p.setSearchText(p.searchText, true);
-  }, [p]);
+  }, [p, textBoxRef]);
 
   return (
     <Base data-type="search" className={p.className} {...filterDataProps(p)}>
@@ -73,12 +86,12 @@ export const SearchBox = (p: ISearchBox) => {
         ref={textBoxRef}
         defaultValue={p.searchText}
         placeholder={p.placeholderText}
-        defaultEditing={{ focus: true }}
+        defaultEditing={{ focus: true, ...p.defaultEditing }}
         singleLine
         leftContent={
           <MagnifyIcon
             onClick={() =>
-              p.setSearchText(textBoxRef.current?.getValue() || '', true)
+              p.setSearchText(textBoxRef?.current?.getValue() || '', true)
             }
           >
             <Magnify />
@@ -98,7 +111,7 @@ export const SearchBox = (p: ISearchBox) => {
       {p.searchText && (
         <CrossIconStyled
           onClick={() => {
-            textBoxRef.current?.setValue('');
+            textBoxRef?.current?.setValue('');
             p.setSearchText('', true);
           }}
         />

@@ -46,7 +46,7 @@ function getCacheKey({
   overrideAuth?: OverrideAuth;
 }) {
   const authkeyPrefix1 = getIdTokenAuthHeaderRaw({
-    overrideAuth: overrideAuth,
+    overrideAuth,
   });
 
   const authPref = !authkeyPrefix1 ? '' : hashCode(toBase64(authkeyPrefix1));

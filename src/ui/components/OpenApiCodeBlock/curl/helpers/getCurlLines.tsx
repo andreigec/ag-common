@@ -31,7 +31,7 @@ export const getCurlLines = <TDefaultApi,>(
     verb,
     path,
     error: undefined,
-    headerLines: headerLines,
+    headerLines,
     fullApiUrl: withPath,
     bodyLine: bodyLines.content,
     operation,

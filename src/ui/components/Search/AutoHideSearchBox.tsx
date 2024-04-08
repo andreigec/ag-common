@@ -50,6 +50,7 @@ export const AutoHideSearchBox = (p: IAutoHideSearchBox) => {
   const [open, setOpen] = useState(!!p.searchText);
 
   const textEditRef = createRef<IRefTextEdit>();
+
   useGranularEffect(
     () => {
       const newOpen = !!p.searchText;
@@ -72,7 +73,7 @@ export const AutoHideSearchBox = (p: IAutoHideSearchBox) => {
           setOpen(!open);
           p.onOpenToggle?.(!open);
           if (!open) {
-            textEditRef.current?.focus();
+            setTimeout(() => textEditRef.current?.focus(), 100);
           }
         }}
       >
@@ -82,7 +83,6 @@ export const AutoHideSearchBox = (p: IAutoHideSearchBox) => {
       <SearchBoxStyled
         textBoxRef={textEditRef}
         {...p}
-        className=""
         data-open={open}
         setSearchText={(val, enter) => {
           //we dont want empty enters to do anything

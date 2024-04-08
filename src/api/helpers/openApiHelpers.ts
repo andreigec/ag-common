@@ -262,7 +262,7 @@ export const openApiImpl = (p: {
         memorySize: lc.memory,
         timeout: lc.timeout,
         description: '(cdk)',
-        entry: entry,
+        entry,
         reservedConcurrentExecutions: lc.reservedConcurrentExecutions,
         logRetention: logs.RetentionDays.FIVE_DAYS,
         layers: lc.layers,

@@ -91,7 +91,7 @@ export const UseDarkMode = ({
   const [darkmode, setDarkmode] = useCookie<TDarkMode>({
     defaultValue: TDarkMode.system,
     name: 'darkmode',
-    cookieDocument: cookieDocument,
+    cookieDocument,
     parse: (v) => Number(v) as TDarkMode,
     stringify: (v) => v.toString(),
   });
