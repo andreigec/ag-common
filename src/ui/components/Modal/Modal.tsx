@@ -122,7 +122,7 @@ export const Modal = ({
       ref,
       moveMouseOutside: closeOnMoveMouseOutside,
     },
-    () => {
+    (e) => {
       //there might be multiple models open, only close the last one on the stack
       if (portalElem) {
         const myid = Array.prototype.indexOf.call(
@@ -136,7 +136,7 @@ export const Modal = ({
         }
       }
       if (closeOnClickOutside && open) {
-        setOpen(false);
+        setOpen(false, e);
         setBounced(false);
       }
     },
@@ -169,7 +169,10 @@ export const Modal = ({
         style={style}
       >
         {showCloseButton && (
-          <CloseStyled data-type="modal-close" onClick={() => setOpen(false)} />
+          <CloseStyled
+            data-type="modal-close"
+            onClick={(e) => setOpen(false, e as unknown as Event)}
+          />
         )}
         {children}
       </ModalBase>
