@@ -151,7 +151,9 @@ export const TreeChart = (tnd: TreeNodeData) => {
 
   return (
     <Base ref={r} className={tnd.className} style={tnd.style}>
-      <UT.Comp pos={UT.pos}>{(p) => <TooltipContent {...p} />}</UT.Comp>
+      <UT.Comp pos={UT.pos}>
+        {({ data }) => <TooltipContent {...data} />}
+      </UT.Comp>
       {headDim &&
         Render({
           UT,

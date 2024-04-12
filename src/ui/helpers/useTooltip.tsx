@@ -19,17 +19,20 @@ interface IPos<T> {
   y: number;
 }
 
+interface IPosSize {
+  tooltipWidth: number;
+  tooltipHeight: number;
+}
+
 const Comp = <T,>({
   pos,
   children,
 }: {
   pos: IPos<T> | undefined;
-  children: (data: T) => JSX.Element;
+  children: (pos: IPos<T>, size?: IPosSize) => JSX.Element;
 }) => {
   const ref = createRef<HTMLDivElement>();
-  const [size, setSize] = useState<{
-    p?: { tooltipWidth: number; tooltipHeight: number };
-  }>();
+  const [size, setSize] = useState<IPosSize>();
 
   useEffect(() => {
     if (!ref.current) {
@@ -44,18 +47,16 @@ const Comp = <T,>({
       ref.current.scrollHeight,
     );
     if (
-      tooltipHeight === size?.p?.tooltipHeight ||
-      tooltipWidth === size?.p?.tooltipWidth ||
+      tooltipHeight === size?.tooltipHeight ||
+      tooltipWidth === size?.tooltipWidth ||
       tooltipHeight === 0 ||
       tooltipWidth === 0
     ) {
       return;
     }
     setSize({
-      p: {
-        tooltipWidth,
-        tooltipHeight,
-      },
+      tooltipWidth,
+      tooltipHeight,
     });
   }, [ref, size]);
 
@@ -68,29 +69,33 @@ const Comp = <T,>({
   let top: number | undefined;
   let bottom: number | undefined;
   const gap = 5;
-  if (size?.p) {
+  if (size) {
     left = pos.x + gap;
     const newRight = pos.parentWidth - pos.x + gap;
 
-    if (pos.x + gap + size.p.tooltipWidth > pos.parentWidth) {
+    if (pos.x + gap + size.tooltipWidth > pos.parentWidth) {
       left = undefined;
       right = newRight;
     }
     //
     top = pos.y + gap;
 
-    if (top + size.p.tooltipHeight > pos.parentHeight) {
+    if (top + size.tooltipHeight > pos.parentHeight) {
       top = undefined;
       bottom = pos.parentHeight - pos.y;
     }
 
-    if (right && right + size.p.tooltipWidth > pos.parentWidth) {
-      right = undefined;
+    if (right && right + size.tooltipWidth > pos.parentWidth) {
+      if (!pos.usePortal) {
+        right = undefined;
+      }
       left = 0;
     }
 
-    if (bottom && bottom + size.p.tooltipHeight > pos.parentHeight) {
-      bottom = undefined;
+    if (bottom && bottom + size.tooltipHeight > pos.parentHeight) {
+      if (!pos.usePortal) {
+        bottom = undefined;
+      }
       top = 0;
     }
   }
@@ -105,11 +110,12 @@ const Comp = <T,>({
         top,
         bottom,
         zIndex: 10,
+        overflow: 'hidden',
         ...(pos.usePortal && { position: 'fixed' }),
-        ...(!size?.p && { zIndex: -1 }),
+        ...(!size && { zIndex: -1 }),
       }}
     >
-      {children(pos.data)}
+      {children(pos, size)}
     </Base>
   );
   const e = document.querySelector(`#${pos.portalId}`) as Element | undefined;
@@ -130,7 +136,7 @@ export interface IUseTooltip<T> {
     children,
   }: {
     pos: IPos<T> | undefined;
-    children: (data: T) => JSX.Element;
+    children: (pos: IPos<T>, size?: IPosSize) => JSX.Element;
   }) => JSX.Element | null;
   setPos: (
     p?:

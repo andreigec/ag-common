@@ -42,7 +42,7 @@ export const BarChart = ({
   return (
     <BarChartBase data-type="bcb" style={style} className={className}>
       <UT.Comp pos={UT.pos}>
-        {(p) => <TooltipContent {...p} style={style} />}
+        {({ data }) => <TooltipContent {...data} style={style} />}
       </UT.Comp>
       {dataRaw.map((data) => (
         <ItemStyled
