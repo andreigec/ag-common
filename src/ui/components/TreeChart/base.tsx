@@ -3,9 +3,12 @@ import styled from '@emotion/styled';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useResize } from '../../helpers/useResize';
+import type { IUseTooltip } from '../../helpers/useTooltip';
+import { useTooltip } from '../../helpers/useTooltip';
 import { getColourWheel } from '../../styles';
 import { HardOutline, TextOverflowEllipsis } from '../../styles/common';
-import { convertToRaw, toArray } from './helpers';
+import { convertToRaw } from './helpers';
+import { TooltipContent } from './TooltipContent';
 import type { TreeNodeData, TreeNodeOut } from './types';
 
 const Base = styled.div`
@@ -44,31 +47,28 @@ const Title = styled.div`
   min-height: 1rem;
   line-height: 1rem;
 `;
-const render = ({
+
+const Render = ({
   n,
   depth,
   head,
   headDim,
   tnd,
+  UT,
 }: {
   tnd: TreeNodeData;
   n: TreeNodeOut;
   depth: number;
   head: TreeNodeOut;
   headDim: { width: number; height: number };
+  UT: IUseTooltip<ITreeChartUTData>;
 }) => {
-  const leaf = n.children.length === 0;
+  const children = Object.values(n.children);
+  const leaf = children.length === 0;
   const sizeMult = n.size / head.size;
 
   const biggerDim = Math.max(headDim.width, headDim.height);
   const nodeSize = Math.floor(biggerDim * sizeMult).toString();
-
-  const title =
-    tnd.titleFn?.({
-      path: n.name,
-      pathCount: n.size,
-      fullCount: head.size,
-    }) || `${n.name} (${n.size}/${head.size})`;
 
   return (
     <Node
@@ -85,22 +85,45 @@ const render = ({
       key={n.name}
       data-ch={n.children.length}
       data-size={n.size}
-      title={title}
+      onMouseLeave={() => UT.setPos(undefined)}
+      onMouseMove={(element) => {
+        UT.setPos({
+          element,
+          parent: null,
+          data: { data: tnd, node: n, head },
+        });
+        element.preventDefault();
+        element.stopPropagation();
+      }}
     >
       {n.name && <Title>{n.name}</Title>}
-      {n.children.length > 0 && (
+      {children.length > 0 && (
         <NodeChildren data-type="nc">
-          {n.children.map((c) =>
-            render({ n: c, depth: depth + 1, head, headDim, tnd }),
+          {children.map((c) =>
+            Render({
+              UT,
+              n: c,
+              depth: depth + 1,
+              head,
+              headDim,
+              tnd,
+            }),
           )}
         </NodeChildren>
       )}
     </Node>
   );
 };
+
+interface ITreeChartUTData {
+  data: TreeNodeData;
+  node: TreeNodeOut;
+  head: TreeNodeOut;
+}
+
 export const TreeChart = (tnd: TreeNodeData) => {
-  const raw = convertToRaw({ tnd });
-  const head = toArray('', raw);
+  const UT = useTooltip<ITreeChartUTData>();
+  const head = convertToRaw({ tnd });
 
   const pd = useResize();
 
@@ -128,7 +151,16 @@ export const TreeChart = (tnd: TreeNodeData) => {
 
   return (
     <Base ref={r} className={tnd.className} style={tnd.style}>
-      {headDim && render({ tnd, n: head, depth: 0, head, headDim })}
+      <UT.Comp pos={UT.pos}>{(p) => <TooltipContent {...p} />}</UT.Comp>
+      {headDim &&
+        Render({
+          UT,
+          tnd,
+          n: head,
+          depth: 0,
+          head,
+          headDim,
+        })}
     </Base>
   );
 };

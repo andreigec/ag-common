@@ -4,8 +4,12 @@ export interface TreeNodeOut {
   name: string;
   size: number;
   depth: number;
-  children: TreeNodeOut[];
+  children: {
+    [P in string]: TreeNodeOut;
+  };
+  parent: TreeNodeOut | undefined;
 }
+
 export interface TreeNodeData {
   className?: string;
   data: {

@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { filterDataProps } from '../../helpers/dom';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { bounce } from '../../styles';
 import { Close } from '../Close';
@@ -62,19 +63,20 @@ const CloseStyled = styled(Close)`
   z-index: 1;
 `;
 
-export const Modal = ({
-  open,
-  setOpen,
-  children,
-  position = 'left',
-  topPosition = 'top',
-  showCloseButton = true,
-  closeOnMoveMouseOutside = false,
-  className,
-  closeOnClickOutside = true,
-  portalId: pidraw,
-  style,
-}: IModal) => {
+export const Modal = (p: IModal) => {
+  const {
+    open,
+    setOpen,
+    children,
+    position = 'left',
+    topPosition = 'top',
+    showCloseButton = true,
+    closeOnMoveMouseOutside = false,
+    className,
+    closeOnClickOutside = true,
+    portalId: pidraw,
+    style,
+  } = p;
   let portalId = pidraw;
   if (portalId === undefined) {
     portalId = globalId;
@@ -161,6 +163,7 @@ export const Modal = ({
   const Content = (
     <FixedBackground>
       <ModalBase
+        {...filterDataProps(p)}
         data-bounced={bounced}
         data-position={position}
         data-topposition={topPosition}

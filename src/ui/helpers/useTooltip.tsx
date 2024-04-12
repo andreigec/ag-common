@@ -97,6 +97,7 @@ const Comp = <T,>({
 
   const Content = (
     <Base
+      data-type="tooltip-content"
       ref={ref}
       style={{
         left,
@@ -118,12 +119,32 @@ const Comp = <T,>({
   return Content;
 };
 
-type IUT = {
+type ITooltipProps = {
   /** default 'ag-tooltip-portal' */
   portalId: string;
 };
 
-export const useTooltip = <T,>(p?: IUT) => {
+export interface IUseTooltip<T> {
+  Comp: <T>({
+    pos,
+    children,
+  }: {
+    pos: IPos<T> | undefined;
+    children: (data: T) => JSX.Element;
+  }) => JSX.Element | null;
+  setPos: (
+    p?:
+      | {
+          element: MouseEvent;
+          parent: Element | null;
+          data: T;
+        }
+      | undefined,
+  ) => void;
+  pos: IPos<T> | undefined;
+}
+
+export const useTooltip = <T,>(p?: ITooltipProps): IUseTooltip<T> => {
   const portalId = p?.portalId || 'ag-tooltip-portal';
   const [pos, setPosRaw] = useState<IPos<T>>();
 
@@ -158,6 +179,8 @@ export const useTooltip = <T,>(p?: IUT) => {
     let parentLeft = 0;
     let parentWidth = document.body.clientWidth;
     let parentHeight = document.body.clientHeight;
+    let x = 0;
+    let y = 0;
 
     if (p.parent) {
       ({
@@ -166,10 +189,14 @@ export const useTooltip = <T,>(p?: IUT) => {
         width: parentWidth,
         height: parentHeight,
       } = p.parent.getBoundingClientRect());
+      x = p.element.pageX - parentLeft;
+      y = p.element.pageY - parentTop;
+    } else {
+      parentWidth = window.innerWidth;
+      parentHeight = window.innerHeight;
+      x = p.element.clientX;
+      y = p.element.clientY;
     }
-
-    const x = p.element.pageX - parentLeft;
-    const y = p.element.pageY - parentTop;
 
     const p2 = {
       cursor: p.element,
