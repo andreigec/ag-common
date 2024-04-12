@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { filterDataProps } from '../../helpers/dom';
+import { useLockBodyScroll } from '../../helpers/useLockBodyScroll';
 import { useOnClickOutside } from '../../helpers/useOnClickOutside';
 import { bounce } from '../../styles';
 import { Close } from '../Close';
@@ -81,6 +82,8 @@ export const Modal = (p: IModal) => {
   if (portalId === undefined) {
     portalId = globalId;
   }
+
+  useLockBodyScroll(p.open);
   const [portalElem, setPortalElem] = useState<Element | undefined | null>();
 
   useEffect(() => {
@@ -104,17 +107,6 @@ export const Modal = (p: IModal) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    const originalStyle = window.getComputedStyle(document.body).overflow || '';
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.body.style.overflow = originalStyle;
-    };
-  }, [open]);
 
   const [bounced, setBounced] = useState(false);
   const ref = useRef<HTMLDivElement>(null);

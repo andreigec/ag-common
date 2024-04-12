@@ -12,7 +12,7 @@ interface IPos<T> {
   cursor: MouseEvent;
   data: T;
   portalId: string;
-  usePortal: boolean;
+  hasParent: boolean;
   parentWidth: number;
   parentHeight: number;
   x: number;
@@ -35,7 +35,7 @@ const Comp = <T,>({
   const [size, setSize] = useState<IPosSize>();
 
   useEffect(() => {
-    if (!ref.current) {
+    if (!ref.current || size) {
       return;
     }
     const tooltipWidth = Math.max(
@@ -46,12 +46,7 @@ const Comp = <T,>({
       ref.current.clientHeight,
       ref.current.scrollHeight,
     );
-    if (
-      tooltipHeight === size?.tooltipHeight ||
-      tooltipWidth === size?.tooltipWidth ||
-      tooltipHeight === 0 ||
-      tooltipWidth === 0
-    ) {
+    if (tooltipHeight === 0 || tooltipWidth === 0) {
       return;
     }
     setSize({
@@ -81,19 +76,22 @@ const Comp = <T,>({
     top = pos.y + gap;
 
     if (top + size.tooltipHeight > pos.parentHeight) {
-      top = undefined;
+      if (pos.hasParent) {
+        top = undefined;
+      }
+
       bottom = pos.parentHeight - pos.y;
     }
 
     if (right && right + size.tooltipWidth > pos.parentWidth) {
-      if (!pos.usePortal) {
+      if (pos.hasParent) {
         right = undefined;
       }
       left = 0;
     }
 
     if (bottom && bottom + size.tooltipHeight > pos.parentHeight) {
-      if (!pos.usePortal) {
+      if (pos.hasParent) {
         bottom = undefined;
       }
       top = 0;
@@ -111,7 +109,7 @@ const Comp = <T,>({
         bottom,
         zIndex: 10,
         overflow: 'hidden',
-        ...(pos.usePortal && { position: 'fixed' }),
+        ...(!pos.hasParent && { position: 'fixed' }),
         ...(!size && { zIndex: -1 }),
       }}
     >
@@ -119,7 +117,7 @@ const Comp = <T,>({
     </Base>
   );
   const e = document.querySelector(`#${pos.portalId}`) as Element | undefined;
-  if (pos.usePortal && e) {
+  if (!pos.hasParent && e) {
     return createPortal(Content, e);
   }
   return Content;
@@ -211,7 +209,7 @@ export const useTooltip = <T,>(p?: ITooltipProps): IUseTooltip<T> => {
       parentHeight,
       x,
       y,
-      usePortal: !p.parent,
+      hasParent: !!p.parent,
       portalId,
     };
 
