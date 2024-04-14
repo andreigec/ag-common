@@ -7,6 +7,7 @@ const Base = styled.div`
   padding: 0.5rem;
   border: solid 1px black;
   background-color: white;
+  color: black;
 `;
 
 const Title = styled.div`
