@@ -31,6 +31,8 @@ export const sendEmail = async ({
       warn('ses arn not equal to config region changing to:' + sourceArnRegion);
       setSes(sourceArnRegion);
     }
+    const ishtml =
+      message.startsWith('<!DOCTYPE HTML') || message.startsWith('<html');
     await ses.send(
       new SendEmailCommand({
         Destination: {
@@ -39,10 +41,18 @@ export const sendEmail = async ({
         },
         Message: {
           Body: {
-            Text: {
-              Charset: 'UTF-8',
-              Data: message,
-            },
+            ...(ishtml && {
+              Html: {
+                Data: message,
+                Charset: 'UTF-8',
+              },
+            }),
+            ...(!ishtml && {
+              Text: {
+                Data: message,
+                Charset: 'UTF-8',
+              },
+            }),
           },
           Subject: {
             Charset: 'UTF-8',
