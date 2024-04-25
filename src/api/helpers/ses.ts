@@ -1,5 +1,7 @@
 import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses';
 
+import { warn } from '../../common/helpers/log';
+
 export const setSes = (region: string) => {
   const raw = new SESClient({ region });
   return raw;
@@ -23,6 +25,13 @@ export const sendEmail = async ({
   from,
 }: ISendEmail): Promise<{ error?: string }> => {
   try {
+    const sourceArnRegion = sourceArn.match(':ses:(.*?):')?.[1];
+    if (sourceArn !== ses.config.region && sourceArnRegion) {
+      warn(
+        'ses arn not equal to config regionm changing to:' + sourceArnRegion,
+      );
+      setSes(sourceArnRegion);
+    }
     await ses.send(
       new SendEmailCommand({
         Destination: {
