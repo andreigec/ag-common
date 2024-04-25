@@ -4,10 +4,11 @@ import { warn } from '../../common/helpers/log';
 
 export const setSes = (region: string) => {
   const raw = new SESClient({ region });
+  ses = raw;
   return raw;
 };
 
-export const ses = setSes('ap-southeast-2');
+export let ses = setSes('ap-southeast-2');
 
 export interface ISendEmail {
   to: string;
@@ -27,9 +28,7 @@ export const sendEmail = async ({
   try {
     const sourceArnRegion = sourceArn.match(':ses:(.*?):')?.[1];
     if (sourceArn !== ses.config.region && sourceArnRegion) {
-      warn(
-        'ses arn not equal to config regionm changing to:' + sourceArnRegion,
-      );
+      warn('ses arn not equal to config region changing to:' + sourceArnRegion);
       setSes(sourceArnRegion);
     }
     await ses.send(
@@ -58,6 +57,7 @@ export const sendEmail = async ({
 
     return {};
   } catch (e) {
+    warn('ses send error:' + JSON.stringify(e));
     return { error: (e as Error).toString() };
   }
 };
