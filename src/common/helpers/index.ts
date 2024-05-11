@@ -3,6 +3,7 @@ export * from './async';
 export * from './binary';
 export * from './date';
 export * from './email';
+export * from './fetch'
 export * from './func';
 export * from './generator';
 export * from './groupBy';
