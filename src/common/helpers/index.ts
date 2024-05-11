@@ -18,4 +18,6 @@ export * from './object';
 export * from './random';
 export * from './secondsInNearest';
 export * from './sleep';
+export * from './stream';
 export * from './string';
+export * from './xml';
