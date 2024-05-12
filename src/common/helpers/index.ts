@@ -4,8 +4,6 @@ export * from './binary';
 export * from './csv';
 export * from './date';
 export * from './email';
-export * from './fetch';
-export * from './fs';
 export * from './func';
 export * from './generator';
 export * from './groupBy';

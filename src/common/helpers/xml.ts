@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as fs from 'fs';
 
-export const convertXmlToJson = async (xmlFilePath: string) => {
-  const xmlData = await fs.readFileSync(xmlFilePath, 'utf8');
+export const convertXmlToJson = async (p: { xmlData: string }) => {
   const parser = new XMLParser();
-  const ret = parser.parse(xmlData);
+  const ret = parser.parse(p.xmlData);
   return ret;
 };
 

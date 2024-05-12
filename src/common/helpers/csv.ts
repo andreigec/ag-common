@@ -1,13 +1,10 @@
-import fs from 'fs';
-
 import { isNumber } from './math';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function loadCsvAsJson<T extends Record<string | number, any>>(
-  filePath: string,
-): T[] {
-  const fileData = fs.readFileSync(filePath, 'utf8');
-  const lines = fileData.split(/[\r]?\n/);
+export function loadCsvAsJson<T extends Record<string | number, any>>(p: {
+  fileData: string;
+}): T[] {
+  const lines = p.fileData.split(/[\r]?\n/);
 
   let sep = ',';
   if (lines[0].split(',').length === 1 && lines[0].split(';').length > 1) {
