@@ -21,11 +21,21 @@ export const useOverloadPageSearch = ({
       }
     };
 
-    window.removeEventListener('keydown', ctrlF);
-    if (!disabled) {
-      window.addEventListener('keydown', ctrlF);
+    try {
+      window.removeEventListener('keydown', ctrlF);
+      if (!disabled) {
+        window.addEventListener('keydown', ctrlF);
+      }
+    } catch (e) {
+      //
     }
 
-    return () => window.removeEventListener('keydown', ctrlF);
+    return () => {
+      try {
+        window.removeEventListener('keydown', ctrlF);
+      } catch (e) {
+        //
+      }
+    };
   }, [disabled, onTrigger]);
 };

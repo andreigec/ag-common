@@ -36,8 +36,12 @@ export const useContextMenu = ({
     document.addEventListener('click', handleClick);
     document.addEventListener('contextmenu', handleContextMenu);
     return () => {
-      document.addEventListener('click', handleClick);
-      document.removeEventListener('contextmenu', handleContextMenu);
+      try {
+        document.addEventListener('click', handleClick);
+        document.removeEventListener('contextmenu', handleContextMenu);
+      } catch (e) {
+        //
+      }
     };
   });
 

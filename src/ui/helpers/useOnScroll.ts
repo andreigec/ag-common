@@ -72,10 +72,14 @@ export function useOnScroll({
       );
 
       return () => {
-        (element?.current ?? document).removeEventListener(
-          `scroll`,
-          listenDebounce,
-        );
+        try {
+          (element?.current ?? document).removeEventListener(
+            `scroll`,
+            listenDebounce,
+          );
+        } catch (e) {
+          //
+        }
       };
     },
     [element],

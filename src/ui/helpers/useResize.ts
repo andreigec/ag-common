@@ -46,7 +46,11 @@ export function useResize() {
     handleResize();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      try {
+        window.removeEventListener('resize', handleResize);
+      } catch (e) {
+        //
+      }
     };
   }, [windowDimensions]);
 

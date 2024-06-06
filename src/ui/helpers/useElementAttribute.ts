@@ -20,11 +20,21 @@ export function useElementAttribute({
     if (!element) {
       return;
     }
-    if (enabled) {
-      element.setAttribute(key, value);
-    } else {
-      element.removeAttribute(key);
+    try {
+      if (enabled) {
+        element.setAttribute(key, value);
+      } else {
+        element.removeAttribute(key);
+      }
+    } catch (e) {
+      //
     }
-    return () => element.removeAttribute(key);
+    return () => {
+      try {
+        element.removeAttribute(key);
+      } catch (e) {
+        //
+      }
+    };
   }, [element, enabled, key, value]);
 }

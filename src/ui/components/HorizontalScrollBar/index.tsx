@@ -24,8 +24,12 @@ export const HorizontalScrollBar = ({
     scrollRef.current.addEventListener('wheel', handleScroll);
 
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      scrollRef.current?.removeEventListener('wheel', handleScroll);
+      try {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        scrollRef.current?.removeEventListener('wheel', handleScroll);
+      } catch (e) {
+        //
+      }
     };
   }, [scrollRef]);
 
