@@ -33,6 +33,7 @@ export const sendEmail = async ({
     }
     const ishtml =
       message.startsWith('<!DOCTYPE HTML') || message.startsWith('<html');
+    warn('sending email. html=' + ishtml);
     await ses.send(
       new SendEmailCommand({
         Destination: {

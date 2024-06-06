@@ -112,6 +112,12 @@ export const Toast = ({
       icon = <Warning />;
       break;
     }
+
+    case 'success':
+    default: {
+      icon = <Tick />;
+      break;
+    }
   }
 
   useEffect(() => {

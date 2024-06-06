@@ -43,8 +43,12 @@ export const SearchDialog = async <T,>(
             document.body.style.overflow = originalStyle || '';
             res(f);
           } finally {
-            root.unmount();
-            wrapper.remove();
+            try {
+              root.unmount();
+              wrapper.remove();
+            } catch (e) {
+              //
+            }
           }
         }}
       />,

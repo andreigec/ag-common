@@ -13,6 +13,7 @@ export const arrayToObject = <TIn, Indexer extends string | number, TOut>(
   valueF: (a: TIn) => TOut,
 ): { [a in Indexer]: TOut } => {
   const ret: { [a in Indexer]: TOut } = {} as { [a in Indexer]: TOut };
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!arr || !keyF) {
     return ret;
   }
@@ -23,6 +24,7 @@ export const arrayToObject = <TIn, Indexer extends string | number, TOut>(
   });
   return ret;
 };
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export const flat = <T>(arr: T[][]): T[] => [].concat(...arr);

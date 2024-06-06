@@ -59,8 +59,12 @@ export const PromptModal = ({
     try {
       res(v);
     } finally {
-      root?.unmount();
-      wrapper?.remove();
+      try {
+        root?.unmount();
+        wrapper?.remove();
+      } catch (e) {
+        //
+      }
     }
   };
 

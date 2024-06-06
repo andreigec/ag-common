@@ -21,7 +21,7 @@ const Template: StoryFn<ISearchDialog<string>> = (args) => {
     <>
       <div
         onClick={() => {
-          ref.current?.setValue?.('2');
+          ref.current?.setValue('2');
         }}
         style={{ cursor: 'pointer', border: 'solid 1px #333', height: '1rem' }}
       >
