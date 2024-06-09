@@ -60,7 +60,7 @@
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "cross-env": "7.0.3",
-    "eslint-config-e7npm": "0.0.105",
+    "eslint-config-e7npm": "0.0.106",
     "globstar": "1.0.0",
     "rimraf": "5.0.7",
     "storybook": "8.1.6",
