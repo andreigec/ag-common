@@ -3,6 +3,7 @@ import { isNumber } from './math';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function loadCsvAsJson<T extends Record<string | number, any>>(p: {
   fileData: string;
+  opt?: { typeOverrides?: { headerName: string; type: 'string' | 'number' }[] };
 }): T[] {
   const lines = p.fileData.split(/[\r]?\n/);
 
@@ -11,7 +12,15 @@ export function loadCsvAsJson<T extends Record<string | number, any>>(p: {
     sep = ';';
   }
 
-  const headers = lines[0].split(sep);
+  const headers = lines[0]
+    .split(sep)
+    .map(
+      (s) =>
+        [s, p.opt?.typeOverrides?.find((s1) => s1.headerName === s)?.type] as [
+          string,
+          'string' | 'number' | undefined,
+        ],
+    );
 
   const jsonData: T[] = lines.slice(1).map((line) => {
     const values: string[] = [];
@@ -35,14 +44,18 @@ export function loadCsvAsJson<T extends Record<string | number, any>>(p: {
 
     for (let i = 0; i < headers.length; i++) {
       const v = values[i];
+
       if (v === '-') {
         //ignore
-      } else if (isNumber(v)) {
+      } else if (headers[i][1] === 'string') {
         //@ts-ignore
-        obj[headers[i]] = Number(v);
+        obj[headers[i][0]] = v.toString();
+      } else if (headers[i][1] === 'number' || isNumber(v)) {
+        //@ts-ignore
+        obj[headers[i][0]] = Number(v);
       } else {
         //@ts-ignore
-        obj[headers[i]] = v;
+        obj[headers[i][0]] = v;
       }
     }
 
