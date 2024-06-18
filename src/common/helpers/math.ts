@@ -45,7 +45,7 @@ export function sumArray(array: number[]) {
   return array.reduce((a, b) => a + b, 0);
 }
 
-export const isNumber = (num: string) => /^-{0,1}\d*\.{0,1}\d+$/.test(num);
+export const isNumber = (num: string) => !isNaN(Number(num));
 
 export function toFixedDown(num: number, scale: number) {
   if (!`${num}`.includes('e')) {
