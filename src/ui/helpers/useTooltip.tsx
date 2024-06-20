@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 
 const Base = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 10;
 `;
 
 interface IPos<T> {
@@ -78,6 +78,8 @@ const Comp = <T,>({
     if (top + size.tooltipHeight > pos.parentHeight) {
       if (pos.hasParent) {
         top = undefined;
+      } else {
+        top = pos.parentHeight - size.tooltipHeight;
       }
 
       bottom = pos.parentHeight - pos.y;
@@ -107,8 +109,6 @@ const Comp = <T,>({
         right,
         top,
         bottom,
-        zIndex: 10,
-        overflow: 'hidden',
         ...(!pos.hasParent && { position: 'fixed' }),
         ...(!size && { zIndex: -1 }),
       }}
