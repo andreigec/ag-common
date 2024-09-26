@@ -30,9 +30,14 @@ export const arrayToObject = <TIn, Indexer extends string | number, TOut>(
 export const flat = <T>(arr: T[][]): T[] => [].concat(...arr);
 
 export const take = <T>(array: T[], num: number): { part: T[]; rest: T[] } => {
-  const ret = JSON.parse(JSON.stringify(array));
+  // Ensure num is within the bounds of the array
+  const safeNum = Math.max(0, Math.min(num, array.length));
 
-  return { part: ret.slice(0, num), rest: ret.slice(num) };
+  // Use array.slice() to create shallow copies of the parts we need
+  const part = array.slice(0, safeNum);
+  const rest = array.slice(safeNum);
+
+  return { part, rest };
 };
 
 export const chunk = <T>(array: T[], max: number): T[][] => {

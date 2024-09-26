@@ -26,6 +26,7 @@ export function isJson(str: unknown) {
 export const objectKeysToLowerCase = <T>(origObj: {
   [a: string]: T;
 }): { [a: string]: T } => {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!origObj || Object.keys(origObj).length === 0) {
     return {} as { [a: string]: T };
   }
@@ -54,6 +55,7 @@ export interface IArrayType<T> {
   value: T;
 }
 export function objectToArray<T>(obj: { [a: string]: T }): IArrayType<T>[] {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!obj) {
     return [];
   }
@@ -125,6 +127,7 @@ export function objectToString(
   /** eg '&' */
   joinKeys: string,
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!obj || Object.keys(obj).length === 0) {
     return '';
   }

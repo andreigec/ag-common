@@ -28,4 +28,9 @@ export async function fetchFile(p: {
   };
 
   await write();
+  try {
+    fileStream.close();
+  } catch (e) {
+    //
+  }
 }
