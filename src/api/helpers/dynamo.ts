@@ -76,8 +76,8 @@ export const batchWrite = async <T extends Record<string, any>>(
   try {
     await asyncForEach(chunked, async (items) => {
       let retryCount = 0;
-      let retryMax = 3;
-      let params = new BatchWriteCommand({
+      const retryMax = 3;
+      const params = new BatchWriteCommand({
         RequestItems: {
           [`${tableName}`]: items.map((Item) => ({
             PutRequest: { Item },
@@ -87,32 +87,37 @@ export const batchWrite = async <T extends Record<string, any>>(
 
       debug(`running dynamo batchWrite=${JSON.stringify(params, null, 2)}`);
 
-      try {
-        await dynamoDb.send(params);
+      // eslint-disable-next-line
+      while (true) {
+        try {
+          await dynamoDb.send(params);
+          return {};
+        } catch (e) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const es = (e as any).toString();
+          let msg = es;
+          warn('dynamo write error', msg);
 
-        return {};
-      } catch (e) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let es = (e as any).toString();
-        let msg = es;
-        warn('dynamo write error', msg);
+          if (
+            es.indexOf('429') !== -1 ||
+            es.indexOf('ProvisionedThroughputExceeded') !== -1
+          ) {
+            retryCount += 1;
+            msg = `batch write throttled. retry ${retryCount}/${retryMax}`;
+            warn(msg);
 
-        if (
-          es.indexOf('429') !== -1 ||
-          es.indexOf('ProvisionedThroughputExceeded') !== -1
-        ) {
-          retryCount += 1;
-          msg = `batch write throttled. retry ${retryCount}/${retryMax}`;
-        } else {
+            if (retryCount >= retryMax) {
+              throw new Error(`Max retries (${retryMax}) exceeded: ${es}`);
+            }
+
+            await sleep(2000);
+            // Continue the while loop to retry
+            continue;
+          }
+
+          // For non-throttling errors, throw immediately
           throw e;
         }
-
-        if (retryCount >= retryMax) {
-          throw e;
-        }
-
-        warn(`dynamo retry ${retryCount}/${retryMax}`);
-        await sleep(2000);
       }
     });
     return {};
@@ -131,14 +136,14 @@ export const batchDelete = async ({
   keys: string[];
   pkName: string;
 }): Promise<{ error?: string }> => {
-  //batch up to 20, so we can retry.
+  // batch up to 20, so we can retry
   let chunked = chunk(keys, 20);
 
   try {
     await asyncForEach(chunked, async (items) => {
       let retryCount = 0;
-      let retryMax = 3;
-      let params = new BatchWriteCommand({
+      const retryMax = 3;
+      const params = new BatchWriteCommand({
         RequestItems: {
           [`${tableName}`]: items.map((key) => ({
             DeleteRequest: { Key: { [`${pkName}`]: key } },
@@ -148,32 +153,38 @@ export const batchDelete = async ({
 
       debug(`running dynamo batch delete=${JSON.stringify(params, null, 2)}`);
 
-      try {
-        await dynamoDb.send(params);
+      while (retryCount < retryMax) {
+        try {
+          await dynamoDb.send(params);
+          return {};
+        } catch (e) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const es = (e as any).toString();
+          let shouldRetry = false;
 
-        return {};
-      } catch (e) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let es = (e as any).toString();
-        let msg = es;
-        warn('dynamo write error', msg);
+          if (
+            es.indexOf('429') !== -1 ||
+            es.indexOf('ProvisionedThroughputExceeded') !== -1
+          ) {
+            shouldRetry = true;
+            retryCount += 1;
+            const msg = `batch delete write throttled. retry ${retryCount}/${retryMax}`;
+            warn('dynamo write error', msg);
+          } else {
+            // Non-retryable error
+            throw e;
+          }
 
-        if (
-          es.indexOf('429') !== -1 ||
-          es.indexOf('ProvisionedThroughputExceeded') !== -1
-        ) {
-          retryCount += 1;
-          msg = `batch delete write throttled. retry ${retryCount}/${retryMax}`;
-        } else {
-          throw e;
+          if (shouldRetry) {
+            if (retryCount >= retryMax) {
+              warn(`Max retries (${retryMax}) reached, giving up`);
+              throw e;
+            }
+            warn(`dynamo retry ${retryCount}/${retryMax}`);
+            await sleep(2000 * Math.pow(2, retryCount - 1)); // Exponential backoff
+            continue;
+          }
         }
-
-        if (retryCount >= retryMax) {
-          throw e;
-        }
-
-        warn(`dynamo retry ${retryCount}/${retryMax}`);
-        await sleep(2000);
       }
     });
     return {};
