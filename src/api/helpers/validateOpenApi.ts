@@ -5,6 +5,7 @@ import type { TLang } from '../../common/helpers/i18n';
 import { getValidatedLang } from '../../common/helpers/i18n';
 import { debug, error as errorF, warn } from '../../common/helpers/log';
 import {
+  copy,
   objectKeysToLowerCase,
   tryJsonParse,
 } from '../../common/helpers/object';
@@ -50,7 +51,7 @@ const getOperation = ({
     'i',
   ).exec(path);
 
-  const pathParams = re?.groups && JSON.parse(JSON.stringify(re.groups));
+  const pathParams = re?.groups && copy(re.groups);
 
   return { operation, pathParams };
 };

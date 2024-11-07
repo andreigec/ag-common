@@ -14,6 +14,7 @@ import type { Buffer } from 'buffer';
 
 import { distinct, take } from '../../common/helpers/array';
 import { debug, error } from '../../common/helpers/log';
+import { copy } from '../../common/helpers/object';
 
 export const setS3 = (region: string) => {
   const raw = new S3Client({ region });
@@ -251,10 +252,7 @@ export async function getPresignedPostURL({
       ],
     });
 
-    const fields = JSON.parse(JSON.stringify(ps.fields)) as Record<
-      string,
-      string
-    >;
+    const fields = copy(ps.fields);
 
     return { data: { fields, url: ps.url } };
   } catch (e) {

@@ -1,5 +1,6 @@
 import { take } from '../../../common/helpers/array';
 import { sumArray } from '../../../common/helpers/math';
+import { copy } from '../../../common/helpers/object';
 import type { IBarChartData } from './types';
 
 export const getLegendItems = ({
@@ -16,9 +17,9 @@ export const getLegendItems = ({
     shownResults,
   ).part;
 
-  const rest = (
-    JSON.parse(JSON.stringify(data.values)) as typeof data.values
-  ).filter((r) => !part.find((p) => p.name === r.name));
+  const rest = copy(data.values).filter(
+    (r) => !part.find((p) => p.name === r.name),
+  );
   //if we want to ensure this value exists in the returned results
   if (selectedKey) {
     const pi = part.findIndex((r) => r.name === selectedKey);

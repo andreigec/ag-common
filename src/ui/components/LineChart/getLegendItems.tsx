@@ -1,5 +1,6 @@
 import { take } from '../../../common/helpers/array';
 import { sumArray } from '../../../common/helpers/math';
+import { copy } from '../../../common/helpers/object';
 import type { ILineChartItemRaw, ILineChartTooltip } from './types';
 
 export interface ILegendItem {
@@ -74,9 +75,7 @@ export const getLegendItems = (
       part.filter((r) => r.y > min),
       shownResults,
     ).part;
-    rest = (JSON.parse(JSON.stringify(values)) as typeof values).filter(
-      (r) => !part.find((p) => p.name === r.name),
-    );
+    rest = copy(values).filter((r) => !part.find((p) => p.name === r.name));
   }
 
   const restTotal = sumArray(rest.map((s) => s.y));
