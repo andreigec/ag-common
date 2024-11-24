@@ -85,14 +85,19 @@ export const putS3Object = async ({
   Bucket,
   Key,
   ContentType,
+  CacheControl = 'public, max-age=300',
 }: {
   ContentType?: string;
   Body: string | Blob | Buffer;
   Bucket: string;
   Key: string;
+  /** default public, max-age=300 */
+  CacheControl?: string;
 }): Promise<{ error?: string }> => {
   try {
-    await s3.send(new PutObjectCommand({ Body, Bucket, Key, ContentType }));
+    await s3.send(
+      new PutObjectCommand({ Body, Bucket, Key, ContentType, CacheControl }),
+    );
 
     return {};
   } catch (e) {
