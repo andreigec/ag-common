@@ -1,8 +1,3 @@
-/* eslint-disable guard-for-in */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable prefer-const */
-
 import { DescribeTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   BatchGetCommand,
@@ -14,38 +9,119 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import type { AwsCredentialIdentity } from '@smithy/types';
 
-// ES6 import
-import { chunk, take } from '../../common/helpers/array';
+import { chunk } from '../../common/helpers/array';
 import { asyncForEach } from '../../common/helpers/async';
-import { debug, warn } from '../../common/helpers/log';
+import { warn } from '../../common/helpers/log';
 import { sleep } from '../../common/helpers/sleep';
-import { trimSide } from '../../common/helpers/string/trim';
-import type { IQueryDynamo, Key } from '../types';
+
+type DynamoDBError = {
+  error: string;
+};
+
+type DynamoDBSuccess<T> = {
+  data: T;
+};
+
+type DynamoDBResult<T> = DynamoDBSuccess<T> | DynamoDBError;
+
+interface Key {
+  [key: string]: string | number;
+}
+
+interface DynamoFilter {
+  filterExpression: string;
+  attrNames: Record<string, string>;
+  attrValues?: Record<string, unknown>;
+}
+
+interface ScanOptions {
+  filter?: DynamoFilter;
+  requiredAttributeList?: string[];
+  limit?: number;
+}
+
+interface DynamoQueryParams {
+  tableName: string;
+  pkName: string;
+  pkValue: string | number;
+  pkOperator?: '=' | '<' | '>' | '<=' | '>=';
+  skName?: string;
+  skValue?: string | number | [string | number, string | number];
+  skOperator?: '=' | '<' | '>' | '<=' | '>=' | 'BETWEEN' | 'BEGINS_WITH';
+  indexName?: string;
+  limit?: number;
+  startKey?: Key;
+  filterName?: string;
+  filterValue?: unknown;
+  filterOperator?: string;
+  sortAscending?: boolean;
+}
+
+const RETRY_CONFIG = {
+  maxRetries: 3,
+  baseDelay: 2000,
+} as const;
+
+const isError = <T>(result: DynamoDBResult<T>): result is DynamoDBError =>
+  'error' in result;
+
+const withRetry = async <T>(
+  operation: () => Promise<T>,
+  operationName: string,
+): Promise<T> => {
+  let retryCount = 0;
+
+  // eslint-disable-next-line
+  while (true) {
+    try {
+      return await operation();
+    } catch (e) {
+      const error = e as Error;
+      const errorString = error.toString();
+
+      if (
+        errorString.includes('429') ||
+        errorString.includes('ProvisionedThroughputExceeded')
+      ) {
+        retryCount++;
+
+        if (retryCount >= RETRY_CONFIG.maxRetries) {
+          warn(`${operationName}: Max retries exceeded`);
+          throw error;
+        }
+
+        const delay = RETRY_CONFIG.baseDelay * Math.pow(2, retryCount - 1);
+        warn(`${operationName}: Throttled. Retry ${retryCount}`);
+        await sleep(delay);
+        continue;
+      }
+
+      throw error;
+    }
+  }
+};
+
+export let dynamoDb: DynamoDBDocument;
 
 export const setDynamo = (
   region: string,
   credentials?: AwsCredentialIdentity,
-) => {
-  let raw = new DynamoDBClient({ region, credentials });
-  const ddbDocClient = DynamoDBDocument.from(raw, {
+): DynamoDBDocument => {
+  const client = new DynamoDBClient({ region, credentials });
+  dynamoDb = DynamoDBDocument.from(client, {
     marshallOptions: { removeUndefinedValues: true },
   });
-  dynamoDb = ddbDocClient;
-  return ddbDocClient;
+  return dynamoDb;
 };
 
-export let dynamoDb = setDynamo('ap-southeast-2');
+dynamoDb = setDynamo('ap-southeast-2');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const putDynamo = async <T extends Record<string, any>>(
+export const putDynamo = async <T extends Record<string, unknown>>(
   item: T,
   tableName: string,
-  opt?: {
-    /** if provided, will assert this PK value doesnt already exist */
-    pkName?: string;
-  },
-): Promise<{ error?: string }> => {
-  let params = new PutCommand({
+  opt?: { pkName?: string },
+): Promise<DynamoDBResult<void>> => {
+  const params = new PutCommand({
     TableName: tableName,
     Item: item,
     ...(opt?.pkName && {
@@ -53,298 +129,169 @@ export const putDynamo = async <T extends Record<string, any>>(
     }),
   });
 
-  debug(`running dynamo put=${JSON.stringify(params, null, 2)}`);
-
   try {
-    await dynamoDb.send(params);
-
-    return {};
+    await withRetry(() => dynamoDb.send(params), 'putDynamo');
+    return { data: undefined };
   } catch (e) {
-    warn('putDynamo error', e);
     return { error: (e as Error).toString() };
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const batchWrite = async <T extends Record<string, any>>(
+export const batchWrite = async <T extends Record<string, unknown>>(
   tableName: string,
-  itemsIn: T[],
-): Promise<{ error?: string }> => {
-  //batch up to 20, so we can retry.
-  let chunked = chunk(itemsIn, 20);
-
+  items: T[],
+): Promise<DynamoDBResult<void>> => {
   try {
-    await asyncForEach(chunked, async (items) => {
-      let retryCount = 0;
-      const retryMax = 3;
+    const chunked = chunk(items, 20);
+    await asyncForEach(chunked, async (chunk) => {
       const params = new BatchWriteCommand({
         RequestItems: {
-          [`${tableName}`]: items.map((Item) => ({
-            PutRequest: { Item },
-          })),
+          [tableName]: chunk.map((Item) => ({ PutRequest: { Item } })),
         },
       });
-
-      debug(`running dynamo batchWrite=${JSON.stringify(params, null, 2)}`);
-
-      // eslint-disable-next-line
-      while (true) {
-        try {
-          await dynamoDb.send(params);
-          return {};
-        } catch (e) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const es = (e as any).toString();
-          let msg = es;
-          warn('dynamo write error', msg);
-
-          if (
-            es.indexOf('429') !== -1 ||
-            es.indexOf('ProvisionedThroughputExceeded') !== -1
-          ) {
-            retryCount += 1;
-            msg = `batch write throttled. retry ${retryCount}/${retryMax}`;
-            warn(msg);
-
-            if (retryCount >= retryMax) {
-              throw new Error(`Max retries (${retryMax}) exceeded: ${es}`);
-            }
-
-            await sleep(2000);
-            // Continue the while loop to retry
-            continue;
-          }
-
-          // For non-throttling errors, throw immediately
-          throw e;
-        }
-      }
+      await withRetry(() => dynamoDb.send(params), 'batchWrite');
     });
-    return {};
+    return { data: undefined };
   } catch (e) {
-    warn('batchWrite error', e);
     return { error: (e as Error).toString() };
   }
 };
 
-export const batchDelete = async ({
-  tableName,
-  keys,
-  pkName,
-}: {
+export const batchDelete = async (params: {
   tableName: string;
   keys: string[];
   pkName: string;
-}): Promise<{ error?: string }> => {
-  // batch up to 20, so we can retry
-  let chunked = chunk(keys, 20);
-
+}): Promise<DynamoDBResult<void>> => {
   try {
-    await asyncForEach(chunked, async (items) => {
-      let retryCount = 0;
-      const retryMax = 3;
-      const params = new BatchWriteCommand({
+    const chunked = chunk(params.keys, 20);
+    await asyncForEach(chunked, async (chunk) => {
+      const command = new BatchWriteCommand({
         RequestItems: {
-          [`${tableName}`]: items.map((key) => ({
-            DeleteRequest: { Key: { [`${pkName}`]: key } },
+          [params.tableName]: chunk.map((key) => ({
+            DeleteRequest: { Key: { [params.pkName]: key } },
           })),
         },
       });
-
-      debug(`running dynamo batch delete=${JSON.stringify(params, null, 2)}`);
-
-      while (retryCount < retryMax) {
-        try {
-          await dynamoDb.send(params);
-          return {};
-        } catch (e) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const es = (e as any).toString();
-          let shouldRetry = false;
-
-          if (
-            es.indexOf('429') !== -1 ||
-            es.indexOf('ProvisionedThroughputExceeded') !== -1
-          ) {
-            shouldRetry = true;
-            retryCount += 1;
-            const msg = `batch delete write throttled. retry ${retryCount}/${retryMax}`;
-            warn('dynamo write error', msg);
-          } else {
-            // Non-retryable error
-            throw e;
-          }
-
-          if (shouldRetry) {
-            if (retryCount >= retryMax) {
-              warn(`Max retries (${retryMax}) reached, giving up`);
-              throw e;
-            }
-            warn(`dynamo retry ${retryCount}/${retryMax}`);
-            await sleep(2000 * Math.pow(2, retryCount - 1)); // Exponential backoff
-            continue;
-          }
-        }
-      }
+      await withRetry(() => dynamoDb.send(command), 'batchDelete');
     });
-    return {};
+    return { data: undefined };
   } catch (e) {
-    warn('batchDelete error', e);
     return { error: (e as Error).toString() };
   }
 };
 
 export const scan = async <T>(
   tableName: string,
-  opt?: {
-    filter?: {
-      filterExpression: string;
-      attrNames: Record<string, string>;
-      attrValues?: Record<string, string>;
-    };
-    /** ProjectionExpression. will csv values */
-    requiredAttributeList?: string[];
-    /** default =ALL */
-    limit?: number;
-  },
-): Promise<{ data: T[] } | { error: string }> => {
+  options?: ScanOptions,
+): Promise<DynamoDBResult<T[]>> => {
   try {
+    const Items: T[] = [];
     let ExclusiveStartKey: Key | undefined;
-    let Items: T[] = [];
 
-    // Handle projection attributes
-    const projectionAttrs = opt?.requiredAttributeList?.reduce<Record<string, string>>(
-      (acc, attr, index) => {
-        const escapedName = `#proj${index}`;
-        acc[escapedName] = attr;
-        return acc;
-      },
-      {}
-    );
+    const projectionAttrs = options?.requiredAttributeList?.reduce<
+      Record<string, string>
+    >((acc, attr, index) => {
+      acc[`#proj${index}`] = attr;
+      return acc;
+    }, {});
 
-    // Merge projection attribute names with filter attribute names
     const expressionAttributeNames = {
       ...projectionAttrs,
-      ...opt?.filter?.attrNames,
+      ...options?.filter?.attrNames,
     };
 
     do {
       const params = new ScanCommand({
         TableName: tableName,
-        ...(opt?.filter && {
-          FilterExpression: opt.filter.filterExpression,
-          ...(opt.filter.attrValues && {
-            ExpressionAttributeValues: opt.filter.attrValues,
+        ...(options?.filter && {
+          FilterExpression: options.filter.filterExpression,
+          ...(options.filter.attrValues && {
+            ExpressionAttributeValues: options.filter.attrValues,
           }),
         }),
         ...(Object.keys(expressionAttributeNames).length > 0 && {
           ExpressionAttributeNames: expressionAttributeNames,
         }),
-        ...(opt?.requiredAttributeList && {
-          ProjectionExpression: opt.requiredAttributeList
+        ...(options?.requiredAttributeList && {
+          ProjectionExpression: options.requiredAttributeList
             .map((_, index) => `#proj${index}`)
             .join(', '),
         }),
         ExclusiveStartKey,
-        // Only set Limit in ScanCommand if we need more items
-        ...((opt?.limit && Items.length < opt.limit) && {
-          Limit: opt.limit - Items.length
-        }),
+        ...(options?.limit &&
+          Items.length < options.limit && {
+            Limit: options.limit - Items.length,
+          }),
       });
 
-      debug(`running dynamo scan=${JSON.stringify(params, null, 2)}`);
+      const result = await withRetry(() => dynamoDb.send(params), 'scan');
 
-      const {
-        Items: newItems = [],
-        LastEvaluatedKey,
-      } = await dynamoDb.send(params);
+      if (result.Items) {
+        Items.push(...(result.Items as T[]));
+      }
 
-      ExclusiveStartKey = LastEvaluatedKey;
-      Items.push(...(newItems as T[]));
+      ExclusiveStartKey = result.LastEvaluatedKey;
 
-      // Break the loop if we've reached the limit
-      if (opt?.limit && Items.length >= opt.limit) {
+      if (options?.limit && Items.length >= options.limit) {
         break;
       }
     } while (ExclusiveStartKey);
 
-    // Ensure we don't return more items than the limit
-    if (opt?.limit && Items.length > opt.limit) {
-      Items = Items.slice(0, opt.limit);
-    }
-
-    debug(`dynamo scan against ${tableName} ok, count=${Items.length}`);
-
-    return { data: Items };
+    return {
+      data: options?.limit ? Items.slice(0, options.limit) : Items,
+    };
   } catch (e) {
-    warn('scan error:', e);
     return { error: (e as Error).toString() };
   }
 };
 
-export const getItemsDynamo = async <T>({
-  tableName,
-  items,
-}: {
-  items: {
-    pkName: string;
-    pkValue: string;
-  }[];
+export const getItemsDynamo = async <T>(params: {
   tableName: string;
-}): Promise<{ data: T[] } | { error: string }> => {
-  const params = new BatchGetCommand({
-    RequestItems: {
-      [tableName]: {
-        Keys: items.map(({ pkName, pkValue }) => ({
-          [pkName]: pkValue,
-        })),
-      },
-    },
-  });
-
+  items: { pkName: string; pkValue: string }[];
+}): Promise<DynamoDBResult<T[]>> => {
   try {
-    let res = await dynamoDb.send(params);
-    let data = res.Responses?.[tableName].map((r) => r as T) ?? [];
-    return { data };
+    const command = new BatchGetCommand({
+      RequestItems: {
+        [params.tableName]: {
+          Keys: params.items.map(({ pkName, pkValue }) => ({
+            [pkName]: pkValue,
+          })),
+        },
+      },
+    });
+
+    const result = await withRetry(
+      () => dynamoDb.send(command),
+      'getItemsDynamo',
+    );
+    return {
+      data: (result.Responses?.[params.tableName] as T[] | undefined) ?? [],
+    };
   } catch (e) {
-    warn('getItemsDynamo error:', e);
     return { error: (e as Error).toString() };
-    //
   }
 };
 
-export const getItemDynamo = async <T>({
-  tableName,
-  pkName,
-  pkValue,
-}: {
+export const getItemDynamo = async <T>(params: {
+  tableName: string;
   pkName: string;
   pkValue: string;
-  tableName: string;
-}): Promise<{ data: T } | { error: string }> => {
-  let r = await getItemsDynamo<T>({ tableName, items: [{ pkName, pkValue }] });
-  if ('error' in r) {
-    return { error: r.error };
+}): Promise<DynamoDBResult<T>> => {
+  const result = await getItemsDynamo<T>({
+    tableName: params.tableName,
+    items: [{ pkName: params.pkName, pkValue: params.pkValue }],
+  });
+
+  if (isError(result)) {
+    return result;
   }
 
-  return { data: r.data[0] };
+  return { data: result.data[0] };
 };
-export const queryDynamo = async <T>({
-  tableName,
-  pkName,
-  pkValue,
-  pkOperator = '=',
-  skName,
-  skValue,
-  skOperator = '=',
-  indexName,
-  limit = 1000,
-  startKey,
-  filterName,
-  filterValue,
-  filterOperator = '=',
-  sortAscending = true,
-}: IQueryDynamo): Promise<
+
+export const queryDynamo = async <T>(
+  params: DynamoQueryParams,
+): Promise<
   | {
       data: T[];
       startKey?: Key;
@@ -353,178 +300,155 @@ export const queryDynamo = async <T>({
       error: string;
     }
 > => {
-  let kce = `#${pkName.toLowerCase()} ${pkOperator} :${pkName.toLowerCase()}`;
-  const ean = { [`#${pkName.toLowerCase()}`]: pkName };
-  const eav = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [`:${pkName.toLowerCase()}`]: pkValue as any,
-  };
-
-  if (skName) {
-    if (skOperator === 'BETWEEN') {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let [sp0, sp1] = skValue as any[];
-      const skName1 = `${skName.toLowerCase()}1`;
-      const skName2 = `${skName.toLowerCase()}2`;
-      kce += ` and #${skName.toLowerCase()} ${skOperator} :${skName1.toLowerCase()} AND :${skName2.toLowerCase()}`;
-      ean[`#${skName.toLowerCase()}`] = skName;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      eav[`:${skName1}`] = sp0 as any;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      eav[`:${skName2}`] = sp1 as any;
-    } else if (skOperator === 'BEGINS_WITH') {
-      kce += ` and ${skOperator.toLowerCase()}(#${skName.toLowerCase()}, :${skName.toLowerCase()})`;
-      ean[`#${skName.toLowerCase()}`] = skName;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      eav[`:${skName.toLowerCase()}`] = skValue as any;
-    } else {
-      kce += ` and #${skName.toLowerCase()} ${skOperator} :${skName.toLowerCase()}`;
-      ean[`#${skName.toLowerCase()}`] = skName;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      eav[`:${skName.toLowerCase()}`] = skValue as any;
-    }
-  }
-
-  let FilterExpression: string | undefined;
-  if (filterName) {
-    ean[`#${filterName.toLowerCase()}`] = filterName;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    eav[`:${filterName.toLowerCase()}`] = filterValue as any;
-    FilterExpression = `#${filterName.toLowerCase()} ${filterOperator} :${filterName.toLowerCase()}`;
-    if (filterOperator === 'contains') {
-      FilterExpression = `contains(#${filterName.toLowerCase()}, :${filterName.toLowerCase()})`;
-    }
-  }
-
-  const Items: T[] = [];
-
-  do {
-    const params = new QueryCommand({
-      TableName: tableName,
-      KeyConditionExpression: kce,
-      ExpressionAttributeNames: ean,
-      ExpressionAttributeValues: eav,
-      ScanIndexForward: sortAscending,
-      ...(limit !== null && { Limit: limit || 1000 }),
-      ...(indexName && { IndexName: indexName }),
-      ...(startKey && {
-        ExclusiveStartKey: startKey,
-      }),
-      ...(FilterExpression && { FilterExpression }),
-    });
-
-    let lek: Key | undefined;
-    let newItems: Key[] | undefined;
-
-    try {
-      ({
-        Items: newItems,
-        LastEvaluatedKey: lek,
-
-        // eslint-disable-next-line no-await-in-loop
-      } = await dynamoDb.send(params));
-      if (newItems) {
-        Items.push(...newItems.map((i) => i as T));
-      }
-    } catch (e) {
-      warn('error. query params=', JSON.stringify(params), e);
-      return { error: (e as Error).toString() };
-    }
-
-    startKey = lek;
-
-    debug(
-      `dynamo query against ${
-        params.input.TableName
-      } ok, count=${newItems?.length} ${JSON.stringify(params)}`,
-      ` next startkey=${startKey}`,
-    );
-
-    if (!!limit && Items.length > limit) {
-      return { data: Items, startKey };
-    }
-  } while (startKey && Object.keys(startKey).length > 0);
-
-  return { data: Items };
-};
-
-export const getDynamoTtlDays = (days: number) =>
-  Math.ceil(new Date().getTime() / 1000) + days * 86400;
-
-export const getDynamoTtlMinutes = (mins: number) =>
-  Math.ceil(new Date().getTime() / 1000) + mins * 60;
-
-export const wipeTable = async (
-  tableName: string,
-): Promise<{ error?: string }> => {
   try {
-    let infoV = await dynamoDb.send(
-      new DescribeTableCommand({ TableName: tableName }),
-    );
+    let kce = `#${params.pkName.toLowerCase()} ${params.pkOperator ?? '='} :${params.pkName.toLowerCase()}`;
+    const ean: Record<string, string> = {
+      [`#${params.pkName.toLowerCase()}`]: params.pkName,
+    };
+    const eav: Record<string, unknown> = {
+      [`:${params.pkName.toLowerCase()}`]: params.pkValue,
+    };
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    let keyHash = infoV.Table.KeySchema.find(
-      (k) => k.KeyType === 'HASH',
-    ).AttributeName;
-    if (!keyHash) {
-      throw new Error('couldnt find keyHash');
+    if (params.skName && params.skValue !== undefined) {
+      const { skName, skValue, skOperator = '=' } = params;
+      if (skOperator === 'BETWEEN' && Array.isArray(skValue)) {
+        const [start, end] = skValue;
+        kce += ` AND #${skName.toLowerCase()} BETWEEN :${skName}1 AND :${skName}2`;
+        ean[`#${skName.toLowerCase()}`] = skName;
+        eav[`:${skName}1`] = start;
+        eav[`:${skName}2`] = end;
+      } else if (skOperator === 'BEGINS_WITH') {
+        kce += ` AND begins_with(#${skName.toLowerCase()}, :${skName.toLowerCase()})`;
+        ean[`#${skName.toLowerCase()}`] = skName;
+        eav[`:${skName.toLowerCase()}`] = skValue;
+      } else {
+        kce += ` AND #${skName.toLowerCase()} ${skOperator} :${skName.toLowerCase()}`;
+        ean[`#${skName.toLowerCase()}`] = skName;
+        eav[`:${skName.toLowerCase()}`] = skValue;
+      }
     }
 
-    let allraw = await scan(tableName);
-    if ('error' in allraw) {
-      throw allraw.error;
+    let FilterExpression: string | undefined;
+    if (params.filterName && params.filterValue !== undefined) {
+      ean[`#${params.filterName.toLowerCase()}`] = params.filterName;
+      eav[`:${params.filterName.toLowerCase()}`] = params.filterValue;
+
+      FilterExpression =
+        params.filterOperator === 'contains'
+          ? `contains(#${params.filterName.toLowerCase()}, :${params.filterName.toLowerCase()})`
+          : `#${params.filterName.toLowerCase()} ${params.filterOperator ?? '='} :${params.filterName.toLowerCase()}`;
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let all = allraw.data.map((d) => d as any) || [];
 
-    warn(`will delete ${all.length} items from ${tableName}`);
+    const items: T[] = [];
+    let { startKey } = params;
 
-    await batchDelete({
-      tableName,
-      keys: all.map((s) => s[keyHash as string]),
-      pkName: 'PK',
-    });
-    warn(`cleared table ${tableName}`);
-    return {};
+    do {
+      const queryParams = new QueryCommand({
+        TableName: params.tableName,
+        KeyConditionExpression: kce,
+        ExpressionAttributeNames: ean,
+        ExpressionAttributeValues: eav,
+        ScanIndexForward: params.sortAscending ?? true,
+        Limit: params.limit,
+        IndexName: params.indexName,
+        ExclusiveStartKey: startKey,
+        FilterExpression,
+      });
+
+      const result = await withRetry(
+        () => dynamoDb.send(queryParams),
+        'queryDynamo',
+      );
+
+      if (result.Items) {
+        items.push(...(result.Items as T[]));
+      }
+
+      startKey = result.LastEvaluatedKey;
+
+      if (params.limit && items.length >= params.limit) {
+        return {
+          data: items.slice(0, params.limit),
+          startKey,
+        };
+      }
+    } while (startKey && Object.keys(startKey).length > 0);
+
+    return { data: items };
   } catch (e) {
-    warn('wipeTable error:', e);
     return { error: (e as Error).toString() };
   }
 };
 
-/** gets all fields in dynamokeys, and moves them into update expressions. eg will turn item.yourFieldName, into a dynamo write into field "yourFieldName" */
-export const getDynamoUpdates = (
-  item: Record<string, string | number | boolean>,
-  opt?: {
-    /** default PK. will also exclude null or undefined */
-    excludeKeys?: string[];
-  },
+export const getDynamoTtlDays = (days: number): number =>
+  Math.ceil(Date.now() / 1000) + days * 86400;
+
+export const getDynamoTtlMinutes = (minutes: number): number =>
+  Math.ceil(Date.now() / 1000) + minutes * 60;
+
+export const wipeTable = async (
+  tableName: string,
+): Promise<DynamoDBResult<void>> => {
+  try {
+    const info = await withRetry(
+      () => dynamoDb.send(new DescribeTableCommand({ TableName: tableName })),
+      'wipeTable-describe',
+    );
+
+    const keyHash = info.Table?.KeySchema?.find(
+      (k) => k.KeyType === 'HASH',
+    )?.AttributeName;
+
+    if (!keyHash) {
+      throw new Error('Could not find hash key');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const scanResult = await scan<any>(tableName);
+    if (isError(scanResult)) {
+      throw new Error(scanResult.error);
+    }
+
+    await batchDelete({
+      tableName,
+      keys: scanResult.data.map((item) => item[keyHash]),
+      pkName: keyHash,
+    });
+
+    return { data: undefined };
+  } catch (e) {
+    return { error: (e as Error).toString() };
+  }
+};
+
+export const getDynamoUpdates = <T extends Record<string, unknown>>(
+  item: T,
+  options?: { excludeKeys?: string[] },
 ): {
   UpdateExpression: string;
   ExpressionAttributeNames: Record<string, string>;
-  ExpressionAttributeValues: Record<string, string | number | boolean>;
+  ExpressionAttributeValues: Record<string, unknown>;
   ReturnValues: 'UPDATED_NEW';
 } => {
-  let ek = opt?.excludeKeys ?? ['PK'];
-  ek = ek.map((r) => r.toLowerCase());
-  let UpdateExpression = `SET `;
-  const ExpressionAttributeNames: Record<string, string> = {};
-  const ExpressionAttributeValues: Record<string, string | number | boolean> =
-    {};
-  //
-  const cleanedKeys = Object.entries(item).filter(
-    ([k]) => !ek.includes(k.toLowerCase()),
+  const excludeKeys = (options?.excludeKeys ?? ['PK']).map((k) =>
+    k.toLowerCase(),
   );
-  cleanedKeys
-    .filter(([_k, v]) => v !== null && v !== undefined)
-    .forEach(([k, v]) => {
-      UpdateExpression += `#${k} = :${k}, `;
-      ExpressionAttributeNames[`#${k}`] = k;
-      ExpressionAttributeValues[`:${k}`] = v;
-    });
+
+  const validEntries = Object.entries(item).filter(
+    ([key, value]) => !excludeKeys.includes(key.toLowerCase()) && value != null,
+  );
+
+  const ExpressionAttributeNames: Record<string, string> = {};
+  const ExpressionAttributeValues: Record<string, unknown> = {};
+
+  const UpdateExpression = validEntries.reduce((expr, [key, value], index) => {
+    ExpressionAttributeNames[`#${key}`] = key;
+    ExpressionAttributeValues[`:${key}`] = value;
+    return `${expr}${index > 0 ? ', ' : ''}#${key} = :${key}`;
+  }, 'SET ');
+
   return {
-    UpdateExpression: trimSide(UpdateExpression, false, ' ', ','),
+    UpdateExpression,
     ExpressionAttributeNames,
     ExpressionAttributeValues,
     ReturnValues: 'UPDATED_NEW',
