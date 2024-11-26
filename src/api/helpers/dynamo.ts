@@ -211,40 +211,66 @@ export const scan = async <T>(
   try {
     let ExclusiveStartKey: Key | undefined;
     let Items: T[] = [];
+
+    // Handle projection attributes
+    const projectionAttrs = opt?.requiredAttributeList?.reduce<Record<string, string>>(
+      (acc, attr, index) => {
+        const escapedName = `#proj${index}`;
+        acc[escapedName] = attr;
+        return acc;
+      },
+      {}
+    );
+
+    // Merge projection attribute names with filter attribute names
+    const expressionAttributeNames = {
+      ...projectionAttrs,
+      ...opt?.filter?.attrNames,
+    };
+
     do {
-      let params = new ScanCommand({
+      const params = new ScanCommand({
         TableName: tableName,
         ...(opt?.filter && {
           FilterExpression: opt.filter.filterExpression,
-          ExpressionAttributeNames: opt.filter.attrNames,
           ...(opt.filter.attrValues && {
             ExpressionAttributeValues: opt.filter.attrValues,
           }),
         }),
+        ...(Object.keys(expressionAttributeNames).length > 0 && {
+          ExpressionAttributeNames: expressionAttributeNames,
+        }),
         ...(opt?.requiredAttributeList && {
-          ProjectionExpression: opt.requiredAttributeList.join(', '),
+          ProjectionExpression: opt.requiredAttributeList
+            .map((_, index) => `#proj${index}`)
+            .join(', '),
         }),
         ExclusiveStartKey,
-        ...(opt?.limit && { Limit: opt.limit }),
+        // Only set Limit in ScanCommand if we need more items
+        ...((opt?.limit && Items.length < opt.limit) && {
+          Limit: opt.limit - Items.length
+        }),
       });
 
       debug(`running dynamo scan=${JSON.stringify(params, null, 2)}`);
 
       const {
-        Items: newitems,
+        Items: newItems = [],
         LastEvaluatedKey,
-        // eslint-disable-next-line no-await-in-loop
       } = await dynamoDb.send(params);
 
       ExclusiveStartKey = LastEvaluatedKey;
+      Items.push(...(newItems as T[]));
 
-      if (newitems) {
-        Items.push(...newitems.map((r) => r as T));
+      // Break the loop if we've reached the limit
+      if (opt?.limit && Items.length >= opt.limit) {
+        break;
       }
-    } while (ExclusiveStartKey && (!opt?.limit || Items.length < opt.limit));
+    } while (ExclusiveStartKey);
 
-    if (opt?.limit) {
-      ({ part: Items } = take(Items, opt.limit));
+    // Ensure we don't return more items than the limit
+    if (opt?.limit && Items.length > opt.limit) {
+      Items = Items.slice(0, opt.limit);
     }
 
     debug(`dynamo scan against ${tableName} ok, count=${Items.length}`);
