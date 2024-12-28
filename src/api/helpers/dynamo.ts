@@ -46,7 +46,6 @@ interface ScanOptions {
    */
   filter?: DynamoFilter;
   requiredAttributeList?: string[];
-  limit?: number;
 }
 
 interface DynamoQueryParams {
@@ -227,10 +226,6 @@ export const scan = async <T>(
             .join(', '),
         }),
         ExclusiveStartKey,
-        ...(options?.limit &&
-          Items.length < options.limit && {
-            Limit: options.limit - Items.length,
-          }),
       });
 
       const result = await withRetry(() => dynamoDb.send(params), 'scan');
@@ -240,15 +235,9 @@ export const scan = async <T>(
       }
 
       ExclusiveStartKey = result.LastEvaluatedKey;
-
-      if (options?.limit && Items.length >= options.limit) {
-        break;
-      }
     } while (ExclusiveStartKey);
 
-    return {
-      data: options?.limit ? Items.slice(0, options.limit) : Items,
-    };
+    return { data: Items };
   } catch (e) {
     return { error: (e as Error).toString() };
   }
@@ -256,12 +245,14 @@ export const scan = async <T>(
 
 export async function* scanWithGenerator<T>(
   tableName: string,
-  options?: ScanOptions,
+  options?: ScanOptions & {
+    /** how many to return in scan generator. default 100 */
+    BATCH_SIZE?: number;
+  },
 ): AsyncGenerator<T[], void, unknown> {
-  const BATCH_SIZE = 25;
+  const BATCH_SIZE = options?.BATCH_SIZE ?? 100;
   let items: T[] = [];
   let exclusiveStartKey: Key | undefined;
-  let totalItems = 0;
 
   try {
     const projectionAttrs = options?.requiredAttributeList?.reduce<
@@ -309,35 +300,16 @@ export async function* scanWithGenerator<T>(
         while (items.length >= BATCH_SIZE) {
           const batch = items.slice(0, BATCH_SIZE);
           items = items.slice(BATCH_SIZE);
-          totalItems += batch.length;
-
-          // If we've reached the limit, yield the final batch and return
-          if (options?.limit && totalItems >= options.limit) {
-            const remainingCount = options.limit - (totalItems - batch.length);
-            yield batch.slice(0, remainingCount);
-            return;
-          }
-
           yield batch;
         }
       }
 
       exclusiveStartKey = result.LastEvaluatedKey;
-    } while (
-      exclusiveStartKey &&
-      (!options?.limit || totalItems < options.limit)
-    );
+    } while (exclusiveStartKey);
 
     // Yield any remaining items
     if (items.length > 0) {
-      if (options?.limit) {
-        const remainingCount = options.limit - totalItems;
-        if (remainingCount > 0) {
-          yield items.slice(0, remainingCount);
-        }
-      } else {
-        yield items;
-      }
+      yield items;
     }
   } catch (e) {
     throw new Error(`Scan generator error: ${(e as Error).toString()}`);
