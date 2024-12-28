@@ -35,6 +35,15 @@ interface DynamoFilter {
 }
 
 interface ScanOptions {
+  /** eg
+   * filter: {
+      filterExpression: '#feedIcon = :empty',
+      attrNames: { '#feedIcon': 'feedIcon' },
+      attrValues: {
+        ':empty': '',
+      },
+    },
+   */
   filter?: DynamoFilter;
   requiredAttributeList?: string[];
   limit?: number;
@@ -244,6 +253,96 @@ export const scan = async <T>(
     return { error: (e as Error).toString() };
   }
 };
+
+export async function* scanWithGenerator<T>(
+  tableName: string,
+  options?: ScanOptions,
+): AsyncGenerator<T[], void, unknown> {
+  const BATCH_SIZE = 25;
+  let items: T[] = [];
+  let exclusiveStartKey: Key | undefined;
+  let totalItems = 0;
+
+  try {
+    const projectionAttrs = options?.requiredAttributeList?.reduce<
+      Record<string, string>
+    >((acc, attr, index) => {
+      acc[`#proj${index}`] = attr;
+      return acc;
+    }, {});
+
+    const expressionAttributeNames = {
+      ...projectionAttrs,
+      ...options?.filter?.attrNames,
+    };
+
+    do {
+      const params = new ScanCommand({
+        TableName: tableName,
+        Limit: BATCH_SIZE,
+        ...(options?.filter && {
+          FilterExpression: options.filter.filterExpression,
+          ...(options.filter.attrValues && {
+            ExpressionAttributeValues: options.filter.attrValues,
+          }),
+        }),
+        ...(Object.keys(expressionAttributeNames).length > 0 && {
+          ExpressionAttributeNames: expressionAttributeNames,
+        }),
+        ...(options?.requiredAttributeList && {
+          ProjectionExpression: options.requiredAttributeList
+            .map((_, index) => `#proj${index}`)
+            .join(', '),
+        }),
+        ExclusiveStartKey: exclusiveStartKey,
+      });
+
+      const result = await withRetry(
+        () => dynamoDb.send(params),
+        'scanWithGenerator',
+      );
+
+      if (result.Items) {
+        items.push(...(result.Items as T[]));
+
+        // Process items in chunks of BATCH_SIZE
+        while (items.length >= BATCH_SIZE) {
+          const batch = items.slice(0, BATCH_SIZE);
+          items = items.slice(BATCH_SIZE);
+          totalItems += batch.length;
+
+          // If we've reached the limit, yield the final batch and return
+          if (options?.limit && totalItems >= options.limit) {
+            const remainingCount = options.limit - (totalItems - batch.length);
+            yield batch.slice(0, remainingCount);
+            return;
+          }
+
+          yield batch;
+        }
+      }
+
+      exclusiveStartKey = result.LastEvaluatedKey;
+    } while (
+      exclusiveStartKey &&
+      (!options?.limit || totalItems < options.limit)
+    );
+
+    // Yield any remaining items
+    if (items.length > 0) {
+      if (options?.limit) {
+        const remainingCount = options.limit - totalItems;
+        if (remainingCount > 0) {
+          yield items.slice(0, remainingCount);
+        }
+      } else {
+        yield items;
+      }
+    }
+  } catch (e) {
+    throw new Error(`Scan generator error: ${(e as Error).toString()}`);
+  }
+}
 
 export const getItemsDynamo = async <T>(params: {
   tableName: string;
