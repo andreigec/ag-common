@@ -46,6 +46,7 @@ interface ScanOptions {
    */
   filter?: DynamoFilter;
   requiredAttributeList?: string[];
+  indexName?: string;
 }
 
 interface DynamoQueryParams {
@@ -211,6 +212,7 @@ export const scan = async <T>(
     do {
       const params = new ScanCommand({
         TableName: tableName,
+        IndexName: options?.indexName,
         ...(options?.filter && {
           FilterExpression: options.filter.filterExpression,
           ...(options.filter.attrValues && {
@@ -270,6 +272,7 @@ export async function* scanWithGenerator<T>(
     do {
       const params = new ScanCommand({
         TableName: tableName,
+        IndexName: options?.indexName,
         Limit: BATCH_SIZE,
         ...(options?.filter && {
           FilterExpression: options.filter.filterExpression,
