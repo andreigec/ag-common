@@ -30,6 +30,7 @@ export async function fetchFile(p: {
   await write();
   try {
     fileStream.close();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     //
   }

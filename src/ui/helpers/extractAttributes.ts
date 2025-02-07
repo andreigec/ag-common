@@ -4,7 +4,7 @@ export const extractAttributes = ({ idName }: { idName: string }) => {
   }
 
   const ret: Record<string, string> = {};
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
   // @ts-ignore
   [...document.getElementById(idName).attributes].forEach((a) => {
     ret[a.name] = a.value;

@@ -40,7 +40,6 @@ function getCacheKey({
   overrideAuth,
   ssrCacheItems,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ssrCacheItems?: any;
   cacheKey: string;
   overrideAuth?: OverrideAuth;
@@ -67,7 +66,7 @@ export const setOpenApiCacheRaw = async <T>(
   p: {
     cacheKey: string;
     overrideAuth?: OverrideAuth | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     ssrCacheItems?: any;
     cacheTtl?: number;
   },

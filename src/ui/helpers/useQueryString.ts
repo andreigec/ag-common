@@ -25,7 +25,7 @@ export const useQueryStringRaw = <T>({
   parse: (v: string | undefined) => T;
 }): [T, (v: T) => void] => {
   const qv: Record<string, string> = isServer
-    ? queryValues ?? {}
+    ? (queryValues ?? {})
     : paramsToObject(new URLSearchParams(window.location.search));
 
   const qsv = parse(qv[name]) || defaultValue;

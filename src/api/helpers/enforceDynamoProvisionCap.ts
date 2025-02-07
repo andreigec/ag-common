@@ -19,7 +19,6 @@ export const enforceDynamoProvisionCap = ({
   writesMax = 25,
   mustEqual = false,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tables: any[];
   /**
    * default 25
@@ -39,7 +38,6 @@ export const enforceDynamoProvisionCap = ({
     return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const t = tables[0] as any;
   const s = safeStringify(t.node._children.Resource.node.scope);
   const reads = extractSum({ str: s, regex: /readCapacityUnits.*/gim });

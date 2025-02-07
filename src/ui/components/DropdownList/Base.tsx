@@ -1,6 +1,7 @@
 'use client';
 import styled from '@emotion/styled';
 import type { CSSProperties } from 'react';
+import type { JSX } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { convertRemToPixels } from '../../helpers/dom';
@@ -102,11 +103,14 @@ export function DropdownList<T>(p: IDropdownList<T>) {
   const [state, setState] = useState(p.value);
   const [open, setOpen] = useState(p.open);
   const [bounced, setBounced] = useState(false);
-  useOnClickOutside({ disabled: !open, ref, moveMouseOutside: false }, () => {
-    setOpen(false);
-    setBounced(false);
-    p.onClose?.();
-  });
+  useOnClickOutside(
+    { disabled: !open, ref: ref as any, moveMouseOutside: false },
+    () => {
+      setOpen(false);
+      setBounced(false);
+      p.onClose?.();
+    },
+  );
 
   useEffect(() => {
     const newv = p.value;

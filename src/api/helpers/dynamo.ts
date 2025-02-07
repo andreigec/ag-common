@@ -477,7 +477,6 @@ export const wipeTable = async (
       throw new Error('Could not find hash key');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const scanResult = await scan<any>(tableName);
     if (isError(scanResult)) {
       throw new Error(scanResult.error);

@@ -24,7 +24,7 @@ export const apiResponseToAxiosResponse = async <T>(
         (s) => s[0],
         (s) => s[1],
       ),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       config: {} as any,
     };
 
@@ -39,6 +39,7 @@ export const apiResponseToAxiosResponse = async <T>(
       try {
         const st = await getStringFromStream(er.body);
         statusText = st;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }
@@ -56,7 +57,7 @@ export const apiResponseToAxiosResponse = async <T>(
           (s) => s[0],
           (s) => s[1],
         ),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       config: {} as any,
     };
 

@@ -49,7 +49,6 @@ export const isNumber = (num: string) => !isNaN(Number(num));
 
 export function toFixedDown(num: number, scale: number) {
   if (!`${num}`.includes('e')) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return +`${Math.round(`${num}e+${scale}`)}e-${scale}`;
   }
@@ -60,7 +59,7 @@ export function toFixedDown(num: number, scale: number) {
   if (+arr[1] + scale > 0) {
     sig = '+';
   }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
   // @ts-ignore
   return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)}e-${scale}`;
 }

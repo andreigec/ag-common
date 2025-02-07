@@ -34,7 +34,7 @@ const Template: StoryFn<ISearchDialog<string>> = (args) => {
           height: 'calc(100% - 1rem)',
         }}
       >
-        <SearchInline {...args} textBoxRef={ref} />
+        <SearchInline {...args} textBoxRef={ref as any} />
       </div>
     </>
   );

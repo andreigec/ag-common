@@ -1,6 +1,5 @@
 import { isNumber } from './math';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function loadCsvAsJson<T extends Record<string | number, any>>(p: {
   fileData: string;
   opt?: { typeOverrides?: { headerName: string; type: 'string' | 'number' }[] };

@@ -1,4 +1,3 @@
-/* eslint-disable no-new */
 import type { aws_certificatemanager as certmgr } from 'aws-cdk-lib';
 import {
   aws_apigateway as apigw,
@@ -14,7 +13,7 @@ import type { Construct } from 'constructs';
 import { distinctBy, notEmpty } from '../../common/helpers/array';
 import { warn } from '../../common/helpers/log';
 import type { ILambdaConfigs } from '../types';
-// eslint-disable-next-line
+
 const getPaths = (schema: any) =>
   Object.entries(
     schema.paths as {
@@ -281,7 +280,7 @@ export const openApiImpl = (p: {
   });
 
   Object.keys(lambdaConfig).forEach((k) => {
-    if (!seenPermissions[k] || seenPermissions[k] === false) {
+    if (!seenPermissions[k]) {
       warn(
         `unused permissions for '${k}', did you mean one of these paths?=`,
         Object.entries(seenPermissions)

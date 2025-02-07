@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import type { MouseEvent } from 'react';
+import type { JSX } from 'react';
 import React, { createRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -162,6 +163,7 @@ export const useTooltip = <T,>(p?: ITooltipProps): IUseTooltip<T> => {
     return () => {
       try {
         document.querySelector(`#${portalId}`)?.remove();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }

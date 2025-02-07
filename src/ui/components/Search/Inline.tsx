@@ -118,7 +118,6 @@ export const SearchInline = <T,>(p: ISearchDialog<T>) => {
         )}
         {filteredItems.map((item, index) =>
           cloneElement(p.renderItem({ searchText, item, index }), {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onClick: (e: any) => resWrap(item, e.target),
           }),
         )}

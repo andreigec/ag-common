@@ -1,5 +1,3 @@
-/* eslint-disable no-bitwise */
-
 /** generate int hashcode of string
  * @param seed default 0
  */

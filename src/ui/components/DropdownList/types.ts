@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 export interface IDropdownList<T> {
   /**
    * all items that can be in dropdown

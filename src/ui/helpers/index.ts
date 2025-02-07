@@ -1,12 +1,12 @@
 export * from './axiosHelper';
 export * from './callOpenApi';
-export * from './cognito';
+export type * from './cognito';
 export * from './cookie';
 export * from './date';
 export * from './debounce';
 export * from './dom';
 export * from './extractAttributes';
-export * from './jwt';
+export type * from './jwt';
 export * from './plural';
 export * from './routes';
 export * from './serviceWorker';

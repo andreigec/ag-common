@@ -1,5 +1,5 @@
 'use client';
-/* eslint-disable react/display-name */
+
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import React, {
@@ -178,7 +178,6 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Comp = !singleLine ? ValueTextArea : ValueTextBox;
 
   return (
@@ -186,7 +185,6 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
       {...noDrag}
       className={p.className}
       data-editing="true"
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={ref as any}
       tabIndex={-1}
       data-nogrow={noGrow}
@@ -198,7 +196,6 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
         tabIndex={editing ? 0 : undefined}
         data-editing="true"
         data-valuechange={valueChange.toString()}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ref={taref as any}
         data-type="text"
         value={value}
@@ -211,7 +208,6 @@ export const TextEdit = forwardRef<IRefTextEdit, ITextEdit>((p, ref) => {
         placeholder={p.placeholder}
         rows={singleLine ? 1 : undefined}
         maxLength={p.maxLength}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onKeyDown={(e: any) => {
           if (p.onKeyDown?.(e) === false) {
             e.preventDefault();

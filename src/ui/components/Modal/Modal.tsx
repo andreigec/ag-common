@@ -101,6 +101,7 @@ export const Modal = (p: IModal) => {
     return () => {
       try {
         document.querySelector(`#${portalId}`)?.remove();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }

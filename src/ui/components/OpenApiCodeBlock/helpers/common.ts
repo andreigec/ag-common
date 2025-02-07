@@ -59,7 +59,6 @@ export const getOperation = <TDefaultApi>(
   if (!path || !verb) {
     return {
       error: 'operation not found',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
   }
 

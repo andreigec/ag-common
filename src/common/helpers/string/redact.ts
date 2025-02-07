@@ -16,6 +16,7 @@ export function redactObject<T>(ob: T): T {
   } else if (typeof ob === 'object') {
     try {
       return JSON.parse(redactString(JSON.stringify(ob)));
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       return ob;
     }

@@ -109,7 +109,7 @@ function printStackTrace(...args: undefined[]) {
       // Remove call to logStackTrace()
       callstack.shift();
       isCallstackPopulated = true;
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
       // @ts-ignore
     } else if (window.opera && er.message) {
       // Opera
@@ -137,7 +137,7 @@ function printStackTrace(...args: undefined[]) {
 
   if (!isCallstackPopulated) {
     // IE and Safari
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
     // @ts-ignore
     let currentFunction = args.callee.caller;
 

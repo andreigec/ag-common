@@ -19,7 +19,6 @@ const LoadMore = styled.div`
   text-decoration: underline;
 `;
 export interface IInfiniteScroll {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any[];
   className?: string;
   startIndex?: number;
@@ -48,7 +47,6 @@ export const InfiniteScroll = (p: IInfiniteScroll) => {
     }
   };
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     setStartScrollTop(ref.current!.scrollTop);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

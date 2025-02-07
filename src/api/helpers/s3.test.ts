@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { debug, SetLogLevel } from '../../common/helpers/log';
 import { deleteFiles, getS3Objects, putS3Object } from './s3';
 

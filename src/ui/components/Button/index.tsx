@@ -1,9 +1,9 @@
 'use client';
-/* eslint-disable react/destructuring-assignment */
+
 import { css } from '@emotion/react';
 import type { StyledComponent } from '@emotion/styled';
 import styled from '@emotion/styled';
-import type { KeyboardEventHandler, MouseEventHandler } from 'react';
+import type { JSX, KeyboardEventHandler, MouseEventHandler } from 'react';
 import React from 'react';
 
 import { colours } from '../../styles/colours';
@@ -72,10 +72,8 @@ export interface IButton {
   colourTheme?: 'green' | 'red';
 }
 export const Button = (props: IButton) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Component: StyledComponent<'button', any> = props.href
-    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (BaseA as any)
+    ? (BaseA as any)
     : BaseButton;
 
   return (

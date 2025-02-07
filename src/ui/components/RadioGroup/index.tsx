@@ -1,6 +1,7 @@
 'use client';
 import styled from '@emotion/styled';
 import type { CSSProperties } from 'react';
+import type { JSX } from 'react';
 import React, { useState } from 'react';
 
 const Base = styled.div`
@@ -41,7 +42,6 @@ export interface IRadioGroup<T> {
 }
 
 export const RadioGroup = <T,>(p: IRadioGroup<T>) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { renderLabel = (x) => (x as any).toString() } = p;
   const [index, setIndex] = useState<number>(p.defaultIndex);
 

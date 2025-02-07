@@ -1,6 +1,7 @@
 'use client';
 import styled from '@emotion/styled';
 import type { CSSProperties } from 'react';
+import type { JSX } from 'react';
 import React, { useState } from 'react';
 
 import { Icon } from '../Icon';

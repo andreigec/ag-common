@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { JSX } from 'react';
 
 export interface IRefTextEdit {
   /** Set the internal value of the typed string. Can be used to clear externally */

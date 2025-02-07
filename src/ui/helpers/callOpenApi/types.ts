@@ -12,7 +12,7 @@ export interface ICallOpenApi<T, TDefaultApi> {
   overrideAuth?: OverrideAuth;
   logout: () => void;
   refreshToken: () => Promise<User | undefined>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   newDefaultApi: (config: any) => TDefaultApi;
   disabled?: boolean;
   headers?: Record<string, string | number>;

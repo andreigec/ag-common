@@ -2,7 +2,7 @@
 import styled from '@emotion/styled';
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-
+import type { JSX } from 'react';
 import { DefaultWithArgs as Accordion } from './Accordion.stories';
 import { DefaultWithArgs as BorderGradient } from './BorderGradient.stories';
 import { DefaultWithArgs as Button } from './Button.stories';

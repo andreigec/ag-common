@@ -7,7 +7,7 @@ import { isRightClick } from './dom';
 type Event = MouseEvent | TouchEvent;
 export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   p: {
-    ref: RefObject<T>;
+    ref: RefObject<T | null>;
     /** can either be a boolean, or a callback */
     disabled?: boolean | (() => boolean);
     /** if true, will also consider moving mouse outside div. default false */
@@ -19,7 +19,7 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
     const listener = (event: Event) => {
       const disabled =
         !p.disabled || typeof p.disabled === 'boolean'
-          ? p.disabled ?? false
+          ? (p.disabled ?? false)
           : p.disabled();
 
       if (disabled) {
@@ -66,6 +66,7 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
         document.removeEventListener(`mousedown`, listener);
         document.removeEventListener(`touchstart`, listener);
         document.removeEventListener(`mousemove`, listener);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }

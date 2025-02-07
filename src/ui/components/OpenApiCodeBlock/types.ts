@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 export interface IOpenApiOperation {
   description?: string;
   operationId: string;
@@ -19,7 +21,7 @@ export interface IOpenApiCodeBlock<TDefaultApi> {
    */
   schema: IOpenApi;
   apiKey?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   funcF: (f: TDefaultApi) => Promise<any>;
 }
 

@@ -8,6 +8,7 @@ export const tryJsonParse = <T>(
 
   try {
     return JSON.parse(str) as T;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return defaultValue;
   }
@@ -16,6 +17,7 @@ export const tryJsonParse = <T>(
 export function isJson(str: unknown) {
   try {
     JSON.parse(typeof str === 'string' ? str : JSON.stringify(str));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return false;
   }
@@ -33,13 +35,12 @@ export const objectKeysToLowerCase = <T>(origObj: {
   return Object.keys(origObj).reduce(
     (newObj, key) => {
       const val = origObj[key];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const newVal: any =
         typeof val === 'object'
           ? objectKeysToLowerCase(val as unknown as { [a: string]: T })
           : val;
 
-      // eslint-disable-next-line no-param-reassign
       newObj[key.toLowerCase()] = newVal;
       return newObj;
     },
@@ -73,24 +74,22 @@ export function objectToArray<T>(obj: { [a: string]: T }): IArrayType<T>[] {
  * @param depthLeft
  * @returns
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export const objectAlphaSort = <T>(object: T, depthLeft = -1): T => {
   if (depthLeft === 0) {
     return object;
   }
 
   if (object !== null && typeof object === 'object') {
-    return (
-      Object.keys(object)
-        .sort((a, b) => (a.toLowerCase() < b.toLowerCase() ? -1 : 1))
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .reduce((result: any, key) => {
-          //@ts-ignore
-          result[key] = objectAlphaSort(object[key], depthLeft - 1);
+    return Object.keys(object)
+      .sort((a, b) => (a.toLowerCase() < b.toLowerCase() ? -1 : 1))
 
-          return result;
-        }, {})
-    );
+      .reduce((result: any, key) => {
+        //@ts-ignore
+        result[key] = objectAlphaSort(object[key], depthLeft - 1);
+
+        return result;
+      }, {});
   } else if (Array.isArray(object)) {
     //@ts-ignore
     return object.map((obj) => objectAlphaSort(obj, depthLeft - 1));
@@ -104,7 +103,7 @@ export const objectAlphaSort = <T>(object: T, depthLeft = -1): T => {
  * @param entries Could be URLSearchParams
  * @returns
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export function paramsToObject(entries: any) {
   const result: Record<string, string> = {};
   for (const [key, value] of entries) {
@@ -182,7 +181,6 @@ export const removeUndefValuesFromObject = <TA>(orig: Record<string, TA>) => {
   const ret = {} as Record<string, TA extends undefined | null ? never : TA>;
   Object.entries(orig).forEach(([k, v]) => {
     if (v !== null && v !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (ret as any)[k] = v;
     }
   });
@@ -224,7 +222,7 @@ export const castStringlyObject = (
     return s;
   });
 };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export const isObject = (o: any) =>
   o && typeof o === 'object' && !Array.isArray(o);
 

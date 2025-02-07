@@ -1,5 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import React from 'react';
 
 import { notEmpty } from '../../../../common/helpers/array';

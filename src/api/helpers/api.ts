@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// eslint-disable-next-line
 import { notEmpty } from '../../common/helpers/array';
 import type { APIGatewayProxyResult, DYNAMOKEYS } from '../types';
 
@@ -27,7 +25,7 @@ export const returnCode = <T>(
   return {
     headers,
     statusCode,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     body: (!body ? undefined : JSON.stringify(body, null, 2)) as any,
   };
 };
@@ -38,10 +36,9 @@ export const returnCode = <T>(
  * @param keepPk if true, will keep PK. default true
  * @returns stripped record
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export const stripPKs = <T>(record: T, keepPk = true): T => {
   if (!record) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return null as any;
   }
 
@@ -55,7 +52,6 @@ export const stripPKs = <T>(record: T, keepPk = true): T => {
     rest.PK = PK;
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return rest;
 };

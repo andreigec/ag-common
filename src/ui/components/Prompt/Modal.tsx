@@ -62,6 +62,7 @@ export const PromptModal = ({
       try {
         root?.unmount();
         wrapper?.remove();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }

@@ -25,7 +25,6 @@ export const arrayToObject = <TIn, Indexer extends string | number, TOut>(
   return ret;
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export const flat = <T>(arr: T[][]): T[] => [].concat(...arr);
 

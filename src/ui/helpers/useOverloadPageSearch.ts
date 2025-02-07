@@ -26,6 +26,7 @@ export const useOverloadPageSearch = ({
       if (!disabled) {
         window.addEventListener('keydown', ctrlF);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       //
     }
@@ -33,6 +34,7 @@ export const useOverloadPageSearch = ({
     return () => {
       try {
         window.removeEventListener('keydown', ctrlF);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }

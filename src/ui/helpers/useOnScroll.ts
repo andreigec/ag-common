@@ -39,8 +39,8 @@ export function useOnScroll({
   useGranularEffect(
     () => {
       const listener = (e: Event) => {
-        const y = element?.current?.scrollTop ?? window.scrollY;
-        const x = element?.current?.scrollLeft ?? window.scrollX;
+        const y = element?.current.scrollTop ?? window.scrollY;
+        const x = element?.current.scrollLeft ?? window.scrollX;
         const r: IScroll = {
           y,
           x,
@@ -77,6 +77,7 @@ export function useOnScroll({
             `scroll`,
             listenDebounce,
           );
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           //
         }
@@ -87,7 +88,7 @@ export function useOnScroll({
   );
 
   useEffect(() => {
-    if (startScrollTopY === -1 && element?.current?.scrollTop) {
+    if (startScrollTopY === -1 && element?.current.scrollTop) {
       setStartScrollTopY(element.current.scrollTop);
     }
   }, [element, startScrollTopY]);

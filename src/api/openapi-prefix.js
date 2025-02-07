@@ -1,6 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-console */
+ 
 var { load } = require('js-yaml');
 const SwaggerParser = require('swagger-parser');
 const fs = require('fs');
@@ -11,7 +9,7 @@ var cwd = process.cwd();
 var resolvePath = (p) => pathV.resolve(cwd, p);
 //
 function cleanSrc() {
-  // eslint-disable-next-line no-console
+   
   console.log('fixing colons in field names');
   let files = fs
     .readdirSync(resolvePath('./src/api'))
@@ -79,7 +77,7 @@ async function generateJs() {
 
     const yml = load(fs.readFileSync(p, 'utf8'));
 
-    // eslint-disable-next-line
+     
     const schema = await SwaggerParser.validate(yml);
     const content = `var ret=${JSON.stringify(
       schema,
@@ -88,7 +86,7 @@ async function generateJs() {
     fs.writeFileSync(resolvePath('./openapi.generated.js'), content);
     console.log('generated');
   } catch (e) {
-    // eslint-disable-next-line no-console
+     
     console.log('err=', e);
   }
 }

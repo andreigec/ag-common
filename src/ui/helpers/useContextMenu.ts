@@ -4,13 +4,12 @@ import { useCallback, useEffect, useState } from 'react';
 export const useContextMenu = ({
   ref,
 }: {
-  ref: React.RefObject<HTMLDivElement>;
+  ref: React.RefObject<HTMLDivElement | null>;
 }) => {
   const [xPos, setXPos] = useState('0px');
   const [yPos, setYPos] = useState('0px');
   const [showMenu, setShowMenu] = useState(false);
   const handleContextMenu = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (e: any) => {
       if (!ref.current?.contains(e.target)) {
         return;
@@ -39,6 +38,7 @@ export const useContextMenu = ({
       try {
         document.addEventListener('click', handleClick);
         document.removeEventListener('contextmenu', handleContextMenu);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }

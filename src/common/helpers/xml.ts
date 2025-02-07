@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export const convertXmlToJson = async (p: { xmlData: string }) => {
   const parser = new XMLParser();
   const ret = parser.parse(p.xmlData);

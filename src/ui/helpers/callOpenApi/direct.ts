@@ -64,13 +64,13 @@ export const callOpenApi = async <T, TDefaultApi>(
   p: ICallOpenApi<T, TDefaultApi>,
 ): Promise<AxiosWrapperLite<T>> => {
   const { func, apiUrl, logout, newDefaultApi, headers } = p;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   let error: AxiosError<unknown, any> | undefined;
   let data: T | undefined = undefined;
   const config: {
     basePath: string;
     baseOptions: Record<string, Record<string, string | number>>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     middleware: { pre: (a: any) => any }[];
   } = {
     basePath: apiUrl,
@@ -90,7 +90,6 @@ export const callOpenApi = async <T, TDefaultApi>(
   if (config.baseOptions.headers.authorization) {
     config.middleware = [
       {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         pre: (oldFetchParams: any) => {
           const url = oldFetchParams?.url ?? '(url)';
           const verb = oldFetchParams?.init?.method ?? '(verb)';
@@ -114,7 +113,6 @@ export const callOpenApi = async <T, TDefaultApi>(
     errorCount += 1;
 
     try {
-      // eslint-disable-next-line no-await-in-loop
       const response = await func(cl);
       if (response.status < 400) {
         data = response.data;
@@ -123,12 +121,11 @@ export const callOpenApi = async <T, TDefaultApi>(
 
       throw { response };
     } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const ae = e as AxiosError<unknown, any>;
       const status = Number(ae.code ?? ae.response?.status ?? 500);
       const errorMessage = [
         ae.status ?? '',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         (ae.response?.data as any)?.toString() ?? '',
         ae.response?.statusText.toString() ?? '',
         ae.response?.status.toString() ?? '',

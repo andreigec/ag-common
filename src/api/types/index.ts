@@ -1,4 +1,3 @@
-/* eslint-disable no-new */
 import type {
   aws_dynamodb as dynamodb,
   aws_iam as iam,
@@ -89,4 +88,4 @@ export interface IQueryDynamo {
   /** default = true */
   sortAscending?: boolean;
 }
-export * from './aws';
+export type * from './aws';

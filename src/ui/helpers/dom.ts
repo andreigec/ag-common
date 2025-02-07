@@ -21,7 +21,7 @@ export const convertRemToPixels = (rem: number) => {
  * @param p
  * @returns
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export const filterDataProps = (p: any): Record<string, string> => {
   const x = Object.entries(p)
     .filter((r) => r[0].startsWith('data-'))
@@ -43,7 +43,7 @@ export const isRightClick = (event: MouseEvent | TouchEvent) => {
     isRightMB = event.which == 3;
   else if ('button' in event)
     // IE, Opera
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     isRightMB = (event as any).button == 2;
 
   return isRightMB;

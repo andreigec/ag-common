@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import React from 'react';
 
 import { getBodyJson, Highlight, Highlight2 } from '../../helpers/common';

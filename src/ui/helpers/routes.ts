@@ -22,7 +22,6 @@ export interface URLLite {
   username: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CacheItems = CacheItem<any>[];
 export interface CacheItem<T> {
   cacheKey: string;
@@ -30,7 +29,6 @@ export interface CacheItem<T> {
   ttlSeconds: number;
 }
 export interface IInitialStateCommon {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   openApiCache?: CacheItem<any>[];
 }
 

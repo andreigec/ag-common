@@ -26,12 +26,14 @@ export function useElementAttribute({
       } else {
         element.removeAttribute(key);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       //
     }
     return () => {
       try {
         element.removeAttribute(key);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }

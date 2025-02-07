@@ -11,7 +11,7 @@ export const ListboxEdit = <T,>({
   onSubmit,
   values,
   canEdit = true,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   renderLabel = (e: T) => (e as any).toString(),
 }: {
   defaultValue: T;
@@ -35,7 +35,6 @@ export const ListboxEdit = <T,>({
     <ValueBox {...noDrag}>
       <select
         size={5}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         value={(value as any).toString()}
         onChange={(v) => {
           const selected = values[v.target.selectedIndex];
@@ -47,12 +46,7 @@ export const ListboxEdit = <T,>({
         }}
       >
         {values.map((v) => (
-          <option
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            key={(v as any).toString()}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            value={(v as any).toString()}
-          >
+          <option key={(v as any).toString()} value={(v as any).toString()}>
             {renderLabel(v)}
           </option>
         ))}

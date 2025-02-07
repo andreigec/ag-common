@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 export async function runGenerator<T>(
   iter: AsyncGenerator<T[], T[], unknown>,
   partialRun: (value: T[]) => Promise<void>,

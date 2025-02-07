@@ -27,6 +27,7 @@ export function isValidUrl(raw: string) {
   try {
     const url = new URL(raw);
     return url.protocol === 'http:' || url.protocol === 'https:';
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
     return false;
   }

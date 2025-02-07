@@ -55,10 +55,10 @@ export interface User {
 
 export interface AxiosWrapper<T> {
   data: T | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   error?: AxiosError<unknown, any>;
   loading: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   reFetch: () => Promise<any>;
   datetime: number;
 }

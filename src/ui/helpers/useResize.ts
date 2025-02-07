@@ -48,6 +48,7 @@ export function useResize() {
     return () => {
       try {
         window.removeEventListener('resize', handleResize);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }

@@ -27,6 +27,7 @@ export const HorizontalScrollBar = ({
       try {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         scrollRef.current?.removeEventListener('wheel', handleScroll);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         //
       }

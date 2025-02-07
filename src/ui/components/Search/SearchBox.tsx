@@ -53,7 +53,7 @@ export interface ISearchBox {
   searchText: string;
   setSearchText: (val: string, enterPressed: boolean) => void;
   className?: string;
-  textBoxRef?: React.RefObject<IRefTextEdit>;
+  textBoxRef?: React.RefObject<IRefTextEdit | null>;
   /**
    * if truthy will enable text edit mode by default. if focus is true, will also focus on open
    */
@@ -64,7 +64,7 @@ export const SearchBox = (p: ISearchBox) => {
   const cr = createRef<IRefTextEdit>();
 
   const textBoxRef = (!p.textBoxRef ? cr : ur) as unknown as
-    | React.RefObject<IRefTextEdit>
+    | React.RefObject<IRefTextEdit | null>
     | undefined;
 
   useEffect(() => {

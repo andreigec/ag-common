@@ -1,6 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
-import type { CSSProperties, Dispatch, SetStateAction } from 'react';
+import type { CSSProperties, Dispatch, JSX, SetStateAction } from 'react';
 import React, { useState } from 'react';
 
 import { useCookie } from '../../helpers/cookie/use';
@@ -150,6 +150,7 @@ export const DarkModeAux = ({
       if (className) {
         document.getElementsByTagName('html')[0].classList.add(className);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       //
     }

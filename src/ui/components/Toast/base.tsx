@@ -21,7 +21,6 @@ import type {
 export const ToastContext = createContext<{
   addToast: TAddToast;
   addToastDetailed: TAddToastDetailed;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }>({} as any);
 const ToastContainerStyle = styled.div`
   position: fixed;
@@ -118,6 +117,7 @@ export const Toast = ({
       icon = <Tick />;
       break;
     }
+    case undefined:
   }
 
   useEffect(() => {

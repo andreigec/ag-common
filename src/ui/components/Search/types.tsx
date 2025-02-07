@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import type { IRefTextEdit } from '../TextEdit/types';
 
 export type TSearchModalRes<T> = {
@@ -46,7 +48,7 @@ export interface ISearchDialog<T> {
 
   onSearchTextChange?: (v: string) => void;
   onSelectItem?: (v: TSearchModalRes<T> | undefined) => void;
-  textBoxRef?: React.RefObject<IRefTextEdit>;
+  textBoxRef?: React.RefObject<IRefTextEdit | null>;
   rowCountOpt?: {
     /** if provided will change position of row count when some lines are hidden. default bottom */
     display?: 'bottom' | 'top' | 'off';

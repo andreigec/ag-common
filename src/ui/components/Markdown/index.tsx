@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import React from 'react';
 
 import { hashCode } from '../../../common';

@@ -1,6 +1,4 @@
-/* eslint-disable import/no-unresolved */
 import { decode, verify } from 'jsonwebtoken';
-// eslint-disable-next-line import/no-named-as-default
 import JwksClient from 'jwks-rsa';
 
 import { debug, error, info } from '../../common/helpers/log';

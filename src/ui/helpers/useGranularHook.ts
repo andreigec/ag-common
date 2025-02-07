@@ -13,7 +13,7 @@ export const useGranularHook = <
   primaryDeps: DependencyList,
   secondaryDeps: DependencyList,
 ) => {
-  const ref = useRef<DependencyList>();
+  const ref = useRef<DependencyList>(null);
 
   if (
     !ref.current ||

@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import type { IVarStyles } from '../../styles';
 
 export type TToastAppearance = 'error' | 'warning' | 'success';

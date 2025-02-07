@@ -57,7 +57,6 @@ export const CSharpToJs = (charpTicks: number) => {
 export const dateTimeToNearestMinute = (minutes: number, date?: Date) => {
   const coeff = 1000 * 60 * minutes;
   if (!date) {
-    // eslint-disable-next-line no-param-reassign
     date = new Date();
   }
 

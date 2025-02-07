@@ -40,11 +40,10 @@ export interface APIGatewayEvent {
 
 export interface AppSyncResolverEvent<
   TArguments,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TSource = Record<string, any> | null,
 > {
   arguments: TArguments;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   identity?: any;
   source: TSource;
   request: {
@@ -55,12 +54,12 @@ export interface AppSyncResolverEvent<
     selectionSetGraphQL: string;
     parentTypeName: string;
     fieldName: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     variables: { [key: string]: any };
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   prev: { result: { [key: string]: any } } | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   stash: { [key: string]: any };
 }
 export interface DynamoDBStreamEvent {
@@ -87,7 +86,7 @@ export interface DynamoDBStreamEvent {
     eventSource?: string | undefined;
     eventSourceARN?: string | undefined;
     eventVersion?: string | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     userIdentity?: any;
   }[];
 }

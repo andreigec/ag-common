@@ -48,7 +48,7 @@ export const axiosHelper = async <TOut>({
       }
 
       let noBody = false;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       let axiosV: <T = any, R = AxiosResponse<T, any>, D = any>(
         url: string,
         body?: D | undefined,
@@ -63,7 +63,6 @@ export const axiosHelper = async <TOut>({
         axiosV = axios.patch;
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       } else if (verb === 'delete') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         axiosV = axios.delete as any;
         noBody = true;
       }
