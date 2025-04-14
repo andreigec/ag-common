@@ -11,8 +11,7 @@ import type { AwsCredentialIdentity } from '@smithy/types';
 
 import { chunk } from '../../common/helpers/array';
 import { asyncForEach } from '../../common/helpers/async';
-import { warn } from '../../common/helpers/log';
-import { sleep } from '../../common/helpers/sleep';
+import { withRetry } from './withRetry';
 
 type DynamoDBError = {
   error: string;
@@ -66,52 +65,17 @@ interface DynamoQueryParams {
   sortAscending?: boolean;
 }
 
-const RETRY_CONFIG = {
-  maxRetries: 3,
-  baseDelay: 2000,
-} as const;
-
 const isError = <T>(result: DynamoDBResult<T>): result is DynamoDBError =>
   'error' in result;
 
-const withRetry = async <T>(
-  operation: () => Promise<T>,
-  operationName: string,
-): Promise<T> => {
-  let retryCount = 0;
-
-  // eslint-disable-next-line
-  while (true) {
-    try {
-      return await operation();
-    } catch (e) {
-      const error = e as Error;
-      const errorString = error.toString();
-
-      if (
-        errorString.includes('429') ||
-        errorString.includes('ProvisionedThroughputExceeded')
-      ) {
-        retryCount++;
-
-        if (retryCount >= RETRY_CONFIG.maxRetries) {
-          warn(`${operationName}: Max retries exceeded`);
-          throw error;
-        }
-
-        const delay = RETRY_CONFIG.baseDelay * Math.pow(2, retryCount - 1);
-        warn(`${operationName}: Throttled. Retry ${retryCount}`);
-        await sleep(delay);
-        continue;
-      }
-
-      throw error;
-    }
-  }
-};
-
 export let dynamoDb: DynamoDBDocument;
 
+/**
+ * Sets up the DynamoDB client with the specified region and credentials.
+ * @param region - AWS region to connect to
+ * @param credentials - Optional AWS credentials
+ * @returns Configured DynamoDBDocument client
+ */
 export const setDynamo = (
   region: string,
   credentials?: AwsCredentialIdentity,
@@ -125,6 +89,13 @@ export const setDynamo = (
 
 dynamoDb = setDynamo('ap-southeast-2');
 
+/**
+ * Puts a single item into a DynamoDB table.
+ * @param item - The item to put into the table
+ * @param tableName - Name of the DynamoDB table
+ * @param opt - Optional parameters including primary key name for conditional put
+ * @returns Promise resolving to void on success or error message on failure
+ */
 export const putDynamo = async <T extends Record<string, unknown>>(
   item: T,
   tableName: string,
@@ -146,19 +117,37 @@ export const putDynamo = async <T extends Record<string, unknown>>(
   }
 };
 
+/**
+ * Writes multiple items to a DynamoDB table in batches.
+ * Automatically chunks items into batches of 20 (or specified size) to comply with DynamoDB limits.
+ * @param tableName - Name of the DynamoDB table
+ * @param items - Array of items to write
+ * @param opt - Optional parameters including batch size and retry behavior
+ * @returns Promise resolving to void on success or error message on failure
+ */
 export const batchWrite = async <T extends Record<string, unknown>>(
   tableName: string,
   items: T[],
+  opt?: {
+    /** option to always retry on 429 until done */
+    alwaysRetry?: boolean;
+    /** default 20 */
+    batchSize?: number;
+  },
 ): Promise<DynamoDBResult<void>> => {
   try {
-    const chunked = chunk(items, 20);
+    const { batchSize = 20 } = opt ?? {};
+
+    const chunked = chunk(items, batchSize);
     await asyncForEach(chunked, async (chunk) => {
       const params = new BatchWriteCommand({
         RequestItems: {
           [tableName]: chunk.map((Item) => ({ PutRequest: { Item } })),
         },
       });
-      await withRetry(() => dynamoDb.send(params), 'batchWrite');
+      await withRetry(() => dynamoDb.send(params), 'batchWrite', {
+        maxRetries: opt?.alwaysRetry ? null : undefined,
+      });
     });
     return { data: undefined };
   } catch (e) {
@@ -166,13 +155,26 @@ export const batchWrite = async <T extends Record<string, unknown>>(
   }
 };
 
+/**
+ * Deletes multiple items from a DynamoDB table in batches.
+ * Automatically chunks keys into batches of 20 (or specified size) to comply with DynamoDB limits.
+ * @param params - Parameters including table name, keys to delete, and options
+ * @returns Promise resolving to void on success or error message on failure
+ */
 export const batchDelete = async (params: {
   tableName: string;
   keys: string[];
   pkName: string;
+  opt?: {
+    /** default 20 */
+    batchSize?: number;
+    /** option to always retry on 429 until done. default false */
+    alwaysRetry?: boolean;
+  };
 }): Promise<DynamoDBResult<void>> => {
   try {
-    const chunked = chunk(params.keys, 20);
+    const { batchSize = 20, alwaysRetry = false } = params.opt ?? {};
+    const chunked = chunk(params.keys, batchSize);
     await asyncForEach(chunked, async (chunk) => {
       const command = new BatchWriteCommand({
         RequestItems: {
@@ -181,7 +183,9 @@ export const batchDelete = async (params: {
           })),
         },
       });
-      await withRetry(() => dynamoDb.send(command), 'batchDelete');
+      await withRetry(() => dynamoDb.send(command), 'batchDelete', {
+        maxRetries: alwaysRetry ? null : undefined,
+      });
     });
     return { data: undefined };
   } catch (e) {
@@ -189,6 +193,13 @@ export const batchDelete = async (params: {
   }
 };
 
+/**
+ * Scans a DynamoDB table and returns all matching items.
+ * Handles pagination automatically and supports filtering and projection.
+ * @param tableName - Name of the DynamoDB table
+ * @param options - Optional parameters for filtering, projection, and index usage
+ * @returns Promise resolving to array of items on success or error message on failure
+ */
 export const scan = async <T>(
   tableName: string,
   options?: ScanOptions,
@@ -245,6 +256,14 @@ export const scan = async <T>(
   }
 };
 
+/**
+ * Scans a DynamoDB table and yields items in batches.
+ * Useful for processing large tables without loading all items into memory.
+ * @param tableName - Name of the DynamoDB table
+ * @param options - Optional parameters including batch size, filtering, and projection
+ * @returns AsyncGenerator yielding batches of items
+ * @throws Error if the scan operation fails
+ */
 export async function* scanWithGenerator<T>(
   tableName: string,
   options?: ScanOptions & {

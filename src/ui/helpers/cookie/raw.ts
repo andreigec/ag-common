@@ -70,7 +70,7 @@ export function wipeCookies(name: string) {
   }
 
   let currentCount = 0;
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,no-constant-condition
   while (true) {
     if (
       getCookie({
