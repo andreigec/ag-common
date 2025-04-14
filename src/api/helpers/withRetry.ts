@@ -10,7 +10,7 @@ export const withRetry = async <T>(
   },
 ): Promise<T> => {
   let retryCount = 0;
-  var baseDelay = 2000;
+  var baseDelay = 1000;
   let { maxRetries = 3 } = opt ?? {};
 
   // eslint-disable-next-line
@@ -33,8 +33,8 @@ export const withRetry = async <T>(
           throw error;
         }
 
-        const delay = baseDelay * (retryCount * 1000);
-        warn(`${operationName}: Throttled. Retry ${retryCount}`);
+        const delay = baseDelay * retryCount;
+        warn(`${operationName}: Throttled. Retry ${retryCount}. Sleeping for ${delay}ms`);
         await sleep(delay);
         continue;
       }
