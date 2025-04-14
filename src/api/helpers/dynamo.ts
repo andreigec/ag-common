@@ -46,6 +46,7 @@ interface ScanOptions {
   filter?: DynamoFilter;
   requiredAttributeList?: string[];
   indexName?: string;
+  alwaysRetry?: boolean;
 }
 
 interface DynamoQueryParams {
@@ -59,9 +60,7 @@ interface DynamoQueryParams {
   indexName?: string;
   limit?: number;
   startKey?: Key;
-  filterName?: string;
-  filterValue?: unknown;
-  filterOperator?: string;
+  filter?: DynamoFilter;
   sortAscending?: boolean;
 }
 
@@ -137,6 +136,7 @@ export const batchWrite = async <T extends Record<string, unknown>>(
 ): Promise<DynamoDBResult<void>> => {
   try {
     const { batchSize = 20 } = opt ?? {};
+    var processed = 0
 
     const chunked = chunk(items, batchSize);
     await asyncForEach(chunked, async (chunk) => {
@@ -145,9 +145,14 @@ export const batchWrite = async <T extends Record<string, unknown>>(
           [tableName]: chunk.map((Item) => ({ PutRequest: { Item } })),
         },
       });
-      await withRetry(() => dynamoDb.send(params), 'batchWrite', {
-        maxRetries: opt?.alwaysRetry ? null : undefined,
-      });
+      await withRetry(
+        () => dynamoDb.send(params),
+        `batchwrite ${processed}/${items.length}. size=${batchSize}`,
+        {
+          maxRetries: opt?.alwaysRetry ? null : undefined,
+        },
+      );
+      processed += chunk.length;
     });
     return { data: undefined };
   } catch (e) {
@@ -175,6 +180,7 @@ export const batchDelete = async (params: {
   try {
     const { batchSize = 20, alwaysRetry = false } = params.opt ?? {};
     const chunked = chunk(params.keys, batchSize);
+    var processed = 0
     await asyncForEach(chunked, async (chunk) => {
       const command = new BatchWriteCommand({
         RequestItems: {
@@ -183,9 +189,14 @@ export const batchDelete = async (params: {
           })),
         },
       });
-      await withRetry(() => dynamoDb.send(command), 'batchDelete', {
-        maxRetries: alwaysRetry ? null : undefined,
-      });
+      await withRetry(
+        () => dynamoDb.send(command),
+        `batchdelete ${processed}/${params.keys.length}. size=${batchSize}`,
+        {
+          maxRetries: alwaysRetry ? null : undefined,
+        },
+      );
+      processed += chunk.length
     });
     return { data: undefined };
   } catch (e) {
@@ -241,7 +252,9 @@ export const scan = async <T>(
         ExclusiveStartKey,
       });
 
-      const result = await withRetry(() => dynamoDb.send(params), 'scan');
+      const result = await withRetry(() => dynamoDb.send(params), `scan. already seen=${Items.length}`, {
+        maxRetries: options?.alwaysRetry ? null : undefined,
+      });
 
       if (result.Items) {
         Items.push(...(result.Items as T[]));
@@ -312,7 +325,10 @@ export async function* scanWithGenerator<T>(
 
       const result = await withRetry(
         () => dynamoDb.send(params),
-        'scanWithGenerator',
+        `scanWithGenerator. already seen=${items.length}`,
+        {
+          maxRetries: options?.alwaysRetry ? null : undefined,
+        },
       );
 
       if (result.Items) {
@@ -386,12 +402,12 @@ export const queryDynamo = async <T>(
   params: DynamoQueryParams,
 ): Promise<
   | {
-      data: T[];
-      startKey?: Key;
-    }
+    data: T[];
+    startKey?: Key;
+  }
   | {
-      error: string;
-    }
+    error: string;
+  }
 > => {
   try {
     let kce = `#${params.pkName.toLowerCase()} ${params.pkOperator ?? '='} :${params.pkName.toLowerCase()}`;
@@ -421,17 +437,6 @@ export const queryDynamo = async <T>(
       }
     }
 
-    let FilterExpression: string | undefined;
-    if (params.filterName && params.filterValue !== undefined) {
-      ean[`#${params.filterName.toLowerCase()}`] = params.filterName;
-      eav[`:${params.filterName.toLowerCase()}`] = params.filterValue;
-
-      FilterExpression =
-        params.filterOperator === 'contains'
-          ? `contains(#${params.filterName.toLowerCase()}, :${params.filterName.toLowerCase()})`
-          : `#${params.filterName.toLowerCase()} ${params.filterOperator ?? '='} :${params.filterName.toLowerCase()}`;
-    }
-
     const items: T[] = [];
     let { startKey } = params;
 
@@ -439,13 +444,27 @@ export const queryDynamo = async <T>(
       const queryParams = new QueryCommand({
         TableName: params.tableName,
         KeyConditionExpression: kce,
-        ExpressionAttributeNames: ean,
-        ExpressionAttributeValues: eav,
+        ExpressionAttributeNames: {
+          ...ean,
+          ...params.filter?.attrNames,
+        },
+        ExpressionAttributeValues: {
+          ...eav,
+          ...params.filter?.attrValues,
+        },
         ScanIndexForward: params.sortAscending ?? true,
         Limit: params.limit,
         IndexName: params.indexName,
         ExclusiveStartKey: startKey,
-        FilterExpression,
+        ...(params.filter && {
+          FilterExpression: params.filter.filterExpression,
+          ...(params.filter.attrValues && {
+            ExpressionAttributeValues: {
+              ...eav,
+              ...params.filter.attrValues,
+            },
+          }),
+        }),
       });
 
       const result = await withRetry(
