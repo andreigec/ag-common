@@ -92,9 +92,13 @@ export const createStorageClient = (config: StorageConfig) => {
   return client;
 };
 
-export const setS3 = (config: StorageConfig) => createStorageClient(config);
+let s3: S3Client;
 
-export const s3 = setS3({
+export const setS3 = (config: StorageConfig) => {
+  s3 = createStorageClient(config);
+};
+
+setS3({
   provider: 's3',
   region: 'ap-southeast-2',
 });
