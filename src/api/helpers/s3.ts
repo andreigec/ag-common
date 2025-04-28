@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import type { ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
 import {
   CopyObjectCommand,

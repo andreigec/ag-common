@@ -5,7 +5,7 @@ import { setSqs } from './sqs';
 
 export const setAwsRegion = (region: string) => {
   setDynamo(region);
-  setS3(region);
+  setS3({ region, provider: 's3' });
   setSes(region);
   setSqs(region);
 };
