@@ -33,6 +33,8 @@ export type StorageConfig =
       accountId: string; // Required for R2
       accessKeyId?: string;
       secretAccessKey?: string;
+      /** region to use. default auto */
+      region?: string;
     };
 
 // Cache for memoization
@@ -81,6 +83,7 @@ export const createStorageClient = (config: StorageConfig) => {
             },
           }
         : {}),
+      region: config.region ?? 'auto',
     });
   } else {
     client = new S3Client({
