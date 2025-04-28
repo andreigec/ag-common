@@ -50,7 +50,7 @@ const executeQuery = async (
     }
   }
 
-  const queryParams = new QueryCommand({
+  const queryParams = {
     TableName: params.tableName,
     KeyConditionExpression: kce,
     ExpressionAttributeNames: {
@@ -74,10 +74,12 @@ const executeQuery = async (
         },
       }),
     }),
-  });
+  };
 
-  // eslint-disable-next-line no-return-await
-  return await withRetry(() => dynamoDb.send(queryParams), 'queryDynamo');
+  return withRetry(
+    () => dynamoDb.send(new QueryCommand(queryParams)),
+    'queryDynamo',
+  );
 };
 
 /**
@@ -102,7 +104,7 @@ const executeScan = async (
     ...options?.filter?.attrNames,
   };
 
-  const params = new ScanCommand({
+  const scanParams = {
     TableName: tableName,
     IndexName: options?.indexName,
     Limit: options?.BATCH_SIZE,
@@ -121,11 +123,10 @@ const executeScan = async (
         .join(', '),
     }),
     ExclusiveStartKey: exclusiveStartKey,
-  });
+  };
 
-  // eslint-disable-next-line no-return-await
-  return await withRetry(
-    () => dynamoDb.send(params),
+  return withRetry(
+    () => dynamoDb.send(new ScanCommand(scanParams)),
     `scan. already seen=${exclusiveStartKey ? 'some' : '0'} items`,
     {
       maxRetries: options?.alwaysRetry ? null : undefined,
@@ -138,7 +139,7 @@ export const getItemsDynamo = async <T>(params: {
   items: { pkName: string; pkValue: string }[];
 }): Promise<DynamoDBResult<T[]>> => {
   try {
-    const command = new BatchGetCommand({
+    const batchGetParams = {
       RequestItems: {
         [params.tableName]: {
           Keys: params.items.map(({ pkName, pkValue }) => ({
@@ -146,10 +147,10 @@ export const getItemsDynamo = async <T>(params: {
           })),
         },
       },
-    });
+    };
 
     const result = await withRetry(
-      () => dynamoDb.send(command),
+      () => dynamoDb.send(new BatchGetCommand(batchGetParams)),
       'getItemsDynamo',
     );
     return {

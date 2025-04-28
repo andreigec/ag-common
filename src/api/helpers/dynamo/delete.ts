@@ -23,15 +23,15 @@ export const batchDelete = async (params: {
     const chunked = chunk(params.keys, batchSize);
     let processed = 0;
     await asyncForEach(chunked, async (chunk) => {
-      const command = new BatchWriteCommand({
+      const batchDeleteParams = {
         RequestItems: {
           [params.tableName]: chunk.map((key) => ({
             DeleteRequest: { Key: { [params.pkName]: key } },
           })),
         },
-      });
+      };
       await withRetry(
-        () => dynamoDb.send(command),
+        () => dynamoDb.send(new BatchWriteCommand(batchDeleteParams)),
         `batchdelete ${processed}/${params.keys.length}. size=${batchSize}`,
         {
           maxRetries: alwaysRetry ? null : undefined,

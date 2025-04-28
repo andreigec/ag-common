@@ -11,16 +11,19 @@ export const putDynamo = async <T extends Record<string, unknown>>(
   tableName: string,
   opt?: { pkName?: string },
 ): Promise<DynamoDBResult<void>> => {
-  const params = new PutCommand({
+  const putParams = {
     TableName: tableName,
     Item: item,
     ...(opt?.pkName && {
       ConditionExpression: `attribute_not_exists(${opt.pkName})`,
     }),
-  });
+  };
 
   try {
-    await withRetry(() => dynamoDb.send(params), 'putDynamo');
+    await withRetry(
+      () => dynamoDb.send(new PutCommand(putParams)),
+      'putDynamo',
+    );
     return { data: undefined };
   } catch (e) {
     return { error: (e as Error).toString() };
@@ -43,13 +46,13 @@ export const batchWrite = async <T extends Record<string, unknown>>(
 
     const chunked = chunk(items, batchSize);
     await asyncForEach(chunked, async (chunk) => {
-      const params = new BatchWriteCommand({
+      const batchWriteParams = {
         RequestItems: {
           [tableName]: chunk.map((Item) => ({ PutRequest: { Item } })),
         },
-      });
+      };
       await withRetry(
-        () => dynamoDb.send(params),
+        () => dynamoDb.send(new BatchWriteCommand(batchWriteParams)),
         `batchwrite ${processed}/${items.length}. size=${batchSize}`,
         {
           maxRetries: opt?.alwaysRetry ? null : undefined,
