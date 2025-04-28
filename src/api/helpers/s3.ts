@@ -16,12 +16,67 @@ import { distinct, take } from '../../common/helpers/array';
 import { debug, error } from '../../common/helpers/log';
 import { copy } from '../../common/helpers/object';
 
-export const setS3 = (region: string) => {
-  const raw = new S3Client({ region });
-  return raw;
+export type StorageProvider = 's3' | 'r2';
+
+export interface StorageConfig {
+  provider: StorageProvider;
+  region: string;
+  endpoint?: string;
+  accountId?: string; // Required for R2
+}
+
+// Cache for memoization
+const clientCache = new Map<string, S3Client>();
+
+const getCacheKey = (config: StorageConfig): string => {
+  return JSON.stringify({
+    provider: config.provider,
+    region: config.region,
+    endpoint: config.endpoint,
+    accountId: config.accountId,
+  });
 };
 
-export const s3 = setS3('ap-southeast-2');
+export const createStorageClient = (config: StorageConfig) => {
+  const cacheKey = getCacheKey(config);
+  const cachedClient = clientCache.get(cacheKey);
+
+  if (cachedClient) {
+    return cachedClient;
+  }
+
+  const baseConfig = {
+    region: config.region,
+  };
+
+  let client: S3Client;
+
+  if (config.provider === 'r2') {
+    const accountId = config.accountId || process.env.CLOUDFLARE_ACCOUNT_ID;
+    if (!accountId) {
+      throw new Error(
+        'Account ID is required for R2. Set CLOUDFLARE_ACCOUNT_ID env var or provide accountId in config',
+      );
+    }
+    client = new S3Client({
+      ...baseConfig,
+      endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+      forcePathStyle: true,
+    });
+  } else {
+    client = new S3Client(baseConfig);
+  }
+
+  clientCache.set(cacheKey, client);
+  return client;
+};
+
+export const setS3 = (config: StorageConfig) => createStorageClient(config);
+
+export const s3 = setS3({
+  provider: 's3',
+  region: 'ap-southeast-2',
+});
 
 export const getS3Object = async ({
   fileurl: { Bucket, Key },

@@ -11,7 +11,7 @@ export const withRetry = async <T>(
 ): Promise<T> => {
   let retryCount = 0;
   const baseDelay = 2000;
-  let { maxRetries = 3 } = opt ?? {};
+  const { maxRetries = 3 } = opt ?? {};
 
   // eslint-disable-next-line
     while (true) {

@@ -9,7 +9,7 @@ export async function getStringFromStream(
   let result = '';
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,no-constant-condition
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (true) {
       const { done, value } = await reader.read();
 

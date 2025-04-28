@@ -12,7 +12,8 @@ const BGcss = css`
   display: flex;
   border: 0;
   padding: 3px;
-  background-image: linear-gradient(white, white),
+  background-image:
+    linear-gradient(white, white),
     linear-gradient(to bottom right, var(--left), var(--right));
   background-origin: border-box;
   background-clip: content-box, border-box;

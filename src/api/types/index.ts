@@ -4,7 +4,9 @@ import type {
   aws_lambda as lambda,
 } from 'aws-cdk-lib';
 
-import type { Key } from './aws';
+export interface Key {
+  [key: string]: string | number;
+}
 
 export interface DYNAMOKEYS {
   type: string;

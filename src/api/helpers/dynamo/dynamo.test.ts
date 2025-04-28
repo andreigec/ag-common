@@ -1,11 +1,6 @@
-import { debug, info, SetLogLevel, warn } from '../../common/helpers/log';
-import {
-  getItemDynamo,
-  putDynamo,
-  queryDynamo,
-  scan,
-  wipeTable,
-} from './dynamo';
+import { debug, info, SetLogLevel, warn } from '../../../common/helpers/log';
+import { getItemDynamo, putDynamo, queryDynamo, scan } from '.';
+import { wipeTable } from './delete';
 
 const tableName = 'ag-common-tests';
 SetLogLevel('INFO');
@@ -15,7 +10,7 @@ async function run() {
   await putDynamo({ PK }, tableName, { pkName: 'PK' });
   info('put fail', PK);
   const r = await putDynamo({ PK }, tableName, { pkName: 'PK' });
-  if (!r.error) {
+  if (!('error' in r)) {
     throw new Error('expected fail');
   }
 
