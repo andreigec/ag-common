@@ -19,17 +19,28 @@ import { copy } from '../../common/helpers/object';
 
 export type StorageProvider = 's3' | 'r2';
 
-export interface StorageConfig {
-  provider: StorageProvider;
-  region: string;
-  endpoint?: string;
-  accountId?: string; // Required for R2
-}
+export type StorageConfig =
+  | {
+      provider: 's3';
+      region?: string;
+      endpoint?: string;
+      accountId?: string;
+    }
+  | {
+      provider: 'r2';
+      accountId: string; // Required for R2
+    };
 
 // Cache for memoization
 const clientCache = new Map<string, S3Client>();
 
 const getCacheKey = (config: StorageConfig): string => {
+  if (config.provider === 'r2') {
+    return JSON.stringify({
+      provider: config.provider,
+      accountId: config.accountId,
+    });
+  }
   return JSON.stringify({
     provider: config.provider,
     region: config.region,
@@ -46,10 +57,6 @@ export const createStorageClient = (config: StorageConfig) => {
     return cachedClient;
   }
 
-  const baseConfig = {
-    region: config.region,
-  };
-
   let client: S3Client;
 
   if (config.provider === 'r2') {
@@ -60,12 +67,13 @@ export const createStorageClient = (config: StorageConfig) => {
       );
     }
     client = new S3Client({
-      ...baseConfig,
       endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
       forcePathStyle: true,
     });
   } else {
-    client = new S3Client(baseConfig);
+    client = new S3Client({
+      region: config.region,
+    });
   }
 
   clientCache.set(cacheKey, client);
