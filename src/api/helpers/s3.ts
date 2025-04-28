@@ -25,10 +25,14 @@ export type StorageConfig =
       region?: string;
       endpoint?: string;
       accountId?: string;
+      accessKeyId?: string;
+      secretAccessKey?: string;
     }
   | {
       provider: 'r2';
       accountId: string; // Required for R2
+      accessKeyId?: string;
+      secretAccessKey?: string;
     };
 
 // Cache for memoization
@@ -69,6 +73,14 @@ export const createStorageClient = (config: StorageConfig) => {
     client = new S3Client({
       endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
       forcePathStyle: true,
+      ...(config.accessKeyId && config.secretAccessKey
+        ? {
+            credentials: {
+              accessKeyId: config.accessKeyId,
+              secretAccessKey: config.secretAccessKey,
+            },
+          }
+        : {}),
     });
   } else {
     client = new S3Client({
