@@ -46,7 +46,7 @@
     "@emotion/styled": "^11.14.0",
     "@smithy/types": "^4.2.0",
     "@storybook/addon-actions": "^8.6.12",
-    "@storybook/addon-docs": "8.1.6",
+    "@storybook/addon-docs": "8.6.12",
     "@storybook/addon-essentials": "^8.6.12",
     "@storybook/addon-interactions": "^8.6.12",
     "@storybook/addon-links": "^8.6.12",
@@ -70,7 +70,7 @@
     "tsx": "^4.19.3"
   },
   "resolutions": {
-    "globals": "15.14.0"
+    "globals": "15.15.0"
   },
   "files": [
     "dist/**/*",
