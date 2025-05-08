@@ -1,4 +1,5 @@
 export * from './api';
+export * from './apigw';
 export * from './aws';
 export * from './dynamo';
 export * from './enforceDynamoProvisionCap';

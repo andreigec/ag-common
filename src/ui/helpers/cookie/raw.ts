@@ -31,7 +31,7 @@ export const getCookie = ({
 }) => getAllCookies(cookieDocument)[name];
 
 /**
- * expiryDays <0 will delete
+ * Sets a cookie with the specified name and value
  * @param param0
  * @returns
  */
@@ -43,7 +43,11 @@ export function setCookie({
   name: string;
   value: string;
   /**
-   * defaults to 1
+   * Number of days until the cookie expires
+   * - Default: 1 day
+   * - Use 0 to set a session cookie (expires when browser closes)
+   * - Use a very large number (e.g. 36500 for ~100 years) to effectively disable expiration
+   * - Use negative number to delete the cookie
    */
   expiryDays?: number;
 }) {

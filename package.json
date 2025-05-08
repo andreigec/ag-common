@@ -18,6 +18,7 @@
     "test": "globstar -- node --import tsx --test \"src/**/*.test.ts\""
   },
   "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.804.0",
     "@aws-sdk/client-dynamodb": "^3.788.0",
     "@aws-sdk/client-s3": "^3.787.0",
     "@aws-sdk/client-ses": "^3.787.0",
