@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
@@ -9,7 +8,11 @@ const base: Meta<typeof BarChart> = {
   component: BarChart,
 };
 
-const Template: StoryFn<typeof BarChart> = (args) => <BarChart {...args} />;
+const Template: StoryFn<typeof BarChart> = (args) => (
+  <div style={{ height: '20rem' }}>
+    <BarChart {...args} />
+  </div>
+);
 
 export const Primary: StoryFn<typeof BarChart> = Template.bind({});
 export const Primary2: StoryFn<typeof BarChart> = Template.bind({});
