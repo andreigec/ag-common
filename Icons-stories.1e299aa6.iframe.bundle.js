@@ -218,6 +218,7 @@
   position: relative;
 `,ItemStyled=(0,emotion_styled_browser_esm.A)(Item)`
   margin-bottom: 0.75rem;
+  height: auto;
 
   &:last-of-type {
     margin-bottom: 0;
@@ -912,4 +913,4 @@
   top: 0;
   left: 0;
 `,UserImage=({image,className,title="user image",opt})=>{const[failed,setFailed]=(0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(0);return(0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)((()=>{setFailed(.5)}),[]),(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Base,{className,title,"data-fail":failed,style:{width:opt?.width||"100%",height:opt?.height||"100%",maxWidth:"100%",maxHeight:"100%"},children:[_icons_UserOutline__WEBPACK_IMPORTED_MODULE_3__.g,1!==failed&&(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Img,{alt:"user",src:image,onError:()=>setFailed(1),onAbort:()=>setFailed(1),style:{width:"100%",height:"100%",objectFit:"cover"}})]})},UserProfileImage=({className,user,opt={width:"2.5rem",height:"2.5rem"}})=>{const image=user?.picture,titleA=[user?.fullname,user?.userId].filter(_common_helpers_array__WEBPACK_IMPORTED_MODULE_4__.z2),title=0===titleA.length?"":titleA.join(" - ");return(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(UserImage,{image,title,className,opt})};UserImage.__docgenInfo={description:"",methods:[],displayName:"UserImage",props:{image:{required:!1,tsType:{name:"string"},description:""},className:{required:!1,tsType:{name:"string"},description:""},title:{required:!1,tsType:{name:"string"},description:'default "user image"',defaultValue:{value:"'user image'",computed:!1}},opt:{required:!1,tsType:{name:"signature",type:"object",raw:"{ width?: string; height?: string }",signature:{properties:[{key:"width",value:{name:"string",required:!1}},{key:"height",value:{name:"string",required:!1}}]}},description:""}}},UserProfileImage.__docgenInfo={description:"",methods:[],displayName:"UserProfileImage",props:{className:{required:!1,tsType:{name:"string"},description:""},user:{required:!1,tsType:{name:"signature",type:"object",raw:"{ picture: string; fullname: string; userId: string }",signature:{properties:[{key:"picture",value:{name:"string",required:!0}},{key:"fullname",value:{name:"string",required:!0}},{key:"userId",value:{name:"string",required:!0}}]}},description:""},opt:{required:!1,tsType:{name:"signature",type:"object",raw:"{ width?: string; height?: string }",signature:{properties:[{key:"width",value:{name:"string",required:!1}},{key:"height",value:{name:"string",required:!1}}]}},description:"100% if not provided. default 2.5rem",defaultValue:{value:"{ width: '2.5rem', height: '2.5rem' }",computed:!1}}}}}}]);
-//# sourceMappingURL=Icons-stories.b555a179.iframe.bundle.js.map
+//# sourceMappingURL=Icons-stories.1e299aa6.iframe.bundle.js.map
