@@ -33,6 +33,7 @@ export const {
   getItemDynamo,
   getItemsDynamo,
   queryDynamo,
+  batchQueryDynamo,
   queryWithGenerator,
   scan,
   scanWithGenerator,

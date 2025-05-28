@@ -9,7 +9,7 @@ const base: Meta<typeof BarChart> = {
 };
 
 const Template: StoryFn<typeof BarChart> = (args) => (
-  <div style={{ height: '20rem' }}>
+  <div>
     <BarChart {...args} />
   </div>
 );
@@ -20,7 +20,7 @@ export const Primary2: StoryFn<typeof BarChart> = Template.bind({});
 Primary.args = {
   data: [
     {
-      name: 'n1',
+      name: 'REALLY LONG VALUE REALLY LONG VALUE REALLY LONG VALUE REALLY LONG VALUE REALLY LONG VALUE REALLY LONG VALUE REALLY LONG VALUE',
       total: 16,
       values: [
         { colour: 'red', name: 'n1', value: 3 },

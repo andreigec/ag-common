@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import {
   BatchGetCommand,
+  ExecuteStatementCommand,
   QueryCommand,
   ScanCommand,
 } from '@aws-sdk/lib-dynamodb';
@@ -9,7 +10,11 @@ import type { Key } from '../../types';
 import { withRetry } from '../withRetry';
 import { dynamoDb } from '.';
 import type { DynamoDBError, DynamoDBResult } from './types';
-import type { DynamoQueryParams, ScanOptions } from './types';
+import type {
+  DynamoBatchQueryParams,
+  DynamoQueryParams,
+  ScanOptions,
+} from './types';
 
 const isError = <T>(result: DynamoDBResult<T>): result is DynamoDBError =>
   'error' in result;
@@ -180,15 +185,7 @@ export const getItemDynamo = async <T>(params: {
 
 export const queryDynamo = async <T>(
   params: DynamoQueryParams,
-): Promise<
-  | {
-      data: T[];
-      startKey?: Key;
-    }
-  | {
-      error: string;
-    }
-> => {
+): Promise<DynamoDBResult<T[]>> => {
   try {
     const items: T[] = [];
     let startKey: Key | undefined;
@@ -202,10 +199,10 @@ export const queryDynamo = async <T>(
 
       startKey = result.LastEvaluatedKey;
 
+      // If we have a limit and we've reached it, stop processing
       if (params.limit && items.length >= params.limit) {
         return {
           data: items.slice(0, params.limit),
-          startKey,
         };
       }
     } while (startKey && Object.keys(startKey).length > 0);
@@ -235,6 +232,168 @@ export const scan = async <T>(
     } while (ExclusiveStartKey);
 
     return { data: Items };
+  } catch (e) {
+    return { error: (e as Error).toString() };
+  }
+};
+
+/**
+ * Batch query DynamoDB using PartiQL to query multiple partition key values at once
+ *
+ * This function uses PartiQL's IN operator to query multiple partition key values
+ * in a single request, which is more efficient than making multiple individual queries.
+ *
+ * Note: AWS has limits on the number of items in WHERE IN queries:
+ * - Primary index: 100 items max
+ * - Secondary index (GSI/LSI): 50 items max
+ * This function automatically chunks requests to stay within these limits.
+ *
+ * @example
+ * // Basic usage with multiple partition keys
+ * const result = await batchQueryDynamo<User>({
+ *   tableName: 'Users',
+ *   pkName: 'userId',
+ *   pkValues: ['user1', 'user2', 'user3']
+ * });
+ *
+ * @example
+ * // With filter and limit
+ * const result = await batchQueryDynamo<Product>({
+ *   tableName: 'Products',
+ *   pkName: 'categoryId',
+ *   pkValues: ['electronics', 'books'],
+ *   filter: {
+ *     filterExpression: 'price < :maxPrice',
+ *     attrNames: {},
+ *     attrValues: { ':maxPrice': 100 }
+ *   },
+ *   limit: 50
+ * });
+ *
+ * @param params - The batch query parameters
+ * @returns Promise resolving to query results or error
+ */
+export const batchQueryDynamo = async <T>(
+  params: DynamoBatchQueryParams,
+): Promise<DynamoDBResult<T[]>> => {
+  try {
+    if (params.pkValues.length === 0) {
+      return { data: [] };
+    }
+
+    // Determine chunk size based on whether we're using a secondary index
+    const isSecondaryIndex = !!params.indexName;
+    const chunkSize = isSecondaryIndex ? 50 : 100;
+
+    // Chunk the partition key values
+    const chunks: (string | number)[][] = [];
+    for (let i = 0; i < params.pkValues.length; i += chunkSize) {
+      chunks.push(params.pkValues.slice(i, i + chunkSize));
+    }
+
+    const allItems: T[] = [];
+    let totalProcessed = 0;
+
+    // Process each chunk
+    for (const chunk of chunks) {
+      const result = await executePartiQLQuery<T>({
+        ...params,
+        pkValues: chunk,
+      });
+
+      if ('error' in result) {
+        return result;
+      }
+
+      allItems.push(...result.data);
+      totalProcessed += result.data.length;
+
+      // If we have a limit and we've reached it, stop processing
+      if (params.limit && totalProcessed >= params.limit) {
+        return {
+          data: allItems.slice(0, params.limit),
+        };
+      }
+    }
+
+    return {
+      data: allItems,
+    };
+  } catch (e) {
+    return { error: (e as Error).toString() };
+  }
+};
+
+/**
+ * Helper function to execute a single PartiQL query for a chunk of partition keys
+ */
+const executePartiQLQuery = async <T>(
+  params: DynamoBatchQueryParams,
+): Promise<DynamoDBResult<T[]>> => {
+  try {
+    // Build the PartiQL WHERE clause for multiple partition keys
+    const pkPlaceholders = params.pkValues.map(() => '?').join(', ');
+    let whereClause = `"${params.pkName}" IN (${pkPlaceholders})`;
+
+    // Build parameters array for PartiQL (positional parameters)
+    const parameters: unknown[] = [...params.pkValues];
+
+    // Add filter conditions if provided
+    if (params.filter) {
+      // For filters, we need to replace the named parameters with positional ones
+      let filterExpression = params.filter.filterExpression;
+      if (params.filter.attrValues) {
+        Object.entries(params.filter.attrValues).forEach(([key, value]) => {
+          filterExpression = filterExpression.replace(
+            new RegExp(key.replace(':', '\\:'), 'g'),
+            '?',
+          );
+          parameters.push(value);
+        });
+      }
+      whereClause += ` AND ${filterExpression}`;
+    }
+
+    // Build the PartiQL statement
+    const tableName = params.indexName
+      ? `"${params.tableName}"."${params.indexName}"`
+      : `"${params.tableName}"`;
+    const statement = `SELECT * FROM ${tableName} WHERE ${whereClause}`;
+
+    const allItems: T[] = [];
+    let nextToken: string | undefined;
+
+    // Loop until all results are retrieved
+    do {
+      const executeParams = {
+        Statement: statement,
+        Parameters: parameters,
+        Limit: params.limit,
+        NextToken: nextToken,
+      };
+
+      const result = await withRetry(
+        () => dynamoDb.send(new ExecuteStatementCommand(executeParams)),
+        'batchQueryDynamo',
+      );
+
+      if (result.Items) {
+        allItems.push(...(result.Items as T[]));
+      }
+
+      nextToken = result.NextToken;
+
+      // If we have a limit and we've reached it, stop processing
+      if (params.limit && allItems.length >= params.limit) {
+        return {
+          data: allItems.slice(0, params.limit),
+        };
+      }
+    } while (nextToken);
+
+    return {
+      data: allItems,
+    };
   } catch (e) {
     return { error: (e as Error).toString() };
   }

@@ -1,5 +1,3 @@
-import type { Key } from '../../types';
-
 export type DynamoDBError = {
   error: string;
 };
@@ -42,9 +40,17 @@ export interface DynamoQueryParams {
   skOperator?: '=' | '<' | '>' | '<=' | '>=' | 'BETWEEN' | 'BEGINS_WITH';
   indexName?: string;
   limit?: number;
-  startKey?: Key;
   filter?: DynamoFilter;
   sortAscending?: boolean;
+}
+
+export interface DynamoBatchQueryParams {
+  tableName: string;
+  pkName: string;
+  pkValues: (string | number)[];
+  indexName?: string;
+  limit?: number;
+  filter?: DynamoFilter;
 }
 
 export const isError = <T>(

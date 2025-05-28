@@ -20,6 +20,7 @@ const BarChartBase = styled.div`
 const ItemStyled = styled(Item)`
   margin-bottom: 0.75rem;
   height: auto;
+  overflow: hidden;
 
   &:last-of-type {
     margin-bottom: 0;

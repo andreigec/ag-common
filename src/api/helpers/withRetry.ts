@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { warn } from '../../common/helpers/log';
 import { sleep } from '../../common/helpers/sleep';
 
@@ -19,12 +20,13 @@ export const withRetry = async <T>(
       return await operation();
     } catch (e) {
       const error = e as Error;
-      const errorString = error.toString().toLowerCase();
+      const errorString = error.toString().toLowerCase().replace(/\s+/gim, '');
 
       if (
         errorString.includes('429') ||
         errorString.includes('provisionedthroughputexceeded') ||
-        errorString.includes('too large')
+        errorString.includes('toolarge') ||
+        errorString.includes('ratelimited')
       ) {
         retryCount++;
 
