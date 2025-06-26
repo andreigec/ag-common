@@ -19,7 +19,7 @@ export const batchDelete = async (params: {
   };
 }): Promise<DynamoDBResult<void>> => {
   try {
-    const { batchSize = 20, maxRetries = 3 } = params.opt ?? {};
+    const { batchSize = 20, maxRetries } = params.opt ?? {};
     const chunked = chunk(params.keys, batchSize);
     let processed = 0;
     await asyncForEach(chunked, async (chunk) => {
