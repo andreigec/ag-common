@@ -42,6 +42,7 @@ export interface DynamoQueryParams {
   limit?: number;
   filter?: DynamoFilter;
   sortAscending?: boolean;
+  alwaysRetry?: boolean;
 }
 
 export interface DynamoBatchQueryParams {

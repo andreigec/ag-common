@@ -84,6 +84,9 @@ const executeQuery = async (
   return withRetry(
     () => dynamoDb.send(new QueryCommand(queryParams)),
     'queryDynamo',
+    {
+      maxRetries: params.alwaysRetry ? null : undefined,
+    },
   );
 };
 
