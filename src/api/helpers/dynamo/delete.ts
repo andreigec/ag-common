@@ -14,12 +14,12 @@ export const batchDelete = async (params: {
   opt?: {
     /** default 20 */
     batchSize?: number;
-    /** option to always retry on 429 until done. default false */
-    alwaysRetry?: boolean;
+    /** option to control retry behavior: undefined = 3 retries, null = infinite. default 3 */
+    maxRetries?: number | null;
   };
 }): Promise<DynamoDBResult<void>> => {
   try {
-    const { batchSize = 20, alwaysRetry = false } = params.opt ?? {};
+    const { batchSize = 20, maxRetries = 3 } = params.opt ?? {};
     const chunked = chunk(params.keys, batchSize);
     let processed = 0;
     await asyncForEach(chunked, async (chunk) => {
@@ -34,7 +34,7 @@ export const batchDelete = async (params: {
         () => dynamoDb.send(new BatchWriteCommand(batchDeleteParams)),
         `batchdelete ${processed}/${params.keys.length}. size=${batchSize}`,
         {
-          maxRetries: alwaysRetry ? null : undefined,
+          maxRetries: maxRetries === undefined ? 3 : maxRetries,
         },
       );
       processed += chunk.length;
@@ -51,7 +51,7 @@ export const wipeTable = async (
   try {
     const generator = scanWithGenerator<{ PK: string }>(tableName, {
       BATCH_SIZE: 100, // Process in chunks of 100 items
-      alwaysRetry: true, // Always retry on 429 since we want to ensure complete deletion
+      maxRetries: null, // Always retry on 429 since we want to ensure complete deletion
     });
 
     // Process each batch of items
@@ -63,7 +63,7 @@ export const wipeTable = async (
           keys: pks,
           pkName: 'PK',
           opt: {
-            alwaysRetry: true, // Always retry on 429 since we want to ensure complete deletion
+            maxRetries: null, // Always retry on 429 since we want to ensure complete deletion
           },
         });
         if ('error' in result) {

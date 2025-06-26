@@ -27,7 +27,7 @@ export interface ScanOptions {
   filter?: DynamoFilter;
   requiredAttributeList?: string[];
   indexName?: string;
-  alwaysRetry?: boolean;
+  maxRetries?: number | null;
 }
 
 export interface DynamoQueryParams {
@@ -42,7 +42,7 @@ export interface DynamoQueryParams {
   limit?: number;
   filter?: DynamoFilter;
   sortAscending?: boolean;
-  alwaysRetry?: boolean;
+  maxRetries?: number | null;
 }
 
 export interface DynamoBatchQueryParams {

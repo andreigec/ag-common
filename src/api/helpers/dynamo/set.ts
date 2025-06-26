@@ -34,8 +34,8 @@ export const batchWrite = async <T extends Record<string, unknown>>(
   tableName: string,
   items: T[],
   opt?: {
-    /** option to always retry on 429 until done */
-    alwaysRetry?: boolean;
+    /** option to control retry behavior: undefined = 3 retries, null = infinite */
+    maxRetries?: number | null;
     /** default 20 */
     batchSize?: number;
   },
@@ -55,7 +55,7 @@ export const batchWrite = async <T extends Record<string, unknown>>(
         () => dynamoDb.send(new BatchWriteCommand(batchWriteParams)),
         `batchwrite ${processed}/${items.length}. size=${batchSize}`,
         {
-          maxRetries: opt?.alwaysRetry ? null : undefined,
+          maxRetries: opt?.maxRetries === undefined ? 3 : opt.maxRetries,
         },
       );
       processed += chunk.length;

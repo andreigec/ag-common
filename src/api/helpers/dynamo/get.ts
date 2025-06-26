@@ -85,7 +85,7 @@ const executeQuery = async (
     () => dynamoDb.send(new QueryCommand(queryParams)),
     'queryDynamo',
     {
-      maxRetries: params.alwaysRetry ? null : undefined,
+      maxRetries: params.maxRetries === undefined ? 3 : params.maxRetries,
     },
   );
 };
@@ -137,7 +137,7 @@ const executeScan = async (
     () => dynamoDb.send(new ScanCommand(scanParams)),
     `scan. already seen=${exclusiveStartKey ? 'some' : '0'} items`,
     {
-      maxRetries: options?.alwaysRetry ? null : undefined,
+      maxRetries: options?.maxRetries === undefined ? 3 : options.maxRetries,
     },
   );
 };
