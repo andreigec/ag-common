@@ -39,8 +39,11 @@ export function useOnScroll({
   useGranularEffect(
     () => {
       const listener = (e: Event) => {
-        const y = element?.current.scrollTop ?? window.scrollY;
-        const x = element?.current.scrollLeft ?? window.scrollX;
+        if (!element?.current) {
+          return null;
+        }
+        const y = element.current.scrollTop ?? window.scrollY;
+        const x = element.current.scrollLeft ?? window.scrollX;
         const r: IScroll = {
           y,
           x,
@@ -56,8 +59,10 @@ export function useOnScroll({
       const listenDebounce = (e: Event) => {
         debounce(
           () => {
-            const { y } = listener(e);
-            setStartScrollTopY(y);
+            const l = listener(e);
+            if (l) {
+              setStartScrollTopY(l.y);
+            }
           },
           { key: 'onscroll', time: 20 },
         );
