@@ -88,7 +88,7 @@ export function useOnScroll({
   );
 
   useEffect(() => {
-    if (startScrollTopY === -1 && element?.current.scrollTop) {
+    if (startScrollTopY === -1 && !!element?.current) {
       setStartScrollTopY(element.current.scrollTop);
     }
   }, [element, startScrollTopY]);
