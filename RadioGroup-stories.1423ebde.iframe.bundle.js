@@ -1,0 +1,21 @@
+"use strict";(self.webpackChunkag_common=self.webpackChunkag_common||[]).push([[177],{"./src/ui/components/RadioGroup/index.tsx":(__unused_webpack_module,__webpack_exports__,__webpack_require__)=>{__webpack_require__.d(__webpack_exports__,{z:()=>RadioGroup});var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__=__webpack_require__("./node_modules/.pnpm/react@19.1.0/node_modules/react/jsx-runtime.js"),_emotion_styled__WEBPACK_IMPORTED_MODULE_1__=__webpack_require__("./node_modules/.pnpm/@emotion+styled@11.14.1_@emotion+react@11.14.0_@types+react@19.1.8_react@19.1.0__@types+react@19.1.8_react@19.1.0/node_modules/@emotion/styled/dist/emotion-styled.browser.esm.js"),react__WEBPACK_IMPORTED_MODULE_2__=__webpack_require__("./node_modules/.pnpm/react@19.1.0/node_modules/react/index.js");const Base=_emotion_styled__WEBPACK_IMPORTED_MODULE_1__.A.div`
+  display: flex;
+  flex-flow: row;
+  &[data-mode='vert'] {
+    flex-flow: column;
+  }
+  overflow: hidden;
+  justify-content: space-between;
+`,Label=_emotion_styled__WEBPACK_IMPORTED_MODULE_1__.A.label`
+  text-align: center;
+  display: flex;
+  align-items: center;
+
+  &[data-selected='true'] {
+    cursor: default;
+  }
+  &[data-selected='false'] {
+    cursor: pointer;
+  }
+`,RadioGroup=p=>{const{renderLabel=x=>x.toString()}=p,[index,setIndex]=(0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(p.defaultIndex);return(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Base,{className:p.className,style:p.style,"data-mode":p.mode??"horiz",children:p.values.map((v,i)=>(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Label,{"data-selected":index===i,onClick:()=>{index!==i&&(setIndex(i),p.onSubmit(v,i))},children:renderLabel(v,index===i)},i.toString()))})};RadioGroup.__docgenInfo={description:"",methods:[],displayName:"RadioGroup",props:{renderLabel:{required:!1,tsType:{name:"signature",type:"function",raw:"(a: T, selected: boolean) => JSX.Element",signature:{arguments:[{type:{name:"T"},name:"a"},{type:{name:"boolean"},name:"selected"}],return:{name:"JSX.Element"}}},description:"can overload the render of the label. defaults to toString"},defaultIndex:{required:!0,tsType:{name:"number"},description:""},onSubmit:{required:!0,tsType:{name:"signature",type:"function",raw:"(val: T, index: number) => void",signature:{arguments:[{type:{name:"T"},name:"val"},{type:{name:"number"},name:"index"}],return:{name:"void"}}},description:""},values:{required:!0,tsType:{name:"Array",elements:[{name:"T"}],raw:"T[]"},description:""},className:{required:!1,tsType:{name:"string"},description:""},style:{required:!1,tsType:{name:"CSSProperties"},description:""},mode:{required:!1,tsType:{name:"union",raw:"'vert' | 'horiz'",elements:[{name:"literal",value:"'vert'"},{name:"literal",value:"'horiz'"}]},description:"default horiz"}}}},"./stories/RadioGroup.stories.tsx":(__unused_webpack_module,__webpack_exports__,__webpack_require__)=>{__webpack_require__.r(__webpack_exports__),__webpack_require__.d(__webpack_exports__,{Primary:()=>Primary,__namedExportsOrder:()=>__namedExportsOrder,default:()=>__WEBPACK_DEFAULT_EXPORT__});var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__=__webpack_require__("./node_modules/.pnpm/react@19.1.0/node_modules/react/jsx-runtime.js"),_src_ui_components_RadioGroup__WEBPACK_IMPORTED_MODULE_2__=(__webpack_require__("./node_modules/.pnpm/react@19.1.0/node_modules/react/index.js"),__webpack_require__("./src/ui/components/RadioGroup/index.tsx"));const base={title:"UI/RadioGroup",component:_src_ui_components_RadioGroup__WEBPACK_IMPORTED_MODULE_2__.z},Primary=(args=>(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div",{style:{backgroundColor:"white",padding:"0.5rem"},children:(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_src_ui_components_RadioGroup__WEBPACK_IMPORTED_MODULE_2__.z,{...args})})).bind({});Primary.args={defaultIndex:0,values:["1","2","3"],onSubmit:s=>alert("ret="+JSON.stringify(s,null,2))};const __WEBPACK_DEFAULT_EXPORT__=base,__namedExportsOrder=["Primary"];Primary.parameters={...Primary.parameters,docs:{...Primary.parameters?.docs,source:{originalSource:"args => <div style={{\n  backgroundColor: 'white',\n  padding: '0.5rem'\n}}>\n    <RadioGroup {...args} />\n  </div>",...Primary.parameters?.docs?.source}}}}}]);
+//# sourceMappingURL=RadioGroup-stories.1423ebde.iframe.bundle.js.map
