@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
@@ -23,7 +22,7 @@ const Template: StoryFn<typeof LineChart> = (args) => (
 export const Primary: StoryFn<typeof LineChart> = Template.bind({});
 
 Primary.args = {
-  colours: colours,
+  colours,
   data: LCD,
   style: { backgroundColor: 'white', borderColor: '#ccc', color: '#111' },
 };
@@ -31,7 +30,7 @@ Primary.args = {
 export const Primary2: StoryFn<typeof LineChart> = Template.bind({});
 
 Primary2.args = {
-  colours: colours,
+  colours,
   data: LCD,
   style: { backgroundColor: 'black', borderColor: '#333', color: 'white' },
 };

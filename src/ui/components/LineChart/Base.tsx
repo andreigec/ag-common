@@ -50,17 +50,13 @@ export const LineChart = (p: ILineChart) => {
   if (!tt && xTime) {
     tt = timeTooltipTitle;
   }
-  if (!tt) {
-    tt = (s) => s.toString();
-  }
+  tt ??= (s) => s.toString();
 
   let lt = p.legendTitle;
   if (!lt && xTime) {
     lt = timeLegendTitle;
   }
-  if (!lt) {
-    lt = (s) => s.toString();
-  }
+  lt ??= (s) => s.toString();
 
   const lt2 = lt as (a: number) => string;
 

@@ -39,6 +39,15 @@ export const TooltipContent = (
   },
 ) => {
   const name = p.tt(p.selectedXs?.[0].x ?? 0);
+
+  const roundNumber = (num: number): string => {
+    // Round to 2 decimal places and remove trailing zeros
+    const rounded = Math.round(num * 100) / 100;
+    return rounded % 1 === 0
+      ? rounded.toString()
+      : rounded.toFixed(2).replace(/\.?0+$/, '');
+  };
+
   return (
     <Base
       style={{
@@ -49,18 +58,18 @@ export const TooltipContent = (
       <Title>{name}</Title>
       <Row>
         <span>total</span>
-        <Total>{p.legendItems.total}</Total>
+        <Total>{roundNumber(p.legendItems.total)}</Total>
       </Row>
       {p.legendItems.part.map((v) => (
         <Row key={v.name + v.y} style={{ color: v.colour }}>
           <ItemTitle>{v.name}</ItemTitle>
-          <Total>{v.y}</Total>
+          <Total>{roundNumber(v.y)}</Total>
         </Row>
       ))}
       {p.legendItems.rest.length > 0 && (
         <Row>
           <span>{p.legendItems.rest.length} more</span>
-          <Total>{p.legendItems.restTotal}</Total>
+          <Total>{roundNumber(p.legendItems.restTotal)}</Total>
         </Row>
       )}
     </Base>

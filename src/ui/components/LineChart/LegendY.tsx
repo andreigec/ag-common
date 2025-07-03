@@ -43,6 +43,14 @@ export const LegendY = ({
 
   const ch = maxY.toString().length;
 
+  const roundNumber = (num: number): string => {
+    // Round to 2 decimal places and remove trailing zeros
+    const rounded = Math.round(num * 100) / 100;
+    return rounded % 1 === 0
+      ? rounded.toString()
+      : rounded.toFixed(2).replace(/\.?0+$/, '');
+  };
+
   return (
     <Base style={{ ...style, maxWidth: `${ch}ch`, paddingRight: '1ch' }}>
       <Numbers>
@@ -55,7 +63,7 @@ export const LegendY = ({
               backgroundColor: style.backgroundColor,
             }}
           >
-            {i}
+            {roundNumber(i)}
           </span>
         ))}
       </Numbers>

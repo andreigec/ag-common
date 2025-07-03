@@ -178,9 +178,15 @@ export const putS3Object = async ({
   CacheControl?: string;
 }): Promise<{ error?: string }> => {
   try {
-    await s3.send(
+    const r = await s3.send(
       new PutObjectCommand({ Body, Bucket, Key, ContentType, CacheControl }),
     );
+    const code = r.$metadata.httpStatusCode;
+    if (code !== 200) {
+      return {
+        error: `failed to upload file to s3. code=${code}. ${JSON.stringify(r.$metadata)}`,
+      };
+    }
 
     return {};
   } catch (e) {
