@@ -46,6 +46,7 @@ export const Item = ({
       style={{
         color: style.color,
         filter: HardOutlineFilter(style.backgroundColor),
+        whiteSpace: 'nowrap',
       }}
     >
       {data.name}
