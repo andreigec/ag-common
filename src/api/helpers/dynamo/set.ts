@@ -20,10 +20,13 @@ export const putDynamo = async <T extends Record<string, unknown>>(
   };
 
   try {
-    await withRetry(
+    const res = await withRetry(
       () => dynamoDb.send(new PutCommand(putParams)),
       'putDynamo',
     );
+    if (res.$metadata.httpStatusCode !== 200) {
+      return { error: res.toString() };
+    }
     return { data: undefined };
   } catch (e) {
     return { error: (e as Error).toString() };
